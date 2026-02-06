@@ -28,6 +28,7 @@ import Context.*
       def log(msg: String): Unit =
         System.err.println(s"[SafeExecMCP] $msg")
 
+
       def printStartupBanner(): Unit =
         val jarPath = scala.util.Try {
           new java.io.File(classOf[McpServer].getProtectionDomain.getCodeSource.getLocation.toURI).getAbsolutePath
@@ -40,6 +41,7 @@ import Context.*
         val llmStatus = config.llmConfig match
           case Some(cfg) => s"LLM:       ON -> ${cfg.model} @ ${cfg.baseUrl}"
           case None      => "LLM:       OFF"
+        val toolNames = Tools.all.map(_.name)
 
         System.err.println(
           s"""
@@ -53,8 +55,7 @@ import Context.*
             |║  $llmStatus
             |╚══════════════════════════════════════════════════════════════════╝
             |
-            |Available tools: execute_scala, create_repl_session, execute_in_session,
-            |                 delete_repl_session, list_sessions
+            |Available tools: ${toolNames.mkString(", ")}
             |
             |┌─ Claude Desktop configuration (~/.config/claude/claude_desktop_config.json):
             |│

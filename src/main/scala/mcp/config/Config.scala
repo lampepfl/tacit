@@ -8,6 +8,7 @@ case class Config(
   strictMode: Boolean = false,
   classifiedPaths: Set[String] = Set.empty,
   llmConfig: Option[LlmConfig] = None,
+  stateful: Boolean = false,
 )
 
 object Config:
@@ -100,6 +101,9 @@ object Config:
           c.copy(llmConfig = Some(llm.copy(model = x)))
         )
         .text("LLM model name."),
+      opt[Unit]('s', "stateful")
+        .action((_, c) => c.copy(stateful = true))
+        .text("Turn on stateful mode. In this mode, all code will be executed in the same REPL session.")
     )
 
   def parseCliArgs(args: Array[String]): Option[Config] =

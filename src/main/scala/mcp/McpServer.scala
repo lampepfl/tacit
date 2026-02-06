@@ -28,6 +28,7 @@ private val InterfaceReference: String =
 /** MCP Server implementation for Scala code execution */
 class McpServer(using Context):
   private val sessionManager = new SessionManager
+  private lazy val defaultSessionId = sessionManager.createSession()
 
   def recorder: Option[CodeRecorder] = ctx.recorder
   def strictMode: Boolean = ctx.strictMode
@@ -107,6 +108,8 @@ class McpServer(using Context):
         listSessions()
       case "show_interface" =>
         showInterface()
+      case "run" =>
+        runScala(arguments)
       case other =>
         Left(s"Unknown tool: $other")
   
@@ -117,6 +120,15 @@ class McpServer(using Context):
     yield
       val result = ScalaExecutor.execute(code)
       recorder.foreach(_.record(code, "stateless", result))
+      formatExecutionResult(result)
+
+  private def runScala(arguments: Option[Json]): Either[String, CallToolResult] =
+    for
+      args <- arguments.toRight("Missing arguments")
+      code <- args.hcursor.get[String]("code").left.map(_.message)
+      result <- sessionManager.executeInSession(defaultSessionId, code)
+    yield
+      recorder.foreach(_.record(code, defaultSessionId, result))
       formatExecutionResult(result)
   
   private def createReplSession(): Either[String, CallToolResult] =

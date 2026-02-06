@@ -2,10 +2,33 @@ package mcp
 
 import io.circe.*
 import io.circe.syntax.*
+import core.Context
+import Context.*
 
 /** Tool definitions for the MCP server */
 object Tools:
-  val all: List[Tool] = List(
+  def all(using Context): List[Tool] =
+    if ctx.settings.stateful then statefulTools
+    else statelessTools
+
+  val statefulTools: List[Tool] = List(
+    Tool(
+      name = "run",
+      description = Some("Run Scala code and get the output. This is stateful: all executions are in the same REPL session."),
+      inputSchema = Json.obj(
+        "type" -> "object".asJson,
+        "properties" -> Json.obj(
+          "code" -> Json.obj(
+            "type" -> "string".asJson,
+            "description" -> "The Scala code".asJson
+          )
+        ),
+        "required" -> Json.arr("code".asJson)
+      )
+    ),
+  )
+
+  val statelessTools: List[Tool] = List(
     Tool(
       name = "execute_scala",
       description = Some("Execute a Scala code snippet and return the output. This is stateless - each execution is independent. The library API is pre-loaded: use requestFileSystem(root){ ... }, access(path), grep/grepRecursive/find for files; requestExecPermission(cmds){ exec(...) } for processes; requestNetwork(hosts){ httpGet/httpPost(...) } for HTTP."),

@@ -41,6 +41,10 @@ import Context.*
           case Some(cfg) => s"LLM:       ON -> ${cfg.model} @ ${cfg.baseUrl}"
           case None      => "LLM:       OFF"
         val statefulStatus = if config.stateful then s"Stateful: yes" else "Stateful: no"
+        val libraryInfo =
+          if config.libraryPaths.isEmpty then "No preloaded Scala file."
+          else s"Preloaded Scala files: ${config.libraryPaths.mkString(", ")}"
+
         val toolNames = Tools.all.map(_.name)
 
         System.err.println(
@@ -54,6 +58,7 @@ import Context.*
             |║  $strictStatus
             |║  $llmStatus
             |║  $recordingStatus | $statefulStatus
+            |║  $libraryInfo
             |╚══════════════════════════════════════════════════════════════════╝
             |
             |Available tools: ${toolNames.mkString(", ")}

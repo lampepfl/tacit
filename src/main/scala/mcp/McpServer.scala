@@ -28,7 +28,7 @@ private val InterfaceReference: String =
 /** MCP Server implementation for Scala code execution */
 class McpServer(using Context):
   private val sessionManager = new SessionManager
-  private lazy val defaultSessionId = sessionManager.createSession()
+  private val defaultSessionId = sessionManager.createSession()
 
   def recorder: Option[CodeRecorder] = ctx.recorder
   def strictMode: Boolean = ctx.strictMode

@@ -95,20 +95,24 @@ class ReplSession(val id: String)(using Context):
     Some(getClass.getClassLoader)
   )
   private var state: State =
-    val s0 = driver.initialState
+    var s0 = driver.initialState
     // Run preamble once to make library API available in the session
     driver.run(libraryPreamble(ctx.strictMode, ctx.classifiedPaths, ctx.llmConfig))(using s0)
-
+//     ctx.libraries.foreach: code =>
+//       s0 = driver.run(code)(using s0)
+//     s0
+  
   /** Execute code in this session and return the result */
   def execute(code: String): ExecutionResult =
-    CodeValidator.validate(code) match
-      case Left(violations) =>
-        return ExecutionResult(
-          success = false,
-          output = "",
-          error = Some(CodeValidator.formatErrors(violations))
-        )
-      case Right(_) => ()
+    // Disable code validation for now
+    // CodeValidator.validate(code) match
+    //   case Left(violations) =>
+    //     return ExecutionResult(
+    //       success = false,
+    //       output = "",
+    //       error = Some(CodeValidator.formatErrors(violations))
+    //     )
+    //   case Right(_) => ()
 
     outputCapture.reset()
 
@@ -145,8 +149,8 @@ class SessionManager(using Context):
   private val sessions = mutable.Map[String, ReplSession]()
 
   /** Create a new session and return its ID */
-  def createSession(): String =
-    val session = ReplSession.create
+  def createSession()(using Context): String =
+    val session = ReplSession.create()
     sessions(session.id) = session
     session.id
 

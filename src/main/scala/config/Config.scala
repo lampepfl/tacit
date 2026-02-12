@@ -107,7 +107,7 @@ object Config:
         .action((_, c) => c.copy(stateful = true))
         .text("Turn on stateful mode. In this mode, all code will be executed in the same REPL session."),
       opt[String]('i', "library")
-        .action((x, c => c.copy(libraryPaths = x :: c.libraryPaths)))
+        .action((x, c) => c.copy(libraryPaths = x :: c.libraryPaths))
         .text("Include a Scala library file.")
     )
 

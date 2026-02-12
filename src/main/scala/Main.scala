@@ -40,6 +40,7 @@ import Context.*
         val llmStatus = config.llmConfig match
           case Some(cfg) => s"LLM:       ON -> ${cfg.model} @ ${cfg.baseUrl}"
           case None      => "LLM:       OFF"
+        val statefulStatus = if config.stateful then s"Stateful: yes" else "Stateful: no"
         val toolNames = Tools.all.map(_.name)
 
         System.err.println(
@@ -52,6 +53,7 @@ import Context.*
             |║  $recordingStatus
             |║  $strictStatus
             |║  $llmStatus
+            |║  $recordingStatus | $statefulStatus
             |╚══════════════════════════════════════════════════════════════════╝
             |
             |Available tools: ${toolNames.mkString(", ")}

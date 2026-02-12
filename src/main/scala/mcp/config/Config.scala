@@ -9,6 +9,8 @@ case class Config(
   classifiedPaths: Set[String] = Set.empty,
   llmConfig: Option[LlmConfig] = None,
   stateful: Boolean = false,
+  stateful: Boolean = false,
+  libraryPaths: List[String] = Nil,
 )
 
 object Config:
@@ -103,7 +105,10 @@ object Config:
         .text("LLM model name."),
       opt[Unit]('s', "stateful")
         .action((_, c) => c.copy(stateful = true))
-        .text("Turn on stateful mode. In this mode, all code will be executed in the same REPL session.")
+        .text("Turn on stateful mode. In this mode, all code will be executed in the same REPL session."),
+      opt[String]('i', "library")
+        .action((x, c => c.copy(libraryPaths = x :: c.libraryPaths)))
+        .text("Include a Scala library file.")
     )
 
   def parseCliArgs(args: Array[String]): Option[Config] =

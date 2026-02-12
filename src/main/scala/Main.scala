@@ -28,7 +28,6 @@ import Context.*
       def log(msg: String): Unit =
         System.err.println(s"[SafeExecMCP] $msg")
 
-
       def printStartupBanner(): Unit =
         val jarPath = scala.util.Try {
           new java.io.File(classOf[McpServer].getProtectionDomain.getCodeSource.getLocation.toURI).getAbsolutePath

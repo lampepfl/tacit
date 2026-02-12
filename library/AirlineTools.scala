@@ -1,5 +1,3 @@
-import library.{Json, MCPClient, MCPToolResult}
-
 // ─── Data types ─────────────────────────────────────────────────────────────
 
 case class FlightInfo(flightNumber: String, date: String)

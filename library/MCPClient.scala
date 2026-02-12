@@ -1,8 +1,5 @@
-package library
-
 import java.net.{URI, HttpURLConnection}
 import java.io.{BufferedReader, InputStreamReader}
-import language.experimental.captureChecking
 
 // ─── Minimal JSON ────────────────────────────────────────────────────────────
 

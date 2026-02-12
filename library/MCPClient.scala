@@ -1,5 +1,8 @@
+package library.mcpclient
+
 import java.net.{URI, HttpURLConnection}
 import java.io.{BufferedReader, InputStreamReader}
+import language.experimental.captureChecking
 
 // ─── Minimal JSON ────────────────────────────────────────────────────────────
 

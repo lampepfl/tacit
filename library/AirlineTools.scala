@@ -1,3 +1,9 @@
+package library
+package facade.airline
+
+import mcpclient.*
+import language.experimental.captureChecking
+
 // ─── Data types ─────────────────────────────────────────────────────────────
 
 case class FlightInfo(flightNumber: String, date: String)

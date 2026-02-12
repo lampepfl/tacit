@@ -11,6 +11,8 @@ case class Config(
   stateful: Boolean = false,
   stateful: Boolean = false,
   libraryPaths: List[String] = Nil,
+  useFacade: Option[String] = None,
+  facadeMcpEndpoint: Option[String] = None,
 )
 
 object Config:
@@ -108,7 +110,13 @@ object Config:
         .text("Turn on stateful mode. In this mode, all code will be executed in the same REPL session."),
       opt[String]('i', "library")
         .action((x, c) => c.copy(libraryPaths = x :: c.libraryPaths))
-        .text("Include a Scala library file.")
+        .text("Include a Scala library file."),
+      opt[String]("use-facade")
+        .action((x, c) => c.copy(useFacade = Some(x)))
+        .text("Use a facade."),
+      opt[String]("facade-mcp-endpoint")
+        .action((x, c) => c.copy(facadeMcpEndpoint = Some(x)))
+        .text("Specify the endpoint of the MCP server for the facade."),
     )
 
   def parseCliArgs(args: Array[String]): Option[Config] =

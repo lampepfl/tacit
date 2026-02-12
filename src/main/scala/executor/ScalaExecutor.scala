@@ -5,7 +5,7 @@ import java.io.{ByteArrayOutputStream, PrintStream}
 import java.util.UUID
 import dotty.tools.repl.{ReplDriver, State}
 import java.nio.charset.StandardCharsets
-import core.Context
+import core.{Context, FacadeType}
 import Context.*
 
 /** Result of code execution */
@@ -89,6 +89,17 @@ class ReplSession(val id: String)(using Context):
   private val outputCapture = new ByteArrayOutputStream()
   private val printStream = new PrintStream(outputCapture, true, StandardCharsets.UTF_8)
 
+  def readSource(path: String): String =
+    val f = new java.io.File(path)
+    scala.io.Source.fromFile(f).mkString
+
+  def getLibraries: List[String] =
+    ctx.facadeType match
+      case FacadeType.Airline(endpoint) =>
+        val sources = List("library/MCPClient.scala", "library/AirlineTools.scala").map(readSource(_))
+        sources ++ List(s"connect(\"$endpoint\")")
+      case _ => ctx.libraries
+
   private val driver = new ReplDriver(
     ReplClasspath.args,
     printStream,
@@ -98,9 +109,9 @@ class ReplSession(val id: String)(using Context):
     var s0 = driver.initialState
     // Run preamble once to make library API available in the session
     driver.run(libraryPreamble(ctx.strictMode, ctx.classifiedPaths, ctx.llmConfig))(using s0)
-//     ctx.libraries.foreach: code =>
-//       s0 = driver.run(code)(using s0)
-//     s0
+    // getLibraries.map: code =>
+    //   s0 = driver.run(code)(using s0)
+    // s0
   
   /** Execute code in this session and return the result */
   def execute(code: String): ExecutionResult =

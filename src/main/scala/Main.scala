@@ -44,6 +44,7 @@ import Context.*
         val libraryInfo =
           if config.libraryPaths.isEmpty then "No preloaded Scala file."
           else s"Preloaded Scala files: ${config.libraryPaths.mkString(", ")}"
+        val facadeInfo = s"Facade: ${ctx.facadeType}"
 
         val toolNames = Tools.all.map(_.name)
 
@@ -59,6 +60,7 @@ import Context.*
             |║  $llmStatus
             |║  $recordingStatus | $statefulStatus
             |║  $libraryInfo
+            |║  $facadeInfo
             |╚══════════════════════════════════════════════════════════════════╝
             |
             |Available tools: ${toolNames.mkString(", ")}

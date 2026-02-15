@@ -6,6 +6,7 @@ import library.LlmConfig
 
 enum FacadeType:
   case Airline(endpoint: String)
+  case Retail(endpoint: String)
   case NoFacade
 
 case class Context(
@@ -29,6 +30,7 @@ object Context:
         scala.io.Source.fromFile(f).mkString
       val facadeType = config.useFacade.match
         case Some("airline") => FacadeType.Airline(config.facadeMcpEndpoint.get)
+        case Some("retail") => FacadeType.Retail(config.facadeMcpEndpoint.get)
         case Some(name) => assert(false, s"Unknown facade: $name")
         case _ => FacadeType.NoFacade
       val myCtx = Context(recorder, config.strictMode, config.classifiedPaths, config.llmConfig, config, libraries, facadeType)

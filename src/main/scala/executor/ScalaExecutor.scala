@@ -93,11 +93,12 @@ class ReplSession(val id: String)(using Context):
     val f = new java.io.File(path)
     scala.io.Source.fromFile(f).mkString
 
-  def getLibraries: List[String] =
+  def getPreamables: List[String] =
     ctx.facadeType match
       case FacadeType.Airline(endpoint) =>
-        val sources = List("library/MCPClient.scala", "library/AirlineTools.scala").map(readSource(_))
-        sources ++ List(s"connect(\"$endpoint\")")
+        List(s"import library.facade.airline.*", s"connect(\"$endpoint\")")
+      case FacadeType.Retail(endpoint) =>
+        List(s"import library.facade.retail.*", s"connect(\"$endpoint\")")
       case _ => ctx.libraries
 
   private val driver = new ReplDriver(
@@ -105,6 +106,7 @@ class ReplSession(val id: String)(using Context):
     printStream,
     Some(getClass.getClassLoader)
   )
+
   private var state: State =
     var s0 = driver.initialState
     // Run preamble once to make library API available in the session

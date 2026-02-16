@@ -162,7 +162,7 @@ class SessionManager(using Context):
 
   /** Create a new session and return its ID */
   def createSession()(using Context): String =
-    val session = ReplSession.create()
+    val session = ReplSession.create
     sessions(session.id) = session
     session.id
 

@@ -233,7 +233,7 @@ private def callJson(name: String, args: Json = Json.obj()): Json =
 
 /** Returns a list of all available airports. */
 def listAllAirports(): List[AirportCode] =
-  callJson("list_all_airports").asArray.getOrElse(Nil).map(AirportCode.fromJson)
+  callRaw("list_all_airports").map(s => AirportCode.fromJson(Json.parse(s)))
 
 /** Get the details of a user, including their reservations. */
 def getUserDetails(userId: String): User =
@@ -256,19 +256,20 @@ def getFlightStatus(flightNumber: String, date: String): String =
 
 /** Search for direct flights between two cities on a specific date. */
 def searchDirectFlight(origin: String, destination: String, date: String): List[DirectFlight] =
-  callJson("search_direct_flight", Json.obj(
+  callRaw("search_direct_flight", Json.obj(
     "origin" -> Json.str(origin),
     "destination" -> Json.str(destination),
     "date" -> Json.str(date)
-  )).asArray.getOrElse(Nil).map(DirectFlight.fromJson)
+  )).map(s => DirectFlight.fromJson(Json.parse(s)))
 
 /** Search for one-stop flights between two cities on a specific date. */
 def searchOnestopFlight(origin: String, destination: String, date: String): List[List[DirectFlight]] =
-  callJson("search_onestop_flight", Json.obj(
+  val raw = callRaw("search_onestop_flight", Json.obj(
     "origin" -> Json.str(origin),
     "destination" -> Json.str(destination),
     "date" -> Json.str(date)
-  )).asArray.getOrElse(Nil).map(_.asArray.getOrElse(Nil).map(DirectFlight.fromJson))
+  ))
+  raw.map(Json.parse).grouped(2).toList.map(_.map(DirectFlight.fromJson))
 
 /** Calculate the result of a mathematical expression. */
 def calculate(expression: String): String =

@@ -109,11 +109,10 @@ class ReplSession(val id: String)(using Context):
 
   private var state: State =
     var s0 = driver.initialState
-    // Run preamble once to make library API available in the session
-    driver.run(libraryPreamble(ctx.strictMode, ctx.classifiedPaths, ctx.llmConfig))(using s0)
-    // getLibraries.map: code =>
-    //   s0 = driver.run(code)(using s0)
-    // s0
+    // s0 = driver.run(libraryPreamble(ctx.strictMode, ctx.classifiedPaths, ctx.llmConfig))(using s0)
+    getPreamables.foreach: code =>
+      s0 = driver.run(code)(using s0)
+    s0
   
   /** Execute code in this session and return the result */
   def execute(code: String): ExecutionResult =

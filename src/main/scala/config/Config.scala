@@ -9,7 +9,6 @@ case class Config(
   classifiedPaths: Set[String] = Set.empty,
   llmConfig: Option[LlmConfig] = None,
   stateful: Boolean = false,
-  stateful: Boolean = false,
   libraryPaths: List[String] = Nil,
   useFacade: Option[String] = None,
   facadeMcpEndpoint: Option[String] = None,

@@ -96,7 +96,7 @@ class McpServer(using Context):
   
   private def callTool(name: String, arguments: Option[Json]): Either[String, CallToolResult] =
     name match
-      case "execute_scala" =>
+      case "run" if !ctx.settings.stateful =>
         executeScala(arguments)
       case "create_repl_session" =>
         createReplSession()

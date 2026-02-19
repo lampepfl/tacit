@@ -1,4 +1,5 @@
 package library.mcpclient
+import language.experimental.captureChecking
 
 // ─── Minimal JSON ────────────────────────────────────────────────────────────
 

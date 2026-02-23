@@ -54,7 +54,8 @@ private object ReplClasspath:
       // "-Yno-predef",
       "-Wsafe-init",
       "-language:experimental.captureChecking",
-      "-language:experimental.modularity"
+      "-language:experimental.modularity",
+      "-Vrepl-height:1000000000",
     )
 
 /** Preamble code injected before user code to make the library API available. */

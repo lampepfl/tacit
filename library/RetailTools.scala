@@ -3,6 +3,7 @@ package facade.retail
 
 import mcpclient.*
 import language.experimental.captureChecking
+import scala.collection.immutable.ListMap
 
 // ─── Data types ─────────────────────────────────────────────────────────────
 
@@ -73,14 +74,14 @@ object User:
 
 case class Variant(
   itemId: String,
-  options: Map[String, String],
+  options: ListMap[String, String],
   available: Boolean,
   price: Double
 )
 object Variant:
   def fromJson(j: Json): Variant = Variant(
     itemId = j("item_id").asString.getOrElse(""),
-    options = decodeMap(j("options"), _.asString.getOrElse("")),
+    options = decodeListMap(j("options"), _.asString.getOrElse("")),
     available = j("available").asBool.getOrElse(false),
     price = j("price").asDouble.getOrElse(0.0)
   )
@@ -173,6 +174,11 @@ private def decodeMap[V](j: Json, f: Json => V): Map[String, V] =
   j.asObject match
     case Some(fields) => fields.map((k, v) => k -> f(v)).toMap
     case None => Map.empty
+
+private def decodeListMap[V](j: Json, f: Json => V): ListMap[String, V] =
+  j.asObject match
+    case Some(fields) => ListMap.from(fields.map((k, v) => k -> f(v)))
+    case None => ListMap.empty
 
 // ─── Global state ───────────────────────────────────────────────────────────
 

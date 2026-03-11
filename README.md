@@ -2,7 +2,7 @@
 
 **Paper:** [Tracking Capabilities for Safer Agents (arXiv:2603.00991)](https://arxiv.org/abs/2603.00991)
 
-An [MCP](https://modelcontextprotocol.io/) server that executes Scala 3 code in a sandboxed environment via an embedded REPL. It enforces security through a capability-based system using Scala 3's experimental [capture checking](https://docs.scala-lang.org/scala3/reference/experimental/cc.html), preventing unauthorized access to the file system, processes, and network.
+An [MCP](https://modelcontextprotocol.io/) server that executes Scala 3 code in a sandboxed environment via an embedded REPL. It enforces security through a capability-based system using Scala 3's experimental [capture checking](https://nightly.scala-lang.org/docs/reference/experimental/capture-checking/), preventing unauthorized access to the file system, processes, and network.
 
 Supports both stateless one-shot execution and stateful sessions that persist definitions across calls.
 

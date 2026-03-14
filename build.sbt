@@ -18,6 +18,7 @@ ThisBuild / resolvers += Resolver.scalaNightlyRepository
 lazy val lib = project
   .in(file("library"))
   .settings(
+    name := "TACIT-library",
     scalaVersion := scala3Version,
     Compile / unmanagedSourceDirectories := Seq(
       baseDirectory.value,
@@ -32,14 +33,27 @@ lazy val lib = project
       "-language:experimental.modularity",
       "-deprecation", "-feature", "-unchecked",
       "-Yexplicit-nulls", "-Wsafe-init"
-    )
+    ),
+    // Assembly settings for creating a standalone library JAR
+    assembly / assemblyJarName := "TACIT-library.jar",
+    assembly / assemblyMergeStrategy := {
+      case PathList("META-INF", "services", _*) => MergeStrategy.concat
+      case PathList("META-INF", "MANIFEST.MF")  => MergeStrategy.discard
+      case PathList("META-INF", x) if x.endsWith(".SF")
+        || x.endsWith(".DSA") || x.endsWith(".RSA") => MergeStrategy.discard
+      case PathList("META-INF", _*)              => MergeStrategy.first
+      case "module-info.class"                   => MergeStrategy.discard
+      case x if x.endsWith(".tasty") => MergeStrategy.first
+      case x =>
+        val oldStrategy = (assembly / assemblyMergeStrategy).value
+        oldStrategy(x)
+    }
   )
 
 lazy val root = project
   .in(file("."))
-  .dependsOn(lib)
   .settings(
-    name := "SafeExecMCP",
+    name := "TACIT",
     version := "0.1.0-SNAPSHOT",
 
     scalaVersion := scala3Version,
@@ -74,13 +88,23 @@ lazy val root = project
       Seq(dst)
     }.taskValue,
 
+    // Build library fat JAR before tests/run/assembly and pass its path
+    Test / test := ((Test / test) dependsOn (lib / assembly)).value,
+    Test / testOnly := ((Test / testOnly) dependsOn (lib / assembly)).evaluated,
+    Compile / run := (Compile / run dependsOn (lib / assembly)).evaluated,
+    assembly := (assembly dependsOn (lib / assembly)).value,
+    javaOptions += {
+      val jarPath = (lib / assembly / assemblyOutputPath).value.getAbsolutePath
+      s"-Dtacit.library.jar=$jarPath"
+    },
+
     // Enable forking for the REPL execution
     fork := true,
     // Connect stdin to the forked process (needed for MCP stdio communication)
     run / connectInput := true,
     
     // Assembly settings for creating a fat JAR
-    assembly / mainClass := Some("tacit.SafeExecMCP"),
+    assembly / mainClass := Some("tacit.StartMCP"),
     assembly / assemblyMergeStrategy := {
       case PathList("META-INF", "services", _*) => MergeStrategy.concat
       case PathList("META-INF", "MANIFEST.MF")  => MergeStrategy.discard

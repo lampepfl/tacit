@@ -19,36 +19,14 @@ case class ExecutionResult(
 /** Executes Scala code snippets */
 object ScalaExecutor:
 
-  /** Computes the classpath for the embedded Scala REPL.
-    *
-    * `-usejavacp` only reads `java.class.path`, which can be incomplete
-    * (e.g. fat JAR, custom classloader). This builds an explicit
-    * classpath by also locating Scala core libraries via loaded classes.
+  /** Returns the REPL compiler args. The library fat JAR provides the full classpath
+    * (Scala stdlib + library classes + library dependencies).
     */
-  private[executor] lazy val replClasspathArgs: Array[String] =
-    val paths = mutable.LinkedHashSet[String]()
-
-    // java.class.path: covers sbt run, java -cp, etc.
-    Option(System.getProperty("java.class.path")).foreach { cp =>
-      paths ++= cp.split(java.io.File.pathSeparator).filter(_.nonEmpty)
-    }
-
-    // Locate the Scala standard library via a loaded class.
-    // This covers cases where java.class.path doesn't list it
-    // (fat JARs, app servers, custom launchers).
-    // Only the stdlib is included: compiler/REPL internals are
-    // intentionally kept off the executed code's classpath.
-    val markerClasses: List[Class[?]] = List(
-      classOf[scala.Unit],                    // scala-library
-    )
-    for cls <- markerClasses do
-      try
-        val loc = cls.getProtectionDomain.getCodeSource.getLocation
-        paths += java.nio.file.Paths.get(loc.toURI).toString
-      catch case _: Exception => ()
+  private[executor] def replClasspathArgs(cfg: Config): Array[String] =
+    val classpath = java.io.File(cfg.libraryJarPath.get).getAbsolutePath
 
     Array(
-      "-classpath", paths.mkString(java.io.File.pathSeparator),
+      "-classpath", classpath,
       "-color:never",
       "-deprecation",
       "-feature",
@@ -59,6 +37,17 @@ object ScalaExecutor:
       "-language:experimental.captureChecking",
       // "-language:experimental.separationChecking",
       "-language:experimental.modularity"
+    )
+
+  /** Creates a sandboxed classloader that only exposes JDK platform classes
+    * and the library JAR. This prevents user code from accessing server internals
+    * (tacit.core, tacit.mcp, tacit.executor) or server dependencies (circe, scopt, etc.).
+    */
+  private[executor] def sandboxedClassLoader(cfg: Config): ClassLoader =
+    val libraryUrl = java.io.File(cfg.libraryJarPath.get).toURI.toURL
+    new java.net.URLClassLoader(
+      Array(libraryUrl),
+      ClassLoader.getPlatformClassLoader  // JDK platform classes only, no application classes
     )
 
   /** Preamble code injected before user code to make the library API available. */
@@ -131,7 +120,7 @@ object ScalaExecutor:
     validated(code).getOrElse:
       val outputCapture = new ByteArrayOutputStream()
       val printStream = new PrintStream(outputCapture, true, StandardCharsets.UTF_8)
-      val driver = new ReplDriver(replClasspathArgs, printStream, Some(getClass.getClassLoader))
+      val driver = new ReplDriver(replClasspathArgs(ctx.config), printStream, Some(sandboxedClassLoader(ctx.config)))
       var state = driver.run(libraryPreamble(ctx.config))(using driver.initialState)
       withOutputCapture(outputCapture, printStream):
         state = driver.run(wrapCode(code, ctx.config.wrappedCode))(using state)
@@ -145,9 +134,9 @@ class ReplSession(val id: String)(using Context):
   private val printStream = new PrintStream(outputCapture, true, StandardCharsets.UTF_8)
 
   private val driver = new ReplDriver(
-    replClasspathArgs,
+    replClasspathArgs(ctx.config),
     printStream,
-    Some(getClass.getClassLoader)
+    Some(sandboxedClassLoader(ctx.config))
   )
   private var state: State =
     val s0 = driver.initialState

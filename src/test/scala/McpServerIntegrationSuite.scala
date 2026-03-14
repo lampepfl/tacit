@@ -48,8 +48,10 @@ class McpServerIntegrationSuite extends munit.FunSuite:
   def startServer(): McpClient =
     // Use the main class directly via Java to avoid sbt logging interference
     val classpath = System.getProperty("java.class.path")
+    val libraryJar = System.getProperty("tacit.library.jar")
+    assert(libraryJar != null, "tacit.library.jar system property not set — sbt should set this automatically")
     val processBuilder = new ProcessBuilder(
-      "java", "-cp", classpath, "tacit.SafeExecMCP"
+      "java", "-cp", classpath, "tacit.StartMCP", "--library-jar", libraryJar
     )
     processBuilder.directory(new java.io.File(System.getProperty("user.dir")))
     processBuilder.redirectErrorStream(false)
@@ -75,7 +77,7 @@ class McpServerIntegrationSuite extends munit.FunSuite:
       )))
 
       assert(initResponse.hcursor.downField("result").get[String]("protocolVersion").isRight)
-      assert(initResponse.hcursor.downField("result").downField("serverInfo").get[String]("name").toOption.contains("SafeExecMCP"))
+      assert(initResponse.hcursor.downField("result").downField("serverInfo").get[String]("name").toOption.contains("TACIT MCP"))
 
       // Send initialized notification
       client.send("initialized")

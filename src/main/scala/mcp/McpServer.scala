@@ -67,7 +67,7 @@ class McpServer(using Context):
         tools = Some(ToolsCapability(listChanged = Some(true)))
       ),
       serverInfo = ServerInfo(
-        name = "SafeExecMCP",
+        name = "TACIT MCP",
         version = "0.1.0"
       )
     )

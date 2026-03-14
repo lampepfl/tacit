@@ -8,9 +8,10 @@ import tacit.mcp.*
 import tacit.core.Config
 import tacit.core.*
 import Context.*
+import Log.*
 
-/** SafeExecMCP - A Model Context Protocol server for safe Scala code execution */
-@main def SafeExecMCP(args: String*): Unit =
+/** TACIT - A Model Context Protocol server for safe Scala code execution */
+@main def StartMCP(args: String*): Unit =
   // Save the real stdout for JSON-RPC before any REPL compiler can pollute it.
   // The Scala compiler (especially with capture checking) may write diagnostic
   // output directly to System.out, bypassing ReplDriver's capture stream.
@@ -26,16 +27,10 @@ import Context.*
       val reader = new BufferedReader(new InputStreamReader(System.in))
       val writer = new PrintWriter(jsonRpcOut, true)
 
-      // Log to stderr so it doesn't interfere with JSON-RPC communication
-      def log(msg: String): Unit =
-        if !config.quiet then System.err.println(s"[SafeExecMCP] $msg")
-      def error(msg: String): Unit =
-        System.err.println(s"[SafeExecMCP] ERROR: $msg")
-
       def printStartupBanner(): Unit =
         val jarPath = scala.util.Try {
           new java.io.File(classOf[McpServer].getProtectionDomain.getCodeSource.getLocation.toURI).getAbsolutePath
-        }.getOrElse("<path/to/SafeExecMCP-assembly-0.1.0-SNAPSHOT.jar>")
+        }.getOrElse("<path/to/TACIT-assembly-0.1.0-SNAPSHOT.jar>")
         val cwd = System.getProperty("user.dir")
         val recordingStatus = config.recordPath match
           case Some(dir) => s"Recording: ON -> $dir"
@@ -45,16 +40,18 @@ import Context.*
         val llmStatus = config.llmConfig match
           case Some(cfg) => s"LLM:       ON -> ${cfg.model} @ ${cfg.baseUrl}"
           case None      => "LLM:       OFF"
+        val libraryStatus = s"Library:   ${config.libraryJarPath.get}"
 
         System.err.println(
           s"""
-            | SafeExecMCP Server
+            | TACIT MCP Server
             | Transport: stdio (JSON-RPC 2.0)                                 
             | Protocol:  Model Context Protocol (MCP)                         
             | $recordingStatus
             | $strictStatus
             | $sessionStatus
             | $llmStatus
+            | $libraryStatus
             | JAR:       $jarPath
             | CWD:       $cwd
             |""".stripMargin)
@@ -77,7 +74,7 @@ import Context.*
                   JsonRpcError.ParseError,
                   s"Parse error: ${error.message}"
                 )
-                sendResponse(writer, response, config.quiet)
+                sendResponse(writer, response)
 
               case Right(json) =>
                 json.as[JsonRpcRequest] match
@@ -87,11 +84,11 @@ import Context.*
                       JsonRpcError.InvalidRequest,
                       s"Invalid request: ${error.message}"
                     )
-                    sendResponse(writer, response, config.quiet)
+                    sendResponse(writer, response)
 
                   case Right(request) =>
                     server.handleRequest(request).foreach { response =>
-                      sendResponse(writer, response, config.quiet)
+                      sendResponse(writer, response)
                     }
       catch
         case e: Exception =>
@@ -100,9 +97,9 @@ import Context.*
       finally
         log("Server shutting down...")
 
-def sendResponse(writer: PrintWriter, response: JsonRpcResponse, quiet: Boolean = false): Unit =
+def sendResponse(writer: PrintWriter, response: JsonRpcResponse)(using Context): Unit =
   val json = response.asJson.noSpaces
-  if !quiet then System.err.println(s"[SafeExecMCP] Sending: ${json.take(200)}...")
+  log(s"Sending: ${json.take(200)}...")
   writer.println(json)
   writer.flush()
 

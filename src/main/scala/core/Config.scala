@@ -2,7 +2,9 @@ package tacit
 package core
 
 import scopt.OParser
-import library.LlmConfig
+
+case class LlmConfig(baseUrl: String, apiKey: String, model: String):
+  override def toString: String = s"LlmConfig($baseUrl, ***, $model)"
 
 case class Config(
   recordPath: Option[String] = None,
@@ -12,11 +14,12 @@ case class Config(
   quiet: Boolean = false,
   wrappedCode: Boolean = true,
   sessionEnabled: Boolean = true,
+  libraryJarPath: Option[String] = Option(System.getProperty("tacit.library.jar")),
 )
 
 object Config:
   private def warn(msg: String): Unit =
-    System.err.println(s"[SafeExecMCP][config] WARNING: $msg")
+    System.err.println(s"[TACIT MCP][config] WARNING: $msg")
 
   private def mergeFromFile(base: Config, path: String): Config =
     import io.circe.parser.{parse => parseJson}
@@ -37,6 +40,7 @@ object Config:
     val quiet = cursor.get[Boolean]("quiet").toOption.getOrElse(base.quiet)
     val wrappedCode = cursor.get[Boolean]("wrappedCode").toOption.getOrElse(base.wrappedCode)
     val sessionEnabled = cursor.get[Boolean]("sessionEnabled").toOption.getOrElse(base.sessionEnabled)
+    val libraryJarPath = cursor.get[String]("libraryJarPath").toOption.orElse(base.libraryJarPath)
     val classifiedPaths = cursor.downField("classifiedPaths").as[List[String]].toOption
       .map(_.toSet).getOrElse(base.classifiedPaths)
     val llmConfig = cursor.downField("llm").focus.flatMap { llmJson =>
@@ -61,6 +65,7 @@ object Config:
       quiet = quiet,
       wrappedCode = wrappedCode,
       sessionEnabled = sessionEnabled,
+      libraryJarPath = libraryJarPath,
     )
 
   /** Validate that LlmConfig doesn't have empty-string fields (from partial CLI flags). */
@@ -79,7 +84,7 @@ object Config:
     val builder = OParser.builder[Config]
     import builder.*
     OParser.sequence(
-      programName("SafeExecMCP"),
+      programName("TACIT"),
       opt[String]('r', "record")
         .action((x, c) => c.copy(recordPath = Some(x)))
         .text("Record code execution requests in the given directory."),
@@ -98,6 +103,9 @@ object Config:
       opt[Unit]("no-session")
         .action((_, c) => c.copy(sessionEnabled = false))
         .text("Disable session-related tools (create/execute/delete/list sessions)."),
+      opt[String]("library-jar")
+        .action((x, c) => c.copy(libraryJarPath = Some(x)))
+        .text("Path to the library JAR (TACIT-library.jar). Required."),
       opt[String]('c', "config")
         .action((x, c) => mergeFromFile(c, x))
         .text("Path to JSON config file."),
@@ -121,5 +129,19 @@ object Config:
         .text("LLM model name."),
     )
 
+  private def validateLibraryJar(config: Config): Option[Config] =
+    config.libraryJarPath match
+      case Some(path) =>
+        val file = java.io.File(path)
+        if !file.exists() then
+          System.err.println(s"Error: Library JAR not found: '$path'")
+          None
+        else Some(config)
+      case None =>
+        System.err.println("Error: --library-jar is required")
+        None
+
   def parseCliArgs(args: Array[String]): Option[Config] =
-    OParser.parse(optParser, args, Config()).map(validateLlmConfig)
+    OParser.parse(optParser, args, Config())
+      .map(validateLlmConfig)
+      .flatMap(validateLibraryJar)

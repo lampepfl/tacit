@@ -2,15 +2,37 @@
 set -euo pipefail
 
 # Usage:
-#   ./build.sh [dist-path]
+#   ./build.sh [--verbose|-v] [dist-path]
 
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
-DEST_DIR="${1:-$PWD}"
+DEST_DIR="$PWD"
+VERBOSE=false
 
-if [[ $# -gt 1 ]]; then
-  echo "Usage: $0 [dist-path]" >&2
-  exit 1
-fi
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    -v|--verbose)
+      VERBOSE=true
+      shift
+      ;;
+    -h|--help)
+      echo "Usage: $0 [--verbose|-v] [dist-path]"
+      exit 0
+      ;;
+    -*)
+      echo "Unknown option: $1" >&2
+      echo "Usage: $0 [--verbose|-v] [dist-path]" >&2
+      exit 1
+      ;;
+    *)
+      if [[ "$DEST_DIR" != "$PWD" ]]; then
+        echo "Usage: $0 [--verbose|-v] [dist-path]" >&2
+        exit 1
+      fi
+      DEST_DIR="$1"
+      shift
+      ;;
+  esac
+done
 
 if [[ "$DEST_DIR" != /* ]]; then
   DEST_DIR="$PWD/$DEST_DIR"
@@ -26,7 +48,14 @@ if ! command -v sbt >/dev/null 2>&1; then
 fi
 
 echo "Running assembly tasks..."
-SBT_OUTPUT="$(sbt -batch -no-colors "lib/assembly" "assembly" "show lib / assembly / assemblyOutputPath" "show assembly / assemblyOutputPath" 2>&1)"
+
+SBT_ARGS=(-batch -no-colors "lib/assembly" "assembly" "show lib / assembly / assemblyOutputPath" "show assembly / assemblyOutputPath")
+
+if [[ "$VERBOSE" == true ]]; then
+  SBT_OUTPUT="$(sbt "${SBT_ARGS[@]}" 2>&1 | tee /dev/stderr)"
+else
+  SBT_OUTPUT="$(sbt "${SBT_ARGS[@]}" 2>&1)"
+fi
 
 LIB_JAR="$(printf '%s\n' "$SBT_OUTPUT" | grep -Eo '/[^ ]*TACIT-library\.jar' | tail -n1 || true)"
 ROOT_JAR="$(printf '%s\n' "$SBT_OUTPUT" | grep -Eo '/[^ ]*/target/scala-[^ /]*/[^ /]*assembly[^ /]*\.jar' | tail -n1 || true)"

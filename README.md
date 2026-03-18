@@ -22,16 +22,25 @@ Requires JDK 17+
 
 ### 1. Download Prebuilt Release JARs (Recommended)
 
-Use the release download script to get started quickly (no local build required). 
+Use the release download script to get started quickly (no local build required).
 It will download the latest server and library JARs from GitHub releases and place them in the current directory.
 
 ```bash
+# Download the script directly (no git clone required)
+curl -fsSL https://raw.githubusercontent.com/noti0na1/TACIT/refs/heads/main/download_release.sh -o download_release.sh
+chmod +x download_release.sh
+
+# Run it
 ./download_release.sh
 ```
 
 Optional:
 
 ```bash
+# Or use wget instead of curl
+wget -q https://raw.githubusercontent.com/noti0na1/TACIT/refs/heads/main/download_release.sh -O download_release.sh
+chmod +x download_release.sh
+
 # Download into a custom directory
 ./download_release.sh ./dist
 
@@ -51,6 +60,9 @@ By default, this downloads:
 Requires JDK 17+ and sbt 1.12+.
 
 ```bash
+git clone https://github.com/noti0na1/TACIT.git
+cd TACIT
+
 ./build.sh
 ```
 
@@ -59,6 +71,9 @@ Optional:
 ```bash
 # Build and copy JARs into a custom directory
 ./build.sh ./dist
+
+# Show full sbt output while building
+./build.sh --verbose
 ```
 
 This builds and copies two JARs:

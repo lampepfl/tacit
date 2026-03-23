@@ -27,7 +27,7 @@ It will download the latest server and library JARs from GitHub releases and pla
 
 ```bash
 # Download the script directly (no git clone required)
-curl -fsSL https://raw.githubusercontent.com/lampepfl/TACIT/refs/heads/main/download_release.sh -o download_release.sh
+curl -fsSL https://raw.githubusercontent.com/lampepfl/tacit/refs/heads/main/download_release.sh -o download_release.sh
 chmod +x download_release.sh
 
 # Run it
@@ -38,7 +38,7 @@ Optional:
 
 ```bash
 # Or use wget instead of curl
-wget -q https://raw.githubusercontent.com/lampepfl/TACIT/refs/heads/main/download_release.sh -O download_release.sh
+wget -q https://raw.githubusercontent.com/lampepfl/tacit/refs/heads/main/download_release.sh -O download_release.sh
 chmod +x download_release.sh
 
 # Download into a custom directory
@@ -60,8 +60,8 @@ By default, this downloads:
 Requires JDK 17+ and sbt 1.12+.
 
 ```bash
-git clone https://github.com/lampepfl/TACIT.git
-cd TACIT
+git clone https://github.com/lampepfl/tacit.git
+cd tacit
 
 ./build.sh
 ```
@@ -250,8 +250,6 @@ The server can be configured via CLI flags or a JSON config file. Pass flags dir
   "recordPath": "/tmp/recordings",
   "strictMode": true,
   "quiet": false,
-  "wrappedCode": true,
-  "sessionEnabled": false,
   "classifiedPaths": ["/home/user/project/secrets"],
   "libraryJarPath": "/path/to/TACIT-library.jar",
   "llm": {

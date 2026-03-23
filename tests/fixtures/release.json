@@ -1,0 +1,37 @@
+{
+  "url": "https://api.github.com/repos/lampepfl/tacit/releases/12345678",
+  "id": 12345678,
+  "tag_name": "v0.2.0",
+  "name": "v0.2.0",
+  "draft": false,
+  "prerelease": false,
+  "assets": [
+    {
+      "url": "https://api.github.com/repos/lampepfl/tacit/releases/assets/111",
+      "id": 111,
+      "name": "TACIT.jar",
+      "content_type": "application/java-archive",
+      "size": 50000000,
+      "digest": "sha256:abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890",
+      "browser_download_url": "https://github.com/lampepfl/tacit/releases/download/v0.2.0/TACIT.jar"
+    },
+    {
+      "url": "https://api.github.com/repos/lampepfl/tacit/releases/assets/222",
+      "id": 222,
+      "name": "TACIT-library.jar",
+      "content_type": "application/java-archive",
+      "size": 30000000,
+      "digest": "sha256:fedcba0987654321fedcba0987654321fedcba0987654321fedcba0987654321",
+      "browser_download_url": "https://github.com/lampepfl/tacit/releases/download/v0.2.0/TACIT-library.jar"
+    },
+    {
+      "url": "https://api.github.com/repos/lampepfl/tacit/releases/assets/333",
+      "id": 333,
+      "name": "checksums.txt",
+      "content_type": "text/plain",
+      "size": 256,
+      "digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+      "browser_download_url": "https://github.com/lampepfl/tacit/releases/download/v0.2.0/checksums.txt"
+    }
+  ]
+}

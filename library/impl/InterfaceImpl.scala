@@ -14,6 +14,11 @@ class InterfaceImpl(
   export ProcessOps.*
   export WebOps.*
 
+  // IOCapability's private constructor means user code cannot create one.
+  // The null sentinel is safe: IOCapability is only used as a type-level
+  // capability witness, never dereferenced at runtime.
+  val iocap: IOCapability = null.asInstanceOf[IOCapability]
+  
   private val llmOps = new LlmOps(llmConfig)
   export llmOps.chat
 

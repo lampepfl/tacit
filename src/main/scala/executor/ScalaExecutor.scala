@@ -64,18 +64,15 @@ object ScalaExecutor:
     val llmConfigExpr = cfg.llmConfig match
       case None => "None"
       case Some(llm) => s"""Some(LlmConfig("${esc(llm.baseUrl)}", "${esc(llm.apiKey)}", "${esc(llm.model)}"))"""
-    // IOCapability's private constructor means user code cannot create one.
-    // The null sentinel is safe: IOCapability is only used as a type-level
-    // capability witness, never dereferenced at runtime.
     s"""|import tacit.library.*
-        |val api: Interface = new InterfaceImpl(
+        |val api: Interface^ = new InterfaceImpl(
         |  (root, check, classified) => new RealFileSystem(java.nio.file.Path.of(root), check, classified),
         |  ${cfg.strictMode},
         |  $classifiedExpr,
         |  $llmConfigExpr
         |)
         |import api.*
-        |given IOCapability = null.asInstanceOf[IOCapability]
+        |given IOCapability = iocap
         |""".stripMargin
 
   /** Wraps user code in a `def run() = ...; run()` block to avoid capture checking REPL errors. */

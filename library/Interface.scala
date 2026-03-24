@@ -119,6 +119,8 @@ class IOCapability private extends caps.SharedCapability
  */
 trait Interface:
 
+  val iocap: IOCapability
+
   // ── File System ─────────────────────────────────────────────────────
 
   /** Request a `FileSystem` scoped to the subtree under `root`.

@@ -4,4 +4,4 @@
 //> using option -language:experimental.captureChecking
 //> using option -language:experimental.modularity
 //> using dep org.scalameta::munit::1.2.4
-//> using dep com.openai:openai-java:4.29.0
+//> using dep com.openai:openai-java:4.29.1

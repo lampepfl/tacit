@@ -2,6 +2,8 @@ package tacit.library
 
 import language.experimental.captureChecking
 
+import caps.unsafe.unsafeAssumePure
+
 import java.nio.file.{Files, Path}
 import scala.compiletime.uninitialized
 import scala.jdk.CollectionConverters.*
@@ -13,11 +15,11 @@ class LibrarySuite extends munit.FunSuite:
   override def beforeEach(context: BeforeEach): Unit =
     tmpDir = Files.createTempDirectory("sandbox-test")
 
-  val interface: Interface = new InterfaceImpl( (root, check, classified) => new RealFileSystem(Path.of(root), check, classified) )
+  private val interface: Interface = new InterfaceImpl( (root, check, classified) => new RealFileSystem(Path.of(root), check, classified) ).unsafeAssumePure
 
   import interface.*
 
-  given iocap: (IOCapability^{}) = null.asInstanceOf[IOCapability]
+  given (IOCapability^{}) = iocap.unsafeAssumePure
 
   override def afterEach(context: AfterEach): Unit =
     if Files.exists(tmpDir) then
@@ -165,7 +167,7 @@ class LibrarySuite extends munit.FunSuite:
   test("classified path enforcement on real file system") {
     val secretDir = tmpDir.resolve("secret")
     Files.createDirectories(secretDir)
-    val classifiedInterface: Interface = new InterfaceImpl(
+    val classifiedInterface: Interface^ = new InterfaceImpl(
       (root, check, classified) => new RealFileSystem(Path.of(root), check, classified),
       false,
       Set(secretDir)

@@ -1,15 +1,18 @@
 package tacit.library
 
-import java.nio.file.{Files, Path}
 import language.experimental.captureChecking
+
+import caps.unsafe.unsafeAssumePure
+
+import java.nio.file.{Files, Path}
 
 class VirtualEnvSuite extends munit.FunSuite:
 
-  val interface: Interface = new InterfaceImpl((root, check, classified) => new VirtualFileSystem(Path.of(root), check, classifiedPaths = classified))
+  val interface: Interface = new InterfaceImpl((root, check, classified) => new VirtualFileSystem(Path.of(root), check, classifiedPaths = classified)).unsafeAssumePure
 
   import interface.*
 
-  given iocap: (IOCapability^{}) = null.asInstanceOf[IOCapability]
+  given (IOCapability^{}) = iocap.unsafeAssumePure
 
   test("virtual: write and read back") {
     requestFileSystem("/virtual") {

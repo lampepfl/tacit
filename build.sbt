@@ -26,7 +26,7 @@ lazy val lib = project
     ),
     Compile / unmanagedSources / excludeFilter :=
       "*.test.scala" || "project.scala" || "README.md",
-    libraryDependencies += "com.openai" % "openai-java" % "4.29.0",
+    libraryDependencies += "com.openai" % "openai-java" % "4.29.1",
     scalacOptions ++= Seq(
       "-language:experimental.captureChecking",
       // "-language:experimental.separationChecking",

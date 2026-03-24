@@ -1,12 +1,11 @@
 package tacit.library
 
-import java.nio.file.Path
 import language.experimental.captureChecking
+import caps.unsafe.unsafeAssumePure
+
+import java.nio.file.Path
 
 class ClassifiedSuite extends munit.FunSuite:
-
-  given iocap: (IOCapability^{}) = null.asInstanceOf[IOCapability]
-
   // ── Classified[T] unit tests ──────────────────────────────────────────
 
   test("Classified.apply creates a classified value") {
@@ -39,9 +38,11 @@ class ClassifiedSuite extends munit.FunSuite:
     (root, check, classified) => new VirtualFileSystem(Path.of(root), check, classifiedPaths = classified),
     false,
     Set(classifiedDir)
-  )
+  ).unsafeAssumePure
 
   import interface.*
+
+  given (IOCapability^{}) = iocap.unsafeAssumePure
 
   test("isClassified returns true for classified file") {
     requestFileSystem("/virtual") {

@@ -18,7 +18,7 @@ The framework has three main components:
 
 TACIT provides a standard MCP server that communicates via JSON-RPC over stdio. It works with any MCP-compatible agent, including Claude Code, OpenCode, GitHub Copilot, and others.
 
-Requires JDK 17+
+Requires JDK 17+.
 
 ### Installing TACIT
 
@@ -93,7 +93,7 @@ By default, this downloads:
 | MCP Server | `./TACIT.jar` |
 | Library | `./TACIT-library.jar` |
 
-If you are developing TACIT or want to build from the current source tree, use the source build path.
+To build from the current source tree, see Option 3 below.
 
 #### Option 3: Build from Source
 
@@ -340,6 +340,8 @@ The server can be configured via CLI flags or a JSON config file. Pass flags dir
   "recordPath": "/tmp/recordings",
   "strictMode": true,
   "quiet": false,
+  "wrappedCode": false,
+  "sessionEnabled": true,
   "classifiedPaths": ["/home/user/project/secrets"],
   "libraryJarPath": "/path/to/TACIT-library.jar",
   "llm": {
@@ -411,9 +413,7 @@ requestNetwork(Set("api.example.com")) {
 
 Consider a typical code agent working on a project directory. Some files are ordinary (source code, build configs, READMEs). Others are sensitive: API keys in `.env`, credentials in `secrets/`, internal documents. The agent is powered by a cloud-hosted LLM (a third-party service). We want the agent to *use* or *process* the sensitive data (summarize internal docs, rotate keys, process reports) but never leak it to the cloud provider.
 
-TACIT solves this through the `Classified[T]` type. Files under designated classified paths (configured via `--classified-paths`) return their content wrapped in `Classified[String]` instead of plain `String`. The type system then enforces the key property:
-**Pure-only access**. `Classified.map` accepts only pure functions (`T -> U`), meaning no effects, not capturing any capability. You can transform the data, but you cannot send it anywhere.
-Any attempt to exfiltrate classified data is rejected **at compile time**:
+TACIT solves this through the `Classified[T]` type. Files under designated classified paths (configured via `--classified-paths`) return their content wrapped in `Classified[String]` instead of plain `String`. The type system enforces **pure-only access**: `Classified.map` accepts only pure functions (`T -> U`), meaning no effects and no captured capabilities. You can transform the data, but you cannot send it anywhere. Any attempt to exfiltrate classified data is rejected **at compile time**:
 
 ```scala
 requestFileSystem("/project") {
@@ -444,7 +444,7 @@ requestFileSystem("/project") {
   val upper = doc.map(_.trim)
 
   // OK: send to trusted local LLM, result stays Classified
-  val summary = chat("Summarize the following document:", doc)
+  val summary = chat(doc.map(s => s"Summarize the following document:\n$s"))
   // summary: Classified[String], content is still protected
 
   // OK: write back to a classified file
@@ -465,7 +465,7 @@ Agent-generated code is compiled under Scala 3's *safe mode* (`import language.e
 
 These restrictions prevent agents from "forgetting" capabilities through unsafe casts, reflection, or type system holes. Code that does not pass compilation is never executed.
 
-The safe mode is an experimental feature and still under active development and testing. We currently use a static code validator that checks for forbidden patterns to enforce the safe mode subset. We are planning to migrate to the official Scala 3 safe mode once soon.
+Safe mode is an experimental feature still under active development. We currently use a static code validator that checks for forbidden patterns to enforce the safe mode subset, and plan to migrate to the official Scala 3 safe mode once it is stable.
 
 ### LLM Integration
 
@@ -505,6 +505,7 @@ library/
 ├── Interface.scala          # Public API trait (what user code sees)
 ├── impl/
 │   ├── InterfaceImpl.scala  # Wires everything together (exports Ops objects)
+│   ├── BaseFileSystem.scala # Shared file system base logic
 │   ├── FileOps.scala        # grep, grepRecursive, find
 │   ├── ProcessOps.scala     # exec, execOutput
 │   ├── WebOps.scala         # httpGet, httpPost
@@ -565,7 +566,7 @@ object DatabaseOps:
 In `library/impl/InterfaceImpl.scala`, export your new operations and implement the `request*` method:
 
 ```scala
-class InterfaceImpl(...) extends Interface:
+abstract class InterfaceImpl(...) extends Interface:
   export FileOps.*
   export ProcessOps.*
   export WebOps.*
@@ -631,14 +632,13 @@ java -jar server.jar --library-jar new-library.jar
 
 - **The library JAR is a fat JAR.** `sbt "lib/assembly"` produces a JAR that includes all of the library's dependencies (e.g., `openai-java`). If you add a dependency, it will be bundled automatically.
 
-- **Server depends on library types at compile time.** The server depends on the interface type to run the REPL.
-Make sure your change is compatible with the server's expected interface.
+- **Server depends on library types at compile time.** The server depends on the interface type to run the REPL. Make sure your change is compatible with the server's expected interface.
 
 - **Test your API at the library level first.** The `library/test/` directory contains library-level tests using MUnit. Test your new operations there before doing integration tests through the MCP server. See `LibrarySuite.test.scala` for examples.
 
 ## Development
 
-Requirements
+Requirements:
 - JDK 17+
 - sbt 1.12+
 

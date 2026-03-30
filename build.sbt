@@ -26,7 +26,9 @@ lazy val agents = project
   .configs(TestFull)
   .settings(
     name := "tacit-agents",
-    scalaVersion := scala3Version,
+    organization := "lampepfl",
+    version := "0.1.0-SNAPSHOT",
+    scalaVersion := "3.8.2",
     scalacOptions ++= Seq(
       "-deprecation", "-feature", "-unchecked",
       "-Yexplicit-nulls", "-Wsafe-init",

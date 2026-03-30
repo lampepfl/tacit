@@ -48,7 +48,7 @@ class EndpointNetworkSuite extends munit.FunSuite:
   test("AnthropicEndpoint.invoke returns a response".tag(Network)):
     assume(sys.env.contains("ANTHROPIC_API_KEY"), "ANTHROPIC_API_KEY not set")
     val endpoint = AnthropicEndpoint.createFromEnv()
-    val config = LLMConfig(model = "claude-sonnet-4-20250514", maxTokens = Some(16))
+    val config = LLMConfig(model = "claude-haiku-4-5", maxTokens = Some(16))
     val result = endpoint.invoke(List(Message.user("Say hello")), config)
     assert(result.isRight, s"Expected Right but got $result")
     val response = result.toOption.get
@@ -61,7 +61,7 @@ class EndpointNetworkSuite extends munit.FunSuite:
     assume(sys.env.contains("ANTHROPIC_API_KEY"), "ANTHROPIC_API_KEY not set")
     val endpoint = AnthropicEndpoint.createFromEnv()
     val config = LLMConfig(
-      model = "claude-sonnet-4-20250514",
+      model = "claude-haiku-4-5",
       maxTokens = Some(16),
       systemPrompt = Some("You are a helpful assistant. Reply only with the word PONG."),
     )
@@ -74,7 +74,7 @@ class EndpointNetworkSuite extends munit.FunSuite:
       baseUrl = "https://api.anthropic.com",
       apiKey = "sk-ant-invalid",
     ))
-    val config = LLMConfig(model = "claude-sonnet-4-20250514", maxTokens = Some(16))
+    val config = LLMConfig(model = "claude-haiku-4-5", maxTokens = Some(16))
     val result = endpoint.invoke(List(Message.user("hello")), config)
     assert(result.isLeft)
 
@@ -127,7 +127,7 @@ class EndpointNetworkSuite extends munit.FunSuite:
   test("AnthropicEndpoint.stream text response".tag(Network)):
     assume(sys.env.contains("ANTHROPIC_API_KEY"), "ANTHROPIC_API_KEY not set")
     val endpoint = AnthropicEndpoint.createFromEnv()
-    val config = LLMConfig(model = "claude-sonnet-4-20250514", maxTokens = Some(32))
+    val config = LLMConfig(model = "claude-haiku-4-5", maxTokens = Some(32))
     val events = endpoint.stream(List(Message.user("Say hello")), config)
     val collected = events.toList
     assert(collected.forall(_.isRight), s"Expected all Right but got errors")
@@ -174,7 +174,7 @@ class EndpointNetworkSuite extends munit.FunSuite:
     assume(sys.env.contains("ANTHROPIC_API_KEY"), "ANTHROPIC_API_KEY not set")
     val endpoint = AnthropicEndpoint.createFromEnv()
     val config = LLMConfig(
-      model = "claude-sonnet-4-20250514",
+      model = "claude-haiku-4-5",
       maxTokens = Some(256),
       tools = List(weatherTool),
       systemPrompt = Some("Use the provided tools to answer questions. Do not respond with text, just call the appropriate tool."),
@@ -205,7 +205,7 @@ class EndpointNetworkSuite extends munit.FunSuite:
     assume(sys.env.contains("ANTHROPIC_API_KEY"), "ANTHROPIC_API_KEY not set")
     val endpoint = AnthropicEndpoint.createFromEnv()
     val config = LLMConfig(
-      model = "claude-sonnet-4-20250514",
+      model = "claude-haiku-4-5",
       maxTokens = Some(256),
       tools = List(weatherTool),
       systemPrompt = Some("Use the provided tools to answer questions. Do not respond with text, just call the appropriate tool."),
@@ -225,7 +225,7 @@ class EndpointNetworkSuite extends munit.FunSuite:
     assume(sys.env.contains("ANTHROPIC_API_KEY"), "ANTHROPIC_API_KEY not set")
     val endpoint = AnthropicEndpoint.createFromEnv()
     val config = LLMConfig(
-      model = "claude-sonnet-4-20250514",
+      model = "claude-haiku-4-5",
       maxTokens = Some(2048),
       thinking = Some(ThinkingMode.Budget(1024)),
     )
@@ -239,7 +239,7 @@ class EndpointNetworkSuite extends munit.FunSuite:
     assume(sys.env.contains("ANTHROPIC_API_KEY"), "ANTHROPIC_API_KEY not set")
     val endpoint = AnthropicEndpoint.createFromEnv()
     val config = LLMConfig(
-      model = "claude-sonnet-4-20250514",
+      model = "claude-haiku-4-5",
       maxTokens = Some(2048),
       thinking = Some(ThinkingMode.Budget(1024)),
     )

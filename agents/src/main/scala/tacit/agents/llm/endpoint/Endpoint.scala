@@ -19,7 +19,7 @@ case class LLMConfig(
   tools: List[ToolSchema] = List.empty,
 )
 
-case class LLMError(description: String):
+class LLMError(val description: String):
   override def toString: String = s"Error when invoking LLM: $description"
 
 trait Endpoint:

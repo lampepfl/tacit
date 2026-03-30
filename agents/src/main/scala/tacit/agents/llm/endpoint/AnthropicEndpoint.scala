@@ -9,6 +9,7 @@ import com.anthropic.models.messages.TextBlock
 import com.anthropic.models.messages.ToolUseBlock
 import com.anthropic.models.messages.{Message as AnthropicMessage}
 import com.anthropic.models.messages.{Tool as AnthropicTool}
+import com.anthropic.models.messages.RawMessageStreamEvent
 import com.anthropic.core.JsonValue
 import scala.jdk.CollectionConverters.*
 import tacit.agents.utils.Result
@@ -23,43 +24,125 @@ class AnthropicEndpoint(config: EndpointConfig) extends Endpoint:
       .baseUrl(config.baseUrl)
       .build()
 
+  private def buildParams(messages: List[Message], llmConfig: LLMConfig): MessageCreateParams.Builder =
+    val maxTokens = llmConfig.maxTokens.map(_.toLong).getOrElse(DefaultMaxTokens)
+    val builder = MessageCreateParams.builder()
+      .model(llmConfig.model)
+      .maxTokens(maxTokens)
+
+    llmConfig.systemPrompt.foreach(p => builder.system(p))
+
+    messages.filterNot(_.role == Role.System).foreach: msg =>
+      msg.role match
+        case Role.User =>
+          builder.addUserMessage(msg.text)
+        case Role.Assistant =>
+          builder.addAssistantMessage(msg.text)
+        case Role.System => ()
+
+    llmConfig.temperature.foreach(t => builder.temperature(t))
+    llmConfig.topP.foreach(p => builder.topP(p))
+    if llmConfig.stopSequences.nonEmpty then
+      llmConfig.stopSequences.foreach(s => builder.addStopSequence(s))
+
+    if llmConfig.tools.nonEmpty then
+      llmConfig.tools.foreach: tool =>
+        builder.addTool(
+          AnthropicTool.builder()
+            .name(tool.name)
+            .description(tool.description)
+            .inputSchema(convertInputSchema(tool.parameters))
+            .build()
+        )
+
+    builder
+
   override def invoke(messages: List[Message], llmConfig: LLMConfig): Result[ChatResponse, LLMError] =
     try
-      val maxTokens = llmConfig.maxTokens.map(_.toLong).getOrElse(DefaultMaxTokens)
-      val builder = MessageCreateParams.builder()
-        .model(llmConfig.model)
-        .maxTokens(maxTokens)
-
-      llmConfig.systemPrompt.foreach(p => builder.system(p))
-
-      messages.filterNot(_.role == Role.System).foreach: msg =>
-        msg.role match
-          case Role.User =>
-            builder.addUserMessage(msg.text)
-          case Role.Assistant =>
-            builder.addAssistantMessage(msg.text)
-          case Role.System => ()
-
-      llmConfig.temperature.foreach(t => builder.temperature(t))
-      llmConfig.topP.foreach(p => builder.topP(p))
-      if llmConfig.stopSequences.nonEmpty then
-        llmConfig.stopSequences.foreach(s => builder.addStopSequence(s))
-
-      if llmConfig.tools.nonEmpty then
-        llmConfig.tools.foreach: tool =>
-          builder.addTool(
-            AnthropicTool.builder()
-              .name(tool.name)
-              .description(tool.description)
-              .inputSchema(convertInputSchema(tool.parameters))
-              .build()
-          )
-
-      val response = client.messages().create(builder.build())
+      val response = client.messages().create(buildParams(messages, llmConfig).build())
       Right(convertResponse(response))
     catch
       case e: Exception =>
         Left(LLMError(s"Anthropic API error: ${e.getMessage}"))
+
+  override def stream(messages: List[Message], llmConfig: LLMConfig): LazyList[Result[StreamEvent, LLMError]] =
+    try
+      val params = buildParams(messages, llmConfig).build()
+      val streamResponse = client.messages().createStreaming(params)
+      val iterator = streamResponse.stream().iterator().asScala
+
+      // Accumulators
+      val textBuf = new StringBuilder
+      val toolCalls = scala.collection.mutable.Map[Int, (String, String, StringBuilder)]()
+      var blockIndex = 0
+      var lastFinishReason: FinishReason = FinishReason.Stop
+      var lastUsage: Option[Usage] = None
+
+      def convertEvent(event: RawMessageStreamEvent): List[Result[StreamEvent, LLMError]] =
+        val events = scala.collection.mutable.ListBuffer[Result[StreamEvent, LLMError]]()
+
+        if event.isContentBlockStart then
+          val startEvent = event.asContentBlockStart()
+          val block = startEvent.contentBlock()
+          val idx = startEvent.index().toInt
+          blockIndex = idx
+          if block.isToolUse then
+            val tu = block.asToolUse()
+            toolCalls(idx) = (tu.id(), tu.name(), new StringBuilder)
+            events += Right(StreamEvent.ToolCallStart(idx, tu.id(), tu.name()))
+
+        else if event.isContentBlockDelta then
+          val deltaEvent = event.asContentBlockDelta()
+          val idx = deltaEvent.index().toInt
+          val delta = deltaEvent.delta()
+          if delta.isText then
+            val text = delta.asText().text()
+            textBuf.append(text)
+            events += Right(StreamEvent.Delta(text))
+          else if delta.isInputJson then
+            val json = delta.asInputJson().partialJson()
+            toolCalls.get(idx).foreach: (_, _, buf) =>
+              buf.append(json)
+            events += Right(StreamEvent.ToolCallDelta(idx, json))
+
+        else if event.isMessageDelta then
+          val md = event.asMessageDelta()
+          md.delta().stopReason().ifPresent: reason =>
+            lastFinishReason = reason.toString match
+              case "end_turn"   => FinishReason.Stop
+              case "max_tokens" => FinishReason.MaxTokens
+              case "tool_use"   => FinishReason.ToolUse
+              case other        => FinishReason.Other(other)
+          lastUsage = Some(Usage(
+            inputTokens = md.usage().inputTokens().orElse(0L),
+            outputTokens = md.usage().outputTokens(),
+          ))
+
+        events.toList
+
+      def buildLazyList(iter: Iterator[RawMessageStreamEvent]): LazyList[Result[StreamEvent, LLMError]] =
+        if iter.hasNext then
+          val event = iter.next()
+          val events = convertEvent(event)
+          LazyList.from(events) #::: buildLazyList(iter)
+        else
+          streamResponse.close()
+          val contents = scala.collection.mutable.ListBuffer[Content]()
+          if textBuf.nonEmpty then
+            contents += Content.Text(textBuf.toString)
+          toolCalls.toList.sortBy(_._1).foreach: (_, tuple) =>
+            contents += Content.ToolUse(tuple._1, tuple._2, tuple._3.toString)
+          val response = ChatResponse(
+            message = Message(Role.Assistant, contents.toList),
+            finishReason = lastFinishReason,
+            usage = lastUsage,
+          )
+          LazyList(Right(StreamEvent.Done(response)))
+
+      buildLazyList(iterator)
+    catch
+      case e: Exception =>
+        LazyList(Left(LLMError(s"Anthropic API error: ${e.getMessage}")))
 
   private def convertResponse(response: AnthropicMessage): ChatResponse =
     val contents = scala.collection.mutable.ListBuffer[Content]()

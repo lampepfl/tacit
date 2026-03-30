@@ -42,3 +42,9 @@ case class Usage(
   inputTokens: Long,
   outputTokens: Long,
 )
+
+enum StreamEvent:
+  case Delta(text: String)
+  case ToolCallStart(index: Int, id: String, name: String)
+  case ToolCallDelta(index: Int, argumentDelta: String)
+  case Done(response: ChatResponse)

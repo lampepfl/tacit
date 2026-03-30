@@ -24,6 +24,7 @@ class LLMError(val description: String):
 
 trait Endpoint:
   def invoke(messages: List[Message], config: LLMConfig): Result[ChatResponse, LLMError]
+  def stream(messages: List[Message], config: LLMConfig): LazyList[Result[StreamEvent, LLMError]]
 
 trait EndpointProvider:
   type EndpointType <: Endpoint

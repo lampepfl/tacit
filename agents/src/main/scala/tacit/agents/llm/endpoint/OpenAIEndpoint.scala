@@ -3,14 +3,11 @@ package llm.endpoint
 
 import com.openai.client.OpenAIClient
 import com.openai.client.okhttp.OpenAIOkHttpClient
-import com.openai.models.chat.completions.ChatCompletion
-import com.openai.models.chat.completions.ChatCompletionCreateParams
-import com.openai.models.chat.completions.ChatCompletionToolMessageParam
-import com.openai.models.chat.completions.ChatCompletionChunk
-import com.openai.models.chat.completions.ChatCompletionStreamOptions
-import com.openai.models.FunctionDefinition
-import com.openai.models.FunctionParameters
-import com.openai.models.ReasoningEffort
+import com.openai.models.chat.completions.{
+  ChatCompletion, ChatCompletionCreateParams, ChatCompletionToolMessageParam,
+  ChatCompletionChunk, ChatCompletionStreamOptions,
+}
+import com.openai.models.{FunctionDefinition, FunctionParameters, ReasoningEffort}
 import com.openai.core.JsonValue
 import scala.jdk.CollectionConverters.*
 import tacit.agents.utils.Result

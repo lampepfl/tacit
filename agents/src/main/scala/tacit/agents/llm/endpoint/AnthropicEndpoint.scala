@@ -3,16 +3,11 @@ package llm.endpoint
 
 import com.anthropic.client.AnthropicClient
 import com.anthropic.client.okhttp.AnthropicOkHttpClient
-import com.anthropic.models.messages.MessageCreateParams
-import com.anthropic.models.messages.ContentBlock
-import com.anthropic.models.messages.TextBlock
-import com.anthropic.models.messages.ToolUseBlock
-import com.anthropic.models.messages.{Message as AnthropicMessage}
-import com.anthropic.models.messages.{Tool as AnthropicTool}
-import com.anthropic.models.messages.RawMessageStreamEvent
-import com.anthropic.models.messages.ThinkingConfigParam
-import com.anthropic.models.messages.ThinkingConfigEnabled
-import com.anthropic.models.messages.ThinkingConfigDisabled
+import com.anthropic.models.messages.{
+  MessageCreateParams, ContentBlock, TextBlock, ToolUseBlock,
+  RawMessageStreamEvent, ThinkingConfigParam, ThinkingConfigEnabled, ThinkingConfigDisabled,
+  Message as AnthropicMessage, Tool as AnthropicTool,
+}
 import com.anthropic.core.JsonValue
 import scala.jdk.CollectionConverters.*
 import tacit.agents.utils.Result

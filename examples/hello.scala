@@ -33,14 +33,14 @@ import tacit.agents.llm.endpoint.*
         event match
           case Right(StreamEvent.ThinkingDelta(text)) =>
             if !inThinking then
-              print("<thinking>")
+              println("<thinking>")
               inThinking = true
               hadThinking = true
             print(text)
             System.out.flush()
           case Right(StreamEvent.Delta(text)) =>
             if inThinking then
-              print("</thinking>")
+              print("\n</thinking>")
               println()
               println()
               inThinking = false

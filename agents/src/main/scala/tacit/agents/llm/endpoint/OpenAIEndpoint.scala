@@ -6,6 +6,9 @@ import com.openai.client.okhttp.OpenAIOkHttpClient
 import com.openai.models.chat.completions.ChatCompletion
 import com.openai.models.chat.completions.ChatCompletionCreateParams
 import com.openai.models.chat.completions.ChatCompletionToolMessageParam
+import com.openai.models.FunctionDefinition
+import com.openai.models.FunctionParameters
+import com.openai.core.JsonValue
 import tacit.agents.utils.Result
 
 class OpenAIEndpoint(config: EndpointConfig) extends Endpoint:
@@ -50,6 +53,16 @@ class OpenAIEndpoint(config: EndpointConfig) extends Endpoint:
             java.util.List.of(llmConfig.stopSequences*)
           )
         )
+
+      if llmConfig.tools.nonEmpty then
+        llmConfig.tools.foreach: tool =>
+          builder.addFunctionTool(
+            FunctionDefinition.builder()
+              .name(tool.name)
+              .description(tool.description)
+              .parameters(convertParameters(tool.parameters))
+              .build()
+          )
 
       val completion = client.chat().completions().create(builder.build())
       val choice = completion.choices().get(0)
@@ -97,6 +110,23 @@ class OpenAIEndpoint(config: EndpointConfig) extends Endpoint:
       finishReason = finishReason,
       usage = usage,
     )
+
+  private def convertParameters(params: Tool.Parameters): FunctionParameters =
+    val propsMap = new java.util.LinkedHashMap[String, Any]()
+    params.properties.foreach: (name, prop) =>
+      val propMap = new java.util.LinkedHashMap[String, Any]()
+      propMap.put("type", prop.`type`)
+      if prop.description.nonEmpty then
+        propMap.put("description", prop.description)
+      if prop.enumValues.nonEmpty then
+        propMap.put("enum", java.util.List.of(prop.enumValues*))
+      propsMap.put(name, propMap)
+
+    FunctionParameters.builder()
+      .putAdditionalProperty("type", JsonValue.from("object"))
+      .putAdditionalProperty("properties", JsonValue.from(propsMap))
+      .putAdditionalProperty("required", JsonValue.from(java.util.List.of(params.required*)))
+      .build()
 
 object OpenAIEndpoint extends EndpointProvider:
   type EndpointType = OpenAIEndpoint

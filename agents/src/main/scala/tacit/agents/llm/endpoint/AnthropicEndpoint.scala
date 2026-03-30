@@ -8,6 +8,9 @@ import com.anthropic.models.messages.ContentBlock
 import com.anthropic.models.messages.TextBlock
 import com.anthropic.models.messages.ToolUseBlock
 import com.anthropic.models.messages.{Message as AnthropicMessage}
+import com.anthropic.models.messages.{Tool as AnthropicTool}
+import com.anthropic.core.JsonValue
+import scala.jdk.CollectionConverters.*
 import tacit.agents.utils.Result
 
 class AnthropicEndpoint(config: EndpointConfig) extends Endpoint:
@@ -41,6 +44,16 @@ class AnthropicEndpoint(config: EndpointConfig) extends Endpoint:
       llmConfig.topP.foreach(p => builder.topP(p))
       if llmConfig.stopSequences.nonEmpty then
         llmConfig.stopSequences.foreach(s => builder.addStopSequence(s))
+
+      if llmConfig.tools.nonEmpty then
+        llmConfig.tools.foreach: tool =>
+          builder.addTool(
+            AnthropicTool.builder()
+              .name(tool.name)
+              .description(tool.description)
+              .inputSchema(convertInputSchema(tool.parameters))
+              .build()
+          )
 
       val response = client.messages().create(builder.build())
       Right(convertResponse(response))
@@ -81,6 +94,22 @@ class AnthropicEndpoint(config: EndpointConfig) extends Endpoint:
       finishReason = finishReason,
       usage = Some(usage),
     )
+
+  private def convertInputSchema(params: Tool.Parameters): AnthropicTool.InputSchema =
+    val propsBuilder = AnthropicTool.InputSchema.Properties.builder()
+    params.properties.foreach: (name, prop) =>
+      val propMap = new java.util.LinkedHashMap[String, Any]()
+      propMap.put("type", prop.`type`)
+      if prop.description.nonEmpty then
+        propMap.put("description", prop.description)
+      if prop.enumValues.nonEmpty then
+        propMap.put("enum", java.util.List.of(prop.enumValues*))
+      propsBuilder.putAdditionalProperty(name, JsonValue.from(propMap))
+
+    AnthropicTool.InputSchema.builder()
+      .properties(propsBuilder.build())
+      .required(params.required.asJava)
+      .build()
 
 object AnthropicEndpoint extends EndpointProvider:
   type EndpointType = AnthropicEndpoint

@@ -77,3 +77,49 @@ class EndpointNetworkSuite extends munit.FunSuite:
     val config = LLMConfig(model = "claude-sonnet-4-20250514", maxTokens = Some(16))
     val result = endpoint.invoke(List(Message.user("hello")), config)
     assert(result.isLeft)
+
+  private val weatherTool = Tool(
+    name = "get_weather",
+    description = "Get the current weather in a given location",
+    parameters = Tool.Parameters(
+      properties = Map(
+        "location" -> Tool.Property(`type` = "string", description = "The city name"),
+      ),
+      required = List("location"),
+    ),
+  )
+
+  test("OpenAIEndpoint.invoke with tool calling".tag(Network)):
+    assume(sys.env.contains("OPENAI_API_KEY"), "OPENAI_API_KEY not set")
+    val endpoint = OpenAIEndpoint.createFromEnv()
+    val config = LLMConfig(
+      model = "gpt-4o-mini",
+      maxTokens = Some(64),
+      tools = List(weatherTool),
+    )
+    val result = endpoint.invoke(List(Message.user("What is the weather in Paris?")), config)
+    assert(result.isRight, s"Expected Right but got $result")
+    val response = result.toOption.get
+    assert(response.finishReason == FinishReason.ToolUse)
+    val toolUses = response.message.content.collect { case c: Content.ToolUse => c }
+    assert(toolUses.nonEmpty, "Expected at least one tool use")
+    assert(toolUses.head.name == "get_weather")
+    assert(toolUses.head.input.contains("Paris"))
+
+  test("AnthropicEndpoint.invoke with tool calling".tag(Network)):
+    assume(sys.env.contains("ANTHROPIC_API_KEY"), "ANTHROPIC_API_KEY not set")
+    val endpoint = AnthropicEndpoint.createFromEnv()
+    val config = LLMConfig(
+      model = "claude-sonnet-4-20250514",
+      maxTokens = Some(256),
+      tools = List(weatherTool),
+      systemPrompt = Some("Use the provided tools to answer questions. Do not respond with text, just call the appropriate tool."),
+    )
+    val result = endpoint.invoke(List(Message.user("What is the weather in Paris?")), config)
+    assert(result.isRight, s"Expected Right but got $result")
+    val response = result.toOption.get
+    assert(response.finishReason == FinishReason.ToolUse)
+    val toolUses = response.message.content.collect { case c: Content.ToolUse => c }
+    assert(toolUses.nonEmpty, "Expected at least one tool use")
+    assert(toolUses.head.name == "get_weather")
+    assert(toolUses.head.input.contains("Paris"))

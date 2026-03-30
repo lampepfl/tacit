@@ -10,6 +10,7 @@ import com.openai.models.chat.completions.ChatCompletionChunk
 import com.openai.models.chat.completions.ChatCompletionStreamOptions
 import com.openai.models.FunctionDefinition
 import com.openai.models.FunctionParameters
+import com.openai.models.ReasoningEffort
 import com.openai.core.JsonValue
 import scala.jdk.CollectionConverters.*
 import tacit.agents.utils.Result
@@ -65,6 +66,16 @@ class OpenAIEndpoint(config: EndpointConfig) extends Endpoint:
             .parameters(convertParameters(tool.parameters))
             .build()
         )
+
+    llmConfig.thinking.foreach:
+      case ThinkingMode.Disabled => builder.reasoningEffort(ReasoningEffort.NONE)
+      case ThinkingMode.Auto => builder.reasoningEffort(ReasoningEffort.MEDIUM)
+      case ThinkingMode.Effort(EffortLevel.Low) => builder.reasoningEffort(ReasoningEffort.LOW)
+      case ThinkingMode.Effort(EffortLevel.Medium) => builder.reasoningEffort(ReasoningEffort.MEDIUM)
+      case ThinkingMode.Effort(EffortLevel.High) => builder.reasoningEffort(ReasoningEffort.HIGH)
+      case ThinkingMode.Effort(EffortLevel.XHigh) => builder.reasoningEffort(ReasoningEffort.XHIGH)
+      case ThinkingMode.Budget(n) =>
+        throw IllegalArgumentException(s"Budget($n) is not valid for OpenAI. Use ThinkingMode.Effort instead.")
 
     builder
 

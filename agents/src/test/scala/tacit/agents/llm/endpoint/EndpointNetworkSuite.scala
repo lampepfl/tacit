@@ -218,3 +218,40 @@ class EndpointNetworkSuite extends munit.FunSuite:
     assert(toolUses.nonEmpty, "Expected at least one tool use")
     assert(toolUses.head.name == "get_weather")
     assert(toolUses.head.input.contains("Paris"))
+
+  // Thinking tests
+
+  test("AnthropicEndpoint.invoke with thinking".tag(Network)):
+    assume(sys.env.contains("ANTHROPIC_API_KEY"), "ANTHROPIC_API_KEY not set")
+    val endpoint = AnthropicEndpoint.createFromEnv()
+    val config = LLMConfig(
+      model = "claude-sonnet-4-20250514",
+      maxTokens = Some(2048),
+      thinking = Some(ThinkingMode.Budget(1024)),
+    )
+    val result = endpoint.invoke(List(Message.user("What is 17 * 23?")), config)
+    assert(result.isRight, s"Expected Right but got $result")
+    val response = result.toOption.get
+    assert(response.message.thinking.nonEmpty, "Expected thinking content")
+    assert(response.message.text.nonEmpty, "Expected text content")
+
+  test("AnthropicEndpoint.stream with thinking".tag(Network)):
+    assume(sys.env.contains("ANTHROPIC_API_KEY"), "ANTHROPIC_API_KEY not set")
+    val endpoint = AnthropicEndpoint.createFromEnv()
+    val config = LLMConfig(
+      model = "claude-sonnet-4-20250514",
+      maxTokens = Some(2048),
+      thinking = Some(ThinkingMode.Budget(1024)),
+    )
+    val events = endpoint.stream(List(Message.user("What is 17 * 23?")), config)
+    val collected = events.toList
+    assert(collected.forall(_.isRight), s"Expected all Right but got ${collected.filter(_.isLeft)}")
+    val streamEvents = collected.map(_.toOption.get)
+    val thinkingDeltas = streamEvents.collect { case StreamEvent.ThinkingDelta(t) => t }
+    assert(thinkingDeltas.nonEmpty, "Expected ThinkingDelta events")
+    val textDeltas = streamEvents.collect { case StreamEvent.Delta(t) => t }
+    assert(textDeltas.nonEmpty, "Expected text Delta events")
+    val done = streamEvents.collectFirst { case d: StreamEvent.Done => d }
+    assert(done.isDefined, "Expected Done event")
+    assert(done.get.response.message.thinking == thinkingDeltas.mkString)
+    assert(done.get.response.message.text == textDeltas.mkString)

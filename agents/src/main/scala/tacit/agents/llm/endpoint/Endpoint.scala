@@ -9,6 +9,15 @@ case class EndpointConfig(
 ):
   override def toString: String = s"EndpointConfig($baseUrl, ***)"
 
+enum EffortLevel:
+  case Low, Medium, High, XHigh
+
+enum ThinkingMode:
+  case Disabled
+  case Auto
+  case Budget(tokens: Int)
+  case Effort(level: EffortLevel)
+
 case class LLMConfig(
   model: String,
   systemPrompt: Option[String] = None,
@@ -17,6 +26,7 @@ case class LLMConfig(
   stopSequences: List[String] = List.empty,
   topP: Option[Double] = None,
   tools: List[ToolSchema] = List.empty,
+  thinking: Option[ThinkingMode] = None,
 )
 
 class LLMError(val description: String):

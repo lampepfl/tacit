@@ -10,6 +10,9 @@ import com.anthropic.models.messages.ToolUseBlock
 import com.anthropic.models.messages.{Message as AnthropicMessage}
 import com.anthropic.models.messages.{Tool as AnthropicTool}
 import com.anthropic.models.messages.RawMessageStreamEvent
+import com.anthropic.models.messages.ThinkingConfigParam
+import com.anthropic.models.messages.ThinkingConfigEnabled
+import com.anthropic.models.messages.ThinkingConfigDisabled
 import com.anthropic.core.JsonValue
 import scala.jdk.CollectionConverters.*
 import tacit.agents.utils.Result
@@ -55,6 +58,20 @@ class AnthropicEndpoint(config: EndpointConfig) extends Endpoint:
             .build()
         )
 
+    llmConfig.thinking.foreach:
+      case ThinkingMode.Disabled =>
+        builder.thinking(ThinkingConfigParam.ofDisabled(ThinkingConfigDisabled.builder().build()))
+      case ThinkingMode.Auto =>
+        builder.thinking(ThinkingConfigParam.ofAdaptive(
+          com.anthropic.models.messages.ThinkingConfigAdaptive.builder().build()
+        ))
+      case ThinkingMode.Budget(n) =>
+        builder.thinking(ThinkingConfigParam.ofEnabled(
+          ThinkingConfigEnabled.builder().budgetTokens(n.toLong).build()
+        ))
+      case ThinkingMode.Effort(_) =>
+        throw IllegalArgumentException("Effort levels are not valid for Anthropic. Use ThinkingMode.Budget or ThinkingMode.Auto.")
+
     builder
 
   override def invoke(messages: List[Message], llmConfig: LLMConfig): Result[ChatResponse, LLMError] =
@@ -72,6 +89,7 @@ class AnthropicEndpoint(config: EndpointConfig) extends Endpoint:
       val iterator = streamResponse.stream().iterator().asScala
 
       // Accumulators
+      val thinkingBuf = new StringBuilder
       val textBuf = new StringBuilder
       val toolCalls = scala.collection.mutable.Map[Int, (String, String, StringBuilder)]()
       var blockIndex = 0
@@ -95,7 +113,11 @@ class AnthropicEndpoint(config: EndpointConfig) extends Endpoint:
           val deltaEvent = event.asContentBlockDelta()
           val idx = deltaEvent.index().toInt
           val delta = deltaEvent.delta()
-          if delta.isText then
+          if delta.isThinking then
+            val thinking = delta.asThinking().thinking()
+            thinkingBuf.append(thinking)
+            events += Right(StreamEvent.ThinkingDelta(thinking))
+          else if delta.isText then
             val text = delta.asText().text()
             textBuf.append(text)
             events += Right(StreamEvent.Delta(text))
@@ -128,6 +150,8 @@ class AnthropicEndpoint(config: EndpointConfig) extends Endpoint:
         else
           streamResponse.close()
           val contents = scala.collection.mutable.ListBuffer[Content]()
+          if thinkingBuf.nonEmpty then
+            contents += Content.Thinking(thinkingBuf.toString)
           if textBuf.nonEmpty then
             contents += Content.Text(textBuf.toString)
           toolCalls.toList.sortBy(_._1).foreach: (_, tuple) =>
@@ -148,7 +172,11 @@ class AnthropicEndpoint(config: EndpointConfig) extends Endpoint:
     val contents = scala.collection.mutable.ListBuffer[Content]()
 
     response.content().forEach: block =>
-      if block.isText then
+      if block.isThinking then
+        val thinking = block.asThinking().thinking()
+        if thinking.nonEmpty then
+          contents += Content.Thinking(thinking)
+      else if block.isText then
         contents += Content.Text(block.asText().text())
       else if block.isToolUse then
         val tu = block.asToolUse()

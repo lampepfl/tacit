@@ -6,6 +6,7 @@ enum Role:
 
 enum Content:
   case Text(text: String)
+  case Thinking(text: String)
   case ToolUse(id: String, name: String, input: String)
   case ToolResult(toolUseId: String, content: String, isError: Boolean = false)
 
@@ -14,6 +15,11 @@ case class Message(role: Role, content: List[Content]):
     val texts = content.collect:
       case Content.Text(t) => t
     texts.mkString
+
+  def thinking: String =
+    val thoughts = content.collect:
+      case Content.Thinking(t) => t
+    thoughts.mkString
 
 object Message:
   def user(text: String): Message =
@@ -45,6 +51,7 @@ case class Usage(
 
 enum StreamEvent:
   case Delta(text: String)
+  case ThinkingDelta(text: String)
   case ToolCallStart(index: Int, id: String, name: String)
   case ToolCallDelta(index: Int, argumentDelta: String)
   case Done(response: ChatResponse)

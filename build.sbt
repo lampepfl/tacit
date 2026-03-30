@@ -30,10 +30,10 @@ lazy val lib = project
     libraryDependencies += "com.openai" % "openai-java" % "4.30.0",
     scalacOptions ++= Seq(
       "-language:experimental.captureChecking",
-      // "-language:experimental.separationChecking",
       "-language:experimental.modularity",
       "-deprecation", "-feature", "-unchecked",
-      "-Yexplicit-nulls", "-Wsafe-init"
+      "-Yexplicit-nulls", "-Wsafe-init",
+      "-release:17",
     ),
     // Assembly settings for creating a standalone library JAR
     assembly / assemblyJarName := "TACIT-library.jar",
@@ -69,6 +69,7 @@ lazy val root = project
       "-Wsafe-init",
       "-language:experimental.modularity",
       // "-Wall",
+      "-release:17",
     ),
 
     libraryDependencies ++= Seq(

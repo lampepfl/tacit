@@ -78,12 +78,12 @@ class EndpointNetworkSuite extends munit.FunSuite:
     val result = endpoint.invoke(List(Message.user("hello")), config)
     assert(result.isLeft)
 
-  private val weatherTool = Tool(
+  private val weatherTool = ToolSchema(
     name = "get_weather",
     description = "Get the current weather in a given location",
-    parameters = Tool.Parameters(
+    parameters = ToolSchema.Parameters(
       properties = Map(
-        "location" -> Tool.Property(`type` = "string", description = "The city name"),
+        "location" -> ToolSchema.Property(`type` = "string", description = "The city name"),
       ),
       required = List("location"),
     ),

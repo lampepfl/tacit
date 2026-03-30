@@ -95,7 +95,7 @@ class AnthropicEndpoint(config: EndpointConfig) extends Endpoint:
       usage = Some(usage),
     )
 
-  private def convertInputSchema(params: Tool.Parameters): AnthropicTool.InputSchema =
+  private def convertInputSchema(params: ToolSchema.Parameters): AnthropicTool.InputSchema =
     val propsBuilder = AnthropicTool.InputSchema.Properties.builder()
     params.properties.foreach: (name, prop) =>
       val propMap = new java.util.LinkedHashMap[String, Any]()

@@ -1,13 +1,13 @@
 package tacit.agents
 package llm.endpoint
 
-case class Tool(
+case class ToolSchema(
   name: String,
   description: String,
-  parameters: Tool.Parameters,
+  parameters: ToolSchema.Parameters,
 )
 
-object Tool:
+object ToolSchema:
   case class Parameters(
     properties: Map[String, Property],
     required: List[String] = List.empty,

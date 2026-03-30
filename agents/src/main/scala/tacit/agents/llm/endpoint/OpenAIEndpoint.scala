@@ -111,7 +111,7 @@ class OpenAIEndpoint(config: EndpointConfig) extends Endpoint:
       usage = usage,
     )
 
-  private def convertParameters(params: Tool.Parameters): FunctionParameters =
+  private def convertParameters(params: ToolSchema.Parameters): FunctionParameters =
     val propsMap = new java.util.LinkedHashMap[String, Any]()
     params.properties.foreach: (name, prop) =>
       val propMap = new java.util.LinkedHashMap[String, Any]()

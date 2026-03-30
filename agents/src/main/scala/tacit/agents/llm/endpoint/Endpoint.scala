@@ -16,7 +16,7 @@ case class LLMConfig(
   maxTokens: Option[Int] = None,
   stopSequences: List[String] = List.empty,
   topP: Option[Double] = None,
-  tools: List[Tool] = List.empty,
+  tools: List[ToolSchema] = List.empty,
 )
 
 case class LLMError(description: String):

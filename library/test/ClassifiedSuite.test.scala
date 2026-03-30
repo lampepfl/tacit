@@ -30,6 +30,37 @@ class ClassifiedSuite extends munit.FunSuite:
     assertEquals(result.toString, "Classified(***)")
   }
 
+  test("Classified.map exception does not leak classified value") {
+    val secret = ClassifiedImpl.wrap("super-secret-password")
+    val result = secret.map { s =>
+      throw RuntimeException(s"leaked: $s")
+    }
+    // The exception is captured inside the Classified — no leak
+    assertEquals(result.toString, "Classified(***)")
+    // Unwrapping reveals a Failure, but the original exception message stays inside Try
+    val tried = ClassifiedImpl.unwrap(result)
+    assert(tried.isFailure)
+  }
+
+  test("Classified.flatMap exception does not leak classified value") {
+    val secret = ClassifiedImpl.wrap("super-secret-password")
+    val result = secret.flatMap { s =>
+      throw RuntimeException(s"leaked: $s")
+    }
+    assertEquals(result.toString, "Classified(***)")
+    val tried = ClassifiedImpl.unwrap(result)
+    assert(tried.isFailure)
+  }
+
+  test("Classified.map on failed value short-circuits without executing op") {
+    val secret = ClassifiedImpl.wrap("secret")
+    val failed = secret.map { s => throw RuntimeException("boom") }
+    var executed = false
+    val result = failed.map { _ => executed = true; "should not run" }
+    assert(!executed)
+    assert(ClassifiedImpl.unwrap(result).isFailure)
+  }
+
   // ── File system classified path enforcement (VirtualFileSystem) ───────
 
   val classifiedDir = Path.of("/virtual/secret").toAbsolutePath.normalize

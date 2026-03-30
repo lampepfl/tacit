@@ -130,9 +130,11 @@ class RealFileSystem(
 
     def writeClassified(content: Classified[String]): Unit =
       requireClassified(jpath, "writeClassified")
-      Files.createDirectories(jpath.getParent)
-      Files.write(jpath, ClassifiedImpl.unwrap(content).getBytes(StandardCharsets.UTF_8))
-      ()
+      try
+        Files.createDirectories(jpath.getParent)
+        Files.write(jpath, ClassifiedImpl.unwrap(content).get.getBytes(StandardCharsets.UTF_8))
+      catch
+        case _: Exception => 
   end FileEntryImpl
 
   def access(path: String): FileEntry^{this} =

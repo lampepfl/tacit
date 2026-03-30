@@ -8,8 +8,13 @@ class LlmOpsSuite extends munit.FunSuite:
     assert(ex.getMessage.nn.contains("not configured"))
   }
 
-  test("chat(Classified[String]) with no config throws RuntimeException") {
+  test("chat(Classified[String]) with no config throws RuntimeException but not observale at call site") {
     val ops = new LlmOps(None)
-    val ex = intercept[RuntimeException] { ops.chat(ClassifiedImpl.wrap("hello")) }
-    assert(ex.getMessage.nn.contains("not configured"))
+    val result = ops.chat(ClassifiedImpl.wrap("hello"))
+    ClassifiedImpl.unwrap(result) match
+      case scala.util.Failure(ex) =>
+        assert(ex.isInstanceOf[RuntimeException])
+        assert(ex.getMessage.nn.contains("not configured"))
+      case scala.util.Success(_) =>
+        fail("Expected a RuntimeException, but got a successful result")
   }

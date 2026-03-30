@@ -30,4 +30,4 @@ class LlmOps(config: Option[LlmConfig]):
     completion.choices().get(0).message().content().orElse("").nn
 
   def chat(message: Classified[String]): Classified[String] =
-    ClassifiedImpl.wrap(chat(ClassifiedImpl.unwrap(message)))
+    message.map(chat)

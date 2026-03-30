@@ -126,7 +126,10 @@ class VirtualFileSystem(
     def writeClassified(content: Classified[String]): Unit =
       requireClassified(resolved, "writeClassified")
       ensureParentDirs(resolved)
-      files(resolved) = ClassifiedImpl.unwrap(content).getBytes(StandardCharsets.UTF_8)
+      try
+        files(resolved) = ClassifiedImpl.unwrap(content).get.getBytes(StandardCharsets.UTF_8)
+      catch
+        case _: Exception => 
   end FileEntryImpl
 
   def access(path: String): FileEntry^{this} =

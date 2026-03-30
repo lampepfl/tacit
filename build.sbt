@@ -18,6 +18,31 @@ ThisBuild / resolvers += Resolver.scalaNightlyRepository
 
 val circeVersion = "0.14.15"
 
+val MUnitFramework = new TestFramework("munit.Framework")
+val TestFull = config("testFull").extend(Test)
+
+lazy val agents = project
+  .in(file("agents"))
+  .configs(TestFull)
+  .settings(
+    name := "tacit-agents",
+    scalaVersion := scala3Version,
+    scalacOptions ++= Seq(
+      "-deprecation", "-feature", "-unchecked",
+      "-Yexplicit-nulls", "-Wsafe-init",
+      "-language:experimental.modularity",
+    ),
+    libraryDependencies ++= Seq(
+      "com.openai" % "openai-java" % "4.29.1",
+      "com.anthropic" % "anthropic-java" % "2.18.0",
+      "org.scalameta" %% "munit" % "1.2.2" % Test,
+    ),
+    testFrameworks += MUnitFramework,
+    Test / testOptions += Tests.Argument(MUnitFramework, "--exclude-tags=Network"),
+    inConfig(TestFull)(Defaults.testTasks),
+    TestFull / testOptions := Seq.empty,
+  )
+
 lazy val lib = project
   .in(file("library"))
   .settings(
@@ -60,6 +85,7 @@ lazy val lib = project
 lazy val root = project
   .in(file("."))
   .aggregate(lib)
+  .dependsOn(agents)
   .settings(
     name := "TACIT",
     version := "0.1.4-SNAPSHOT",

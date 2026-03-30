@@ -7,7 +7,11 @@ import tacit.agents.llm.endpoint.*
 
 @main def hello(): Unit =
   val endpoint = AnthropicEndpoint.createFromEnv()
-  val config = LLMConfig(model = "claude-haiku-4-5", maxTokens = Some(1024))
+  val config = LLMConfig(
+    model = "claude-haiku-4-5",
+    maxTokens = Some(4096),
+    thinking = Some(ThinkingMode.Budget(1024)),
+  )
 
   var history = List.empty[Message]
 
@@ -22,13 +26,32 @@ import tacit.agents.llm.endpoint.*
       running = false
     else
       history = history :+ Message.user(line)
-      val result = endpoint.invoke(history, config)
-      result match
-        case Right(response) =>
-          val text = response.message.text
-          println(text)
-          println()
-          history = history :+ Message.assistant(text)
-        case Left(err) =>
-          println(s"Error: $err")
-          println()
+      var inThinking = false
+      var hadThinking = false
+      var lastResponse: ChatResponse | Null = null
+      for event <- endpoint.stream(history, config) do
+        event match
+          case Right(StreamEvent.ThinkingDelta(text)) =>
+            if !inThinking then
+              print("<thinking>")
+              inThinking = true
+              hadThinking = true
+            print(text)
+            System.out.flush()
+          case Right(StreamEvent.Delta(text)) =>
+            if inThinking then
+              print("</thinking>")
+              println()
+              println()
+              inThinking = false
+            print(text)
+            System.out.flush()
+          case Right(StreamEvent.Done(response)) =>
+            lastResponse = response
+          case Left(err) =>
+            println(s"\nError: $err")
+          case _ => ()
+      println()
+      println()
+      if lastResponse != null then
+        history = history :+ Message.assistant(lastResponse.nn.message.text)

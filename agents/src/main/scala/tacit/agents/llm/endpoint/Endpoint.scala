@@ -1,6 +1,8 @@
 package tacit.agents
 package llm.endpoint
 
+import gears.async.Async
+import gears.async.ReadableChannel
 import tacit.agents.utils.Result
 
 case class EndpointConfig(
@@ -34,7 +36,7 @@ class LLMError(val description: String):
 
 trait Endpoint:
   def invoke(messages: List[Message], config: LLMConfig): Result[ChatResponse, LLMError]
-  def stream(messages: List[Message], config: LLMConfig): LazyList[Result[StreamEvent, LLMError]]
+  def stream(messages: List[Message], config: LLMConfig)(using Async.Spawn): ReadableChannel[Result[StreamEvent, LLMError]]
 
 trait EndpointProvider:
   type EndpointType <: Endpoint

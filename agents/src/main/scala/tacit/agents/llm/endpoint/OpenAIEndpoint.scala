@@ -10,6 +10,7 @@ import com.openai.models.chat.completions.{
 import com.openai.models.{FunctionDefinition, FunctionParameters, ReasoningEffort}
 import com.openai.core.JsonValue
 import scala.jdk.CollectionConverters.*
+import gears.async.{Async, Future, BufferedChannel, ReadableChannel}
 import tacit.agents.utils.Result
 
 class OpenAIEndpoint(config: EndpointConfig) extends Endpoint:
@@ -85,88 +86,83 @@ class OpenAIEndpoint(config: EndpointConfig) extends Endpoint:
       case e: Exception =>
         Left(LLMError(s"OpenAI API error: ${e.getMessage}"))
 
-  override def stream(messages: List[Message], llmConfig: LLMConfig): LazyList[Result[StreamEvent, LLMError]] =
-    try
-      val params = buildParams(messages, llmConfig)
-        .streamOptions(ChatCompletionStreamOptions.builder().includeUsage(true).build())
-        .build()
-      val streamResponse = client.chat().completions().createStreaming(params)
-      val iterator = streamResponse.stream().iterator().asScala
+  override def stream(messages: List[Message], llmConfig: LLMConfig)(using Async.Spawn): ReadableChannel[Result[StreamEvent, LLMError]] =
+    val ch = BufferedChannel[Result[StreamEvent, LLMError]](16)
+    Future:
+      try
+        val params = buildParams(messages, llmConfig)
+          .streamOptions(ChatCompletionStreamOptions.builder().includeUsage(true).build())
+          .build()
+        val streamResponse = client.chat().completions().createStreaming(params)
+        val iterator = streamResponse.stream().iterator().asScala
 
-      // Accumulators for building the final ChatResponse
-      val textBuf = new StringBuilder
-      val toolCalls = scala.collection.mutable.Map[Int, (String, String, StringBuilder)]() // index -> (id, name, args)
-      var lastFinishReason: FinishReason = FinishReason.Stop
-      var lastUsage: Option[Usage] = None
+        // Accumulators for building the final ChatResponse
+        val textBuf = new StringBuilder
+        val toolCalls = scala.collection.mutable.Map[Int, (String, String, StringBuilder)]() // index -> (id, name, args)
+        var lastFinishReason: FinishReason = FinishReason.Stop
+        var lastUsage: Option[Usage] = None
 
-      def convertChunk(chunk: ChatCompletionChunk): List[Result[StreamEvent, LLMError]] =
-        val events = scala.collection.mutable.ListBuffer[Result[StreamEvent, LLMError]]()
-        val choices = chunk.choices()
-        if !choices.isEmpty then
-          val choice = choices.get(0)
-          val delta = choice.delta()
+        while iterator.hasNext do
+          val chunk = iterator.next()
+          val choices = chunk.choices()
+          if !choices.isEmpty then
+            val choice = choices.get(0)
+            val delta = choice.delta()
 
-          // Text delta
-          delta.content().ifPresent: text =>
-            if text.nn.nonEmpty then
-              textBuf.append(text.nn)
-              events += Right(StreamEvent.Delta(text.nn))
+            // Text delta
+            delta.content().ifPresent: text =>
+              if text.nn.nonEmpty then
+                textBuf.append(text.nn)
+                ch.send(Right(StreamEvent.Delta(text.nn)))
 
-          // Tool call deltas
-          delta.toolCalls().ifPresent: tcs =>
-            tcs.forEach: tc =>
-              val idx = tc.index().toInt
-              tc.id().ifPresent: id =>
-                val name = tc.function().flatMap(f => f.name()).orElse("").nn
-                toolCalls(idx) = (id.nn, name, new StringBuilder)
-                events += Right(StreamEvent.ToolCallStart(idx, id.nn, name))
-              tc.function().ifPresent: fn =>
-                fn.arguments().ifPresent: args =>
-                  toolCalls.get(idx).foreach: (_, _, buf) =>
-                    buf.append(args.nn)
-                  events += Right(StreamEvent.ToolCallDelta(idx, args.nn))
+            // Tool call deltas
+            delta.toolCalls().ifPresent: tcs =>
+              tcs.forEach: tc =>
+                val idx = tc.index().toInt
+                tc.id().ifPresent: id =>
+                  val name = tc.function().flatMap(f => f.name()).orElse("").nn
+                  toolCalls(idx) = (id.nn, name, new StringBuilder)
+                  ch.send(Right(StreamEvent.ToolCallStart(idx, id.nn, name)))
+                tc.function().ifPresent: fn =>
+                  fn.arguments().ifPresent: args =>
+                    toolCalls.get(idx).foreach: (_, _, buf) =>
+                      buf.append(args.nn)
+                    ch.send(Right(StreamEvent.ToolCallDelta(idx, args.nn)))
 
-          // Finish reason
-          if choice.finishReason().isPresent then
-            lastFinishReason = choice.finishReason().get().nn.toString match
-              case "stop"       => FinishReason.Stop
-              case "length"     => FinishReason.MaxTokens
-              case "tool_calls" => FinishReason.ToolUse
-              case other        => FinishReason.Other(other)
+            // Finish reason
+            if choice.finishReason().isPresent then
+              lastFinishReason = choice.finishReason().get().nn.toString match
+                case "stop"       => FinishReason.Stop
+                case "length"     => FinishReason.MaxTokens
+                case "tool_calls" => FinishReason.ToolUse
+                case other        => FinishReason.Other(other)
 
-        // Usage (appears in final chunk)
-        chunk.usage().ifPresent: u =>
-          lastUsage = Some(Usage(
-            inputTokens = u.promptTokens(),
-            outputTokens = u.completionTokens(),
-          ))
+          // Usage (appears in final chunk)
+          chunk.usage().ifPresent: u =>
+            lastUsage = Some(Usage(
+              inputTokens = u.promptTokens(),
+              outputTokens = u.completionTokens(),
+            ))
 
-        events.toList
-
-      def buildLazyList(iter: Iterator[ChatCompletionChunk]): LazyList[Result[StreamEvent, LLMError]] =
-        if iter.hasNext then
-          val chunk = iter.next()
-          val events = convertChunk(chunk)
-          LazyList.from(events) #::: buildLazyList(iter)
-        else
-          streamResponse.close()
-          // Build final ChatResponse
-          val contents = scala.collection.mutable.ListBuffer[Content]()
-          if textBuf.nonEmpty then
-            contents += Content.Text(textBuf.toString)
-          toolCalls.toList.sortBy(_._1).foreach: (_, tuple) =>
-            contents += Content.ToolUse(tuple._1, tuple._2, tuple._3.toString)
-          val response = ChatResponse(
-            message = Message(Role.Assistant, contents.toList),
-            finishReason = lastFinishReason,
-            usage = lastUsage,
-          )
-          LazyList(Right(StreamEvent.Done(response)))
-
-      buildLazyList(iterator)
-    catch
-      case e: Exception =>
-        LazyList(Left(LLMError(s"OpenAI API error: ${e.getMessage}")))
+        streamResponse.close()
+        // Build final ChatResponse
+        val contents = scala.collection.mutable.ListBuffer[Content]()
+        if textBuf.nonEmpty then
+          contents += Content.Text(textBuf.toString)
+        toolCalls.toList.sortBy(_._1).foreach: (_, tuple) =>
+          contents += Content.ToolUse(tuple._1, tuple._2, tuple._3.toString)
+        val response = ChatResponse(
+          message = Message(Role.Assistant, contents.toList),
+          finishReason = lastFinishReason,
+          usage = lastUsage,
+        )
+        ch.send(Right(StreamEvent.Done(response)))
+        ch.close()
+      catch
+        case e: Exception =>
+          ch.send(Left(LLMError(s"OpenAI API error: ${e.getMessage}")))
+          ch.close()
+    ch.asReadable
 
   private def convertResponse(
     choice: ChatCompletion.Choice,

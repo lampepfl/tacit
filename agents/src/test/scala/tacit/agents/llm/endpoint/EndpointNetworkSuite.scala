@@ -1,7 +1,21 @@
 package tacit.agents
 package llm.endpoint
 
+import gears.async.Async
+import gears.async.default.given
+import gears.async.Channel
+
 class EndpointNetworkSuite extends munit.FunSuite:
+
+  /** Read all items from a channel until it is closed. */
+  private def readAll[T](ch: gears.async.ReadableChannel[T])(using Async): List[T] =
+    val buf = scala.collection.mutable.ListBuffer[T]()
+    var reading = true
+    while reading do
+      ch.read() match
+        case Right(item) => buf += item
+        case Left(_)     => reading = false
+    buf.toList
 
   test("OpenAIEndpoint.createFromEnv reads OPENAI_API_KEY".tag(Network)):
     assume(sys.env.contains("OPENAI_API_KEY"), "OPENAI_API_KEY not set")
@@ -110,94 +124,98 @@ class EndpointNetworkSuite extends munit.FunSuite:
 
   test("OpenAIEndpoint.stream text response".tag(Network)):
     assume(sys.env.contains("OPENAI_API_KEY"), "OPENAI_API_KEY not set")
-    val endpoint = OpenAIEndpoint.createFromEnv()
-    val config = LLMConfig(model = "gpt-4o-mini", maxTokens = Some(32))
-    val events = endpoint.stream(List(Message.user("Say hello")), config)
-    val collected = events.toList
-    assert(collected.forall(_.isRight), s"Expected all Right but got errors")
-    val streamEvents = collected.map(_.toOption.get)
-    val deltas = streamEvents.collect { case StreamEvent.Delta(t) => t }
-    assert(deltas.nonEmpty, "Expected at least one Delta event")
-    val done = streamEvents.collectFirst { case d: StreamEvent.Done => d }
-    assert(done.isDefined, "Expected Done event")
-    val text = deltas.mkString
-    assert(text.nonEmpty)
-    assert(done.get.response.message.text == text)
+    Async.blocking:
+      val endpoint = OpenAIEndpoint.createFromEnv()
+      val config = LLMConfig(model = "gpt-4o-mini", maxTokens = Some(32))
+      val ch = endpoint.stream(List(Message.user("Say hello")), config)
+      val collected = readAll(ch)
+      assert(collected.forall(_.isRight), s"Expected all Right but got errors")
+      val streamEvents = collected.map(_.toOption.get)
+      val deltas = streamEvents.collect { case StreamEvent.Delta(t) => t }
+      assert(deltas.nonEmpty, "Expected at least one Delta event")
+      val done = streamEvents.collectFirst { case d: StreamEvent.Done => d }
+      assert(done.isDefined, "Expected Done event")
+      val text = deltas.mkString
+      assert(text.nonEmpty)
+      assert(done.get.response.message.text == text)
 
   test("AnthropicEndpoint.stream text response".tag(Network)):
     assume(sys.env.contains("ANTHROPIC_API_KEY"), "ANTHROPIC_API_KEY not set")
-    val endpoint = AnthropicEndpoint.createFromEnv()
-    val config = LLMConfig(model = "claude-haiku-4-5", maxTokens = Some(32))
-    val events = endpoint.stream(List(Message.user("Say hello")), config)
-    val collected = events.toList
-    assert(collected.forall(_.isRight), s"Expected all Right but got errors")
-    val streamEvents = collected.map(_.toOption.get)
-    val deltas = streamEvents.collect { case StreamEvent.Delta(t) => t }
-    assert(deltas.nonEmpty, "Expected at least one Delta event")
-    val done = streamEvents.collectFirst { case d: StreamEvent.Done => d }
-    assert(done.isDefined, "Expected Done event")
-    val text = deltas.mkString
-    assert(text.nonEmpty)
-    assert(done.get.response.message.text == text)
+    Async.blocking:
+      val endpoint = AnthropicEndpoint.createFromEnv()
+      val config = LLMConfig(model = "claude-haiku-4-5", maxTokens = Some(32))
+      val ch = endpoint.stream(List(Message.user("Say hello")), config)
+      val collected = readAll(ch)
+      assert(collected.forall(_.isRight), s"Expected all Right but got errors")
+      val streamEvents = collected.map(_.toOption.get)
+      val deltas = streamEvents.collect { case StreamEvent.Delta(t) => t }
+      assert(deltas.nonEmpty, "Expected at least one Delta event")
+      val done = streamEvents.collectFirst { case d: StreamEvent.Done => d }
+      assert(done.isDefined, "Expected Done event")
+      val text = deltas.mkString
+      assert(text.nonEmpty)
+      assert(done.get.response.message.text == text)
 
   // Streaming tests: tool calling
 
   test("OpenAIEndpoint.stream with tool calling".tag(Network)):
     assume(sys.env.contains("OPENAI_API_KEY"), "OPENAI_API_KEY not set")
-    val endpoint = OpenAIEndpoint.createFromEnv()
-    val config = LLMConfig(
-      model = "gpt-4o-mini",
-      maxTokens = Some(64),
-      tools = List(weatherTool),
-    )
-    val events = endpoint.stream(List(Message.user("What is the weather in Paris?")), config)
-    val collected = events.toList
-    assert(collected.forall(_.isRight), s"Expected all Right but got ${collected.filter(_.isLeft)}")
-    val streamEvents = collected.map(_.toOption.get)
-    val starts = streamEvents.collect { case s: StreamEvent.ToolCallStart => s }
-    assert(starts.nonEmpty, "Expected at least one ToolCallStart event")
-    assert(starts.head.name == "get_weather")
-    assert(starts.head.id.nonEmpty)
-    val toolDeltas = streamEvents.collect { case d: StreamEvent.ToolCallDelta => d }
-    assert(toolDeltas.nonEmpty, "Expected at least one ToolCallDelta event")
-    val fullArgs = toolDeltas.map(_.argumentDelta).mkString
-    assert(fullArgs.contains("Paris"), s"Expected tool args to contain Paris but got: $fullArgs")
-    val done = streamEvents.collectFirst { case d: StreamEvent.Done => d }
-    assert(done.isDefined, "Expected Done event")
-    assert(done.get.response.finishReason == FinishReason.ToolUse)
-    val toolUses = done.get.response.message.content.collect { case c: Content.ToolUse => c }
-    assert(toolUses.nonEmpty)
-    assert(toolUses.head.name == "get_weather")
-    assert(toolUses.head.input.contains("Paris"))
+    Async.blocking:
+      val endpoint = OpenAIEndpoint.createFromEnv()
+      val config = LLMConfig(
+        model = "gpt-4o-mini",
+        maxTokens = Some(64),
+        tools = List(weatherTool),
+      )
+      val ch = endpoint.stream(List(Message.user("What is the weather in Paris?")), config)
+      val collected = readAll(ch)
+      assert(collected.forall(_.isRight), s"Expected all Right but got ${collected.filter(_.isLeft)}")
+      val streamEvents = collected.map(_.toOption.get)
+      val starts = streamEvents.collect { case s: StreamEvent.ToolCallStart => s }
+      assert(starts.nonEmpty, "Expected at least one ToolCallStart event")
+      assert(starts.head.name == "get_weather")
+      assert(starts.head.id.nonEmpty)
+      val toolDeltas = streamEvents.collect { case d: StreamEvent.ToolCallDelta => d }
+      assert(toolDeltas.nonEmpty, "Expected at least one ToolCallDelta event")
+      val fullArgs = toolDeltas.map(_.argumentDelta).mkString
+      assert(fullArgs.contains("Paris"), s"Expected tool args to contain Paris but got: $fullArgs")
+      val done = streamEvents.collectFirst { case d: StreamEvent.Done => d }
+      assert(done.isDefined, "Expected Done event")
+      assert(done.get.response.finishReason == FinishReason.ToolUse)
+      val toolUses = done.get.response.message.content.collect { case c: Content.ToolUse => c }
+      assert(toolUses.nonEmpty)
+      assert(toolUses.head.name == "get_weather")
+      assert(toolUses.head.input.contains("Paris"))
 
   test("AnthropicEndpoint.stream with tool calling".tag(Network)):
     assume(sys.env.contains("ANTHROPIC_API_KEY"), "ANTHROPIC_API_KEY not set")
-    val endpoint = AnthropicEndpoint.createFromEnv()
-    val config = LLMConfig(
-      model = "claude-haiku-4-5",
-      maxTokens = Some(256),
-      tools = List(weatherTool),
-      systemPrompt = Some("Use the provided tools to answer questions. Do not respond with text, just call the appropriate tool."),
-    )
-    val events = endpoint.stream(List(Message.user("What is the weather in Paris?")), config)
-    val collected = events.toList
-    assert(collected.forall(_.isRight), s"Expected all Right but got ${collected.filter(_.isLeft)}")
-    val streamEvents = collected.map(_.toOption.get)
-    val starts = streamEvents.collect { case s: StreamEvent.ToolCallStart => s }
-    assert(starts.nonEmpty, "Expected at least one ToolCallStart event")
-    assert(starts.head.name == "get_weather")
-    assert(starts.head.id.nonEmpty)
-    val toolDeltas = streamEvents.collect { case d: StreamEvent.ToolCallDelta => d }
-    assert(toolDeltas.nonEmpty, "Expected at least one ToolCallDelta event")
-    val fullArgs = toolDeltas.filter(_.index == starts.head.index).map(_.argumentDelta).mkString
-    assert(fullArgs.contains("Paris"), s"Expected tool args to contain Paris but got: $fullArgs")
-    val done = streamEvents.collectFirst { case d: StreamEvent.Done => d }
-    assert(done.isDefined, "Expected Done event")
-    assert(done.get.response.finishReason == FinishReason.ToolUse)
-    val toolUses = done.get.response.message.content.collect { case c: Content.ToolUse => c }
-    assert(toolUses.nonEmpty)
-    assert(toolUses.head.name == "get_weather")
-    assert(toolUses.head.input.contains("Paris"))
+    Async.blocking:
+      val endpoint = AnthropicEndpoint.createFromEnv()
+      val config = LLMConfig(
+        model = "claude-haiku-4-5",
+        maxTokens = Some(256),
+        tools = List(weatherTool),
+        systemPrompt = Some("Use the provided tools to answer questions. Do not respond with text, just call the appropriate tool."),
+      )
+      val ch = endpoint.stream(List(Message.user("What is the weather in Paris?")), config)
+      val collected = readAll(ch)
+      assert(collected.forall(_.isRight), s"Expected all Right but got ${collected.filter(_.isLeft)}")
+      val streamEvents = collected.map(_.toOption.get)
+      val starts = streamEvents.collect { case s: StreamEvent.ToolCallStart => s }
+      assert(starts.nonEmpty, "Expected at least one ToolCallStart event")
+      assert(starts.head.name == "get_weather")
+      assert(starts.head.id.nonEmpty)
+      val toolDeltas = streamEvents.collect { case d: StreamEvent.ToolCallDelta => d }
+      assert(toolDeltas.nonEmpty, "Expected at least one ToolCallDelta event")
+      val fullArgs = toolDeltas.filter(_.index == starts.head.index).map(_.argumentDelta).mkString
+      assert(fullArgs.contains("Paris"), s"Expected tool args to contain Paris but got: $fullArgs")
+      val done = streamEvents.collectFirst { case d: StreamEvent.Done => d }
+      assert(done.isDefined, "Expected Done event")
+      assert(done.get.response.finishReason == FinishReason.ToolUse)
+      val toolUses = done.get.response.message.content.collect { case c: Content.ToolUse => c }
+      assert(toolUses.nonEmpty)
+      assert(toolUses.head.name == "get_weather")
+      assert(toolUses.head.input.contains("Paris"))
 
   // Non-streaming tool calling tests
 
@@ -237,21 +255,22 @@ class EndpointNetworkSuite extends munit.FunSuite:
 
   test("AnthropicEndpoint.stream with thinking".tag(Network)):
     assume(sys.env.contains("ANTHROPIC_API_KEY"), "ANTHROPIC_API_KEY not set")
-    val endpoint = AnthropicEndpoint.createFromEnv()
-    val config = LLMConfig(
-      model = "claude-haiku-4-5",
-      maxTokens = Some(2048),
-      thinking = Some(ThinkingMode.Budget(1024)),
-    )
-    val events = endpoint.stream(List(Message.user("What is 17 * 23?")), config)
-    val collected = events.toList
-    assert(collected.forall(_.isRight), s"Expected all Right but got ${collected.filter(_.isLeft)}")
-    val streamEvents = collected.map(_.toOption.get)
-    val thinkingDeltas = streamEvents.collect { case StreamEvent.ThinkingDelta(t) => t }
-    assert(thinkingDeltas.nonEmpty, "Expected ThinkingDelta events")
-    val textDeltas = streamEvents.collect { case StreamEvent.Delta(t) => t }
-    assert(textDeltas.nonEmpty, "Expected text Delta events")
-    val done = streamEvents.collectFirst { case d: StreamEvent.Done => d }
-    assert(done.isDefined, "Expected Done event")
-    assert(done.get.response.message.thinking == thinkingDeltas.mkString)
-    assert(done.get.response.message.text == textDeltas.mkString)
+    Async.blocking:
+      val endpoint = AnthropicEndpoint.createFromEnv()
+      val config = LLMConfig(
+        model = "claude-haiku-4-5",
+        maxTokens = Some(2048),
+        thinking = Some(ThinkingMode.Budget(1024)),
+      )
+      val ch = endpoint.stream(List(Message.user("What is 17 * 23?")), config)
+      val collected = readAll(ch)
+      assert(collected.forall(_.isRight), s"Expected all Right but got ${collected.filter(_.isLeft)}")
+      val streamEvents = collected.map(_.toOption.get)
+      val thinkingDeltas = streamEvents.collect { case StreamEvent.ThinkingDelta(t) => t }
+      assert(thinkingDeltas.nonEmpty, "Expected ThinkingDelta events")
+      val textDeltas = streamEvents.collect { case StreamEvent.Delta(t) => t }
+      assert(textDeltas.nonEmpty, "Expected text Delta events")
+      val done = streamEvents.collectFirst { case d: StreamEvent.Done => d }
+      assert(done.isDefined, "Expected Done event")
+      assert(done.get.response.message.thinking == thinkingDeltas.mkString)
+      assert(done.get.response.message.text == textDeltas.mkString)

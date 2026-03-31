@@ -10,6 +10,7 @@ import com.anthropic.models.messages.{
 }
 import com.anthropic.core.JsonValue
 import scala.jdk.CollectionConverters.*
+import gears.async.{Async, Future, BufferedChannel, ReadableChannel}
 import tacit.agents.utils.Result
 
 class AnthropicEndpoint(config: EndpointConfig) extends Endpoint:
@@ -77,91 +78,86 @@ class AnthropicEndpoint(config: EndpointConfig) extends Endpoint:
       case e: Exception =>
         Left(LLMError(s"Anthropic API error: ${e.getMessage}"))
 
-  override def stream(messages: List[Message], llmConfig: LLMConfig): LazyList[Result[StreamEvent, LLMError]] =
-    try
-      val params = buildParams(messages, llmConfig).build()
-      val streamResponse = client.messages().createStreaming(params)
-      val iterator = streamResponse.stream().iterator().asScala
+  override def stream(messages: List[Message], llmConfig: LLMConfig)(using Async.Spawn): ReadableChannel[Result[StreamEvent, LLMError]] =
+    val ch = BufferedChannel[Result[StreamEvent, LLMError]](16)
+    Future:
+      try
+        val params = buildParams(messages, llmConfig).build()
+        val streamResponse = client.messages().createStreaming(params)
+        val iterator = streamResponse.stream().iterator().asScala
 
-      // Accumulators
-      val thinkingBuf = new StringBuilder
-      val textBuf = new StringBuilder
-      val toolCalls = scala.collection.mutable.Map[Int, (String, String, StringBuilder)]()
-      var blockIndex = 0
-      var lastFinishReason: FinishReason = FinishReason.Stop
-      var lastUsage: Option[Usage] = None
+        // Accumulators
+        val thinkingBuf = new StringBuilder
+        val textBuf = new StringBuilder
+        val toolCalls = scala.collection.mutable.Map[Int, (String, String, StringBuilder)]()
+        var blockIndex = 0
+        var lastFinishReason: FinishReason = FinishReason.Stop
+        var lastUsage: Option[Usage] = None
 
-      def convertEvent(event: RawMessageStreamEvent): List[Result[StreamEvent, LLMError]] =
-        val events = scala.collection.mutable.ListBuffer[Result[StreamEvent, LLMError]]()
+        while iterator.hasNext do
+          val event = iterator.next()
 
-        if event.isContentBlockStart then
-          val startEvent = event.asContentBlockStart()
-          val block = startEvent.contentBlock()
-          val idx = startEvent.index().toInt
-          blockIndex = idx
-          if block.isToolUse then
-            val tu = block.asToolUse()
-            toolCalls(idx) = (tu.id(), tu.name(), new StringBuilder)
-            events += Right(StreamEvent.ToolCallStart(idx, tu.id(), tu.name()))
+          if event.isContentBlockStart then
+            val startEvent = event.asContentBlockStart()
+            val block = startEvent.contentBlock()
+            val idx = startEvent.index().toInt
+            blockIndex = idx
+            if block.isToolUse then
+              val tu = block.asToolUse()
+              toolCalls(idx) = (tu.id(), tu.name(), new StringBuilder)
+              ch.send(Right(StreamEvent.ToolCallStart(idx, tu.id(), tu.name())))
 
-        else if event.isContentBlockDelta then
-          val deltaEvent = event.asContentBlockDelta()
-          val idx = deltaEvent.index().toInt
-          val delta = deltaEvent.delta()
-          if delta.isThinking then
-            val thinking = delta.asThinking().thinking()
-            thinkingBuf.append(thinking)
-            events += Right(StreamEvent.ThinkingDelta(thinking))
-          else if delta.isText then
-            val text = delta.asText().text()
-            textBuf.append(text)
-            events += Right(StreamEvent.Delta(text))
-          else if delta.isInputJson then
-            val json = delta.asInputJson().partialJson()
-            toolCalls.get(idx).foreach: (_, _, buf) =>
-              buf.append(json)
-            events += Right(StreamEvent.ToolCallDelta(idx, json))
+          else if event.isContentBlockDelta then
+            val deltaEvent = event.asContentBlockDelta()
+            val idx = deltaEvent.index().toInt
+            val delta = deltaEvent.delta()
+            if delta.isThinking then
+              val thinking = delta.asThinking().thinking()
+              thinkingBuf.append(thinking)
+              ch.send(Right(StreamEvent.ThinkingDelta(thinking)))
+            else if delta.isText then
+              val text = delta.asText().text()
+              textBuf.append(text)
+              ch.send(Right(StreamEvent.Delta(text)))
+            else if delta.isInputJson then
+              val json = delta.asInputJson().partialJson()
+              toolCalls.get(idx).foreach: (_, _, buf) =>
+                buf.append(json)
+              ch.send(Right(StreamEvent.ToolCallDelta(idx, json)))
 
-        else if event.isMessageDelta then
-          val md = event.asMessageDelta()
-          md.delta().stopReason().ifPresent: reason =>
-            lastFinishReason = reason.toString match
-              case "end_turn"   => FinishReason.Stop
-              case "max_tokens" => FinishReason.MaxTokens
-              case "tool_use"   => FinishReason.ToolUse
-              case other        => FinishReason.Other(other)
-          lastUsage = Some(Usage(
-            inputTokens = md.usage().inputTokens().orElse(0L),
-            outputTokens = md.usage().outputTokens(),
-          ))
+          else if event.isMessageDelta then
+            val md = event.asMessageDelta()
+            md.delta().stopReason().ifPresent: reason =>
+              lastFinishReason = reason.toString match
+                case "end_turn"   => FinishReason.Stop
+                case "max_tokens" => FinishReason.MaxTokens
+                case "tool_use"   => FinishReason.ToolUse
+                case other        => FinishReason.Other(other)
+            lastUsage = Some(Usage(
+              inputTokens = md.usage().inputTokens().orElse(0L),
+              outputTokens = md.usage().outputTokens(),
+            ))
 
-        events.toList
-
-      def buildLazyList(iter: Iterator[RawMessageStreamEvent]): LazyList[Result[StreamEvent, LLMError]] =
-        if iter.hasNext then
-          val event = iter.next()
-          val events = convertEvent(event)
-          LazyList.from(events) #::: buildLazyList(iter)
-        else
-          streamResponse.close()
-          val contents = scala.collection.mutable.ListBuffer[Content]()
-          if thinkingBuf.nonEmpty then
-            contents += Content.Thinking(thinkingBuf.toString)
-          if textBuf.nonEmpty then
-            contents += Content.Text(textBuf.toString)
-          toolCalls.toList.sortBy(_._1).foreach: (_, tuple) =>
-            contents += Content.ToolUse(tuple._1, tuple._2, tuple._3.toString)
-          val response = ChatResponse(
-            message = Message(Role.Assistant, contents.toList),
-            finishReason = lastFinishReason,
-            usage = lastUsage,
-          )
-          LazyList(Right(StreamEvent.Done(response)))
-
-      buildLazyList(iterator)
-    catch
-      case e: Exception =>
-        LazyList(Left(LLMError(s"Anthropic API error: ${e.getMessage}")))
+        streamResponse.close()
+        val contents = scala.collection.mutable.ListBuffer[Content]()
+        if thinkingBuf.nonEmpty then
+          contents += Content.Thinking(thinkingBuf.toString)
+        if textBuf.nonEmpty then
+          contents += Content.Text(textBuf.toString)
+        toolCalls.toList.sortBy(_._1).foreach: (_, tuple) =>
+          contents += Content.ToolUse(tuple._1, tuple._2, tuple._3.toString)
+        val response = ChatResponse(
+          message = Message(Role.Assistant, contents.toList),
+          finishReason = lastFinishReason,
+          usage = lastUsage,
+        )
+        ch.send(Right(StreamEvent.Done(response)))
+        ch.close()
+      catch
+        case e: Exception =>
+          ch.send(Left(LLMError(s"Anthropic API error: ${e.getMessage}")))
+          ch.close()
+    ch.asReadable
 
   private def convertResponse(response: AnthropicMessage): ChatResponse =
     val contents = scala.collection.mutable.ListBuffer[Content]()

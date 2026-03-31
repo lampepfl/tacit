@@ -1,9 +1,13 @@
 //> using scala 3.8.2
 //> using repository ivy2local
 //> using dep lampepfl:tacit-agents_3:0.1.0-SNAPSHOT
+//> using dep ch.epfl.lamp::gears:0.2.0
 //> using options -experimental
 
 import tacit.agents.llm.endpoint.*
+import gears.async.Async
+import gears.async.default.given
+import gears.async.Channel
 
 @main def hello(): Unit =
   val endpoint = AnthropicEndpoint.createFromEnv()
@@ -27,30 +31,33 @@ import tacit.agents.llm.endpoint.*
     else
       history = history :+ Message.user(line)
       var inThinking = false
-      var hadThinking = false
       var lastResponse: ChatResponse | Null = null
-      for event <- endpoint.stream(history, config) do
-        event match
-          case Right(StreamEvent.ThinkingDelta(text)) =>
-            if !inThinking then
-              println("<thinking>")
-              inThinking = true
-              hadThinking = true
-            print(text)
-            System.out.flush()
-          case Right(StreamEvent.Delta(text)) =>
-            if inThinking then
-              print("\n</thinking>")
-              println()
-              println()
-              inThinking = false
-            print(text)
-            System.out.flush()
-          case Right(StreamEvent.Done(response)) =>
-            lastResponse = response
-          case Left(err) =>
-            println(s"\nError: $err")
-          case _ => ()
+      Async.blocking:
+        val ch = endpoint.stream(history, config)
+        var reading = true
+        while reading do
+          ch.read() match
+            case Right(Right(StreamEvent.ThinkingDelta(text))) =>
+              if !inThinking then
+                println("<thinking>")
+                inThinking = true
+              print(text)
+              System.out.flush()
+            case Right(Right(StreamEvent.Delta(text))) =>
+              if inThinking then
+                print("\n</thinking>")
+                println()
+                println()
+                inThinking = false
+              print(text)
+              System.out.flush()
+            case Right(Right(StreamEvent.Done(response))) =>
+              lastResponse = response
+            case Right(Left(err)) =>
+              println(s"\nError: $err")
+            case Left(_) =>
+              reading = false
+            case _ => ()
       println()
       println()
       if lastResponse != null then

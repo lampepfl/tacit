@@ -13,6 +13,7 @@ import scala.jdk.CollectionConverters.*
 import gears.async.{Async, Future, BufferedChannel, ReadableChannel}
 import tacit.agents.utils.Result
 
+/** Anthropic API endpoint. */
 class AnthropicEndpoint(config: EndpointConfig) extends Endpoint:
 
   private val DefaultMaxTokens = 4096L

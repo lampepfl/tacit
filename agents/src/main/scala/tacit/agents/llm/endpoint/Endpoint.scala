@@ -20,6 +20,7 @@ enum ThinkingMode:
   case Budget(tokens: Int)
   case Effort(level: EffortLevel)
 
+/** Configuration for LLM invocation. */
 case class LLMConfig(
   model: String,
   systemPrompt: Option[String] = None,
@@ -34,11 +35,15 @@ case class LLMConfig(
 class LLMError(val description: String):
   override def toString: String = s"Error when invoking LLM: $description"
 
+/** Interface for LLM endpoints. */
 trait Endpoint:
   def invoke(messages: List[Message], config: LLMConfig): Result[ChatResponse, LLMError]
   def stream(messages: List[Message], config: LLMConfig)(using Async.Spawn): ReadableChannel[Result[StreamEvent, LLMError]]
 
+/** Endpoint provider interface. */
 trait EndpointProvider:
   type EndpointType <: Endpoint
+  /** Create an endpoint instance from a configuration. */
   def create(config: EndpointConfig): EndpointType
+  /** Create an endpoint instance from environment variables. */
   def createFromEnv(): EndpointType

@@ -5,6 +5,7 @@ import com.openai.client.OpenAIClient
 import com.openai.client.okhttp.OpenAIOkHttpClient
 import com.openai.models.chat.completions.{
   ChatCompletion, ChatCompletionCreateParams, ChatCompletionToolMessageParam,
+  ChatCompletionAssistantMessageParam, ChatCompletionMessageFunctionToolCall,
   ChatCompletionChunk, ChatCompletionStreamOptions,
 }
 import com.openai.models.{FunctionDefinition, FunctionParameters, ReasoningEffort}
@@ -33,18 +34,39 @@ class OpenAIEndpoint(config: EndpointConfig) extends Endpoint:
         case Role.System =>
           builder.addSystemMessage(msg.text)
         case Role.User =>
-          msg.content match
-            case List(Content.ToolResult(toolUseId, content, _)) =>
+          val toolResults = msg.content.collect { case tr: Content.ToolResult => tr }
+          if toolResults.nonEmpty then
+            toolResults.foreach: tr =>
               builder.addMessage(
                 ChatCompletionToolMessageParam.builder()
-                  .toolCallId(toolUseId)
-                  .content(content)
+                  .toolCallId(tr.toolUseId)
+                  .content(tr.content)
                   .build()
               )
-            case _ =>
-              builder.addUserMessage(msg.text)
+          else
+            builder.addUserMessage(msg.text)
         case Role.Assistant =>
-          builder.addAssistantMessage(msg.text)
+          val toolUses = msg.content.collect { case tu: Content.ToolUse => tu }
+          if toolUses.nonEmpty then
+            val assistantBuilder = ChatCompletionAssistantMessageParam.builder()
+            val textContent = msg.text
+            if textContent.nonEmpty then
+              assistantBuilder.content(textContent)
+            toolUses.foreach: tu =>
+              assistantBuilder.addToolCall(
+                ChatCompletionMessageFunctionToolCall.builder()
+                  .id(tu.id)
+                  .function(
+                    ChatCompletionMessageFunctionToolCall.Function.builder()
+                      .name(tu.name)
+                      .arguments(tu.input)
+                      .build()
+                  )
+                  .build()
+              )
+            builder.addMessage(assistantBuilder.build())
+          else
+            builder.addAssistantMessage(msg.text)
 
     llmConfig.temperature.foreach(t => builder.temperature(t))
     llmConfig.maxTokens.foreach(n => builder.maxCompletionTokens(n.toLong))

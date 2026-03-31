@@ -4,7 +4,8 @@ package llm.endpoint
 import com.anthropic.client.AnthropicClient
 import com.anthropic.client.okhttp.AnthropicOkHttpClient
 import com.anthropic.models.messages.{
-  MessageCreateParams, ContentBlock, TextBlock, ToolUseBlock,
+  MessageCreateParams, ContentBlock, ContentBlockParam, TextBlock, TextBlockParam,
+  ToolUseBlock, ToolUseBlockParam, ToolResultBlockParam,
   RawMessageStreamEvent, ThinkingConfigParam, ThinkingConfigEnabled, ThinkingConfigDisabled,
   Message as AnthropicMessage, Tool as AnthropicTool,
 }
@@ -35,9 +36,50 @@ class AnthropicEndpoint(config: EndpointConfig) extends Endpoint:
     messages.filterNot(_.role == Role.System).foreach: msg =>
       msg.role match
         case Role.User =>
-          builder.addUserMessage(msg.text)
+          val hasToolResults = msg.content.exists(_.isInstanceOf[Content.ToolResult])
+          if hasToolResults then
+            val blocks = msg.content.map:
+              case Content.ToolResult(toolUseId, content, isError) =>
+                ContentBlockParam.ofToolResult(
+                  ToolResultBlockParam.builder()
+                    .toolUseId(toolUseId)
+                    .content(content)
+                    .isError(isError)
+                    .build()
+                )
+              case Content.Text(text) =>
+                ContentBlockParam.ofText(TextBlockParam.builder().text(text).build())
+              case other =>
+                ContentBlockParam.ofText(TextBlockParam.builder().text(other.toString).build())
+            builder.addUserMessageOfBlockParams(blocks.asJava)
+          else
+            builder.addUserMessage(msg.text)
         case Role.Assistant =>
-          builder.addAssistantMessage(msg.text)
+          val hasToolUse = msg.content.exists(_.isInstanceOf[Content.ToolUse])
+          if hasToolUse then
+            val blocks = msg.content.map:
+              case Content.ToolUse(id, name, input) =>
+                val mapper = com.fasterxml.jackson.databind.json.JsonMapper.builder().nn.build().nn
+                val tree = mapper.readTree(input).nn
+                val inputBuilder = ToolUseBlockParam.Input.builder()
+                tree.fields().nn.forEachRemaining: entry =>
+                  inputBuilder.putAdditionalProperty(entry.getKey, JsonValue.fromJsonNode(entry.getValue))
+                ContentBlockParam.ofToolUse(
+                  ToolUseBlockParam.builder()
+                    .id(id)
+                    .name(name)
+                    .input(inputBuilder.build())
+                    .build()
+                )
+              case Content.Text(text) =>
+                ContentBlockParam.ofText(TextBlockParam.builder().text(text).build())
+              case Content.Thinking(text) =>
+                ContentBlockParam.ofText(TextBlockParam.builder().text(text).build())
+              case other =>
+                ContentBlockParam.ofText(TextBlockParam.builder().text(other.toString).build())
+            builder.addAssistantMessageOfBlockParams(blocks.asJava)
+          else
+            builder.addAssistantMessage(msg.text)
         case Role.System => ()
 
     llmConfig.temperature.foreach(t => builder.temperature(t))

@@ -217,6 +217,134 @@ class EndpointNetworkSuite extends munit.FunSuite:
       assert(toolUses.head.name == "get_weather")
       assert(toolUses.head.input.contains("Paris"))
 
+  // OpenAIResponseEndpoint tests
+
+  test("OpenAIResponseEndpoint.invoke returns a response".tag(Network)):
+    assume(sys.env.contains("OPENAI_API_KEY"), "OPENAI_API_KEY not set")
+    val endpoint = OpenAIResponseEndpoint.createFromEnv()
+    val config = LLMConfig(model = "gpt-4o-mini", maxTokens = Some(16))
+    val result = endpoint.invoke(List(Message.user("Say hello")), config)
+    assert(result.isRight, s"Expected Right but got $result")
+    val response = result.toOption.get
+    assert(response.message.role == Role.Assistant)
+    assert(response.message.text.nonEmpty)
+    assert(response.finishReason == FinishReason.Stop || response.finishReason == FinishReason.MaxTokens)
+
+  test("OpenAIResponseEndpoint.invoke with system prompt".tag(Network)):
+    assume(sys.env.contains("OPENAI_API_KEY"), "OPENAI_API_KEY not set")
+    val endpoint = OpenAIResponseEndpoint.createFromEnv()
+    val config = LLMConfig(
+      model = "gpt-4o-mini",
+      maxTokens = Some(16),
+      systemPrompt = Some("You are a helpful assistant. Reply only with the word PONG."),
+    )
+    val result = endpoint.invoke(List(Message.user("PING")), config)
+    assert(result.isRight, s"Expected Right but got $result")
+    assert(result.toOption.get.message.text.contains("PONG"))
+
+  test("OpenAIResponseEndpoint.invoke with invalid key returns Left".tag(Network)):
+    val endpoint = OpenAIResponseEndpoint.create(EndpointConfig(
+      baseUrl = "https://api.openai.com/v1",
+      apiKey = "sk-invalid",
+    ))
+    val config = LLMConfig(model = "gpt-4o-mini", maxTokens = Some(16))
+    val result = endpoint.invoke(List(Message.user("hello")), config)
+    assert(result.isLeft)
+
+  test("OpenAIResponseEndpoint.invoke with tool calling".tag(Network)):
+    assume(sys.env.contains("OPENAI_API_KEY"), "OPENAI_API_KEY not set")
+    val endpoint = OpenAIResponseEndpoint.createFromEnv()
+    val config = LLMConfig(
+      model = "gpt-4o-mini",
+      maxTokens = Some(64),
+      tools = List(weatherTool),
+    )
+    val result = endpoint.invoke(List(Message.user("What is the weather in Paris?")), config)
+    assert(result.isRight, s"Expected Right but got $result")
+    val response = result.toOption.get
+    assert(response.finishReason == FinishReason.ToolUse)
+    val toolUses = response.message.content.collect { case c: Content.ToolUse => c }
+    assert(toolUses.nonEmpty, "Expected at least one tool use")
+    assert(toolUses.head.name == "get_weather")
+    assert(toolUses.head.input.contains("Paris"))
+
+  test("OpenAIResponseEndpoint.stream text response".tag(Network)):
+    assume(sys.env.contains("OPENAI_API_KEY"), "OPENAI_API_KEY not set")
+    Async.blocking:
+      val endpoint = OpenAIResponseEndpoint.createFromEnv()
+      val config = LLMConfig(model = "gpt-4o-mini", maxTokens = Some(32))
+      val ch = endpoint.stream(List(Message.user("Say hello")), config)
+      val collected = readAll(ch)
+      assert(collected.forall(_.isRight), s"Expected all Right but got errors")
+      val streamEvents = collected.map(_.toOption.get)
+      val deltas = streamEvents.collect { case StreamEvent.Delta(t) => t }
+      assert(deltas.nonEmpty, "Expected at least one Delta event")
+      val done = streamEvents.collectFirst { case d: StreamEvent.Done => d }
+      assert(done.isDefined, "Expected Done event")
+      val text = deltas.mkString
+      assert(text.nonEmpty)
+      assert(done.get.response.message.text == text)
+
+  test("OpenAIResponseEndpoint.stream with tool calling".tag(Network)):
+    assume(sys.env.contains("OPENAI_API_KEY"), "OPENAI_API_KEY not set")
+    Async.blocking:
+      val endpoint = OpenAIResponseEndpoint.createFromEnv()
+      val config = LLMConfig(
+        model = "gpt-4o-mini",
+        maxTokens = Some(64),
+        tools = List(weatherTool),
+      )
+      val ch = endpoint.stream(List(Message.user("What is the weather in Paris?")), config)
+      val collected = readAll(ch)
+      assert(collected.forall(_.isRight), s"Expected all Right but got ${collected.filter(_.isLeft)}")
+      val streamEvents = collected.map(_.toOption.get)
+      val starts = streamEvents.collect { case s: StreamEvent.ToolCallStart => s }
+      assert(starts.nonEmpty, "Expected at least one ToolCallStart event")
+      assert(starts.head.name == "get_weather")
+      assert(starts.head.id.nonEmpty)
+      val toolDeltas = streamEvents.collect { case d: StreamEvent.ToolCallDelta => d }
+      assert(toolDeltas.nonEmpty, "Expected at least one ToolCallDelta event")
+      val fullArgs = toolDeltas.map(_.argumentDelta).mkString
+      assert(fullArgs.contains("Paris"), s"Expected tool args to contain Paris but got: $fullArgs")
+      val done = streamEvents.collectFirst { case d: StreamEvent.Done => d }
+      assert(done.isDefined, "Expected Done event")
+      assert(done.get.response.finishReason == FinishReason.ToolUse)
+      val toolUses = done.get.response.message.content.collect { case c: Content.ToolUse => c }
+      assert(toolUses.nonEmpty)
+      assert(toolUses.head.name == "get_weather")
+      assert(toolUses.head.input.contains("Paris"))
+
+  test("OpenAIResponseEndpoint.invoke with thinking".tag(Network)):
+    assume(sys.env.contains("OPENAI_API_KEY"), "OPENAI_API_KEY not set")
+    val endpoint = OpenAIResponseEndpoint.createFromEnv()
+    val config = LLMConfig(
+      model = "o4-mini",
+      maxTokens = Some(2048),
+      thinking = Some(ThinkingMode.Effort(EffortLevel.Low)),
+    )
+    val result = endpoint.invoke(List(Message.user("What is 17 * 23?")), config)
+    assert(result.isRight, s"Expected Right but got $result")
+    val response = result.toOption.get
+    assert(response.message.text.nonEmpty, "Expected text content")
+
+  test("OpenAIResponseEndpoint.stream with thinking".tag(Network)):
+    assume(sys.env.contains("OPENAI_API_KEY"), "OPENAI_API_KEY not set")
+    Async.blocking:
+      val endpoint = OpenAIResponseEndpoint.createFromEnv()
+      val config = LLMConfig(
+        model = "o4-mini",
+        maxTokens = Some(2048),
+        thinking = Some(ThinkingMode.Effort(EffortLevel.Low)),
+      )
+      val ch = endpoint.stream(List(Message.user("What is 17 * 23?")), config)
+      val collected = readAll(ch)
+      assert(collected.forall(_.isRight), s"Expected all Right but got ${collected.filter(_.isLeft)}")
+      val streamEvents = collected.map(_.toOption.get)
+      val textDeltas = streamEvents.collect { case StreamEvent.Delta(t) => t }
+      assert(textDeltas.nonEmpty, "Expected text Delta events")
+      val done = streamEvents.collectFirst { case d: StreamEvent.Done => d }
+      assert(done.isDefined, "Expected Done event")
+
   // Non-streaming tool calling tests
 
   test("AnthropicEndpoint.invoke with tool calling".tag(Network)):

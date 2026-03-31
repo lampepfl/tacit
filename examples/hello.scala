@@ -9,12 +9,12 @@ import gears.async.Async
 import gears.async.default.given
 import gears.async.Channel
 
-@main def hello(): Unit =
+@main def runLLM(): Unit =
   val endpoint = AnthropicEndpoint.createFromEnv()
   val config = LLMConfig(
-    model = "claude-haiku-4-5",
+    model = "claude-sonnet-4-6",
     maxTokens = Some(4096),
-    thinking = Some(ThinkingMode.Budget(1024)),
+    thinking = Some(ThinkingMode.Auto),
   )
 
   var history = List.empty[Message]

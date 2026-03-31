@@ -8,6 +8,11 @@ class EndpointSuite extends munit.FunSuite:
     val endpoint = OpenAIEndpoint.create(config)
     assert(endpoint.isInstanceOf[OpenAIEndpoint])
 
+  test("OpenAICompletionEndpoint.create with explicit config"):
+    val config = EndpointConfig(baseUrl = "https://api.openai.com/v1", apiKey = "test-key")
+    val endpoint = OpenAICompletionEndpoint.create(config)
+    assert(endpoint.isInstanceOf[OpenAICompletionEndpoint])
+
   test("AnthropicEndpoint.create with explicit config"):
     val config = EndpointConfig(baseUrl = "https://api.anthropic.com", apiKey = "test-key")
     val endpoint = AnthropicEndpoint.create(config)

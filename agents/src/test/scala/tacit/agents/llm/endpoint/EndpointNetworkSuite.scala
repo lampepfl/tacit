@@ -17,19 +17,19 @@ class EndpointNetworkSuite extends munit.FunSuite:
         case Left(_)     => reading = false
     buf.toList
 
-  test("OpenAIEndpoint.createFromEnv reads OPENAI_API_KEY".tag(Network)):
+  test("OpenAICompletionEndpoint.createFromEnv reads OPENAI_API_KEY".tag(Network)):
     assume(sys.env.contains("OPENAI_API_KEY"), "OPENAI_API_KEY not set")
-    val endpoint = OpenAIEndpoint.createFromEnv()
-    assert(endpoint.isInstanceOf[OpenAIEndpoint])
+    val endpoint = OpenAICompletionEndpoint.createFromEnv()
+    assert(endpoint.isInstanceOf[OpenAICompletionEndpoint])
 
   test("AnthropicEndpoint.createFromEnv reads ANTHROPIC_API_KEY".tag(Network)):
     assume(sys.env.contains("ANTHROPIC_API_KEY"), "ANTHROPIC_API_KEY not set")
     val endpoint = AnthropicEndpoint.createFromEnv()
     assert(endpoint.isInstanceOf[AnthropicEndpoint])
 
-  test("OpenAIEndpoint.invoke returns a response".tag(Network)):
+  test("OpenAICompletionEndpoint.invoke returns a response".tag(Network)):
     assume(sys.env.contains("OPENAI_API_KEY"), "OPENAI_API_KEY not set")
-    val endpoint = OpenAIEndpoint.createFromEnv()
+    val endpoint = OpenAICompletionEndpoint.createFromEnv()
     val config = LLMConfig(model = "gpt-4o-mini", maxTokens = Some(16))
     val result = endpoint.invoke(List(Message.user("Say hello")), config)
     assert(result.isRight, s"Expected Right but got $result")
@@ -38,9 +38,9 @@ class EndpointNetworkSuite extends munit.FunSuite:
     assert(response.message.text.nonEmpty)
     assert(response.finishReason == FinishReason.Stop || response.finishReason == FinishReason.MaxTokens)
 
-  test("OpenAIEndpoint.invoke with system prompt".tag(Network)):
+  test("OpenAICompletionEndpoint.invoke with system prompt".tag(Network)):
     assume(sys.env.contains("OPENAI_API_KEY"), "OPENAI_API_KEY not set")
-    val endpoint = OpenAIEndpoint.createFromEnv()
+    val endpoint = OpenAICompletionEndpoint.createFromEnv()
     val config = LLMConfig(
       model = "gpt-4o-mini",
       maxTokens = Some(16),
@@ -50,8 +50,8 @@ class EndpointNetworkSuite extends munit.FunSuite:
     assert(result.isRight, s"Expected Right but got $result")
     assert(result.toOption.get.message.text.contains("PONG"))
 
-  test("OpenAIEndpoint.invoke with invalid key returns Left".tag(Network)):
-    val endpoint = OpenAIEndpoint.create(EndpointConfig(
+  test("OpenAICompletionEndpoint.invoke with invalid key returns Left".tag(Network)):
+    val endpoint = OpenAICompletionEndpoint.create(EndpointConfig(
       baseUrl = "https://api.openai.com/v1",
       apiKey = "sk-invalid",
     ))
@@ -103,9 +103,9 @@ class EndpointNetworkSuite extends munit.FunSuite:
     ),
   )
 
-  test("OpenAIEndpoint.invoke with tool calling".tag(Network)):
+  test("OpenAICompletionEndpoint.invoke with tool calling".tag(Network)):
     assume(sys.env.contains("OPENAI_API_KEY"), "OPENAI_API_KEY not set")
-    val endpoint = OpenAIEndpoint.createFromEnv()
+    val endpoint = OpenAICompletionEndpoint.createFromEnv()
     val config = LLMConfig(
       model = "gpt-4o-mini",
       maxTokens = Some(64),
@@ -122,10 +122,10 @@ class EndpointNetworkSuite extends munit.FunSuite:
 
   // Streaming tests: text
 
-  test("OpenAIEndpoint.stream text response".tag(Network)):
+  test("OpenAICompletionEndpoint.stream text response".tag(Network)):
     assume(sys.env.contains("OPENAI_API_KEY"), "OPENAI_API_KEY not set")
     Async.blocking:
-      val endpoint = OpenAIEndpoint.createFromEnv()
+      val endpoint = OpenAICompletionEndpoint.createFromEnv()
       val config = LLMConfig(model = "gpt-4o-mini", maxTokens = Some(32))
       val ch = endpoint.stream(List(Message.user("Say hello")), config)
       val collected = readAll(ch)
@@ -158,10 +158,10 @@ class EndpointNetworkSuite extends munit.FunSuite:
 
   // Streaming tests: tool calling
 
-  test("OpenAIEndpoint.stream with tool calling".tag(Network)):
+  test("OpenAICompletionEndpoint.stream with tool calling".tag(Network)):
     assume(sys.env.contains("OPENAI_API_KEY"), "OPENAI_API_KEY not set")
     Async.blocking:
-      val endpoint = OpenAIEndpoint.createFromEnv()
+      val endpoint = OpenAICompletionEndpoint.createFromEnv()
       val config = LLMConfig(
         model = "gpt-4o-mini",
         maxTokens = Some(64),
@@ -217,11 +217,11 @@ class EndpointNetworkSuite extends munit.FunSuite:
       assert(toolUses.head.name == "get_weather")
       assert(toolUses.head.input.contains("Paris"))
 
-  // OpenAIResponseEndpoint tests
+  // OpenAIEndpoint tests
 
-  test("OpenAIResponseEndpoint.invoke returns a response".tag(Network)):
+  test("OpenAIEndpoint.invoke returns a response".tag(Network)):
     assume(sys.env.contains("OPENAI_API_KEY"), "OPENAI_API_KEY not set")
-    val endpoint = OpenAIResponseEndpoint.createFromEnv()
+    val endpoint = OpenAIEndpoint.createFromEnv()
     val config = LLMConfig(model = "gpt-4o-mini", maxTokens = Some(16))
     val result = endpoint.invoke(List(Message.user("Say hello")), config)
     assert(result.isRight, s"Expected Right but got $result")
@@ -230,9 +230,9 @@ class EndpointNetworkSuite extends munit.FunSuite:
     assert(response.message.text.nonEmpty)
     assert(response.finishReason == FinishReason.Stop || response.finishReason == FinishReason.MaxTokens)
 
-  test("OpenAIResponseEndpoint.invoke with system prompt".tag(Network)):
+  test("OpenAIEndpoint.invoke with system prompt".tag(Network)):
     assume(sys.env.contains("OPENAI_API_KEY"), "OPENAI_API_KEY not set")
-    val endpoint = OpenAIResponseEndpoint.createFromEnv()
+    val endpoint = OpenAIEndpoint.createFromEnv()
     val config = LLMConfig(
       model = "gpt-4o-mini",
       maxTokens = Some(16),
@@ -242,8 +242,8 @@ class EndpointNetworkSuite extends munit.FunSuite:
     assert(result.isRight, s"Expected Right but got $result")
     assert(result.toOption.get.message.text.contains("PONG"))
 
-  test("OpenAIResponseEndpoint.invoke with invalid key returns Left".tag(Network)):
-    val endpoint = OpenAIResponseEndpoint.create(EndpointConfig(
+  test("OpenAIEndpoint.invoke with invalid key returns Left".tag(Network)):
+    val endpoint = OpenAIEndpoint.create(EndpointConfig(
       baseUrl = "https://api.openai.com/v1",
       apiKey = "sk-invalid",
     ))
@@ -251,9 +251,9 @@ class EndpointNetworkSuite extends munit.FunSuite:
     val result = endpoint.invoke(List(Message.user("hello")), config)
     assert(result.isLeft)
 
-  test("OpenAIResponseEndpoint.invoke with tool calling".tag(Network)):
+  test("OpenAIEndpoint.invoke with tool calling".tag(Network)):
     assume(sys.env.contains("OPENAI_API_KEY"), "OPENAI_API_KEY not set")
-    val endpoint = OpenAIResponseEndpoint.createFromEnv()
+    val endpoint = OpenAIEndpoint.createFromEnv()
     val config = LLMConfig(
       model = "gpt-4o-mini",
       maxTokens = Some(64),
@@ -268,10 +268,10 @@ class EndpointNetworkSuite extends munit.FunSuite:
     assert(toolUses.head.name == "get_weather")
     assert(toolUses.head.input.contains("Paris"))
 
-  test("OpenAIResponseEndpoint.stream text response".tag(Network)):
+  test("OpenAIEndpoint.stream text response".tag(Network)):
     assume(sys.env.contains("OPENAI_API_KEY"), "OPENAI_API_KEY not set")
     Async.blocking:
-      val endpoint = OpenAIResponseEndpoint.createFromEnv()
+      val endpoint = OpenAIEndpoint.createFromEnv()
       val config = LLMConfig(model = "gpt-4o-mini", maxTokens = Some(32))
       val ch = endpoint.stream(List(Message.user("Say hello")), config)
       val collected = readAll(ch)
@@ -285,10 +285,10 @@ class EndpointNetworkSuite extends munit.FunSuite:
       assert(text.nonEmpty)
       assert(done.get.response.message.text == text)
 
-  test("OpenAIResponseEndpoint.stream with tool calling".tag(Network)):
+  test("OpenAIEndpoint.stream with tool calling".tag(Network)):
     assume(sys.env.contains("OPENAI_API_KEY"), "OPENAI_API_KEY not set")
     Async.blocking:
-      val endpoint = OpenAIResponseEndpoint.createFromEnv()
+      val endpoint = OpenAIEndpoint.createFromEnv()
       val config = LLMConfig(
         model = "gpt-4o-mini",
         maxTokens = Some(64),
@@ -314,9 +314,9 @@ class EndpointNetworkSuite extends munit.FunSuite:
       assert(toolUses.head.name == "get_weather")
       assert(toolUses.head.input.contains("Paris"))
 
-  test("OpenAIResponseEndpoint.invoke with thinking".tag(Network)):
+  test("OpenAIEndpoint.invoke with thinking".tag(Network)):
     assume(sys.env.contains("OPENAI_API_KEY"), "OPENAI_API_KEY not set")
-    val endpoint = OpenAIResponseEndpoint.createFromEnv()
+    val endpoint = OpenAIEndpoint.createFromEnv()
     val config = LLMConfig(
       model = "o4-mini",
       maxTokens = Some(2048),
@@ -327,10 +327,10 @@ class EndpointNetworkSuite extends munit.FunSuite:
     val response = result.toOption.get
     assert(response.message.text.nonEmpty, "Expected text content")
 
-  test("OpenAIResponseEndpoint.stream with thinking".tag(Network)):
+  test("OpenAIEndpoint.stream with thinking".tag(Network)):
     assume(sys.env.contains("OPENAI_API_KEY"), "OPENAI_API_KEY not set")
     Async.blocking:
-      val endpoint = OpenAIResponseEndpoint.createFromEnv()
+      val endpoint = OpenAIEndpoint.createFromEnv()
       val config = LLMConfig(
         model = "o4-mini",
         maxTokens = Some(2048),

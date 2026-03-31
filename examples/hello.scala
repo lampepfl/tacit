@@ -66,7 +66,7 @@ def streamResponse(endpoint: Endpoint, history: List[Message], config: LLMConfig
   lastResponse.nn
 
 @main def runLLM(): Unit =
-  val endpoint = OpenAIResponseEndpoint.createFromEnv()
+  val endpoint = OpenAIEndpoint.createFromEnv()
   val config = LLMConfig(
     model = "gpt-5.4",
     maxTokens = Some(4096),

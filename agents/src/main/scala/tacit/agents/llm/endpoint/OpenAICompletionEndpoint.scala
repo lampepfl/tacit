@@ -240,6 +240,10 @@ class OpenAICompletionEndpoint(config: EndpointConfig) extends Endpoint:
         propMap.put("description", prop.description)
       if prop.enumValues.nonEmpty then
         propMap.put("enum", java.util.List.of(prop.enumValues*))
+      prop.items.foreach: itemProp =>
+        val itemMap = new java.util.LinkedHashMap[String, Any]()
+        itemMap.put("type", itemProp.`type`)
+        propMap.put("items", itemMap)
       propsMap.put(name, propMap)
 
     FunctionParameters.builder()

@@ -38,6 +38,7 @@ lazy val agents = project
       "com.openai" % "openai-java" % "4.29.1",
       "com.anthropic" % "anthropic-java" % "2.18.0",
       "ch.epfl.lamp" %% "gears" % "0.2.0",
+      "com.lihaoyi" %% "ujson" % "4.1.0",
       "org.scalameta" %% "munit" % "1.2.2" % Test,
     ),
     testFrameworks += MUnitFramework,

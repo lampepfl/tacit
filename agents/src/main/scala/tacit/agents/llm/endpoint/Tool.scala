@@ -17,4 +17,5 @@ object ToolSchema:
     `type`: String,
     description: String = "",
     enumValues: List[String] = List.empty,
+    items: Option[Property] = None,
   )

@@ -12,10 +12,8 @@ trait ToolType:
 
   type Args: IsToolArg
 
-  /** The ToolSchema for this tool, ready to pass to an Endpoint. */
   def toolSchema: ToolSchema =
-    ToolSchema(name = name, description = description, parameters = summon[IsToolArg[Args]].schema)
+    ToolSchema(name, description, parameters = summon[IsToolArg[Args]].schema)
 
-  /** Parse a raw JSON string into the typed Args. */
   def parseArgs(input: String): Result[Args, ToolArgParsingError] =
     summon[IsToolArg[Args]].parse(input)

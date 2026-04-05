@@ -46,6 +46,8 @@ object LookupTool extends AgentTool[AgentState]:
   def description = "Look up a value by key"
   def handle(arg: LookupArgs, state: AgentState): String = s"Value for ${arg.key}: found"
 
+case class GreetArgs(name: String) derives IsToolArg
+
 // --- Test state ---
 
 class SimpleState(val llmConfig: LLMConfig) extends AgentState
@@ -62,8 +64,10 @@ def toolCallResponse(calls: (String, String, String)*): ChatResponse =
 
 val defaultConfig = LLMConfig(model = "test-model")
 
-def makeAgent(tools: List[AgentTool[AgentState]] = Nil): Agent[SimpleState] =
-  val agent = Agent(SimpleState(defaultConfig))
+def makeAgent(tools: List[AgentTool[AgentState]] = Nil): Agent =
+  val agent = new Agent:
+    type State = SimpleState
+    def getInitState = SimpleState(defaultConfig)
   agent.tools = tools
   agent
 
@@ -141,19 +145,61 @@ class AgentSuite extends munit.FunSuite:
     assert(result.isLeft)
     assert(result.swap.toOption.get.description.contains("No more stub responses"))
 
-  test("withTool: mutably adds tool and returns same agent"):
+  test("addTool: mutably adds tool and returns same agent"):
     val agent = makeAgent()
     assertEquals(agent.tools.size, 0)
-    val same = agent.withTool(CalcTool)
+    val same = agent.addTool(CalcTool)
     assert(same eq agent)
     assertEquals(agent.tools.size, 1)
     assertEquals(agent.tools.head.name, "calculate")
 
-  test("withTool: chains multiple tools"):
+  test("addTool: chains multiple tools"):
     val agent = makeAgent()
-    agent.withTool(CalcTool).withTool(LookupTool)
+    agent.addTool(CalcTool).addTool(LookupTool)
     assertEquals(agent.tools.size, 2)
     assertEquals(agent.tools.map(_.name), List("calculate", "lookup"))
+
+  test("addTool: rejects duplicate tool name"):
+    val agent = makeAgent()
+    agent.addTool(CalcTool)
+    intercept[IllegalArgumentException]:
+      agent.addTool(CalcTool)
+
+  test("addTools: adds multiple tools at once"):
+    val agent = makeAgent()
+    val same = agent.addTools(CalcTool, LookupTool)
+    assert(same eq agent)
+    assertEquals(agent.tools.size, 2)
+    assertEquals(agent.tools.map(_.name), List("calculate", "lookup"))
+
+  test("addTools: rejects duplicates among new tools"):
+    val agent = makeAgent()
+    intercept[IllegalArgumentException]:
+      agent.addTools(CalcTool, CalcTool)
+
+  test("handle: creates tool from lambda"):
+    val ep = StubEndpoint(List(
+      toolCallResponse(("call-1", "greet", """{"name": "Alice"}""")),
+      textResponse("Done."),
+    ))
+    given Endpoint = ep
+    val agent = makeAgent()
+    agent.handle[GreetArgs]("greet", "Greet someone"): (arg, state) =>
+      s"Hello, ${arg.name}!"
+    assertEquals(agent.tools.size, 1)
+    assertEquals(agent.tools.head.name, "greet")
+    val result = agent.ask("Greet Alice")
+    assert(result.isRight)
+    val secondCall = ep.invokedWith(1)
+    val toolResult = secondCall.last.content.collectFirst:
+      case Content.ToolResult(_, content, _) => content
+    assertEquals(toolResult, Some("Hello, Alice!"))
+
+  test("handle: rejects duplicate name"):
+    val agent = makeAgent()
+    agent.handle[GreetArgs]("greet", "Greet someone")((arg, _) => "hi")
+    intercept[IllegalArgumentException]:
+      agent.handle[GreetArgs]("greet", "Greet again")((arg, _) => "hi")
 
   // --- state.messages update tests ---
 

@@ -30,13 +30,31 @@ trait AgentTool[-StateType <: AgentState]:
   def parseArgs(input: String): Result[ArgType, ToolArgParsingError] =
     summon[IsToolArg[ArgType]].parse(input)
 
-class Agent[S <: AgentState](initialState: S):
-  var state: S = initialState
-  var tools: List[AgentTool[S]] = Nil
+abstract class Agent:
+  type State <: AgentState
 
-  def withTool(tool: AgentTool[S]): this.type =
+  val state: State = getInitState
+  var tools: List[AgentTool[State]] = Nil
+
+  def getInitState: State
+
+  def addTool(tool: AgentTool[State]): this.type =
+    if tools.exists(_.name == tool.name) then
+      throw IllegalArgumentException(s"Tool with name '${tool.name}' already exists")
     tools = tools :+ tool
     this
+
+  def addTools(newTools: AgentTool[State]*): this.type =
+    newTools.foreach(addTool)
+    this
+
+  def handle[A: IsToolArg](toolName: String, desc: String)(handler: (A, this.State) => String): this.type =
+    val tool = new AgentTool[State]:
+      type ArgType = A
+      def name = toolName
+      def description = desc
+      def handle(arg: A, state: State): String = handler(arg, state)
+    addTool(tool)
 
   def ask(message: String)(using endpoint: Endpoint): Result[ChatResponse, AgentError] =
     state.messages = state.messages :+ Message.user(message)

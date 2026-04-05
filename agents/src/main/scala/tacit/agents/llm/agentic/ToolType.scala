@@ -1,6 +1,6 @@
 package tacit.agents
 package llm
-package computation
+package agentic
 
 import utils.{IsToolArg, ToolArgParsingError}
 import endpoint.ToolSchema

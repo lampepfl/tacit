@@ -2,8 +2,8 @@ package tacit.agents
 package llm
 package agentic
 
-import utils.{IsToolArg, ToolArgParsingError}
-import endpoint.ToolSchema
+import llm.utils.{IsToolArg, ToolArgParsingError}
+import endpoint.{LLMConfig, ToolSchema}
 
 // --- Test tool definitions ---
 

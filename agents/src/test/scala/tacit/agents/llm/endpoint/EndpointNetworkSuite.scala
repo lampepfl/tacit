@@ -156,6 +156,39 @@ class EndpointNetworkSuite extends munit.FunSuite:
       assert(text.nonEmpty)
       assert(done.get.response.message.text == text)
 
+  // OpenAICompletionEndpoint thinking tests
+
+  test("OpenAICompletionEndpoint.invoke with thinking".tag(Network)):
+    assume(sys.env.contains("OPENAI_API_KEY"), "OPENAI_API_KEY not set")
+    val endpoint = OpenAICompletionEndpoint.createFromEnv()
+    val config = LLMConfig(
+      model = "o4-mini",
+      maxTokens = Some(2048),
+      thinking = Some(ThinkingMode.Effort(EffortLevel.Low)),
+    )
+    val result = endpoint.invoke(List(Message.user("What is 17 * 23?")), config)
+    assert(result.isRight, s"Expected Right but got $result")
+    val response = result.toOption.get
+    assert(response.message.text.nonEmpty, "Expected text content")
+
+  test("OpenAICompletionEndpoint.stream with thinking".tag(Network)):
+    assume(sys.env.contains("OPENAI_API_KEY"), "OPENAI_API_KEY not set")
+    Async.blocking:
+      val endpoint = OpenAICompletionEndpoint.createFromEnv()
+      val config = LLMConfig(
+        model = "o4-mini",
+        maxTokens = Some(2048),
+        thinking = Some(ThinkingMode.Effort(EffortLevel.Low)),
+      )
+      val ch = endpoint.stream(List(Message.user("What is 17 * 23?")), config)
+      val collected = readAll(ch)
+      assert(collected.forall(_.isRight), s"Expected all Right but got ${collected.filter(_.isLeft)}")
+      val streamEvents = collected.map(_.toOption.get)
+      val textDeltas = streamEvents.collect { case StreamEvent.Delta(t) => t }
+      assert(textDeltas.nonEmpty, "Expected text Delta events")
+      val done = streamEvents.collectFirst { case d: StreamEvent.Done => d }
+      assert(done.isDefined, "Expected Done event")
+
   // Streaming tests: tool calling
 
   test("OpenAICompletionEndpoint.stream with tool calling".tag(Network)):
@@ -340,6 +373,8 @@ class EndpointNetworkSuite extends munit.FunSuite:
       val collected = readAll(ch)
       assert(collected.forall(_.isRight), s"Expected all Right but got ${collected.filter(_.isLeft)}")
       val streamEvents = collected.map(_.toOption.get)
+      // Note: OpenAI's Responses API does not stream reasoning tokens as deltas,
+      // so we do not assert ThinkingDelta events here (unlike Anthropic).
       val textDeltas = streamEvents.collect { case StreamEvent.Delta(t) => t }
       assert(textDeltas.nonEmpty, "Expected text Delta events")
       val done = streamEvents.collectFirst { case d: StreamEvent.Done => d }
@@ -402,3 +437,42 @@ class EndpointNetworkSuite extends munit.FunSuite:
       assert(done.isDefined, "Expected Done event")
       assert(done.get.response.message.thinking == thinkingDeltas.mkString)
       assert(done.get.response.message.text == textDeltas.mkString)
+
+  // Tool calling + thinking combined tests
+
+  test("OpenAIEndpoint.invoke with tool calling and thinking".tag(Network)):
+    assume(sys.env.contains("OPENAI_API_KEY"), "OPENAI_API_KEY not set")
+    val endpoint = OpenAIEndpoint.createFromEnv()
+    val config = LLMConfig(
+      model = "o4-mini",
+      maxTokens = Some(2048),
+      tools = List(weatherTool),
+      thinking = Some(ThinkingMode.Effort(EffortLevel.Low)),
+    )
+    val result = endpoint.invoke(List(Message.user("What is the weather in Paris?")), config)
+    assert(result.isRight, s"Expected Right but got $result")
+    val response = result.toOption.get
+    assert(response.finishReason == FinishReason.ToolUse)
+    val toolUses = response.message.content.collect { case c: Content.ToolUse => c }
+    assert(toolUses.nonEmpty, "Expected at least one tool use")
+    assert(toolUses.head.name == "get_weather")
+    assert(toolUses.head.input.contains("Paris"))
+
+  test("AnthropicEndpoint.invoke with tool calling and thinking".tag(Network)):
+    assume(sys.env.contains("ANTHROPIC_API_KEY"), "ANTHROPIC_API_KEY not set")
+    val endpoint = AnthropicEndpoint.createFromEnv()
+    val config = LLMConfig(
+      model = "claude-haiku-4-5",
+      maxTokens = Some(2048),
+      tools = List(weatherTool),
+      thinking = Some(ThinkingMode.Budget(1024)),
+      systemPrompt = Some("Use the provided tools to answer questions. Do not respond with text, just call the appropriate tool."),
+    )
+    val result = endpoint.invoke(List(Message.user("What is the weather in Paris?")), config)
+    assert(result.isRight, s"Expected Right but got $result")
+    val response = result.toOption.get
+    assert(response.finishReason == FinishReason.ToolUse)
+    val toolUses = response.message.content.collect { case c: Content.ToolUse => c }
+    assert(toolUses.nonEmpty, "Expected at least one tool use")
+    assert(toolUses.head.name == "get_weather")
+    assert(toolUses.head.input.contains("Paris"))

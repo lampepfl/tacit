@@ -7,6 +7,12 @@ import tacit.agents.utils.Result.ok
 
 import scala.deriving.Mirror
 import scala.compiletime.{erasedValue, summonInline, constValue}
+import scala.quoted.*
+
+// --- Annotation for field descriptions ---
+
+/** Annotation to attach a description to a case class field for tool schema generation. */
+class desc(val value: String) extends scala.annotation.StaticAnnotation
 
 // --- Error type ---
 
@@ -75,12 +81,14 @@ object IsToolArg:
     labels: List[String],
     fieldTypes: List[IsFieldType[?]],
     requiredFields: List[String],
+    descriptions: List[String],
     parsers: List[(String, ujson.Value) => Result[Any, ToolArgParsingError]],
     mirror: Mirror.ProductOf[T],
   ) extends IsToolArg[T]:
     def schema: ToolSchema.Parameters =
-      val properties = labels.zip(fieldTypes).map: (name, ft) =>
-        name -> ToolSchema.Property(`type` = ft.schemaType, items = ft.items)
+      val properties = labels.zip(fieldTypes).zip(descriptions).map { case ((name, ft), desc) =>
+        name -> ToolSchema.Property(`type` = ft.schemaType, description = desc, items = ft.items)
+      }
       ToolSchema.Parameters(properties = properties.toMap, required = requiredFields)
 
     def parse(input: String): Result[T, ToolArgParsingError] =
@@ -106,9 +114,45 @@ object IsToolArg:
       getFieldLabels[mirror.MirroredElemLabels],
       getFieldTypes[mirror.MirroredElemTypes],
       getRequiredFields[mirror.MirroredElemTypes, mirror.MirroredElemLabels],
+      getFieldDescriptions[T],
       getFieldParsers[mirror.MirroredElemTypes],
       mirror,
     )
+
+  /** Extract @desc annotations from case class fields via macro. */
+  inline def getFieldDescriptions[T]: List[String] = ${ getFieldDescriptionsImpl[T] }
+
+  private def getFieldDescriptionsImpl[T: Type](using Quotes): Expr[List[String]] =
+    import quotes.reflect.*
+    val sym = TypeRepr.of[T].typeSymbol
+    val ctorParams = sym.primaryConstructor.paramSymss.flatten.filterNot(_.isType)
+    val descType = TypeRepr.of[desc]
+    // Parse @param tags from class-level docstring as a fallback.
+    val paramDocs = parseParamTags(sym.docstring)
+    val docs = ctorParams.map: param =>
+      // 1. Check @desc annotation first.
+      val descAnnot = param.annotations.find(_.tpe <:< descType)
+      val description = descAnnot match
+        case Some(Apply(_, List(Literal(StringConstant(value))))) => value
+        case _ => paramDocs.getOrElse(param.name, "")
+      Expr(description)
+    Expr.ofList(docs)
+
+  /** Parse `@param name description` tags from a raw Scaladoc comment. */
+  private[utils] def parseParamTags(raw: Option[String]): Map[String, String] =
+    raw match
+      case None => Map.empty
+      case Some(s) =>
+        // Use a non-greedy match that stops before the next known Scaladoc tag or end of string.
+        val scaladocTags = """@(?:param|return|returns|throws|tparam|see|note|example|constructor|deprecated|since|version|todo|inheritdoc|group)\b"""
+        val paramPattern = s"""@param\\s+(\\w+)\\s+((?:(?!$scaladocTags).)+)""".r
+        val cleaned = s.stripPrefix("/**").stripSuffix("*/")
+          .linesIterator
+          .map(_.trim.stripPrefix("*").trim)
+          .mkString(" ")
+        paramPattern.findAllMatchIn(cleaned).map: m =>
+          m.group(1).nn -> m.group(2).nn.trim
+        .toMap
 
   // --- inline helpers ---
 

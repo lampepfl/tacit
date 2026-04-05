@@ -9,26 +9,29 @@ import endpoint.ToolSchema
 
 case class DiceArgs(count: Int) derives IsToolArg
 
-object RollDice extends ToolType:
-  def name = "rollDice"
-  def description = "Roll some dice"
-  type Args = DiceArgs
+object RollDice extends AgentTool[AgentState]:
+  type ArgType = DiceArgs
+  override def name = "rollDice"
+  override def description = "Roll some dice"
+  override def handle(arg: DiceArgs, state: AgentState): String = s"Rolled ${arg.count} dice"
 
 case class SearchArgs(query: String, maxResults: Option[Int]) derives IsToolArg
 
-object WebSearch extends ToolType:
-  def name = "webSearch"
-  def description = "Search the web"
-  type Args = SearchArgs
+object WebSearch extends AgentTool[AgentState]:
+  type ArgType = SearchArgs
+  override def name = "webSearch"
+  override def description = "Search the web"
+  override def handle(arg: SearchArgs, state: AgentState): String = s"Searching for ${arg.query}"
 
 case class TagArgs(names: List[String], verbose: Boolean) derives IsToolArg
 
-object TagItems extends ToolType:
-  def name = "tagItems"
-  def description = "Tag items with names"
-  type Args = TagArgs
+object TagItems extends AgentTool[AgentState]:
+  type ArgType = TagArgs
+  override def name = "tagItems"
+  override def description = "Tag items with names"
+  override def handle(arg: TagArgs, state: AgentState): String = s"Tagged ${arg.names.size} items"
 
-class ToolTypeSuite extends munit.FunSuite:
+class AgentToolSuite extends munit.FunSuite:
 
   // --- toolSchema tests ---
 

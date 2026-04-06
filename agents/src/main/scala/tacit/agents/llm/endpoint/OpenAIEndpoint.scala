@@ -191,7 +191,6 @@ class OpenAIEndpoint(config: EndpointConfig) extends Endpoint:
       catch
         case e: Exception =>
           ch.send(Left(LLMError(s"OpenAI API error: ${e.getMessage}")))
-          ch.close()
     ch.asReadable
 
   private def convertResponse(response: Response): ChatResponse =

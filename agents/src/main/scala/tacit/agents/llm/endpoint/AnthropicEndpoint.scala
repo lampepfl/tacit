@@ -199,7 +199,9 @@ class AnthropicEndpoint(config: EndpointConfig) extends Endpoint:
       catch
         case e: Exception =>
           ch.send(Left(LLMError(s"Anthropic API error: ${e.getMessage}")))
-          ch.close()
+          // Do not close the channel here — BufferedChannel.close() discards
+          // buffered messages, so the consumer would see Left(Closed) instead
+          // of the LLMError we just sent.
     ch.asReadable
 
   private def convertResponse(response: AnthropicMessage): ChatResponse =

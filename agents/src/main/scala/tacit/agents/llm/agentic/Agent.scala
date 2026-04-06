@@ -62,14 +62,20 @@ abstract class Agent:
       def handle(arg: A, state: State): String = handler(arg, state)
     addTool(tool)
 
-  def ask(message: String)(using endpoint: Endpoint): Result[ChatResponse, AgentError] =
+  def ask(
+    message: String,
+    onToolCall: Option[(String, String, String) => Unit] = None,
+  )(using endpoint: Endpoint): Result[ChatResponse, AgentError] =
     state.messages = state.messages :+ Message.user(message)
     val config = state.llmConfig.copy(tools = tools.map(_.toolSchema))
     Result:
-      loop(config)
+      loop(config, onToolCall)
 
   @tailrec
-  private def loop(config: LLMConfig)(using endpoint: Endpoint, label: boundary.Label[Result[ChatResponse, AgentError]]): ChatResponse =
+  private def loop(
+    config: LLMConfig,
+    onToolCall: Option[(String, String, String) => Unit],
+  )(using endpoint: Endpoint, label: boundary.Label[Result[ChatResponse, AgentError]]): ChatResponse =
     val response = endpoint.invoke(state.messages, config) match
       case Right(r) => r
       case Left(e) => boundary.break(Left(AgentError(e.description)))
@@ -82,10 +88,14 @@ abstract class Agent:
           case tu: Content.ToolUse => tu
 
         val toolResults = toolUses.map: tu =>
-          dispatchTool(tu).ok
+          val result = dispatchTool(tu).ok
+          val resultContent = result.content.collectFirst:
+            case Content.ToolResult(_, content, _) => content
+          onToolCall.foreach(_(tu.name, tu.input, resultContent.getOrElse("")))
+          result
 
         state.messages = state.messages :++ toolResults
-        loop(config)
+        loop(config, onToolCall)
 
       case FinishReason.MaxTokens =>
         redactMaxTokensMessage(response)

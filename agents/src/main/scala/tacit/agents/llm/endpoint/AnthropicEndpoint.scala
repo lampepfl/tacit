@@ -216,10 +216,12 @@ class AnthropicEndpoint(config: EndpointConfig) extends Endpoint:
         contents += Content.Text(block.asText().text())
       else if block.isToolUse then
         val tu = block.asToolUse()
+        val mapper = com.fasterxml.jackson.databind.json.JsonMapper.builder().nn.build().nn
+        val inputJson = mapper.writeValueAsString(tu._input()).nn
         contents += Content.ToolUse(
           id = tu.id(),
           name = tu.name(),
-          input = tu._input().toString,
+          input = inputJson,
         )
 
     val finishReason =

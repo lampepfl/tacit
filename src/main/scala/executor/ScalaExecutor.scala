@@ -54,14 +54,36 @@ object ScalaExecutor:
 
   /** Preamble code injected before user code to make the library API available. */
   private[executor] def libraryPreamble(using Context): String =
-    val jsonStr = ctx.config.libraryConfig.noSpaces
-      .replace("\\", "\\\\")
-      .replace("\"", "\\\"")
+    val cfg = ctx.config
+    val classifiedExpr =
+      if cfg.classifiedPaths.isEmpty then "Set.empty[java.nio.file.Path]"
+      else cfg.classifiedPaths
+        .map(p => s"""java.nio.file.Path.of("$p").toAbsolutePath.normalize""")
+        .mkString("Set(", ", ", ")")
+    def esc(s: String): String = s.replace("\\", "\\\\").replace("\"", "\\\"")
+    val llmConfigExpr = cfg.llmConfig match
+      case None => "None"
+      case Some(llm) => s"""Some(LlmConfig("${esc(llm.baseUrl)}", "${esc(llm.apiKey)}", "${esc(llm.model)}"))"""
+    val createFSBody = cfg.restrictedWorkingDir match
+      case Some(dir) =>
+        val escapedDir = esc(dir)
+        s"""|  def createFS(root: String, filter: String -> Boolean, classifiedPaths: Set[java.nio.file.Path]): FileSystem =
+            |    val allowed = java.nio.file.Path.of("$escapedDir").toAbsolutePath.normalize
+            |    val requested = java.nio.file.Path.of(root).toAbsolutePath.normalize
+            |    if !requested.startsWith(allowed) then
+            |      throw SecurityException(s"Access denied: $$root is outside allowed directory $$allowed")
+            |    new RealFileSystem(java.nio.file.Path.of(root), filter, classifiedPaths)""".stripMargin
+      case None =>
+        s"""|  def createFS(root: String, filter: String -> Boolean, classifiedPaths: Set[java.nio.file.Path]): FileSystem =
+            |    new RealFileSystem(java.nio.file.Path.of(root), filter, classifiedPaths)""".stripMargin
     s"""|import tacit.library.*
         |import caps.*
-        |@assumeSafe val api: Interface^ = new InterfaceImpl(LibraryConfig.fromJson("$jsonStr")) {
-        |  def createFS(root: String, filter: String -> Boolean, classifiedPatterns: Set[String]): FileSystem =
-        |    new RealFileSystem(java.nio.file.Path.of(root), filter, classifiedPatterns)
+        |val api: Interface^ = new InterfaceImpl(
+        |  ${cfg.strictMode},
+        |  $classifiedExpr,
+        |  $llmConfigExpr
+        |) {
+        |$createFSBody
         |}
         |import api.*
         |@assumeSafe given IOCapability = iocap

@@ -13,6 +13,7 @@ case class Config(
   sessionEnabled: Boolean = true,
   libraryJarPath: String = Option(System.getProperty("tacit.library.jar")).getOrElse(""),
   libraryConfig: Json = Json.obj(),
+  restrictedWorkingDir: Option[String] = None,
 ):
   def withLibrary(key: String, value: Json): Config =
     copy(libraryConfig = libraryConfig.deepMerge(Json.obj(key -> value)))

@@ -5,7 +5,8 @@ package agentic
 import endpoint.{Endpoint, LLMConfig, LLMError, Message, Content, ChatResponse, FinishReason, Usage}
 import tacit.agents.utils.Result
 import tacit.agents.llm.utils.IsToolArg
-import gears.async.{Async, ReadableChannel}
+import gears.async.{Async, ReadableChannel, UnboundedChannel, Future}
+import gears.async.default.given
 import endpoint.StreamEvent
 
 // --- Stub Endpoint ---
@@ -26,7 +27,15 @@ class StubEndpoint(responses: List[ChatResponse]) extends Endpoint:
       Left(LLMError("No more stub responses"))
 
   def stream(messages: List[Message], config: LLMConfig)(using Async.Spawn): ReadableChannel[Result[StreamEvent, LLMError]] =
-    throw UnsupportedOperationException("StubEndpoint does not support streaming")
+    _invokedWith = _invokedWith :+ messages
+    val ch = UnboundedChannel[Result[StreamEvent, LLMError]]()
+    if callIndex < responses.length then
+      val resp = responses(callIndex)
+      callIndex += 1
+      ch.sendImmediately(Right(StreamEvent.Done(resp)))
+    else
+      ch.sendImmediately(Left(LLMError("No more stub responses")))
+    ch.asReadable
 
 // --- Test tool definitions ---
 
@@ -70,6 +79,15 @@ def makeAgent(tools: List[AgentTool[AgentState]] = Nil): Agent =
     def getInitState = SimpleState(defaultConfig)
   agent.tools = tools
   agent
+
+def readAll[T](ch: ReadableChannel[T])(using Async): List[T] =
+  val buf = scala.collection.mutable.ListBuffer[T]()
+  var reading = true
+  while reading do
+    ch.read() match
+      case Right(item) => buf += item
+      case Left(_) => reading = false
+  buf.toList
 
 // --- Tests ---
 
@@ -236,3 +254,205 @@ class AgentSuite extends munit.FunSuite:
     agent.ask("Two")
     assertEquals(agent.state.messages.size, 4)
     assertEquals(agent.state.messages.map(_.text), List("One", "First", "Two", "Second"))
+
+  // --- streamAsk tests ---
+
+  test("streamAsk: simple response emits Stream(Done)"):
+    Async.blocking:
+      val ep = StubEndpoint(List(textResponse("Hello!")))
+      given Endpoint = ep
+      val agent = makeAgent()
+      val ch = agent.streamAsk("Hi")
+      val events = readAll(ch)
+      assertEquals(events.size, 1)
+      val done = events.head match
+        case Right(AgentStreamEvent.Stream(StreamEvent.Done(r))) => r
+        case other => fail(s"Expected Stream(Done), got $other")
+      assertEquals(done.message.text, "Hello!")
+
+  test("streamAsk: tool call emits Done, ToolResult, then final Done"):
+    Async.blocking:
+      val ep = StubEndpoint(List(
+        toolCallResponse(("call-1", "calculate", """{"expression": "2+2"}""")),
+        textResponse("The answer is 42."),
+      ))
+      given Endpoint = ep
+      val agent = makeAgent(List(CalcTool))
+      val ch = agent.streamAsk("What is 2+2?")
+      val events = readAll(ch).collect { case Right(e) => e }
+
+      // Should have: Stream(Done(tool_use)), ToolResult, Stream(Done(final))
+      val toolResults = events.collect:
+        case AgentStreamEvent.ToolResult(id, name, result) => (id, name, result)
+      assertEquals(toolResults, List(("call-1", "calculate", "Result: 42")))
+
+      val doneEvents = events.collect:
+        case AgentStreamEvent.Stream(StreamEvent.Done(r)) => r
+      assertEquals(doneEvents.size, 2)
+      assertEquals(doneEvents.last.message.text, "The answer is 42.")
+
+  test("streamAsk: updates state.messages"):
+    Async.blocking:
+      val ep = StubEndpoint(List(textResponse("Hello!")))
+      given Endpoint = ep
+      val agent = makeAgent()
+      val ch = agent.streamAsk("Hi")
+      readAll(ch) // consume
+      assertEquals(agent.state.messages.size, 2)
+      assertEquals(agent.state.messages(0).text, "Hi")
+      assertEquals(agent.state.messages(1).text, "Hello!")
+
+  test("streamAsk: endpoint error emits Left"):
+    Async.blocking:
+      val ep = StubEndpoint(Nil)
+      given Endpoint = ep
+      val agent = makeAgent()
+      val ch = agent.streamAsk("Hi")
+      val events = readAll(ch)
+      assert(events.exists(_.isLeft))
+
+  test("streamAsk: unknown tool emits error"):
+    Async.blocking:
+      val ep = StubEndpoint(List(
+        toolCallResponse(("call-1", "nonexistent", """{}""")),
+      ))
+      given Endpoint = ep
+      val agent = makeAgent()
+      val ch = agent.streamAsk("Call something")
+      val events = readAll(ch)
+      val errors = events.collect { case Left(e) => e }
+      assert(errors.exists(_.description.contains("Unknown tool")))
+
+  test("streamAsk: tool arg parse failure emits error"):
+    Async.blocking:
+      val ep = StubEndpoint(List(
+        toolCallResponse(("call-1", "calculate", """not json""")),
+      ))
+      given Endpoint = ep
+      val agent = makeAgent(List(CalcTool))
+      val ch = agent.streamAsk("Calculate")
+      val events = readAll(ch)
+      val errors = events.collect { case Left(e) => e }
+      assert(errors.exists(_.description.contains("Failed to parse args")))
+
+  test("streamAsk: multiple tool calls in one response"):
+    Async.blocking:
+      val ep = StubEndpoint(List(
+        toolCallResponse(
+          ("call-1", "calculate", """{"expression": "1+1"}"""),
+          ("call-2", "lookup", """{"key": "pi"}"""),
+        ),
+        textResponse("Done."),
+      ))
+      given Endpoint = ep
+      val agent = makeAgent(List(CalcTool, LookupTool))
+      val ch = agent.streamAsk("Do both")
+      val events = readAll(ch).collect { case Right(e) => e }
+
+      val toolResults = events.collect:
+        case AgentStreamEvent.ToolResult(id, name, result) => (id, name, result)
+      assertEquals(toolResults.size, 2)
+      assertEquals(toolResults(0), ("call-1", "calculate", "Result: 42"))
+      assertEquals(toolResults(1), ("call-2", "lookup", "Value for pi: found"))
+
+      val doneEvents = events.collect:
+        case AgentStreamEvent.Stream(StreamEvent.Done(r)) => r
+      assertEquals(doneEvents.size, 2)
+      assertEquals(doneEvents.last.message.text, "Done.")
+
+  test("streamAsk: state.messages includes tool use and tool result"):
+    Async.blocking:
+      val ep = StubEndpoint(List(
+        toolCallResponse(("call-1", "calculate", """{"expression": "2+2"}""")),
+        textResponse("42"),
+      ))
+      given Endpoint = ep
+      val agent = makeAgent(List(CalcTool))
+      val ch = agent.streamAsk("Calc")
+      readAll(ch)
+      // user + assistant(tool_use) + tool_result + assistant(final)
+      assertEquals(agent.state.messages.size, 4)
+      val toolResult = agent.state.messages(2).content.collectFirst:
+        case Content.ToolResult(id, content, _) => (id, content)
+      assertEquals(toolResult, Some(("call-1", "Result: 42")))
+      assertEquals(agent.state.messages(3).text, "42")
+
+  test("streamAsk: successive streamAsks accumulate messages"):
+    Async.blocking:
+      val ep = StubEndpoint(List(textResponse("First"), textResponse("Second")))
+      given Endpoint = ep
+      val agent = makeAgent()
+      readAll(agent.streamAsk("One"))
+      readAll(agent.streamAsk("Two"))
+      assertEquals(agent.state.messages.size, 4)
+      assertEquals(agent.state.messages.map(_.text), List("One", "First", "Two", "Second"))
+
+  test("streamAsk: event ordering is Stream(Done), ToolResult, Stream(Done)"):
+    Async.blocking:
+      val ep = StubEndpoint(List(
+        toolCallResponse(("call-1", "calculate", """{"expression": "x"}""")),
+        textResponse("Final"),
+      ))
+      given Endpoint = ep
+      val agent = makeAgent(List(CalcTool))
+      val ch = agent.streamAsk("Go")
+      val events = readAll(ch).collect { case Right(e) => e }
+
+      // Verify exact ordering: Stream(Done(tool_use)), ToolResult(call-1), Stream(Done(final))
+      assertEquals(events.size, 3)
+      assert(events(0).isInstanceOf[AgentStreamEvent.Stream])
+      assert(events(1).isInstanceOf[AgentStreamEvent.ToolResult])
+      assert(events(2).isInstanceOf[AgentStreamEvent.Stream])
+
+  test("streamAsk: no tool calls means no ToolResult events"):
+    Async.blocking:
+      val ep = StubEndpoint(List(textResponse("Just text")))
+      given Endpoint = ep
+      val agent = makeAgent(List(CalcTool))
+      val ch = agent.streamAsk("Hello")
+      val events = readAll(ch).collect { case Right(e) => e }
+      val toolResults = events.collect { case e: AgentStreamEvent.ToolResult => e }
+      assertEquals(toolResults.size, 0)
+      assertEquals(events.size, 1)
+
+  test("streamAsk: handle lambda tool works with streaming"):
+    Async.blocking:
+      val ep = StubEndpoint(List(
+        toolCallResponse(("call-1", "greet", """{"name": "Bob"}""")),
+        textResponse("Greeted Bob."),
+      ))
+      given Endpoint = ep
+      val agent = makeAgent()
+      agent.handle[GreetArgs]("greet", "Greet someone"): (arg, _) =>
+        s"Hello, ${arg.name}!"
+      val ch = agent.streamAsk("Greet Bob")
+      val events = readAll(ch).collect { case Right(e) => e }
+
+      val toolResults = events.collect:
+        case AgentStreamEvent.ToolResult(_, _, result) => result
+      assertEquals(toolResults, List("Hello, Bob!"))
+
+  test("streamAsk: ToolResult carries correct id and tool name"):
+    Async.blocking:
+      val ep = StubEndpoint(List(
+        toolCallResponse(("my-id-42", "lookup", """{"key": "answer"}""")),
+        textResponse("Done"),
+      ))
+      given Endpoint = ep
+      val agent = makeAgent(List(LookupTool))
+      val ch = agent.streamAsk("Look up")
+      val events = readAll(ch).collect { case Right(e) => e }
+
+      val toolResults = events.collect:
+        case AgentStreamEvent.ToolResult(id, name, result) => (id, name, result)
+      assertEquals(toolResults, List(("my-id-42", "lookup", "Value for answer: found")))
+
+  test("streamAsk: endpoint error description is preserved"):
+    Async.blocking:
+      val ep = StubEndpoint(Nil) // will emit "No more stub responses"
+      given Endpoint = ep
+      val agent = makeAgent()
+      val ch = agent.streamAsk("Hi")
+      val events = readAll(ch)
+      val errors = events.collect { case Left(e) => e.description }
+      assert(errors.exists(_.contains("No more stub responses")))

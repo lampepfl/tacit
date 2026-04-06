@@ -2,15 +2,20 @@ package tacit.agents
 package llm
 package agentic
 
-import endpoint.{Endpoint, LLMConfig, LLMError, Message, Content, ChatResponse, FinishReason, ToolSchema}
+import endpoint.{Endpoint, LLMConfig, LLMError, Message, Content, ChatResponse, FinishReason, ToolSchema, StreamEvent}
 import tacit.agents.utils.Result
 import tacit.agents.utils.Result.ok
 import llm.utils.{IsToolArg, ToolArgParsingError}
 import scala.util.boundary
 import scala.annotation.tailrec
+import gears.async.{Async, Future, BufferedChannel, ReadableChannel, Channel}
 
 class AgentError(val description: String):
   override def toString: String = s"AgentError: $description"
+
+enum AgentStreamEvent:
+  case Stream(event: StreamEvent)
+  case ToolResult(id: String, toolName: String, result: String)
 
 trait AgentState:
   val llmConfig: LLMConfig
@@ -82,6 +87,75 @@ abstract class Agent:
         loop(config)
 
       case _ => response
+
+  def streamAsk(message: String)(using endpoint: Endpoint, spawn: Async.Spawn): ReadableChannel[Result[AgentStreamEvent, AgentError]] =
+    state.messages = state.messages :+ Message.user(message)
+    val config = state.llmConfig.copy(tools = tools.map(_.toolSchema))
+    val ch = BufferedChannel[Result[AgentStreamEvent, AgentError]](16)
+    Future:
+      streamLoop(config, ch)(using endpoint)
+    ch.asReadable
+
+  private def streamLoop(config: LLMConfig, ch: BufferedChannel[Result[AgentStreamEvent, AgentError]])(using endpoint: Endpoint, spawn: Async.Spawn): Unit =
+    try
+      val streamCh = endpoint.stream(state.messages, config)
+      val response = consumeStream(streamCh, ch)
+
+      state.messages = state.messages :+ response.message
+
+      response.finishReason match
+        case FinishReason.ToolUse =>
+          val toolUses = response.message.content.collect:
+            case tu: Content.ToolUse => tu
+
+          val dispatched = toolUses.map(tu => (tu, dispatchTool(tu)))
+          val failed = dispatched.collectFirst { case (tu, Left(err)) => err }
+
+          failed match
+            case Some(err) =>
+              ch.send(Left(err))
+              ch.close()
+            case None =>
+              for case (tu, Right(msg)) <- dispatched do
+                val resultContent = msg.content.collectFirst:
+                  case Content.ToolResult(_, content, _) => content
+                ch.send(Right(AgentStreamEvent.ToolResult(tu.id, tu.name, resultContent.getOrElse(""))))
+                state.messages = state.messages :+ msg
+              streamLoop(config, ch)
+
+        case _ =>
+          ch.close()
+    catch
+      case e: Exception =>
+        ch.send(Left(AgentError(s"Stream error: ${e.getMessage}")))
+        ch.close()
+
+  private def consumeStream(
+    streamCh: ReadableChannel[Result[StreamEvent, LLMError]],
+    outCh: BufferedChannel[Result[AgentStreamEvent, AgentError]]
+  )(using Async): ChatResponse =
+    var finalResponse: ChatResponse | Null = null
+    var reading = true
+    while reading do
+      streamCh.read() match
+        case Right(Right(event)) =>
+          outCh.send(Right(AgentStreamEvent.Stream(event)))
+          event match
+            case StreamEvent.Done(response) =>
+              finalResponse = response
+              reading = false
+            case _ =>
+        case Right(Left(llmError)) =>
+          outCh.send(Left(AgentError(llmError.description)))
+          outCh.close()
+          throw RuntimeException(s"LLM error: ${llmError.description}")
+        case Left(_) => // channel closed
+          reading = false
+    if finalResponse == null then
+      outCh.send(Left(AgentError("Stream ended without Done event")))
+      outCh.close()
+      throw RuntimeException("Stream ended without Done event")
+    finalResponse
 
   private def dispatchTool(toolUse: Content.ToolUse): Result[Message, AgentError] =
     tools.find(_.name == toolUse.name) match

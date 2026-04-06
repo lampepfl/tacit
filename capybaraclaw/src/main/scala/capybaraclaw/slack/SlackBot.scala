@@ -52,9 +52,13 @@ class SlackBot(botToken: String, appToken: String):
       val text = event.getText
       val channel = event.getChannel
       val subtype = event.getSubtype
+      println(s"[DEBUG] Received event: channel=$channel subtype=$subtype text=$text")
       // Only echo regular messages (not bot messages, edits, etc.)
       if subtype == null && text != null && channel != null then
+        println(s"[DEBUG] Echoing to $channel")
         ctx.say(s"Echo: $text")
+      else
+        println(s"[DEBUG] Skipped: subtype=$subtype text=$text channel=$channel")
       ctx.ack()
     })
 

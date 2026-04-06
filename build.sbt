@@ -106,7 +106,7 @@ lazy val capybaraclaw = project
     libraryDependencies ++= Seq(
       "com.slack.api" % "bolt" % "1.48.0",
       "com.slack.api" % "bolt-socket-mode" % "1.48.0",
-      "org.glassfish.tyrus.bundles" % "tyrus-standalone-client" % "2.2.0",
+      "org.glassfish.tyrus.bundles" % "tyrus-standalone-client" % "1.21",
       "org.scalameta" %% "munit" % "1.2.2" % Test,
     ),
     testFrameworks += MUnitFramework,

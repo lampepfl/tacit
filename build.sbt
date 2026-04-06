@@ -19,6 +19,7 @@ ThisBuild / resolvers += Resolver.scalaNightlyRepository
 val circeVersion = "0.14.15"
 
 addCommandAlias("claw", "capybaraclaw/run")
+addCommandAlias("slackbot", "capybaraclaw/runMain capybaraclaw.slack.slackEchoBot")
 
 val stableScala3Version = "3.8.2"
 
@@ -93,6 +94,7 @@ lazy val lib = project
 lazy val capybaraclaw = project
   .in(file("capybaraclaw"))
   .dependsOn(agents, root)
+  .configs(TestFull)
   .settings(
     name := "capybaraclaw",
     scalaVersion := scala3Version,
@@ -101,6 +103,16 @@ lazy val capybaraclaw = project
       "-Yexplicit-nulls", "-Wsafe-init",
       "-language:experimental.modularity",
     ),
+    libraryDependencies ++= Seq(
+      "com.slack.api" % "bolt" % "1.48.0",
+      "com.slack.api" % "bolt-socket-mode" % "1.48.0",
+      "org.glassfish.tyrus.bundles" % "tyrus-standalone-client" % "2.2.0",
+      "org.scalameta" %% "munit" % "1.2.2" % Test,
+    ),
+    testFrameworks += MUnitFramework,
+    Test / testOptions += Tests.Argument(MUnitFramework, "--exclude-tags=Network"),
+    inConfig(TestFull)(Defaults.testTasks),
+    TestFull / testOptions := Seq.empty,
     fork := true,
     run / connectInput := true,
     Compile / run := (Compile / run dependsOn (lib / assembly)).evaluated,

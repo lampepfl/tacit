@@ -9,7 +9,8 @@ import gears.async.Async
 import gears.async.default.given
 
 @main def main(): Unit =
-  given Context = Context(Config(), recorder = None)
+  val workDir = System.getProperty("user.dir")
+  given Context = Context(Config(restrictedWorkingDir = Some(workDir)), recorder = None)
   given Endpoint = AnthropicEndpoint.createFromEnv()
 
   val repl = ReplSession.create
@@ -59,6 +60,11 @@ import gears.async.default.given
                 inToolCall = false
               println(s" <<< output:\n$result")
               println(" <<< done")
+            case Right(Right(AgentStreamEvent.MaxTokensExceeded)) =>
+              if inToolCall then
+                println()
+                inToolCall = false
+              println("\n[max tokens exceeded — response truncated]")
             case Right(Left(err)) =>
               println(s"\nError: $err")
             case Left(_) =>

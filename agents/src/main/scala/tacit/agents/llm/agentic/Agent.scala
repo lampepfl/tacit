@@ -16,6 +16,7 @@ class AgentError(val description: String):
 enum AgentStreamEvent:
   case Stream(event: StreamEvent)
   case ToolResult(id: String, toolName: String, result: String)
+  case MaxTokensExceeded
 
 trait AgentState:
   val llmConfig: LLMConfig
@@ -86,6 +87,10 @@ abstract class Agent:
         state.messages = state.messages :++ toolResults
         loop(config)
 
+      case FinishReason.MaxTokens =>
+        redactMaxTokensMessage(response)
+        response
+
       case _ => response
 
   def streamAsk(message: String)(using endpoint: Endpoint, spawn: Async.Spawn): ReadableChannel[Result[AgentStreamEvent, AgentError]] =
@@ -123,6 +128,11 @@ abstract class Agent:
                 state.messages = state.messages :+ msg
               streamLoop(config, ch)
 
+        case FinishReason.MaxTokens =>
+          redactMaxTokensMessage(response)
+          ch.send(Right(AgentStreamEvent.MaxTokensExceeded))
+          ch.close()
+
         case _ =>
           ch.close()
     catch
@@ -156,6 +166,14 @@ abstract class Agent:
       outCh.close()
       throw RuntimeException("Stream ended without Done event")
     finalResponse
+
+  /** Redact a MaxTokens response: remove incomplete tool calls, update message history. */
+  private def redactMaxTokensMessage(response: ChatResponse): Unit =
+    val cleaned = response.message.content.filter:
+      case _: Content.ToolUse => false
+      case _ => true
+    // Replace the last message in history with the cleaned version
+    state.messages = state.messages.init :+ response.message.copy(content = cleaned)
 
   private def dispatchTool(toolUse: Content.ToolUse): Result[Message, AgentError] =
     tools.find(_.name == toolUse.name) match

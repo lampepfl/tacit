@@ -17,6 +17,9 @@ val scala3Version = {
 ThisBuild / resolvers += Resolver.scalaNightlyRepository
 
 val circeVersion = "0.14.15"
+
+addCommandAlias("claw", "capybaraclaw/run")
+
 val stableScala3Version = "3.8.2"
 
 val MUnitFramework = new TestFramework("munit.Framework")

@@ -1,4 +1,6 @@
 package capybaraclaw
 
 @main def main(): Unit =
-  println("Hello from capybaraclaw!")
+  println("""
+    | Welcome to Capybara Claw!
+    |""".stripMargin)

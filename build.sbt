@@ -101,6 +101,13 @@ lazy val capybaraclaw = project
       "-Yexplicit-nulls", "-Wsafe-init",
       "-language:experimental.modularity",
     ),
+    fork := true,
+    run / connectInput := true,
+    Compile / run := (Compile / run dependsOn (lib / assembly)).evaluated,
+    javaOptions += {
+      val jarPath = (lib / assembly / assemblyOutputPath).value.getAbsolutePath
+      s"-Dtacit.library.jar=$jarPath"
+    },
   )
 
 lazy val root = project

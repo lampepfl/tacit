@@ -17,6 +17,7 @@ val scala3Version = {
 ThisBuild / resolvers += Resolver.scalaNightlyRepository
 
 val circeVersion = "0.14.15"
+val stableScala3Version = "3.8.2"
 
 val MUnitFramework = new TestFramework("munit.Framework")
 val TestFull = config("testFull").extend(Test)
@@ -28,7 +29,7 @@ lazy val agents = project
     name := "tacit-agents",
     organization := "lampepfl",
     version := "0.1.0-SNAPSHOT",
-    scalaVersion := "3.8.2",
+    scalaVersion := stableScala3Version,
     scalacOptions ++= Seq(
       "-deprecation", "-feature", "-unchecked",
       "-Yexplicit-nulls", "-Wsafe-init",
@@ -84,6 +85,19 @@ lazy val lib = project
         val oldStrategy = (assembly / assemblyMergeStrategy).value
         oldStrategy(x)
     }
+  )
+
+lazy val capybaraclaw = project
+  .in(file("capybaraclaw"))
+  .dependsOn(agents, root)
+  .settings(
+    name := "capybaraclaw",
+    scalaVersion := scala3Version,
+    scalacOptions ++= Seq(
+      "-deprecation", "-feature", "-unchecked",
+      "-Yexplicit-nulls", "-Wsafe-init",
+      "-language:experimental.modularity",
+    ),
   )
 
 lazy val root = project

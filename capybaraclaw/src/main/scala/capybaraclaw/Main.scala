@@ -35,7 +35,7 @@ import language.experimental.captureChecking
   Async.blocking:
     SlackBot.usingBot: bot =>
       given Context = Context(Config(restrictedWorkingDir = Some(canonicalWorkDir)), recorder = None)
-      given Endpoint = AnthropicEndpoint.createFromEnv()
+      given Endpoint = OpenAIEndpoint.createFromEnv()
 
       val repl = ReplSession.create
       val agent = ClawAgent.create(config, repl)

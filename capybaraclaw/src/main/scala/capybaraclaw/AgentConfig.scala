@@ -1,11 +1,11 @@
 package capybaraclaw
 
-import tacit.agents.llm.endpoint.{LLMConfig, ThinkingMode}
+import tacit.agents.llm.endpoint.{EffortLevel, LLMConfig, ThinkingMode}
 
 case class AgentConfig(
-  model: String = "claude-haiku-4-5",
+  model: String = "gpt-5.4-mini",
   maxTokens: Option[Int] = Some(16000),
-  thinking: Option[ThinkingMode] = Some(ThinkingMode.Budget(2048)),
+  thinking: Option[ThinkingMode] = Some(ThinkingMode.Effort(EffortLevel.Medium)),
   workDir: String = System.getProperty("user.dir"),
 ):
   def toLLMConfig: LLMConfig =

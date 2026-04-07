@@ -115,6 +115,7 @@ lazy val capybaraclaw = project
     TestFull / testOptions := Seq.empty,
     fork := true,
     run / connectInput := true,
+    Compile / mainClass := Some("capybaraclaw.main"),
     Compile / run := (Compile / run dependsOn (lib / assembly)).evaluated,
     javaOptions += {
       val jarPath = (lib / assembly / assemblyOutputPath).value.getAbsolutePath

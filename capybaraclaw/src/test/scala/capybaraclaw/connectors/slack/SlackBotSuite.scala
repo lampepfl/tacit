@@ -1,4 +1,4 @@
-package capybaraclaw.slack
+package capybaraclaw.connectors.slack
 
 val Network = munit.Tag("Network")
 

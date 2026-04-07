@@ -19,7 +19,7 @@ ThisBuild / resolvers += Resolver.scalaNightlyRepository
 val circeVersion = "0.14.15"
 
 addCommandAlias("claw", "capybaraclaw/run")
-addCommandAlias("slackbot", "capybaraclaw/runMain capybaraclaw.slack.slackEchoBot")
+addCommandAlias("slackbot", "capybaraclaw/runMain capybaraclaw.slackTestMain")
 
 val stableScala3Version = "3.8.2"
 

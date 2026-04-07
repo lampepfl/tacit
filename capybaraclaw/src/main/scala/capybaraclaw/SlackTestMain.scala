@@ -1,6 +1,8 @@
-package capybaraclaw.slack
+package capybaraclaw
 
-@main def slackEchoBot(): Unit =
+import capybaraclaw.connectors.slack.SlackBot
+
+@main def slackTestMain(): Unit =
   println("Starting Slack Echo Bot...")
   val bot = SlackBot.fromEnv()
   val socketModeApp = bot.startEchoBot()

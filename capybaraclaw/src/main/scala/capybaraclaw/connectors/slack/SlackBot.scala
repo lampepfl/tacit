@@ -1,4 +1,4 @@
-package capybaraclaw.slack
+package capybaraclaw.connectors.slack
 
 import com.slack.api.Slack
 import com.slack.api.methods.request.chat.ChatPostMessageRequest
@@ -27,7 +27,7 @@ class SlackBot(botToken: String, appToken: String):
     response.getTs
 
   /** Read recent messages from a channel. */
-  def readHistory(channel: String, limit: Int = 10): List[SlackMessage] =
+  def readHistory(channel: String, limit: Int = 32): List[SlackMessage] =
     val response = methods.conversationsHistory(
       ConversationsHistoryRequest.builder()
         .channel(channel)
@@ -52,13 +52,14 @@ class SlackBot(botToken: String, appToken: String):
       val text = event.getText
       val channel = event.getChannel
       val subtype = event.getSubtype
-      println(s"[DEBUG] Received event: channel=$channel subtype=$subtype text=$text")
       // Only echo regular messages (not bot messages, edits, etc.)
       if subtype == null && text != null && channel != null then
-        println(s"[DEBUG] Echoing to $channel")
+        println(s"\n--- New message in $channel ---")
+        val history = readHistory(channel)
+        history.reverse.foreach: msg =>
+          println(s"  [${msg.user}] ${msg.text}")
+        println(s"---")
         ctx.say(s"Echo: $text")
-      else
-        println(s"[DEBUG] Skipped: subtype=$subtype text=$text channel=$channel")
       ctx.ack()
     })
 

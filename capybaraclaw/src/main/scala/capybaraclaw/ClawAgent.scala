@@ -13,12 +13,19 @@ class ClawAgent(val workDir: String):
   val clawConfig: ClawConfig = ClawConfig.load(workDir)
   val agentConfig: AgentConfig = AgentConfig.fromClawConfig(clawConfig, workDir)
 
-  private given Context = Context(Config(restrictedWorkingDir = Some(workDir)), recorder = None)
+  private given Context = Context(
+    Config(
+      restrictedWorkingDir = Some(workDir),
+      classifiedPaths = clawConfig.classifiedPaths.map(p => java.io.File(workDir, p).getCanonicalPath).toSet,
+    ),
+    recorder = None,
+  )
 
   private given Endpoint = clawConfig.provider match
-    case "anthropic" => AnthropicEndpoint.createFromEnv()
-    case "openai"    => OpenAIEndpoint.createFromEnv()
-    case other       => throw RuntimeException(s"Unknown provider: $other")
+    case "anthropic"  => AnthropicEndpoint.createFromEnv()
+    case "openai"     => OpenAIEndpoint.createFromEnv()
+    case "openrouter" => OpenRouterEndpoint.createFromEnv()
+    case other        => throw RuntimeException(s"Unknown provider: $other")
 
   private val repl: ReplSession = ReplSession.create
 

@@ -18,6 +18,7 @@ import language.experimental.captureChecking
     System.err.println(s"Error: not a directory: $workDirFile")
     sys.exit(1)
   val canonicalWorkDir = workDirFile.getPath
+  System.setProperty("user.dir", canonicalWorkDir)
 
   val claw = ClawAgent(canonicalWorkDir)
   claw.printStartupInfo()

@@ -1,0 +1,12 @@
+From: bob@example.com
+To: carol@example.com
+Subject: Weekend plans
+
+Hey Carol,
+
+Are you free this Saturday? I was thinking we could check out that new restaurant on Main Street. I heard they have amazing pasta.
+
+Also, just between us — I'm thinking of leaving the company next month. Got an offer from TechCorp at 40% more. Haven't told anyone else yet.
+
+Let me know about Saturday!
+Bob

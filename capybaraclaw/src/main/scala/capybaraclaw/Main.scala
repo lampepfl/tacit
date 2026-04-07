@@ -1,8 +1,5 @@
 package capybaraclaw
 
-import tacit.core.{Context, Config}
-import tacit.executor.ReplSession
-
 import tacit.agents.llm.endpoint.*
 import tacit.agents.llm.agentic.*
 
@@ -22,24 +19,11 @@ import language.experimental.captureChecking
     sys.exit(1)
   val canonicalWorkDir = workDirFile.getPath
 
-  val config = AgentConfig(workDir = canonicalWorkDir)
-  val clawMdExists = java.io.File(canonicalWorkDir, "CLAW.md").exists()
-
-  println("Capybara Claw")
-  println(s"  workdir : $canonicalWorkDir")
-  println(s"  model   : ${config.model}")
-  println(s"  thinking: ${config.thinking.getOrElse("off")}")
-  println(s"  CLAW.md : ${if clawMdExists then "found" else "not found"}")
-  println()
+  val claw = ClawAgent(canonicalWorkDir)
+  claw.printStartupInfo()
 
   Async.blocking:
     SlackBot.usingBot: bot =>
-      given Context = Context(Config(restrictedWorkingDir = Some(canonicalWorkDir)), recorder = None)
-      given Endpoint = OpenAIEndpoint.createFromEnv()
-
-      val repl = ReplSession.create
-      val agent = ClawAgent.create(config, repl)
-
       println("Listening on Slack. Press Ctrl+C to stop.")
 
       var running = true
@@ -59,7 +43,7 @@ import language.experimental.captureChecking
               println(" <<< done")
               toolCalls += ((name, input, result))
 
-            agent.ask(msg.text, onToolCall = Some(onToolCall)) match
+            claw.ask(msg.text, onToolCall = Some(onToolCall)) match
               case Right(response) =>
                 val thinking = response.message.thinking
                 if thinking.nonEmpty then

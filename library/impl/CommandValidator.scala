@@ -31,8 +31,10 @@ object CommandValidator:
     "ln", "readlink",
     // Disk operations
     "dd", "df", "du",
-    // Bash 
-    "bash", "sh", "zsh", "fish", "dash"
+    // Shell
+    "bash", "sh", "zsh", "fish", "dash",
+    // Scripting languages
+    "python", "python3", "perl", "ruby", "node", "lua"
   )
 
   /** Validate a command against the ProcessPermission rules.

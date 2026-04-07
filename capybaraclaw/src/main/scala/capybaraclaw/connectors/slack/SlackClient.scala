@@ -14,6 +14,7 @@ import scala.collection.mutable
 
 // --- ADTs ---
 
+/** A message channel in Slack. */
 case class Channel(
   id: String,
   name: String,

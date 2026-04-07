@@ -8,6 +8,7 @@ import gears.async.Async
 import gears.async.default.given
 import language.experimental.captureChecking
 
+/** Entrypoint of Capybara Claw */
 @main def main(): Unit =
   val workDirFile = java.io.File(".").getCanonicalFile
   val canonicalWorkDir = workDirFile.getPath
@@ -30,10 +31,10 @@ import language.experimental.captureChecking
             val toolCalls = scala.collection.mutable.ListBuffer[(String, String, String)]()
 
             val onToolCall: (String, String, String) -> Unit = (name, input, result) =>
-              println(s" >>> $name")
+              println(s" >>> [Tool Call] $name")
               println(input)
               println(s" <<< output:\n$result")
-              println(" <<< done")
+              println(" <<< end")
               toolCalls += ((name, input, result))
 
             claw.ask(msg.text, onToolCall = Some(onToolCall)) match

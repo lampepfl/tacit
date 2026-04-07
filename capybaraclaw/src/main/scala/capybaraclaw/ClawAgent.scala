@@ -9,6 +9,7 @@ import tacit.agents.utils.Result
 
 case class EvalScalaArgs(code: String) derives IsToolArg
 
+/** Agent class for Claw. */
 class ClawAgent(val workDir: String):
   val clawConfig: ClawConfig = ClawConfig.load(workDir)
   val agentConfig: AgentConfig = AgentConfig.fromClawConfig(clawConfig, workDir)

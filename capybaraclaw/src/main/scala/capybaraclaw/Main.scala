@@ -9,7 +9,9 @@ import gears.async.default.given
 import language.experimental.captureChecking
 
 @main def main(args: String*): Unit =
-  val workDir = args.headOption.getOrElse(System.getProperty("user.dir"))
+  val workDir = args.headOption
+    .orElse(Option(System.getProperty("claw.workdir")))
+    .getOrElse(System.getProperty("user.dir"))
   val workDirFile = java.io.File(workDir).getCanonicalFile
   if !workDirFile.exists() then
     System.err.println(s"Error: working directory does not exist: $workDirFile")

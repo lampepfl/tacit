@@ -18,7 +18,7 @@ ThisBuild / resolvers += Resolver.scalaNightlyRepository
 
 val circeVersion = "0.14.15"
 
-addCommandAlias("claw", "capybaraclaw/run")
+addCommandAlias("claw", "set capybaraclaw / run / baseDirectory := file(\"capybaraclaw/examples/default\"); capybaraclaw/run")
 addCommandAlias("slackbot", "capybaraclaw/runMain capybaraclaw.slackTestMain")
 
 val stableScala3Version = "3.8.2"
@@ -117,9 +117,13 @@ lazy val capybaraclaw = project
     run / connectInput := true,
     Compile / mainClass := Some("capybaraclaw.main"),
     Compile / run := (Compile / run dependsOn (lib / assembly)).evaluated,
-    javaOptions += {
+    javaOptions ++= {
       val jarPath = (lib / assembly / assemblyOutputPath).value.getAbsolutePath
-      s"-Dtacit.library.jar=$jarPath"
+      val workDir = (run / baseDirectory).value.getAbsolutePath
+      Seq(
+        s"-Dtacit.library.jar=$jarPath",
+        s"-Dclaw.workdir=$workDir",
+      )
     },
   )
 

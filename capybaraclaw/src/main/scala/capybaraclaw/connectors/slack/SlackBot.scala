@@ -1,71 +1,22 @@
 package capybaraclaw.connectors.slack
+import language.experimental.captureChecking
 
-import com.slack.api.Slack
-import com.slack.api.methods.request.chat.ChatPostMessageRequest
-import com.slack.api.methods.request.conversations.ConversationsHistoryRequest
-import com.slack.api.bolt.{App, AppConfig}
-import com.slack.api.bolt.socket_mode.SocketModeApp
-import com.slack.api.app_backend.events.payload.EventsApiPayload
-import com.slack.api.model.event.MessageEvent
-
-case class SlackMessage(user: String | Null, text: String | Null, ts: String | Null)
+import gears.async.ReadableChannel
 
 class SlackBot(botToken: String, appToken: String):
-  private val slack = Slack.getInstance()
-  private val methods = slack.methods(botToken)
+  val client: SlackClient = SlackClient(botToken, appToken)
 
-  /** Post a message to a channel. Returns the message timestamp. */
   def sendMessage(channel: String, text: String): String =
-    val response = methods.chatPostMessage(
-      ChatPostMessageRequest.builder()
-        .channel(channel)
-        .text(text)
-        .build()
-    )
-    if !response.isOk then
-      throw RuntimeException(s"Slack API error: ${response.getError}")
-    response.getTs
+    client.sendMessage(channel, text)
 
-  /** Read recent messages from a channel. */
-  def readHistory(channel: String, limit: Int = 32): List[SlackMessage] =
-    val response = methods.conversationsHistory(
-      ConversationsHistoryRequest.builder()
-        .channel(channel)
-        .limit(limit)
-        .build()
-    )
-    if !response.isOk then
-      throw RuntimeException(s"Slack API error: ${response.getError}")
-    import scala.jdk.CollectionConverters.*
-    response.getMessages.asScala.toList.map: msg =>
-      SlackMessage(msg.getUser, msg.getText, msg.getTs)
+  def readHistory(channel: String, limit: Int = 32): List[Message] =
+    client.readHistory(channel, limit)
 
-  /** Start a Socket Mode echo bot that replies to every message. */
-  def startEchoBot(): SocketModeApp =
-    val appConfig = AppConfig.builder()
-      .singleTeamBotToken(botToken)
-      .build()
-    val app = App(appConfig)
+  def getChannel(id: String): Channel = client.getChannel(id)
+  def getUser(id: String): User = client.getUser(id)
 
-    app.event(classOf[MessageEvent], (payload, ctx) => {
-      val event = payload.getEvent
-      val text = event.getText
-      val channel = event.getChannel
-      val subtype = event.getSubtype
-      // Only echo regular messages (not bot messages, edits, etc.)
-      if subtype == null && text != null && channel != null then
-        println(s"\n--- New message in $channel ---")
-        val history = readHistory(channel)
-        history.reverse.foreach: msg =>
-          println(s"  [${msg.user}] ${msg.text}")
-        println(s"---")
-        ctx.say(s"Echo: $text")
-      ctx.ack()
-    })
-
-    val socketModeApp = SocketModeApp(appToken, app)
-    socketModeApp.startAsync()
-    socketModeApp
+  def messageChannel: ReadableChannel[Message] = client.messageChannel
+  def shutdown(): Unit = client.shutdown()
 
 object SlackBot:
   def fromEnv(): SlackBot =
@@ -74,3 +25,9 @@ object SlackBot:
     val appToken = sys.env.getOrElse("SLACK_APP_TOKEN",
       throw RuntimeException("SLACK_APP_TOKEN not set"))
     SlackBot(botToken, appToken)
+
+  def usingBot[R](block: SlackBot^ => R): R =
+    val bot = fromEnv()
+    try block(bot)
+    finally bot.shutdown()
+

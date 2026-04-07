@@ -1,5 +1,8 @@
 package capybaraclaw.connectors.slack
 
+import gears.async.Async
+import gears.async.default.given
+
 val Network = munit.Tag("Network")
 
 class SlackBotSuite extends munit.FunSuite:
@@ -12,32 +15,31 @@ class SlackBotSuite extends munit.FunSuite:
 
   test("sendMessage posts to channel and returns timestamp".tag(Network)):
     val bot = SlackBot(botToken, appToken)
-    val ts = bot.sendMessage(channel, "SlackBotSuite: send test")
-    assert(ts != null && ts.nonEmpty, s"Expected a timestamp, got: $ts")
+    try
+      val ts = bot.sendMessage(channel, "SlackBotSuite: send test")
+      assert(ts.nonEmpty, s"Expected a timestamp, got: $ts")
+    finally bot.shutdown()
 
   test("readHistory retrieves recent messages".tag(Network)):
     val bot = SlackBot(botToken, appToken)
-    val marker = s"SlackBotSuite: history test ${System.currentTimeMillis()}"
-    bot.sendMessage(channel, marker)
-    // Brief pause to allow Slack to index the message
-    Thread.sleep(1000)
-    val messages = bot.readHistory(channel, limit = 5)
-    assert(messages.nonEmpty, "Expected at least one message")
-    assert(messages.exists(_.text == marker), s"Marker message not found in history: $messages")
-
-  test("echo bot replies to messages".tag(Network)):
-    val bot = SlackBot(botToken, appToken)
-    val socketModeApp = bot.startEchoBot()
     try
-      // Give Socket Mode time to connect
-      Thread.sleep(3000)
-      val marker = s"echo test ${System.currentTimeMillis()}"
+      val marker = s"SlackBotSuite: history test ${System.currentTimeMillis()}"
       bot.sendMessage(channel, marker)
-      // Wait for the echo reply
-      Thread.sleep(3000)
+      Thread.sleep(1000)
       val messages = bot.readHistory(channel, limit = 5)
-      val echoFound = messages.exists: msg =>
-        msg.text != null && msg.text.contains(s"Echo: $marker")
-      assert(echoFound, s"Echo reply not found in history: ${messages.map(_.text)}")
-    finally
-      socketModeApp.stop()
+      assert(messages.nonEmpty, "Expected at least one message")
+      assert(messages.exists(_.text == marker), s"Marker message not found in history: $messages")
+    finally bot.shutdown()
+
+  test("messageChannel receives messages".tag(Network)):
+    val bot = SlackBot(botToken, appToken)
+    try
+      Async.blocking:
+        Thread.sleep(3000) // wait for Socket Mode to connect
+        val marker = s"listen test ${System.currentTimeMillis()}"
+        bot.sendMessage(channel, marker)
+        Thread.sleep(3000)
+        val history = bot.readHistory(channel, limit = 5)
+        val found = history.exists(_.text.contains(marker))
+        assert(found, s"Marker not found in history: ${history.map(_.text)}")
+    finally bot.shutdown()

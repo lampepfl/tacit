@@ -11,51 +11,70 @@ import gears.async.Async
 import gears.async.default.given
 import language.experimental.captureChecking
 
-@main def main(args: String*): Unit = Async.blocking:
-  SlackBot.usingBot: bot =>
-    val workDir = args.headOption.getOrElse(System.getProperty("user.dir"))
-    given Context = Context(Config(restrictedWorkingDir = Some(workDir)), recorder = None)
-    given Endpoint = AnthropicEndpoint.createFromEnv()
+@main def main(args: String*): Unit =
+  val workDir = args.headOption.getOrElse(System.getProperty("user.dir"))
+  val workDirFile = java.io.File(workDir).getCanonicalFile
+  if !workDirFile.exists() then
+    System.err.println(s"Error: working directory does not exist: $workDirFile")
+    sys.exit(1)
+  if !workDirFile.isDirectory then
+    System.err.println(s"Error: not a directory: $workDirFile")
+    sys.exit(1)
+  val canonicalWorkDir = workDirFile.getPath
 
-    val config = AgentConfig(workDir = workDir)
-    val repl = ReplSession.create
-    val agent = ClawAgent.create(config, repl)
+  val config = AgentConfig(workDir = canonicalWorkDir)
+  val clawMdExists = java.io.File(canonicalWorkDir, "CLAW.md").exists()
 
-    println("Capybara Claw on Slack. Press Ctrl+C to stop.")
+  println("Capybara Claw")
+  println(s"  workdir : $canonicalWorkDir")
+  println(s"  model   : ${config.model}")
+  println(s"  thinking: ${config.thinking.getOrElse("off")}")
+  println(s"  CLAW.md : ${if clawMdExists then "found" else "not found"}")
+  println()
 
-    var running = true
-    while running do
-      bot.messageChannel.read() match
-        case Right(msg) =>
-          val user = bot.getUser(msg.userId)
-          val channel = bot.getChannel(msg.origin.channelId)
-          println(s"[#${channel.name}] ${user.displayName}: ${msg.text}")
+  Async.blocking:
+    SlackBot.usingBot: bot =>
+      given Context = Context(Config(restrictedWorkingDir = Some(canonicalWorkDir)), recorder = None)
+      given Endpoint = AnthropicEndpoint.createFromEnv()
 
-          val toolCalls = scala.collection.mutable.ListBuffer[(String, String, String)]()
+      val repl = ReplSession.create
+      val agent = ClawAgent.create(config, repl)
 
-          val onToolCall: (String, String, String) -> Unit = (name, input, result) =>
-            println(s" >>> $name")
-            println(input)
-            println(s" <<< output:\n$result")
-            println(" <<< done")
-            toolCalls += ((name, input, result))
+      println("Listening on Slack. Press Ctrl+C to stop.")
 
-          agent.ask(msg.text, onToolCall = Some(onToolCall)) match
-            case Right(response) =>
-              val thinking = response.message.thinking
-              if thinking.nonEmpty then
-                println(s"<thinking>\n$thinking\n</thinking>\n")
-              println(response.message.text)
+      var running = true
+      while running do
+        bot.messageChannel.read() match
+          case Right(msg) =>
+            val user = bot.getUser(msg.userId)
+            val channel = bot.getChannel(msg.origin.channelId)
+            println(s"[#${channel.name}] ${user.displayName}: ${msg.text}")
 
-              val slackMessage = composeSlackMessage(thinking, toolCalls.toList, response)
-              bot.sendMessage(msg.origin.channelId, slackMessage)
-            case Left(err) =>
-              println(s"Error: $err")
-              bot.sendMessage(msg.origin.channelId, s"**Error:** $err")
+            val toolCalls = scala.collection.mutable.ListBuffer[(String, String, String)]()
 
-        case Left(err) =>
-          println(s"Error: $err")
-          running = false
+            val onToolCall: (String, String, String) -> Unit = (name, input, result) =>
+              println(s" >>> $name")
+              println(input)
+              println(s" <<< output:\n$result")
+              println(" <<< done")
+              toolCalls += ((name, input, result))
+
+            agent.ask(msg.text, onToolCall = Some(onToolCall)) match
+              case Right(response) =>
+                val thinking = response.message.thinking
+                if thinking.nonEmpty then
+                  println(s"<thinking>\n$thinking\n</thinking>\n")
+                println(response.message.text)
+
+                val slackMessage = composeSlackMessage(thinking, toolCalls.toList, response)
+                bot.sendMessage(msg.origin.channelId, slackMessage)
+              case Left(err) =>
+                println(s"Error: $err")
+                bot.sendMessage(msg.origin.channelId, s"**Error:** $err")
+
+          case Left(err) =>
+            println(s"Error: $err")
+            running = false
 
 private def composeSlackMessage(
   thinking: String,

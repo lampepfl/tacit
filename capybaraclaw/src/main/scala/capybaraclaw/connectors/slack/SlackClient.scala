@@ -89,17 +89,54 @@ class SlackClient(botToken: String, appToken: String):
   def getUser(id: String): User =
     userCache.getOrElseUpdate(id, fetchUser(id))
 
-  /** Post a message to a channel. Returns the message timestamp. */
+  private val MaxMarkdownLen = 12000
+
+  /** Post a message to a channel. Returns the last message timestamp.
+    * Uses Slack's markdown block for proper Markdown rendering.
+    * Splits into multiple messages if text exceeds the 12k char limit.
+    */
   def sendMessage(channel: String, text: String): String =
-    val response = methods.chatPostMessage(
-      ChatPostMessageRequest.builder()
-        .channel(channel)
-        .text(text)
-        .build()
-    )
-    if !response.isOk then
-      throw RuntimeException(s"Slack API error: ${response.getError}")
-    response.getTs.nn
+    val chunks = splitMessage(text)
+    var lastTs = ""
+    for chunk <- chunks do
+      val response = methods.chatPostMessage(
+        ChatPostMessageRequest.builder()
+          .channel(channel)
+          .blocks(java.util.List.of(
+            com.slack.api.model.block.Blocks.markdown(m => m.text(chunk))
+          ))
+          .text(chunk) // fallback for notifications
+          .build()
+      )
+      if !response.isOk then
+        throw RuntimeException(s"Slack API error: ${response.getError}")
+      lastTs = response.getTs.nn
+    lastTs
+
+  /** Split text into chunks that fit within the markdown block limit.
+    * Splits on double-newline (paragraph) boundaries when possible.
+    */
+  private def splitMessage(text: String): List[String] =
+    if text.length <= MaxMarkdownLen then return List(text)
+    val chunks = scala.collection.mutable.ListBuffer[String]()
+    var remaining = text
+    while remaining.nonEmpty do
+      if remaining.length <= MaxMarkdownLen then
+        chunks += remaining
+        remaining = ""
+      else
+        // Find a double-newline split point before the limit
+        val searchRegion = remaining.substring(0, MaxMarkdownLen)
+        val splitAt = searchRegion.lastIndexOf("\n\n") match
+          case -1 =>
+            // Fall back to single newline
+            searchRegion.lastIndexOf('\n') match
+              case -1 => MaxMarkdownLen // hard cut
+              case i  => i + 1
+          case i => i + 2
+        chunks += remaining.substring(0, splitAt)
+        remaining = remaining.substring(splitAt)
+    chunks.toList
 
   /** Read recent messages from a channel. */
   def readHistory(channel: String, limit: Int = 32): List[Message] =

@@ -21,12 +21,6 @@ import language.experimental.captureChecking
     val repl = ReplSession.create
     val agent = ClawAgent.create(config, repl)
 
-    val onToolCall: (String, String, String) -> Unit = (name, input, result) =>
-      println(s" >>> $name")
-      println(input)
-      println(s" <<< output:\n$result")
-      println(" <<< done")
-
     println("Capybara Claw on Slack. Press Ctrl+C to stop.")
 
     var running = true
@@ -37,20 +31,68 @@ import language.experimental.captureChecking
           val channel = bot.getChannel(msg.origin.channelId)
           println(s"[#${channel.name}] ${user.displayName}: ${msg.text}")
 
+          val toolCalls = scala.collection.mutable.ListBuffer[(String, String, String)]()
+
+          val onToolCall: (String, String, String) -> Unit = (name, input, result) =>
+            println(s" >>> $name")
+            println(input)
+            println(s" <<< output:\n$result")
+            println(" <<< done")
+            toolCalls += ((name, input, result))
+
           agent.ask(msg.text, onToolCall = Some(onToolCall)) match
             case Right(response) =>
               val thinking = response.message.thinking
               if thinking.nonEmpty then
                 println(s"<thinking>\n$thinking\n</thinking>\n")
               println(response.message.text)
-              bot.sendMessage(msg.origin.channelId, response.message.text)
-              if response.finishReason == FinishReason.MaxTokens then
-                println("[max tokens exceeded — response truncated]")
-                bot.sendMessage(msg.origin.channelId, "[max tokens exceeded — response truncated]")
+
+              val slackMessage = composeSlackMessage(thinking, toolCalls.toList, response)
+              bot.sendMessage(msg.origin.channelId, slackMessage)
             case Left(err) =>
               println(s"Error: $err")
-              bot.sendMessage(msg.origin.channelId, s"Error: $err")
+              bot.sendMessage(msg.origin.channelId, s"**Error:** $err")
 
         case Left(err) =>
           println(s"Error: $err")
           running = false
+
+private def composeSlackMessage(
+  thinking: String,
+  toolCalls: List[(String, String, String)],
+  response: ChatResponse,
+): String =
+  val sb = StringBuilder()
+
+  // Thinking
+  if thinking.nonEmpty then
+    sb.append("#### Thinking\n")
+    sb.append("> ")
+    sb.append(thinking.linesIterator.mkString("\n> "))
+    sb.append("\n\n")
+
+  // Tool calls
+  for (name, input, result) <- toolCalls do
+    val code = try
+      ujson.read(input)("code").str
+    catch
+      case _: Exception => input
+    sb.append(s"#### $name\n")
+    sb.append(s"```scala\n$code\n```\n")
+    if result.trim.nonEmpty then
+      sb.append(s"> **Output**\n")
+      sb.append("> ```\n")
+      result.linesIterator.foreach: line =>
+        sb.append(s"> $line\n")
+      sb.append("> ```\n")
+    sb.append("\n")
+
+  if toolCalls.nonEmpty then sb.append("---\n\n")
+
+  // Response
+  sb.append(response.message.text)
+
+  if response.finishReason == FinishReason.MaxTokens then
+    sb.append("\n\n*[max tokens exceeded — response truncated]*")
+
+  sb.toString

@@ -8,19 +8,9 @@ import gears.async.Async
 import gears.async.default.given
 import language.experimental.captureChecking
 
-@main def main(args: String*): Unit =
-  val workDir = args.headOption
-    .orElse(Option(System.getProperty("claw.workdir")))
-    .getOrElse(System.getProperty("user.dir"))
-  val workDirFile = java.io.File(workDir).getCanonicalFile
-  if !workDirFile.exists() then
-    System.err.println(s"Error: working directory does not exist: $workDirFile")
-    sys.exit(1)
-  if !workDirFile.isDirectory then
-    System.err.println(s"Error: not a directory: $workDirFile")
-    sys.exit(1)
+@main def main(): Unit =
+  val workDirFile = java.io.File(".").getCanonicalFile
   val canonicalWorkDir = workDirFile.getPath
-  System.setProperty("user.dir", canonicalWorkDir)
 
   val claw = ClawAgent(canonicalWorkDir)
   claw.printStartupInfo()

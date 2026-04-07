@@ -117,13 +117,9 @@ lazy val capybaraclaw = project
     run / connectInput := true,
     Compile / mainClass := Some("capybaraclaw.main"),
     Compile / run := (Compile / run dependsOn (lib / assembly)).evaluated,
-    javaOptions ++= {
+    javaOptions += {
       val jarPath = (lib / assembly / assemblyOutputPath).value.getAbsolutePath
-      val workDir = (run / baseDirectory).value.getAbsolutePath
-      Seq(
-        s"-Dtacit.library.jar=$jarPath",
-        s"-Dclaw.workdir=$workDir",
-      )
+      s"-Dtacit.library.jar=$jarPath"
     },
   )
 

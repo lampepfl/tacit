@@ -60,8 +60,8 @@ object ScalaExecutor:
     s"""|import tacit.library.*
         |import caps.*
         |@assumeSafe val api: Interface^ = new InterfaceImpl(LibraryConfig.fromJson("$jsonStr")) {
-        |  def createFS(root: String, filter: String -> Boolean, classifiedPaths: Set[java.nio.file.Path]): FileSystem =
-        |    new RealFileSystem(java.nio.file.Path.of(root), filter, classifiedPaths)
+        |  def createFS(root: String, filter: String -> Boolean, classifiedPatterns: Set[String]): FileSystem =
+        |    new RealFileSystem(java.nio.file.Path.of(root), filter, classifiedPatterns)
         |}
         |import api.*
         |@assumeSafe given IOCapability = iocap
@@ -122,7 +122,7 @@ object ScalaExecutor:
       val driver = new ReplDriver(replClasspathArgs, printStream, Some(sandboxedClassLoader))
       // If library preamble fails to compile, move this line inside withOutputCapture 
       // to capture the error output.
-      var state = driver.run(libraryPreamble)(using driver.initialState)
+      var state = driver.run(libraryPreamble)(using driver.initialState)  
       // state = driver.run("import language.experimental.safe")(using state)
       withOutputCapture(outputCapture, printStream):
         state = driver.run(wrapCode(code, ctx.config.wrappedCode))(using state)

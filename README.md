@@ -332,12 +332,12 @@ Configuration is split into **server config** (transport, recording, sessions) a
 | `--no-session` | Disable session-related tools |
 | `-c`/`--config <path>` | JSON config file (flags after `--config` override file values) |
 
-**Library flags** (shorthand for `libraryConfig` fields):
+**Library flags** (shorthand for some `libraryConfig` fields):
 
 | Flag | Description |
 |------|-------------|
 | `-s`/`--strict` | Block file ops (cat, ls, rm, etc.) through exec |
-| `--classified-paths <paths>` | Comma-separated classified (protected) paths |
+| `--classified-paths <patterns>` | Comma-separated classified path patterns (gitignore-style, see below) |
 | `--llm-base-url <url>` | LLM API base URL |
 | `--llm-api-key <key>` | LLM API key |
 | `--llm-model <name>` | LLM model name |
@@ -353,7 +353,7 @@ Configuration is split into **server config** (transport, recording, sessions) a
   "libraryJarPath": "/path/to/TACIT-library.jar",
   "libraryConfig": {
     "strictMode": true,
-    "classifiedPaths": ["/home/user/project/secrets"],
+    "classifiedPaths": [".ssh", ".env", ".env.*", "secrets"],
     "llm": {
       "baseUrl": "https://api.example.com",
       "apiKey": "sk-...",
@@ -362,6 +362,26 @@ Configuration is split into **server config** (transport, recording, sessions) a
   }
 }
 ```
+
+### Classified Path Patterns
+
+Classified path patterns follow gitignore-style syntax. A path is classified if it matches a pattern or is a descendant of a match.
+
+| Pattern | Matches | Example |
+|---------|---------|---------|
+| `.ssh` | Any path component named `.ssh` | `/home/user/.ssh/id_rsa` |
+| `.env.*` | Any component matching the glob | `/project/.env.local` |
+| `config/*/keys` | Relative to filesystem root, with wildcard | `<root>/config/prod/keys/secret.pem` |
+| `**/secrets` | `secrets` at any depth | `<root>/a/b/secrets/key.txt` |
+| `/home/user/.ssh` | Absolute path (symlinks resolved) | `/home/user/.ssh/id_rsa` |
+
+**Rules:**
+- **No `/` in pattern:** matches against any path component (basename matching)
+- **Relative pattern with `/`:** anchored to the filesystem root; supports `*`, `**`, `?`, `[…]`
+- **Absolute pattern:** matched against full path; non-glob prefix is resolved through symlinks
+- **Trailing `/`** is stripped (no directory-only distinction)
+
+Default classified patterns (when `classifiedPaths` is not configured): `.ssh`, `.gnupg`, `.env`, `.env.*`, `.netrc`, `.npmrc`, `.pypirc`, `.docker`, `.kube`, `.aws`, `.azure`, `.gcloud`.
 
 ## Tools
 
@@ -424,7 +444,7 @@ requestNetwork(Set("api.example.com")) {
 
 Consider a typical code agent working on a project directory. Some files are ordinary (source code, build configs, READMEs). Others are sensitive: API keys in `.env`, credentials in `secrets/`, internal documents. The agent is powered by a cloud-hosted LLM (a third-party service). We want the agent to *use* or *process* the sensitive data (summarize internal docs, rotate keys, process reports) but never leak it to the cloud provider.
 
-TACIT solves this through the `Classified[T]` type. Files under designated classified paths (configured via `--classified-paths`) return their content wrapped in `Classified[String]` instead of plain `String`. The type system enforces **pure-only access**: `Classified.map` accepts only pure functions (`T -> U`), meaning no effects and no captured capabilities. You can transform the data, but you cannot send it anywhere. Any attempt to exfiltrate classified data is rejected **at compile time**:
+TACIT solves this through the `Classified[T]` type. Files under designated classified paths (configured via `--classified-paths` with gitignore-style patterns, e.g. `.ssh`, `.env.*`, `secrets`, `**/keys`) return their content wrapped in `Classified[String]` instead of plain `String`. If not configured otherwise, common secret paths (`.ssh`, `.gnupg`, `.env`, `.env.*`, etc.) are classified by default. The type system enforces **pure-only access**: `Classified.map` accepts only pure functions (`T -> U`), meaning no effects and no captured capabilities. You can transform the data, but you cannot send it anywhere. Any attempt to exfiltrate classified data is rejected **at compile time**:
 
 ```scala
 requestFileSystem("/project") {
@@ -516,16 +536,17 @@ library/
 ├── Interface.scala          # Public API trait (what user code sees)
 ├── impl/
 │   ├── InterfaceImpl.scala  # Wires everything together (exports Ops objects)
-│   ├── BaseFileSystem.scala # Shared file system base logic
-│   ├── FileOps.scala        # grep, grepRecursive, find
-│   ├── ProcessOps.scala     # exec, execOutput
-│   ├── WebOps.scala         # httpGet, httpPost
-│   ├── LlmOps.scala         # chat
-│   ├── RealFileSystem.scala # FileSystem on real disk
+│   ├── BaseFileSystem.scala    # Shared path validation and gitignore-style classified-path matching
+│   ├── FileOps.scala           # grep, grepRecursive, find
+│   ├── ProcessOps.scala        # exec, execOutput
+│   ├── WebOps.scala            # httpGet, httpPost
+│   ├── LlmOps.scala            # chat
+│   ├── RealFileSystem.scala    # FileSystem on real disk
 │   ├── VirtualFileSystem.scala # In-memory FileSystem (for testing)
-│   ├── ClassifiedImpl.scala # Classified[T] wrapper implementation
+│   ├── ClassifiedImpl.scala    # Classified[T] wrapper implementation
 │   ├── CommandValidator.scala  # Command allowlist enforcement
-│   └── LlmConfig.scala     # LLM configuration case class
+│   ├── LibraryConfig.scala     # Library configuration with JSON parsing
+│   └── LlmConfig.scala        # LLM configuration case class
 └── test/                    # Library-level tests
 ```
 

@@ -14,13 +14,10 @@ import java.nio.file.attribute.BasicFileAttributes
 class RealFileSystem(
   val root: Path,
   check: String -> Boolean = _ => true,
-  classifiedPaths: Set[Path] = Set.empty
+  protected val classifiedPatterns: Set[String] = Set.empty
 ) extends BaseFileSystem:
   protected val normalizedRoot: Path =
     val abs = root.toAbsolutePath.normalize
-    if Files.exists(abs) then abs.toRealPath() else abs
-  protected val normalizedClassified: Set[Path] = classifiedPaths.map: cp =>
-    val abs = cp.toAbsolutePath.normalize
     if Files.exists(abs) then abs.toRealPath() else abs
   protected def pathCheck(relativePath: String): Boolean = check(relativePath)
 

@@ -59,9 +59,10 @@ lazy val lib = project
 
 lazy val root = project
   .in(file("."))
+  .aggregate(lib)
   .settings(
     name := "TACIT",
-    version := "0.1.2-SNAPSHOT",
+    version := "0.1.4-SNAPSHOT",
 
     scalaVersion := scala3Version,
 

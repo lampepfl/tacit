@@ -1,17 +1,22 @@
 import tacit.core.Config
 import io.circe.*
-import io.circe.syntax.*
 import scopt.OParser
 
-import java.nio.file.Files
+import java.nio.file.{Files, Path}
 
 class ConfigSuite extends munit.FunSuite:
 
   // Create a fake JAR file so --library-jar validation passes
-  val fakeJar = Files.createTempFile("fake-library", ".jar")
-  val jarPath = fakeJar.toAbsolutePath.toString
+  val fakeJar: Path = Files.createTempFile("fake-library", ".jar")
+  val jarPath: String = fakeJar.toAbsolutePath.toString
 
   override def afterAll(): Unit = Files.deleteIfExists(fakeJar)
+
+  /** Run a block with stderr suppressed (for tests that intentionally trigger error output). */
+  private def quietly[T](f: => T): T =
+    val origErr = System.err
+    System.setErr(new java.io.PrintStream(java.io.OutputStream.nullOutputStream()))
+    try f finally System.setErr(origErr)
 
   /** Parse CLI args with the fake JAR path prepended. */
   private def parse(args: String*): Option[Config] =
@@ -83,21 +88,21 @@ class ConfigSuite extends munit.FunSuite:
     assertEquals(llm.get[String]("model").toOption, Some("gpt-4"))
 
   test("incomplete LLM config is removed"):
-    val cfg = parse("--llm-base-url", "https://api.example.com").get
+    val cfg = quietly { parse("--llm-base-url", "https://api.example.com").get }
     assertEquals(cfg.libraryConfig.hcursor.downField("llm").focus, None)
 
   test("all-empty LLM fields are removed"):
-    val cfg = parse(
+    val cfg = quietly { parse(
       "--llm-base-url", "",
       "--llm-api-key", "",
       "--llm-model", ""
-    ).get
+    ).get }
     assertEquals(cfg.libraryConfig.hcursor.downField("llm").focus, None)
 
   // ── Missing library JAR ─────────────────────────────────────
 
   test("nonexistent --library-jar returns None"):
-    val cfg = Config.parseCliArgs(Array("--library-jar", "/nonexistent/fake.jar"))
+    val cfg = quietly { Config.parseCliArgs(Array("--library-jar", "/nonexistent/fake.jar")) }
     assertEquals(cfg, None)
 
   // ── JSON config file ────────────────────────────────────────
@@ -220,12 +225,12 @@ class ConfigSuite extends munit.FunSuite:
   // ── Invalid config file ─────────────────────────────────────
 
   test("nonexistent config file returns None"):
-    val cfg = parse("--config", "/nonexistent/config.json")
+    val cfg = quietly { parse("--config", "/nonexistent/config.json") }
     assertEquals(cfg, None)
 
   test("malformed JSON config file returns None"):
     withConfigFile("not valid json {{{") { path =>
-      val cfg = parse("--config", path)
+      val cfg = quietly { parse("--config", path) }
       assertEquals(cfg, None)
     }
 

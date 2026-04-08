@@ -63,13 +63,11 @@ class ClassifiedSuite extends munit.FunSuite:
 
   // ── File system classified path enforcement (VirtualFileSystem) ───────
 
-  val classifiedDir = Path.of("/virtual/secret").toAbsolutePath.normalize
-
   val interface: Interface^{} = new InterfaceImpl(
-    LibraryConfig(strictMode = Some(false), classifiedPaths = Some(Set(classifiedDir.toString)))
+    LibraryConfig(strictMode = Some(false), classifiedPaths = Some(Set("secret")))
   ) {
-    def createFS(root: String, filter: String -> Boolean, classifiedPaths: Set[Path]): FileSystem =
-      new VirtualFileSystem(Path.of(root), filter, classifiedPaths = classifiedPaths)
+    def createFS(root: String, filter: String -> Boolean, classifiedPatterns: Set[String]): FileSystem =
+      new VirtualFileSystem(Path.of(root), filter, classifiedPatterns = classifiedPatterns)
   }.unsafeAssumePure
 
   import interface.*
@@ -231,5 +229,90 @@ class ClassifiedSuite extends munit.FunSuite:
       file.writeClassified(classify("hello"))
       assertEquals(file.exists, true)
       assertEquals(file.size, 5L)
+    }
+  }
+
+  // ── Gitignore-style pattern matching tests ──────────────────────────
+
+  private def mkInterface(patterns: Set[String]): Interface^{} =
+    new InterfaceImpl(
+      LibraryConfig(strictMode = Some(false), classifiedPaths = Some(patterns))
+    ) {
+      def createFS(root: String, filter: String -> Boolean, classifiedPatterns: Set[String]): FileSystem =
+        new VirtualFileSystem(Path.of(root), filter, classifiedPatterns = classifiedPatterns)
+    }.unsafeAssumePure
+
+  test("pattern without slash matches any component") {
+    val api = mkInterface(Set(".ssh"))
+    import api.*
+    given (IOCapability^{}) = iocap.unsafeAssumePure
+    requestFileSystem("/virtual") {
+      assert(access("/virtual/.ssh").isClassified)
+      assert(access("/virtual/home/.ssh/id_rsa").isClassified)
+      assert(!access("/virtual/ssh").isClassified)
+    }
+  }
+
+  test("glob wildcard in component pattern") {
+    val api = mkInterface(Set(".env.*"))
+    import api.*
+    given (IOCapability^{}) = iocap.unsafeAssumePure
+    requestFileSystem("/virtual") {
+      assert(access("/virtual/.env.local").isClassified)
+      assert(access("/virtual/config/.env.production").isClassified)
+      assert(!access("/virtual/.env").isClassified)
+    }
+  }
+
+  test("relative pattern with slash is anchored to root") {
+    val api = mkInterface(Set("config/secrets"))
+    import api.*
+    given (IOCapability^{}) = iocap.unsafeAssumePure
+    requestFileSystem("/virtual") {
+      assert(access("/virtual/config/secrets").isClassified)
+      assert(access("/virtual/config/secrets/key.pem").isClassified)
+      assert(!access("/virtual/other/config/secrets").isClassified)
+    }
+  }
+
+  test("relative pattern with ** matches at any depth") {
+    val api = mkInterface(Set("**/secrets"))
+    import api.*
+    given (IOCapability^{}) = iocap.unsafeAssumePure
+    requestFileSystem("/virtual") {
+      assert(access("/virtual/secrets").isClassified)
+      assert(access("/virtual/a/secrets").isClassified)
+      assert(access("/virtual/a/b/secrets/key.txt").isClassified)
+      assert(!access("/virtual/not-secrets").isClassified)
+    }
+  }
+
+  test("relative pattern with wildcard in middle") {
+    val api = mkInterface(Set("config/*/keys"))
+    import api.*
+    given (IOCapability^{}) = iocap.unsafeAssumePure
+    requestFileSystem("/virtual") {
+      assert(access("/virtual/config/prod/keys").isClassified)
+      assert(access("/virtual/config/dev/keys/secret.pem").isClassified)
+      assert(!access("/virtual/config/keys").isClassified)
+    }
+  }
+
+  test("trailing slash is stripped and still matches") {
+    val api = mkInterface(Set("secret/"))
+    import api.*
+    given (IOCapability^{}) = iocap.unsafeAssumePure
+    requestFileSystem("/virtual") {
+      assert(access("/virtual/secret").isClassified)
+      assert(access("/virtual/secret/data.txt").isClassified)
+    }
+  }
+
+  test("empty pattern matches nothing") {
+    val api = mkInterface(Set("", "/"))
+    import api.*
+    given (IOCapability^{}) = iocap.unsafeAssumePure
+    requestFileSystem("/virtual") {
+      assert(!access("/virtual/anything").isClassified)
     }
   }

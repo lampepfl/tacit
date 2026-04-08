@@ -87,7 +87,7 @@ object Config:
         .text("Enable strict mode: block file operations (cat, ls, rm, etc.) through exec."),
       opt[String]("classified-paths")
         .action((x, c) => c.withLibrary("classifiedPaths", x.split(",").map(_.trim).filter(_.nonEmpty).toSeq.asJson))
-        .text("Comma-separated list of classified (protected) paths."),
+        .text("Comma-separated classified path patterns ('.ssh' matches any .ssh dir, '/abs/path' matches that path)."),
       opt[Unit]('q', "quiet")
         .action((_, c) => c.copy(quiet = true))
         .text("Suppress startup banner and request/response logging."),

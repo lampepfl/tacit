@@ -224,6 +224,66 @@ class LibraryIntegrationSuite extends munit.FunSuite:
     assert(result.output.toLowerCase.contains("access denied") || result.output.toLowerCase.contains("classified"),
       s"expected security error about classified path, got: ${result.output}")
 
+  test("classified pattern with glob wildcard blocks matching paths"):
+    val tmpDir = Files.createTempDirectory("classified-glob-test")
+    val configDir = tmpDir.resolve("config")
+    val prodDir = configDir.resolve("prod")
+    val keysDir = prodDir.resolve("keys")
+    Files.createDirectories(keysDir)
+    val keyFile = keysDir.resolve("secret.pem")
+    Files.writeString(keyFile, "PRIVATE KEY DATA")
+
+    // Pattern: config/*/keys — should match config/prod/keys and descendants
+    val cfg = Config(libraryConfig = io.circe.Json.obj(
+      "classifiedPaths" -> io.circe.Json.arr(
+        io.circe.Json.fromString(s"${configDir}/*/keys")
+      )
+    ))
+    given Context = Context(cfg, None)
+
+    val result = ScalaExecutor.execute(s"""
+      requestFileSystem("${tmpDir}") {
+        access("${keyFile}").read()
+      }
+    """)
+
+    Files.deleteIfExists(keyFile)
+    Files.deleteIfExists(keysDir)
+    Files.deleteIfExists(prodDir)
+    Files.deleteIfExists(configDir)
+    Files.deleteIfExists(tmpDir)
+
+    assert(!result.output.contains("PRIVATE KEY DATA"),
+      s"classified data leaked! output: ${result.output}")
+    assert(result.output.toLowerCase.contains("access denied") || result.output.toLowerCase.contains("classified"),
+      s"expected security error, got: ${result.output}")
+
+  test("classified component pattern blocks matching paths via REPL"):
+    val tmpDir = Files.createTempDirectory("classified-component-test")
+    val sshDir = tmpDir.resolve(".ssh")
+    Files.createDirectories(sshDir)
+    val keyFile = sshDir.resolve("id_rsa")
+    Files.writeString(keyFile, "SSH PRIVATE KEY")
+
+    // Component pattern: .ssh (no slash) should match .ssh at any depth
+    val cfg = Config(libraryConfig = io.circe.Json.obj(
+      "classifiedPaths" -> io.circe.Json.arr(io.circe.Json.fromString(".ssh"))
+    ))
+    given Context = Context(cfg, None)
+
+    val result = ScalaExecutor.execute(s"""
+      requestFileSystem("${tmpDir}") {
+        access("${keyFile}").read()
+      }
+    """)
+
+    Files.deleteIfExists(keyFile)
+    Files.deleteIfExists(sshDir)
+    Files.deleteIfExists(tmpDir)
+
+    assert(!result.output.contains("SSH PRIVATE KEY"),
+      s"classified data leaked! output: ${result.output}")
+
   // ── Runtime security: capability enforcement via REPL ────────────
 
   test("exec rejects disallowed command via REPL"):

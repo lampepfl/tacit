@@ -16,8 +16,8 @@ class LibrarySuite extends munit.FunSuite:
     tmpDir = Files.createTempDirectory("sandbox-test")
 
   private val interface: Interface^{} = new InterfaceImpl() {
-    def createFS(root: String, filter: String -> Boolean, classifiedPaths: Set[Path]): FileSystem =
-      new RealFileSystem(Path.of(root), filter, classifiedPaths)
+    def createFS(root: String, filter: String -> Boolean, classifiedPatterns: Set[String]): FileSystem =
+      new RealFileSystem(Path.of(root), filter, classifiedPatterns)
   }.unsafeAssumePure
 
   import interface.*
@@ -171,10 +171,10 @@ class LibrarySuite extends munit.FunSuite:
     val secretDir = tmpDir.resolve("secret")
     Files.createDirectories(secretDir)
     val classifiedInterface: Interface^ = new InterfaceImpl(
-      LibraryConfig(strictMode = Some(false), classifiedPaths = Some(Set(secretDir.toString)))
+      LibraryConfig(strictMode = Some(false), classifiedPaths = Some(Set("secret")))
     ) {
-      def createFS(root: String, filter: String -> Boolean, classifiedPaths: Set[Path]): FileSystem =
-        new RealFileSystem(Path.of(root), filter, classifiedPaths)
+      def createFS(root: String, filter: String -> Boolean, classifiedPatterns: Set[String]): FileSystem =
+        new RealFileSystem(Path.of(root), filter, classifiedPatterns)
     }
     import classifiedInterface.*
 

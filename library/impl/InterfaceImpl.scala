@@ -3,19 +3,30 @@ package tacit.library
 import language.experimental.captureChecking
 import caps.*
 
-import java.nio.file.Path
-
 @assumeSafe
 abstract class InterfaceImpl(
   private val config: LibraryConfig = LibraryConfig()
 ) extends Interface:
 
+  private val DefaultClassifiedPatterns: Set[String] = Set(
+    ".ssh",
+    ".gnupg",
+    ".env",
+    ".env.*",
+    ".netrc",
+    ".npmrc",
+    ".pypirc",
+    ".docker",
+    ".kube",
+    ".aws",
+    ".azure",
+    ".gcloud",
+  )
   private val strictMode: Boolean = config.strictMode.getOrElse(true)
-  private val classifiedPaths: Set[Path] = config.classifiedPaths.getOrElse(Set.empty)
-    .map(Path.of(_).toAbsolutePath.normalize)
+  private val classifiedPatterns: Set[String] = config.classifiedPaths.getOrElse(DefaultClassifiedPatterns)
   private val llmConfig: Option[LlmConfig] = config.llm
 
-  protected def createFS(root: String, filter: String -> Boolean, classifiedPaths: Set[Path]): FileSystem
+  protected def createFS(root: String, filter: String -> Boolean, classifiedPatterns: Set[String]): FileSystem
 
   export FileOps.*
   export ProcessOps.*
@@ -38,11 +49,7 @@ abstract class InterfaceImpl(
   def printf(fmt: String, args: Any*)(using IOCapability): Unit = scala.Predef.printf(fmt, args*)
 
   def requestFileSystem[T](root: String)(op: FileSystem^ ?=> T)(using IOCapability): T =
-    val rootPath = Path.of(root).toAbsolutePath.normalize
-    val relevantClassified = classifiedPaths
-      .map(_.toAbsolutePath.normalize)
-      .filter(cp => cp.startsWith(rootPath) || rootPath.startsWith(cp))
-    val fs = createFS(root, _ => true, relevantClassified)
+    val fs = createFS(root, _ => true, classifiedPatterns)
     op(using fs)
 
   def requestExecPermission[T](commands: Set[String])(op: ProcessPermission^ ?=> T)(using IOCapability): T =

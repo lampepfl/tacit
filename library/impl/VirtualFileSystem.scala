@@ -12,10 +12,9 @@ class VirtualFileSystem(
   val root: Path,
   check: String -> Boolean = _ => true,
   initialFiles: Map[String, String] = Map.empty,
-  classifiedPaths: Set[Path] = Set.empty
+  protected val classifiedPatterns: Set[String] = Set.empty
 ) extends BaseFileSystem:
   protected val normalizedRoot: Path = root.toAbsolutePath.normalize
-  protected val normalizedClassified: Set[Path] = classifiedPaths.map(_.toAbsolutePath.normalize)
   protected def pathCheck(relativePath: String): Boolean = check(relativePath)
   private val files: TrieMap[Path, Array[Byte]] = TrieMap.empty
   private val directories: TrieMap[Path, Unit] = TrieMap(normalizedRoot -> ())

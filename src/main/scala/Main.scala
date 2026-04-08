@@ -36,23 +36,20 @@ import java.io.PrintWriter
         val recordingStatus = config.recordPath match
           case Some(dir) => s"Recording: ON -> $dir"
           case None      => "Recording: OFF"
-        val strictStatus = if config.strictMode then "Strict:    ON (file ops blocked in exec)" else "Strict:    OFF"
         val sessionStatus = if config.sessionEnabled then "Sessions:  ON" else "Sessions:  OFF"
-        val llmStatus = config.llmConfig match
-          case Some(cfg) => s"LLM:       ON -> ${cfg.model} @ ${cfg.baseUrl}"
-          case None      => "LLM:       OFF"
-        val libraryStatus = s"Library:   ${config.libraryJarPath}"
+        val libConfigStr = config.libraryConfig.spaces2
+          .linesIterator.map(l => s"             $l").mkString("\n")
 
         System.err.println(
           s"""
             | TACIT MCP Server
-            | Transport: stdio (JSON-RPC 2.0)                                 
-            | Protocol:  Model Context Protocol (MCP)                         
+            | Transport: stdio (JSON-RPC 2.0)
+            | Protocol:  Model Context Protocol (MCP)
             | $recordingStatus
-            | $strictStatus
             | $sessionStatus
-            | $llmStatus
-            | $libraryStatus
+            | Library:   ${config.libraryJarPath}
+            | LibConfig:
+$libConfigStr
             | JAR:       $jarPath
             | CWD:       $cwd
             |""".stripMargin)

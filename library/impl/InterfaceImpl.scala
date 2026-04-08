@@ -7,10 +7,13 @@ import java.nio.file.Path
 
 @assumeSafe
 abstract class InterfaceImpl(
-  private val strictMode: Boolean = false,
-  private val classifiedPaths: Set[Path] = Set.empty,
-  private val llmConfig: Option[LlmConfig] = None
+  private val config: LibraryConfig = LibraryConfig()
 ) extends Interface:
+
+  private val strictMode: Boolean = config.strictMode.getOrElse(true)
+  private val classifiedPaths: Set[Path] = config.classifiedPaths.getOrElse(Set.empty)
+    .map(Path.of(_).toAbsolutePath.normalize)
+  private val llmConfig: Option[LlmConfig] = config.llm
 
   protected def createFS(root: String, filter: String -> Boolean, classifiedPaths: Set[Path]): FileSystem
 

@@ -54,23 +54,12 @@ object ScalaExecutor:
 
   /** Preamble code injected before user code to make the library API available. */
   private[executor] def libraryPreamble(using Context): String =
-    val cfg = ctx.config
-    val classifiedExpr =
-      if cfg.classifiedPaths.isEmpty then "Set.empty[java.nio.file.Path]"
-      else cfg.classifiedPaths
-        .map(p => s"""java.nio.file.Path.of("$p").toAbsolutePath.normalize""")
-        .mkString("Set(", ", ", ")")
-    def esc(s: String): String = s.replace("\\", "\\\\").replace("\"", "\\\"")
-    val llmConfigExpr = cfg.llmConfig match
-      case None => "None"
-      case Some(llm) => s"""Some(LlmConfig("${esc(llm.baseUrl)}", "${esc(llm.apiKey)}", "${esc(llm.model)}"))"""
+    val jsonStr = ctx.config.libraryConfig.noSpaces
+      .replace("\\", "\\\\")
+      .replace("\"", "\\\"")
     s"""|import tacit.library.*
         |import caps.*
-        |val api: Interface^ = new InterfaceImpl(
-        |  ${cfg.strictMode},
-        |  $classifiedExpr,
-        |  $llmConfigExpr
-        |) {
+        |@assumeSafe val api: Interface^ = new InterfaceImpl(LibraryConfig.fromJson("$jsonStr")) {
         |  def createFS(root: String, filter: String -> Boolean, classifiedPaths: Set[java.nio.file.Path]): FileSystem =
         |    new RealFileSystem(java.nio.file.Path.of(root), filter, classifiedPaths)
         |}
@@ -131,6 +120,8 @@ object ScalaExecutor:
       val outputCapture = new ByteArrayOutputStream()
       val printStream = new PrintStream(outputCapture, true, StandardCharsets.UTF_8)
       val driver = new ReplDriver(replClasspathArgs, printStream, Some(sandboxedClassLoader))
+      // If library preamble fails to compile, move this line inside withOutputCapture 
+      // to capture the error output.
       var state = driver.run(libraryPreamble)(using driver.initialState)
       // state = driver.run("import language.experimental.safe")(using state)
       withOutputCapture(outputCapture, printStream):

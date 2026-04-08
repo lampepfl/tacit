@@ -171,8 +171,7 @@ class LibrarySuite extends munit.FunSuite:
     val secretDir = tmpDir.resolve("secret")
     Files.createDirectories(secretDir)
     val classifiedInterface: Interface^ = new InterfaceImpl(
-      false,
-      Set(secretDir)
+      LibraryConfig(strictMode = Some(false), classifiedPaths = Some(Set(secretDir.toString)))
     ) {
       def createFS(root: String, filter: String -> Boolean, classifiedPaths: Set[Path]): FileSystem =
         new RealFileSystem(Path.of(root), filter, classifiedPaths)

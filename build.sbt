@@ -16,6 +16,8 @@ val scala3Version = {
 // val scala3Version = "3.8.4-RC1-bin-SNAPSHOT"
 ThisBuild / resolvers += Resolver.scalaNightlyRepository
 
+val circeVersion = "0.14.15"
+
 lazy val lib = project
   .in(file("library"))
   .settings(
@@ -27,7 +29,11 @@ lazy val lib = project
     ),
     Compile / unmanagedSources / excludeFilter :=
       "*.test.scala" || "project.scala" || "README.md",
-    libraryDependencies += "com.openai" % "openai-java" % "4.30.0",
+    libraryDependencies ++= Seq(
+      "com.openai" % "openai-java" % "4.30.0",
+      "io.circe" %% "circe-core" % circeVersion,
+      "io.circe" %% "circe-parser" % circeVersion,
+    ),
     scalacOptions ++= Seq(
       "-language:experimental.captureChecking",
       "-language:experimental.modularity",
@@ -73,9 +79,9 @@ lazy val root = project
     ),
 
     libraryDependencies ++= Seq(
-      "io.circe" %% "circe-core" % "0.14.15",
-      "io.circe" %% "circe-generic" % "0.14.15",
-      "io.circe" %% "circe-parser" % "0.14.15",
+      "io.circe" %% "circe-core" % circeVersion,
+      "io.circe" %% "circe-generic" % circeVersion,
+      "io.circe" %% "circe-parser" % circeVersion,
       "com.github.scopt" %% "scopt" % "4.1.1-M3",
       "org.scala-lang" %% "scala3-compiler" % scala3Version,
       "org.scala-lang" %% "scala3-repl" % scala3Version,

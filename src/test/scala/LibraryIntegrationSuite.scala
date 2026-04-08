@@ -200,7 +200,9 @@ class LibraryIntegrationSuite extends munit.FunSuite:
     Files.writeString(secretFile, "TOP SECRET DATA")
 
     // Configure classified paths to include secrets/
-    val cfg = Config(classifiedPaths = Set(secretsDir.toString))
+    val cfg = Config(libraryConfig = io.circe.Json.obj(
+      "classifiedPaths" -> io.circe.Json.arr(io.circe.Json.fromString(secretsDir.toString))
+    ))
     given Context = Context(cfg, None)
 
     // Attempt the bypass: requestFileSystem on secrets/docs (a subdirectory of classified)
@@ -235,7 +237,9 @@ class LibraryIntegrationSuite extends munit.FunSuite:
       s"expected security error, got: ${result.output}")
 
   test("strict mode blocks file commands via exec in REPL"):
-    val cfg = Config(strictMode = true)
+    val cfg = Config(libraryConfig = io.circe.Json.obj(
+      "strictMode" -> io.circe.Json.fromBoolean(true)
+    ))
     given Context = Context(cfg, None)
     val result = ScalaExecutor.execute("""
       requestExecPermission(Set("cat")) {

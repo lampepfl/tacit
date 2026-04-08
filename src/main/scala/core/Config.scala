@@ -1,84 +1,78 @@
 package tacit
 package core
 
+import io.circe.*
+import io.circe.parser.decode
+import io.circe.syntax.*
 import scopt.OParser
-
-case class LlmConfig(baseUrl: String, apiKey: String, model: String):
-  override def toString: String = s"LlmConfig($baseUrl, ***, $model)"
 
 case class Config(
   recordPath: Option[String] = None,
-  strictMode: Boolean = true,
-  classifiedPaths: Set[String] = Set.empty,
-  llmConfig: Option[LlmConfig] = None,
   quiet: Boolean = false,
   wrappedCode: Boolean = false,
   sessionEnabled: Boolean = true,
   libraryJarPath: String = Option(System.getProperty("tacit.library.jar")).getOrElse(""),
-)
+  libraryConfig: Json = Json.obj(),
+):
+  def withLibrary(key: String, value: Json): Config =
+    copy(libraryConfig = libraryConfig.deepMerge(Json.obj(key -> value)))
+
+  def withLlm(key: String, value: String): Config =
+    val existing = libraryConfig.hcursor.downField("llm").focus.getOrElse(Json.obj())
+    withLibrary("llm", existing.deepMerge(Json.obj(key -> value.asJson)))
+
+/** Shape of the JSON config file. All fields optional so missing keys decode as None. */
+private case class FileConfig(
+  recordPath: Option[String] = None,
+  quiet: Option[Boolean] = None,
+  wrappedCode: Option[Boolean] = None,
+  sessionEnabled: Option[Boolean] = None,
+  libraryJarPath: Option[String] = None,
+  libraryConfig: Option[Json] = None,
+) derives Decoder
 
 object Config:
   private def warn(msg: String): Unit =
     System.err.println(s"[TACIT MCP][config] WARNING: $msg")
 
-  private def mergeFromFile(base: Config, path: String): Config =
-    import io.circe.parser.{parse => parseJson}
+  private def readFile(path: String): String =
     val file = java.io.File(path)
-    if !file.exists() then
-      throw RuntimeException(s"Config file not found: '$path'")
-    if !file.canRead then
-      throw RuntimeException(s"Config file is not readable: '$path'")
-
+    if !file.exists() then throw RuntimeException(s"Config file not found: '$path'")
+    if !file.canRead then throw RuntimeException(s"Config file is not readable: '$path'")
     val source = scala.io.Source.fromFile(file)
-    val content = try source.mkString finally source.close()
-    val json = parseJson(content) match
-      case Left(err) => throw RuntimeException(s"Failed to parse config file '$path': ${err.message}")
-      case Right(j) => j
-    val cursor = json.hcursor
-    val recordPath = cursor.get[String]("recordPath").toOption.orElse(base.recordPath)
-    val strictMode = cursor.get[Boolean]("strictMode").toOption.getOrElse(base.strictMode)
-    val quiet = cursor.get[Boolean]("quiet").toOption.getOrElse(base.quiet)
-    val wrappedCode = cursor.get[Boolean]("wrappedCode").toOption.getOrElse(base.wrappedCode)
-    val sessionEnabled = cursor.get[Boolean]("sessionEnabled").toOption.getOrElse(base.sessionEnabled)
-    val libraryJarPath = cursor.get[String]("libraryJarPath").toOption.getOrElse(base.libraryJarPath)
-    val classifiedPaths = cursor.downField("classifiedPaths").as[List[String]].toOption
-      .map(_.toSet).getOrElse(base.classifiedPaths)
-    val llmConfig = cursor.downField("llm").focus.flatMap { llmJson =>
-      val c = llmJson.hcursor
-      val baseUrl = c.get[String]("baseUrl").toOption
-      val apiKey  = c.get[String]("apiKey").toOption
-      val model   = c.get[String]("model").toOption
-      (baseUrl, apiKey, model) match
-        case (Some(b), Some(a), Some(m)) => Some(LlmConfig(b, a, m))
-        case (None, None, None) => None
-        case _ =>
-          val missing = Seq("baseUrl" -> baseUrl, "apiKey" -> apiKey, "model" -> model)
-            .collect { case (name, None) => name }
-          warn(s"Incomplete LLM config in '$path': missing ${missing.mkString(", ")}. LLM config ignored.")
-          None
-    }.orElse(base.llmConfig)
+    try source.mkString finally source.close()
+
+  private def mergeFromFile(base: Config, path: String): Config =
+    val fc = decode[FileConfig](readFile(path)) match
+      case Left(err) => throw RuntimeException(s"Failed to parse config file '$path': ${err.getMessage}")
+      case Right(fc) => fc
+    // File values fill in defaults; CLI-provided libraryConfig fields override file values
     base.copy(
-      recordPath = recordPath,
-      strictMode = strictMode,
-      classifiedPaths = classifiedPaths,
-      llmConfig = llmConfig,
-      quiet = quiet,
-      wrappedCode = wrappedCode,
-      sessionEnabled = sessionEnabled,
-      libraryJarPath = libraryJarPath,
+      recordPath = fc.recordPath.orElse(base.recordPath),
+      quiet = fc.quiet.getOrElse(base.quiet),
+      wrappedCode = fc.wrappedCode.getOrElse(base.wrappedCode),
+      sessionEnabled = fc.sessionEnabled.getOrElse(base.sessionEnabled),
+      libraryJarPath = fc.libraryJarPath.getOrElse(base.libraryJarPath),
+      libraryConfig = fc.libraryConfig.getOrElse(Json.obj()).deepMerge(base.libraryConfig),
     )
 
-  /** Validate that LlmConfig doesn't have empty-string fields (from partial CLI flags). */
   private def validateLlmConfig(config: Config): Config =
-    config.llmConfig match
-      case Some(llm) =>
-        val missing = Seq("baseUrl" -> llm.baseUrl, "apiKey" -> llm.apiKey, "model" -> llm.model)
-          .collect { case (name, v) if v.isEmpty => name }
-        if missing.nonEmpty then
-          warn(s"Incomplete LLM config: missing ${missing.mkString(", ")}. LLM config ignored.")
-          config.copy(llmConfig = None)
-        else config
-      case None => config
+    val llm = config.libraryConfig.hcursor.downField("llm")
+    val fields = Seq("baseUrl", "apiKey", "model")
+    val present = fields.filter(f => llm.get[String](f).toOption.exists(_.nonEmpty))
+    if present.size == fields.size then config       // all present
+    else if present.isEmpty then                     // none present — clean up empty object
+      config.copy(libraryConfig = config.libraryConfig.mapObject(_.remove("llm")))
+    else
+      warn(s"Incomplete LLM config: missing ${(fields.toSet -- present).mkString(", ")}. LLM config ignored.")
+      config.copy(libraryConfig = config.libraryConfig.mapObject(_.remove("llm")))
+
+  private def validateLibraryJar(config: Config): Option[Config] =
+    if config.libraryJarPath.isEmpty then
+      System.err.println("Error: --library-jar is required"); None
+    else if !java.io.File(config.libraryJarPath).exists() then
+      System.err.println(s"Error: Library JAR not found: '${config.libraryJarPath}'"); None
+    else Some(config)
 
   val optParser =
     val builder = OParser.builder[Config]
@@ -89,10 +83,10 @@ object Config:
         .action((x, c) => c.copy(recordPath = Some(x)))
         .text("Record code execution requests in the given directory."),
       opt[Unit]('s', "strict")
-        .action((_, c) => c.copy(strictMode = true))
+        .action((_, c) => c.withLibrary("strictMode", true.asJson))
         .text("Enable strict mode: block file operations (cat, ls, rm, etc.) through exec."),
       opt[String]("classified-paths")
-        .action((x, c) => c.copy(classifiedPaths = x.split(",").map(_.trim).filter(_.nonEmpty).toSet))
+        .action((x, c) => c.withLibrary("classifiedPaths", x.split(",").map(_.trim).filter(_.nonEmpty).toSeq.asJson))
         .text("Comma-separated list of classified (protected) paths."),
       opt[Unit]('q', "quiet")
         .action((_, c) => c.copy(quiet = true))
@@ -110,35 +104,15 @@ object Config:
         .action((x, c) => mergeFromFile(c, x))
         .text("Path to JSON config file."),
       opt[String]("llm-base-url")
-        .action((x, c) =>
-          val llm = c.llmConfig.getOrElse(LlmConfig("", "", ""))
-          c.copy(llmConfig = Some(llm.copy(baseUrl = x)))
-        )
+        .action((x, c) => c.withLlm("baseUrl", x))
         .text("LLM API base URL."),
       opt[String]("llm-api-key")
-        .action((x, c) =>
-          val llm = c.llmConfig.getOrElse(LlmConfig("", "", ""))
-          c.copy(llmConfig = Some(llm.copy(apiKey = x)))
-        )
+        .action((x, c) => c.withLlm("apiKey", x))
         .text("LLM API key."),
       opt[String]("llm-model")
-        .action((x, c) =>
-          val llm = c.llmConfig.getOrElse(LlmConfig("", "", ""))
-          c.copy(llmConfig = Some(llm.copy(model = x)))
-        )
+        .action((x, c) => c.withLlm("model", x))
         .text("LLM model name."),
     )
-
-  private def validateLibraryJar(config: Config): Option[Config] =
-    if config.libraryJarPath.isEmpty then
-      System.err.println("Error: --library-jar is required")
-      None
-    else
-      val file = java.io.File(config.libraryJarPath)
-      if !file.exists() then
-        System.err.println(s"Error: Library JAR not found: '${config.libraryJarPath}'")
-        None
-      else Some(config)
 
   def parseCliArgs(args: Array[String]): Option[Config] =
     OParser.parse(optParser, args, Config())

@@ -374,6 +374,7 @@ class EndpointNetworkSuite extends munit.FunSuite:
     val result = endpoint.invoke(List(Message.user("What is 17 * 23?")), config)
     assert(result.isRight, s"Expected Right but got $result")
     val response = result.toOption.get
+    assert(response.message.thinking.nonEmpty, "Expected thinking content")
     assert(response.message.text.nonEmpty, "Expected text content")
 
   test("OpenAIEndpoint.stream with thinking".tag(Network)):
@@ -389,12 +390,13 @@ class EndpointNetworkSuite extends munit.FunSuite:
       val collected = readAll(ch)
       assert(collected.forall(_.isRight), s"Expected all Right but got ${collected.filter(_.isLeft)}")
       val streamEvents = collected.map(_.toOption.get)
-      // Note: OpenAI's Responses API does not stream reasoning tokens as deltas,
-      // so we do not assert ThinkingDelta events here (unlike Anthropic).
+      val thinkingDeltas = streamEvents.collect { case StreamEvent.ThinkingDelta(t) => t }
+      assert(thinkingDeltas.nonEmpty, "Expected ThinkingDelta events")
       val textDeltas = streamEvents.collect { case StreamEvent.Delta(t) => t }
       assert(textDeltas.nonEmpty, "Expected text Delta events")
       val done = streamEvents.collectFirst { case d: StreamEvent.Done => d }
       assert(done.isDefined, "Expected Done event")
+      assert(done.get.response.message.thinking == thinkingDeltas.mkString)
 
   // Non-streaming tool calling tests
 

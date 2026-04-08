@@ -95,14 +95,20 @@ class OpenAIEndpoint(config: EndpointConfig) extends Endpoint:
     llmConfig.thinking.foreach:
       case ThinkingMode.Disabled => ()
       case ThinkingMode.Auto =>
-        builder.reasoning(Reasoning.builder().effort(ReasoningEffort.MEDIUM).build())
+        builder.reasoning(Reasoning.builder()
+          .effort(ReasoningEffort.MEDIUM)
+          .generateSummary(Reasoning.GenerateSummary.AUTO)
+          .build())
       case ThinkingMode.Effort(level) =>
         val effort = level match
           case EffortLevel.Low => ReasoningEffort.LOW
           case EffortLevel.Medium => ReasoningEffort.MEDIUM
           case EffortLevel.High => ReasoningEffort.HIGH
           case EffortLevel.XHigh => ReasoningEffort.XHIGH
-        builder.reasoning(Reasoning.builder().effort(effort).build())
+        builder.reasoning(Reasoning.builder()
+          .effort(effort)
+          .generateSummary(Reasoning.GenerateSummary.AUTO)
+          .build())
       case ThinkingMode.Budget(n) =>
         throw IllegalArgumentException(s"Budget($n) is not valid for OpenAI. Use ThinkingMode.Effort instead.")
 

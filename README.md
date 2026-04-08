@@ -317,18 +317,27 @@ In your VS Code `settings.json`, restrict the tools available to Copilot:
 
 The server can be configured via CLI flags or a JSON config file. Pass flags directly in your agent's MCP args, or use `--config` to point to a JSON file.
 
+Configuration is split into **server config** (transport, recording, sessions) and **library config** (sandbox behavior, capabilities). In the JSON config file, library settings live under the `libraryConfig` key and are passed directly to the library for processing.
+
 ### CLI Flags
+
+**Server flags:**
 
 | Flag | Description |
 |------|-------------|
-| `-r`/`--record <dir>` | Log every execution to disk |
-| `-s`/`--strict` | Block file ops (cat, ls, rm, etc.) through exec |
-| `--classified-paths <paths>` | Comma-separated classified (protected) paths |
 | `--library-jar <path>` | **Required.** Path to the library JAR (`TACIT-library.jar`) |
+| `-r`/`--record <dir>` | Log every execution to disk |
 | `-q`/`--quiet` | Suppress startup banner and request/response logging |
 | `--no-wrap` | Disable wrapping user code in `def run() = ... ; run()` |
 | `--no-session` | Disable session-related tools |
 | `-c`/`--config <path>` | JSON config file (flags after `--config` override file values) |
+
+**Library flags** (shorthand for `libraryConfig` fields):
+
+| Flag | Description |
+|------|-------------|
+| `-s`/`--strict` | Block file ops (cat, ls, rm, etc.) through exec |
+| `--classified-paths <paths>` | Comma-separated classified (protected) paths |
 | `--llm-base-url <url>` | LLM API base URL |
 | `--llm-api-key <key>` | LLM API key |
 | `--llm-model <name>` | LLM model name |
@@ -338,16 +347,18 @@ The server can be configured via CLI flags or a JSON config file. Pass flags dir
 ```json
 {
   "recordPath": "/tmp/recordings",
-  "strictMode": true,
   "quiet": false,
   "wrappedCode": false,
   "sessionEnabled": true,
-  "classifiedPaths": ["/home/user/project/secrets"],
   "libraryJarPath": "/path/to/TACIT-library.jar",
-  "llm": {
-    "baseUrl": "https://api.example.com",
-    "apiKey": "sk-...",
-    "model": "gpt-..."
+  "libraryConfig": {
+    "strictMode": true,
+    "classifiedPaths": ["/home/user/project/secrets"],
+    "llm": {
+      "baseUrl": "https://api.example.com",
+      "apiKey": "sk-...",
+      "model": "gpt-..."
+    }
   }
 }
 ```

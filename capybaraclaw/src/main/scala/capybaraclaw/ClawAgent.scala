@@ -6,6 +6,8 @@ import tacit.agents.llm.endpoint.*
 import tacit.agents.llm.agentic.{Agent, AgentState, AgentError}
 import tacit.agents.llm.utils.IsToolArg
 import tacit.agents.utils.Result
+import io.circe.Json
+import io.circe.syntax.*
 
 case class EvalScalaArgs(code: String) derives IsToolArg
 
@@ -17,7 +19,9 @@ class ClawAgent(val workDir: String):
   private given Context = Context(
     Config(
       restrictedWorkingDir = Some(workDir),
-      classifiedPaths = clawConfig.classifiedPaths.map(p => java.io.File(workDir, p).getCanonicalPath).toSet,
+      libraryConfig = Json.obj(
+        "classifiedPaths" -> clawConfig.classifiedPaths.map(p => java.io.File(workDir, p).getCanonicalPath).asJson
+      ),
     ),
     recorder = None,
   )

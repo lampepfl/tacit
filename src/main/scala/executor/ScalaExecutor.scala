@@ -55,15 +55,23 @@ object ScalaExecutor:
   /** Preamble code injected before user code to make the library API available. */
   private[executor] def libraryPreamble(using Context): String =
     val cfg = ctx.config
+    val lc = cfg.libraryConfig.hcursor
+    val classifiedPaths = lc.downField("classifiedPaths").as[Seq[String]].getOrElse(Seq.empty)
     val classifiedExpr =
-      if cfg.classifiedPaths.isEmpty then "Set.empty[java.nio.file.Path]"
-      else cfg.classifiedPaths
+      if classifiedPaths.isEmpty then "Set.empty[java.nio.file.Path]"
+      else classifiedPaths
         .map(p => s"""java.nio.file.Path.of("$p").toAbsolutePath.normalize""")
         .mkString("Set(", ", ", ")")
     def esc(s: String): String = s.replace("\\", "\\\\").replace("\"", "\\\"")
-    val llmConfigExpr = cfg.llmConfig match
-      case None => "None"
-      case Some(llm) => s"""Some(LlmConfig("${esc(llm.baseUrl)}", "${esc(llm.apiKey)}", "${esc(llm.model)}"))"""
+    val llm = lc.downField("llm")
+    val llmConfigExpr =
+      (for
+        baseUrl <- llm.get[String]("baseUrl")
+        apiKey  <- llm.get[String]("apiKey")
+        model   <- llm.get[String]("model")
+      yield s"""Some(LlmConfig("${esc(baseUrl)}", "${esc(apiKey)}", "${esc(model)}"))""")
+        .getOrElse("None")
+    val strictMode = lc.downField("strictMode").as[Boolean].getOrElse(false)
     val createFSBody = cfg.restrictedWorkingDir match
       case Some(dir) =>
         val escapedDir = esc(dir)
@@ -79,7 +87,7 @@ object ScalaExecutor:
     s"""|import tacit.library.*
         |import caps.*
         |val api: Interface^ = new InterfaceImpl(
-        |  ${cfg.strictMode},
+        |  $strictMode,
         |  $classifiedExpr,
         |  $llmConfigExpr
         |) {

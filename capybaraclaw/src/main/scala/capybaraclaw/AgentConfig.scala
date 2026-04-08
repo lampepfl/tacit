@@ -43,7 +43,7 @@ object AgentConfig:
   def fromClawConfig(cc: ClawConfig, workDir: String): AgentConfig =
     val thinking: Option[ThinkingMode] = cc.provider match
       case "anthropic" => Some(ThinkingMode.Budget(2048))
-      case "openai" | "openrouter" => Some(ThinkingMode.Effort(EffortLevel.Medium))
+      case "openai" | "openrouter" | "ollama" => Some(ThinkingMode.Effort(EffortLevel.Medium))
       case _           => None
     AgentConfig(
       model = cc.model,

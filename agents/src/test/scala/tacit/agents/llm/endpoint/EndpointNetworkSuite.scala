@@ -7,6 +7,16 @@ import gears.async.Channel
 
 class EndpointNetworkSuite extends munit.FunSuite:
 
+  /** Check once whether a local Ollama server is reachable. */
+  private lazy val ollamaAvailable: Boolean =
+    try
+      val url = sys.env.getOrElse("OLLAMA_BASE_URL", "http://localhost:11434/v1")
+      val conn = java.net.URI(s"$url/models").toURL.openConnection().asInstanceOf[java.net.HttpURLConnection]
+      conn.setConnectTimeout(2000)
+      conn.setReadTimeout(2000)
+      conn.getResponseCode == 200
+    catch case _: Exception => false
+
   /** Read all items from a channel until it is closed. */
   private def readAll[T](ch: gears.async.ReadableChannel[T])(using Async): List[T] =
     val buf = scala.collection.mutable.ListBuffer[T]()
@@ -586,3 +596,43 @@ class EndpointNetworkSuite extends munit.FunSuite:
     val result2 = endpoint.invoke(messages, noToolConfig)
     assert(result2.isRight, s"Step 3 failed: $result2")
     assert(result2.toOption.get.message.text.nonEmpty)
+
+  // OllamaEndpoint tests
+
+  test("OllamaEndpoint.invoke returns a response".tag(Network)):
+    assume(ollamaAvailable, "Ollama not reachable")
+    val endpoint = OllamaEndpoint.createFromEnv()
+    val config = LLMConfig(model = "gemma3:1b", maxTokens = Some(32))
+    val result = endpoint.invoke(List(Message.user("Say hello")), config)
+    assert(result.isRight, s"Expected Right but got $result")
+    val response = result.toOption.get
+    assert(response.message.role == Role.Assistant)
+    assert(response.message.text.nonEmpty)
+
+  test("OllamaEndpoint.invoke with system prompt".tag(Network)):
+    assume(ollamaAvailable, "Ollama not reachable")
+    val endpoint = OllamaEndpoint.createFromEnv()
+    val config = LLMConfig(
+      model = "gemma3:1b",
+      maxTokens = Some(16),
+      systemPrompt = Some("You are a helpful assistant. Reply only with the word PONG."),
+    )
+    val result = endpoint.invoke(List(Message.user("PING")), config)
+    assert(result.isRight, s"Expected Right but got $result")
+    assert(result.toOption.get.message.text.contains("PONG"))
+
+  test("OllamaEndpoint.stream text response".tag(Network)):
+    assume(ollamaAvailable, "Ollama not reachable")
+    Async.blocking:
+      val endpoint = OllamaEndpoint.createFromEnv()
+      val config = LLMConfig(model = "gemma3:1b", maxTokens = Some(32))
+      val ch = endpoint.stream(List(Message.user("Say hello")), config)
+      val collected = readAll(ch)
+      assert(collected.forall(_.isRight), s"Expected all Right but got errors")
+      val streamEvents = collected.map(_.toOption.get)
+      val deltas = streamEvents.collect { case StreamEvent.Delta(t) => t }
+      assert(deltas.nonEmpty, "Expected at least one Delta event")
+      val done = streamEvents.collectFirst { case d: StreamEvent.Done => d }
+      assert(done.isDefined, "Expected Done event")
+      val text = deltas.mkString
+      assert(text.nonEmpty)

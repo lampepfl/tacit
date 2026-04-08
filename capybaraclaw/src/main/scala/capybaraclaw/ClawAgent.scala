@@ -30,6 +30,7 @@ class ClawAgent(val workDir: String):
     case "anthropic"  => AnthropicEndpoint.createFromEnv()
     case "openai"     => OpenAIEndpoint.createFromEnv()
     case "openrouter" => OpenRouterEndpoint.createFromEnv()
+    case "ollama"     => OllamaEndpoint.createFromEnv()
     case other        => throw RuntimeException(s"Unknown provider: $other")
 
   private val repl: ReplSession = ReplSession.create

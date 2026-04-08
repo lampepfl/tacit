@@ -58,10 +58,10 @@ object ScalaExecutor:
     val lc = cfg.libraryConfig.hcursor
     val classifiedPaths = lc.downField("classifiedPaths").as[Seq[String]].getOrElse(Seq.empty)
     val classifiedExpr =
-      if classifiedPaths.isEmpty then "Set.empty[java.nio.file.Path]"
+      if classifiedPaths.isEmpty then "None"
       else classifiedPaths
-        .map(p => s"""java.nio.file.Path.of("$p").toAbsolutePath.normalize""")
-        .mkString("Set(", ", ", ")")
+        .map(p => s""""$p"""")
+        .mkString("Some(Set(", ", ", "))")
     def esc(s: String): String = s.replace("\\", "\\\\").replace("\"", "\\\"")
     val llm = lc.downField("llm")
     val llmConfigExpr =
@@ -75,21 +75,23 @@ object ScalaExecutor:
     val createFSBody = cfg.restrictedWorkingDir match
       case Some(dir) =>
         val escapedDir = esc(dir)
-        s"""|  def createFS(root: String, filter: String -> Boolean, classifiedPaths: Set[java.nio.file.Path]): FileSystem =
+        s"""|  def createFS(root: String, filter: String -> Boolean, classifiedPatterns: Set[String]): FileSystem =
             |    val allowed = java.nio.file.Path.of("$escapedDir").toAbsolutePath.normalize
             |    val requested = java.nio.file.Path.of(root).toAbsolutePath.normalize
             |    if !requested.startsWith(allowed) then
             |      throw SecurityException(s"Access denied: $$root is outside allowed directory $$allowed")
-            |    new RealFileSystem(java.nio.file.Path.of(root), filter, classifiedPaths)""".stripMargin
+            |    new RealFileSystem(java.nio.file.Path.of(root), filter, classifiedPatterns)""".stripMargin
       case None =>
-        s"""|  def createFS(root: String, filter: String -> Boolean, classifiedPaths: Set[java.nio.file.Path]): FileSystem =
-            |    new RealFileSystem(java.nio.file.Path.of(root), filter, classifiedPaths)""".stripMargin
+        s"""|  def createFS(root: String, filter: String -> Boolean, classifiedPatterns: Set[String]): FileSystem =
+            |    new RealFileSystem(java.nio.file.Path.of(root), filter, classifiedPatterns)""".stripMargin
     s"""|import tacit.library.*
         |import caps.*
         |val api: Interface^ = new InterfaceImpl(
-        |  $strictMode,
-        |  $classifiedExpr,
-        |  $llmConfigExpr
+        |  LibraryConfig(
+        |    strictMode = Some($strictMode),
+        |    classifiedPaths = $classifiedExpr,
+        |    llm = $llmConfigExpr
+        |  )
         |) {
         |$createFSBody
         |}

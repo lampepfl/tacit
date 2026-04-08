@@ -4,6 +4,7 @@ import language.experimental.captureChecking
 import caps.assumeSafe
 
 import scala.collection.concurrent.TrieMap
+import scala.util.{Success, Failure}
 import java.nio.charset.StandardCharsets
 import java.nio.file.{Path, Paths}
 
@@ -124,18 +125,14 @@ class VirtualFileSystem(
 
     def writeClassified(content: Classified[String]): Unit =
       requireClassified(resolved, "writeClassified")
-      ensureParentDirs(resolved)
-      try
-        files(resolved) = ClassifiedImpl.unwrap(content).get.getBytes(StandardCharsets.UTF_8)
-      catch
-        case _: Exception => 
+      ClassifiedImpl.unwrap(content) match
+        case Success(value) =>
+          ensureParentDirs(resolved)
+          files(resolved) = value.getBytes(StandardCharsets.UTF_8)
+        case Failure(_) => // Classified wraps a failed computation; nothing to write
   end FileEntryImpl
 
   def access(path: String): FileEntry^{this} =
     val resolved = resolvePath(path)
     checkPath(resolved)
-    new FileEntryImpl(resolved)
-
-  def forceAccess(path: String): FileEntry^{this} =
-    val resolved = resolvePath(path)
     new FileEntryImpl(resolved)

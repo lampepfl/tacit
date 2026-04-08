@@ -124,15 +124,8 @@ object CodeValidator:
             sb.append(' ')
             i += 1
       else if i + 1 < len && code.charAt(i) == '/' && code.charAt(i + 1) == '/' then
-        // Line comment, but check for //> using directive first
-        // We still need to strip the comment content, the pattern matching
-        // runs against the stripped version. The directive pattern won't match
-        // after stripping. So we handle directives specially:
-        // Actually, //> using IS a comment and should be blocked. We need
-        // the pattern to match, so we preserve the comment prefix "//>" for
-        // directive detection but blank the rest.
-        // Simpler: just blank the whole comment. The directive check should
-        // run on the original code. Let's keep it simple and blank all comments.
+        // Line comment: blank entirely. Directive patterns (//> using) are
+        // checked against the original code via originalCodePatterns.
         while i < len && code.charAt(i) != '\n' do
           sb.append(' ')
           i += 1

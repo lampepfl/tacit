@@ -5,6 +5,7 @@ import caps.assumeSafe
 
 import scala.collection.mutable.ListBuffer
 import scala.jdk.CollectionConverters.*
+import scala.util.{Success, Failure}
 
 import java.nio.charset.StandardCharsets
 import java.nio.file.{Files, FileVisitResult, Path, Paths, SimpleFileVisitor}
@@ -65,7 +66,7 @@ class RealFileSystem(
     def append(content: String): Unit =
       requireNotClassified(jpath, "append")
       Files.createDirectories(jpath.getParent)
-      Files.write(jpath, content.getBytes,
+      Files.write(jpath, content.getBytes(StandardCharsets.UTF_8),
         java.nio.file.StandardOpenOption.CREATE,
         java.nio.file.StandardOpenOption.APPEND)
       ()
@@ -127,11 +128,12 @@ class RealFileSystem(
 
     def writeClassified(content: Classified[String]): Unit =
       requireClassified(jpath, "writeClassified")
-      try
-        Files.createDirectories(jpath.getParent)
-        Files.write(jpath, ClassifiedImpl.unwrap(content).get.getBytes(StandardCharsets.UTF_8))
-      catch
-        case _: Exception => 
+      ClassifiedImpl.unwrap(content) match
+        case Success(value) =>
+          Files.createDirectories(jpath.getParent)
+          Files.write(jpath, value.getBytes(StandardCharsets.UTF_8))
+          ()
+        case Failure(_) => // Classified wraps a failed computation; nothing to write
   end FileEntryImpl
 
   def access(path: String): FileEntry^{this} =

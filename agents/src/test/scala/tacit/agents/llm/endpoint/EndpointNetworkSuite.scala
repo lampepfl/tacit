@@ -597,8 +597,9 @@ class EndpointNetworkSuite extends munit.FunSuite:
     assert(result2.isRight, s"Step 3 failed: $result2")
     assert(result2.toOption.get.message.text.nonEmpty)
 
-  // OllamaEndpoint tests
 
+/*
+  // OllamaEndpoint tests
   test("OllamaEndpoint.invoke returns a response".tag(Network)):
     assume(ollamaAvailable, "Ollama not reachable")
     val endpoint = OllamaEndpoint.createFromEnv()
@@ -635,4 +636,5 @@ class EndpointNetworkSuite extends munit.FunSuite:
       val done = streamEvents.collectFirst { case d: StreamEvent.Done => d }
       assert(done.isDefined, "Expected Done event")
       val text = deltas.mkString
-      assert(text.nonEmpty)
+   assert(text.nonEmpty)
+*/

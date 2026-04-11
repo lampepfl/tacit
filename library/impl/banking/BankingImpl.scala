@@ -2,51 +2,7 @@ package tacit.library.banking
 
 import language.experimental.captureChecking
 
-case class Transaction(
-    id: Int,
-    sender: String,
-    recipient: String,
-    amount: Double,
-    subject: String,
-    date: String,
-    recurring: Boolean
-)
-
-object Transaction:
-  def fromJson(j: JValue): Transaction =
-    Transaction(
-      id = j.field("id").asInt.getOrElse(0),
-      sender = j.field("sender").asString.getOrElse(""),
-      recipient = j.field("recipient").asString.getOrElse(""),
-      amount = j.field("amount").asDouble.getOrElse(0.0),
-      subject = j.field("subject").asString.getOrElse(""),
-      date = j.field("date").asString.getOrElse(""),
-      recurring = j.field("recurring").asBool.getOrElse(false)
-    )
-
-case class UserInfo(
-    firstName: String,
-    lastName: String,
-    street: String,
-    city: String
-)
-
-object UserInfo:
-  def fromJson(j: JValue): UserInfo =
-    UserInfo(
-      firstName = j.field("first_name").asString.getOrElse(""),
-      lastName = j.field("last_name").asString.getOrElse(""),
-      street = j.field("street").asString.getOrElse(""),
-      city = j.field("city").asString.getOrElse("")
-    )
-
-case class MessageResult(message: String)
-
-object MessageResult:
-  def fromJson(j: JValue): MessageResult =
-    MessageResult(message = j.field("message").asString.getOrElse(""))
-
-class BankingService(endpoint: String) extends AutoCloseable:
+class BankingImpl(endpoint: String) extends BankingService, AutoCloseable:
   private val client = MCPClient(endpoint)
 
   client.initialize()
@@ -63,15 +19,15 @@ class BankingService(endpoint: String) extends AutoCloseable:
     callToolText("get_balance", JValue.obj()).toDouble
 
   def getUserInfo(): UserInfo =
-    UserInfo.fromJson(callToolParsed("get_user_info", JValue.obj()))
+    parseUserInfo(callToolParsed("get_user_info", JValue.obj()))
 
   def getMostRecentTransactions(n: Int = 100): List[Transaction] =
     callToolParsed("get_most_recent_transactions", JValue.obj("n" -> JValue.num(n)))
-      .asArray.getOrElse(Nil).map(Transaction.fromJson)
+      .asArray.getOrElse(Nil).map(parseTransaction)
 
   def getScheduledTransactions(): List[Transaction] =
     callToolParsed("get_scheduled_transactions", JValue.obj())
-      .asArray.getOrElse(Nil).map(Transaction.fromJson)
+      .asArray.getOrElse(Nil).map(parseTransaction)
 
   def readFile(path: String): String =
     callToolText("read_file", JValue.obj("file_path" -> JValue.str(path)))
@@ -79,7 +35,7 @@ class BankingService(endpoint: String) extends AutoCloseable:
   /** Mutations */
 
   def sendMoney(recipient: String, amount: Double, subject: String, date: String): MessageResult =
-    MessageResult.fromJson(callToolParsed("send_money", JValue.obj(
+    parseMessage(callToolParsed("send_money", JValue.obj(
       "recipient" -> JValue.str(recipient),
       "amount" -> JValue.num(amount),
       "subject" -> JValue.str(subject),
@@ -90,7 +46,7 @@ class BankingService(endpoint: String) extends AutoCloseable:
       recipient: String, amount: Double, subject: String,
       date: String, recurring: Boolean
   ): MessageResult =
-    MessageResult.fromJson(callToolParsed("schedule_transaction", JValue.obj(
+    parseMessage(callToolParsed("schedule_transaction", JValue.obj(
       "recipient" -> JValue.str(recipient),
       "amount" -> JValue.num(amount),
       "subject" -> JValue.str(subject),
@@ -114,10 +70,10 @@ class BankingService(endpoint: String) extends AutoCloseable:
       "date" -> date.map(JValue.str),
       "recurring" -> recurring.map(JValue.bool)
     )
-    MessageResult.fromJson(callToolParsed("update_scheduled_transaction", base.merge(opts)))
+    parseMessage(callToolParsed("update_scheduled_transaction", base.merge(opts)))
 
   def updatePassword(password: String): MessageResult =
-    MessageResult.fromJson(callToolParsed("update_password",
+    parseMessage(callToolParsed("update_password",
       JValue.obj("password" -> JValue.str(password))))
 
   def updateUserInfo(
@@ -126,7 +82,7 @@ class BankingService(endpoint: String) extends AutoCloseable:
       street: Option[String] = None,
       city: Option[String] = None
   ): UserInfo =
-    UserInfo.fromJson(callToolParsed("update_user_info", JValue.objOpt(
+    parseUserInfo(callToolParsed("update_user_info", JValue.objOpt(
       "first_name" -> firstName.map(JValue.str),
       "last_name" -> lastName.map(JValue.str),
       "street" -> street.map(JValue.str),
@@ -143,10 +99,32 @@ class BankingService(endpoint: String) extends AutoCloseable:
 
   private def callToolParsed(name: String, arguments: JValue): JValue =
     val text = callToolText(name, arguments)
-    val json = BankingService.pythonReprToJson(text)
+    val json = BankingImpl.pythonReprToJson(text)
     JValue.parse(json)
 
-object BankingService:
+  private def parseTransaction(j: JValue): Transaction =
+    Transaction(
+      id = j.field("id").asInt.getOrElse(0),
+      sender = j.field("sender").asString.getOrElse(""),
+      recipient = j.field("recipient").asString.getOrElse(""),
+      amount = j.field("amount").asDouble.getOrElse(0.0),
+      subject = j.field("subject").asString.getOrElse(""),
+      date = j.field("date").asString.getOrElse(""),
+      recurring = j.field("recurring").asBool.getOrElse(false)
+    )
+
+  private def parseUserInfo(j: JValue): UserInfo =
+    UserInfo(
+      firstName = j.field("first_name").asString.getOrElse(""),
+      lastName = j.field("last_name").asString.getOrElse(""),
+      street = j.field("street").asString.getOrElse(""),
+      city = j.field("city").asString.getOrElse("")
+    )
+
+  private def parseMessage(j: JValue): MessageResult =
+    MessageResult(message = j.field("message").asString.getOrElse(""))
+
+object BankingImpl:
   /** Convert Python repr string to JSON.
    *  Handles: single quotes to double quotes, True/False/None to true/false/null */
   def pythonReprToJson(s: String): String =

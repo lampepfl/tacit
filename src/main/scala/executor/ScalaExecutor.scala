@@ -54,6 +54,11 @@ object ScalaExecutor:
 
   /** Preamble code injected before user code to make the library API available. */
   private[executor] def libraryPreamble(using Context): String =
+    ctx.config.agentdojoPort match
+      case Some(port) => bankingPreamble(port)
+      case None => defaultPreamble
+
+  private def defaultPreamble(using Context): String =
     val jsonStr = ctx.config.libraryConfig.noSpaces
       .replace("\\", "\\\\")
       .replace("\"", "\\\"")
@@ -65,6 +70,13 @@ object ScalaExecutor:
         |}
         |import api.*
         |@assumeSafe given IOCapability = iocap
+        |""".stripMargin
+
+  private def bankingPreamble(port: Int): String =
+    s"""|import tacit.library.Classified
+        |import tacit.library.banking.*
+        |val banking: BankingService = new BankingImpl("http://localhost:$port/mcp")
+        |import banking.*
         |""".stripMargin
 
   /** Wraps user code in a `def run() = ...; run()` block to avoid capture checking REPL errors. */

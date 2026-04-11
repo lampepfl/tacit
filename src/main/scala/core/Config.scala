@@ -13,6 +13,7 @@ case class Config(
   sessionEnabled: Boolean = true,
   libraryJarPath: String = Option(System.getProperty("tacit.library.jar")).getOrElse(""),
   libraryConfig: Json = Json.obj(),
+  agentdojoPort: Option[Int] = None,
 ):
   def withLibrary(key: String, value: Json): Config =
     copy(libraryConfig = libraryConfig.deepMerge(Json.obj(key -> value)))
@@ -29,6 +30,7 @@ private case class FileConfig(
   sessionEnabled: Option[Boolean] = None,
   libraryJarPath: Option[String] = None,
   libraryConfig: Option[Json] = None,
+  agentdojoPort: Option[Int] = None,
 ) derives Decoder
 
 object Config:
@@ -54,6 +56,7 @@ object Config:
       sessionEnabled = fc.sessionEnabled.getOrElse(base.sessionEnabled),
       libraryJarPath = fc.libraryJarPath.getOrElse(base.libraryJarPath),
       libraryConfig = fc.libraryConfig.getOrElse(Json.obj()).deepMerge(base.libraryConfig),
+      agentdojoPort = base.agentdojoPort.orElse(fc.agentdojoPort),
     )
 
   private def validateLlmConfig(config: Config): Config =
@@ -103,6 +106,9 @@ object Config:
       opt[String]('c', "config")
         .action((x, c) => mergeFromFile(c, x))
         .text("Path to JSON config file."),
+      opt[Int]("agentdojo-port")
+        .action((x, c) => c.copy(agentdojoPort = Some(x)))
+        .text("Port for the AgentDojo MCP server."),
       opt[String]("llm-base-url")
         .action((x, c) => c.withLlm("baseUrl", x))
         .text("LLM API base URL."),

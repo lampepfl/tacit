@@ -1,5 +1,7 @@
 package tacit.library.banking
 
+import language.experimental.captureChecking
+
 case class JsonRpcRequest(
     jsonrpc: String = "2.0",
     method: String,

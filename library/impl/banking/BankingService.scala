@@ -1,5 +1,7 @@
 package tacit.library.banking
 
+import language.experimental.captureChecking
+
 case class Transaction(
     id: Int,
     sender: String,

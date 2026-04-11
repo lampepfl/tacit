@@ -1,5 +1,6 @@
 package tacit.library.banking
 
+import language.experimental.captureChecking
 import java.net.URI
 import java.net.http.{HttpClient, HttpRequest, HttpResponse}
 

@@ -1,5 +1,7 @@
 package tacit.library.banking
 
+import language.experimental.captureChecking
+
 /** Minimal self-contained JSON ADT, parser, and serializer. */
 enum JValue:
   case JString(value: String)

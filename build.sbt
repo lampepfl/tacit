@@ -32,7 +32,6 @@ lazy val lib = project
     libraryDependencies ++= Seq(
       "com.openai" % "openai-java" % "4.30.0",
       "io.circe" %% "circe-core" % circeVersion,
-      "io.circe" %% "circe-generic" % circeVersion,
       "io.circe" %% "circe-parser" % circeVersion,
     ),
     scalacOptions ++= Seq(

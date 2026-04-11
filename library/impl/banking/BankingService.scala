@@ -1,10 +1,5 @@
 package tacit.library.banking
 
-import io.circe.*
-import io.circe.syntax.*
-import io.circe.generic.semiauto.*
-import io.circe.parser.{decode, parse}
-
 case class Transaction(
     id: Int,
     sender: String,
@@ -16,27 +11,42 @@ case class Transaction(
 )
 
 object Transaction:
-  given Decoder[Transaction] = deriveDecoder
+  def fromJson(j: JValue): Transaction =
+    Transaction(
+      id = j.field("id").asInt.getOrElse(0),
+      sender = j.field("sender").asString.getOrElse(""),
+      recipient = j.field("recipient").asString.getOrElse(""),
+      amount = j.field("amount").asDouble.getOrElse(0.0),
+      subject = j.field("subject").asString.getOrElse(""),
+      date = j.field("date").asString.getOrElse(""),
+      recurring = j.field("recurring").asBool.getOrElse(false)
+    )
 
 case class UserInfo(
-    first_name: String,
-    last_name: String,
+    firstName: String,
+    lastName: String,
     street: String,
     city: String
 )
 
 object UserInfo:
-  given Decoder[UserInfo] = deriveDecoder
+  def fromJson(j: JValue): UserInfo =
+    UserInfo(
+      firstName = j.field("first_name").asString.getOrElse(""),
+      lastName = j.field("last_name").asString.getOrElse(""),
+      street = j.field("street").asString.getOrElse(""),
+      city = j.field("city").asString.getOrElse("")
+    )
 
 case class MessageResult(message: String)
 
 object MessageResult:
-  given Decoder[MessageResult] = deriveDecoder
+  def fromJson(j: JValue): MessageResult =
+    MessageResult(message = j.field("message").asString.getOrElse(""))
 
 class BankingService(endpoint: String) extends AutoCloseable:
   private val client = MCPClient(endpoint)
 
-  // Initialize MCP session
   client.initialize()
   client.sendInitialized()
 
@@ -45,45 +55,46 @@ class BankingService(endpoint: String) extends AutoCloseable:
   /** Read-only queries */
 
   def getIban(): String =
-    callToolText("get_iban", Json.obj())
+    callToolText("get_iban", JValue.obj())
 
   def getBalance(): Double =
-    callToolText("get_balance", Json.obj()).toDouble
+    callToolText("get_balance", JValue.obj()).toDouble
 
   def getUserInfo(): UserInfo =
-    callToolParsed[UserInfo]("get_user_info", Json.obj())
+    UserInfo.fromJson(callToolParsed("get_user_info", JValue.obj()))
 
   def getMostRecentTransactions(n: Int = 100): List[Transaction] =
-    callToolParsed[List[Transaction]]("get_most_recent_transactions",
-      Json.obj("n" -> Json.fromInt(n)))
+    callToolParsed("get_most_recent_transactions", JValue.obj("n" -> JValue.num(n)))
+      .asArray.getOrElse(Nil).map(Transaction.fromJson)
 
   def getScheduledTransactions(): List[Transaction] =
-    callToolParsed[List[Transaction]]("get_scheduled_transactions", Json.obj())
+    callToolParsed("get_scheduled_transactions", JValue.obj())
+      .asArray.getOrElse(Nil).map(Transaction.fromJson)
 
   def readFile(path: String): String =
-    callToolText("read_file", Json.obj("file_path" -> Json.fromString(path)))
+    callToolText("read_file", JValue.obj("file_path" -> JValue.str(path)))
 
   /** Mutations */
 
   def sendMoney(recipient: String, amount: Double, subject: String, date: String): MessageResult =
-    callToolParsed[MessageResult]("send_money", Json.obj(
-      "recipient" -> Json.fromString(recipient),
-      "amount" -> Json.fromDoubleOrNull(amount),
-      "subject" -> Json.fromString(subject),
-      "date" -> Json.fromString(date)
-    ))
+    MessageResult.fromJson(callToolParsed("send_money", JValue.obj(
+      "recipient" -> JValue.str(recipient),
+      "amount" -> JValue.num(amount),
+      "subject" -> JValue.str(subject),
+      "date" -> JValue.str(date)
+    )))
 
   def scheduleTransaction(
       recipient: String, amount: Double, subject: String,
       date: String, recurring: Boolean
   ): MessageResult =
-    callToolParsed[MessageResult]("schedule_transaction", Json.obj(
-      "recipient" -> Json.fromString(recipient),
-      "amount" -> Json.fromDoubleOrNull(amount),
-      "subject" -> Json.fromString(subject),
-      "date" -> Json.fromString(date),
-      "recurring" -> Json.fromBoolean(recurring)
-    ))
+    MessageResult.fromJson(callToolParsed("schedule_transaction", JValue.obj(
+      "recipient" -> JValue.str(recipient),
+      "amount" -> JValue.num(amount),
+      "subject" -> JValue.str(subject),
+      "date" -> JValue.str(date),
+      "recurring" -> JValue.bool(recurring)
+    )))
 
   def updateScheduledTransaction(
       id: Int,
@@ -93,20 +104,19 @@ class BankingService(endpoint: String) extends AutoCloseable:
       date: Option[String] = None,
       recurring: Option[Boolean] = None
   ): MessageResult =
-    val args = Json.obj(
-      "id" -> Json.fromInt(id)
-    ).deepMerge(optionalFields(
-      "recipient" -> recipient.map(Json.fromString),
-      "amount" -> amount.map(Json.fromDoubleOrNull),
-      "subject" -> subject.map(Json.fromString),
-      "date" -> date.map(Json.fromString),
-      "recurring" -> recurring.map(Json.fromBoolean)
-    ))
-    callToolParsed[MessageResult]("update_scheduled_transaction", args)
+    val base = JValue.obj("id" -> JValue.num(id))
+    val opts = JValue.objOpt(
+      "recipient" -> recipient.map(JValue.str),
+      "amount" -> amount.map(JValue.num(_)),
+      "subject" -> subject.map(JValue.str),
+      "date" -> date.map(JValue.str),
+      "recurring" -> recurring.map(JValue.bool)
+    )
+    MessageResult.fromJson(callToolParsed("update_scheduled_transaction", base.merge(opts)))
 
   def updatePassword(password: String): MessageResult =
-    callToolParsed[MessageResult]("update_password",
-      Json.obj("password" -> Json.fromString(password)))
+    MessageResult.fromJson(callToolParsed("update_password",
+      JValue.obj("password" -> JValue.str(password))))
 
   def updateUserInfo(
       firstName: Option[String] = None,
@@ -114,31 +124,25 @@ class BankingService(endpoint: String) extends AutoCloseable:
       street: Option[String] = None,
       city: Option[String] = None
   ): UserInfo =
-    callToolParsed[UserInfo]("update_user_info", optionalFields(
-      "first_name" -> firstName.map(Json.fromString),
-      "last_name" -> lastName.map(Json.fromString),
-      "street" -> street.map(Json.fromString),
-      "city" -> city.map(Json.fromString)
-    ))
+    UserInfo.fromJson(callToolParsed("update_user_info", JValue.objOpt(
+      "first_name" -> firstName.map(JValue.str),
+      "last_name" -> lastName.map(JValue.str),
+      "street" -> street.map(JValue.str),
+      "city" -> city.map(JValue.str)
+    )))
 
   /** Internals */
 
-  private def callToolText(name: String, arguments: Json): String =
+  private def callToolText(name: String, arguments: JValue): String =
     val result = client.callTool(name, arguments)
-    result.hcursor.downField("content").downArray
-      .downField("text").as[String] match
-      case Right(text) => text
-      case Left(err) => throw MCPError(s"Failed to extract text from $name: $err")
+    result.field("content")(0).field("text").asString.getOrElse(
+      throw MCPError(s"Failed to extract text from $name")
+    )
 
-  private def callToolParsed[T](name: String, arguments: Json)(using decoder: Decoder[T]): T =
+  private def callToolParsed(name: String, arguments: JValue): JValue =
     val text = callToolText(name, arguments)
     val json = BankingService.pythonReprToJson(text)
-    decode[T](json) match
-      case Right(value) => value
-      case Left(err) => throw MCPError(s"Failed to parse response from $name: $err\nRaw: $text\nConverted: $json")
-
-  private def optionalFields(fields: (String, Option[Json])*): Json =
-    Json.fromFields(fields.collect { case (k, Some(v)) => (k, v) })
+    JValue.parse(json)
 
 object BankingService:
   /** Convert Python repr string to JSON.
@@ -149,7 +153,6 @@ object BankingService:
     while i < s.length do
       val c = s.charAt(i)
       if c == '\'' then
-        // String literal: scan until matching unescaped single quote
         sb.append('"')
         i += 1
         while i < s.length && s.charAt(i) != '\'' do
@@ -162,7 +165,7 @@ object BankingService:
           else sb.append(ch)
           i += 1
         sb.append('"')
-        i += 1 // skip closing quote
+        i += 1
       else if s.startsWith("True", i) && !isIdentContinue(s, i + 4) then
         sb.append("true")
         i += 4

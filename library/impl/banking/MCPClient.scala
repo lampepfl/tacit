@@ -1,8 +1,5 @@
 package tacit.library.banking
 
-import io.circe.*
-import io.circe.syntax.*
-import io.circe.parser.decode
 import java.net.URI
 import java.net.http.{HttpClient, HttpRequest, HttpResponse}
 
@@ -19,7 +16,7 @@ class MCPClient(baseUrl: String) extends AutoCloseable:
     id
 
   def sendRequest(request: JsonRpcRequest): List[JsonRpcResponse] =
-    val body = request.asJson.noSpaces
+    val body = request.toJson.compact
     val builder = HttpRequest.newBuilder()
       .nn.uri(URI.create(baseUrl))
       .nn.header("Content-Type", "application/json")
@@ -43,13 +40,11 @@ class MCPClient(baseUrl: String) extends AutoCloseable:
     if contentType.isPresent && contentType.get().nn.startsWith("text/event-stream") then
       parseSse(respBody)
     else
-      decode[JsonRpcResponse](respBody) match
-        case Right(resp) => List(resp)
-        case Left(err) => throw MCPError(s"Failed to parse response: $err")
+      List(JsonRpcResponse.fromJson(JValue.parse(respBody)))
 
-  def sendNotification(method: String, params: Option[Json] = None): Unit =
+  def sendNotification(method: String, params: Option[JValue] = None): Unit =
     val req = JsonRpcRequest.notification(method, params)
-    val body = req.asJson.noSpaces
+    val body = req.toJson.compact
     val builder = HttpRequest.newBuilder()
       .nn.uri(URI.create(baseUrl))
       .nn.header("Content-Type", "application/json")
@@ -60,13 +55,13 @@ class MCPClient(baseUrl: String) extends AutoCloseable:
     val httpReq = builder.build().nn
     httpClient.send(httpReq, HttpResponse.BodyHandlers.ofString())
 
-  def initialize(): Json =
-    val params = Json.obj(
-      "protocolVersion" -> Json.fromString("2025-11-25"),
-      "capabilities" -> Json.obj(),
-      "clientInfo" -> Json.obj(
-        "name" -> Json.fromString("tacit-banking-client"),
-        "version" -> Json.fromString("0.1.0")
+  def initialize(): JValue =
+    val params = JValue.obj(
+      "protocolVersion" -> JValue.str("2025-11-25"),
+      "capabilities" -> JValue.obj(),
+      "clientInfo" -> JValue.obj(
+        "name" -> JValue.str("tacit-banking-client"),
+        "version" -> JValue.str("0.1.0")
       )
     )
     val req = JsonRpcRequest.request("initialize", params, allocateId())
@@ -76,14 +71,14 @@ class MCPClient(baseUrl: String) extends AutoCloseable:
   def sendInitialized(): Unit =
     sendNotification("notifications/initialized")
 
-  def listTools(): Json =
-    val req = JsonRpcRequest.request("tools/list", Json.obj(), allocateId())
+  def listTools(): JValue =
+    val req = JsonRpcRequest.request("tools/list", JValue.obj(), allocateId())
     val responses = sendRequest(req)
     extractResult(responses)
 
-  def callTool(name: String, arguments: Json): Json =
-    val params = Json.obj(
-      "name" -> Json.fromString(name),
+  def callTool(name: String, arguments: JValue): JValue =
+    val params = JValue.obj(
+      "name" -> JValue.str(name),
       "arguments" -> arguments
     )
     val req = JsonRpcRequest.request("tools/call", params, allocateId())
@@ -92,18 +87,17 @@ class MCPClient(baseUrl: String) extends AutoCloseable:
 
   def close(): Unit = ()
 
-  private def extractResult(responses: List[JsonRpcResponse]): Json =
+  private def extractResult(responses: List[JsonRpcResponse]): JValue =
     val resp = responses.lastOption.getOrElse(
       throw MCPError("No response received")
     )
     resp.error.foreach { err =>
       throw MCPError(s"JSON-RPC error ${err.code}: ${err.message}")
     }
-    resp.result.getOrElse(Json.Null)
+    resp.result.getOrElse(JValue.JNull)
 
   private def parseSse(body: String): List[JsonRpcResponse] =
     body.linesIterator
       .filter(_.startsWith("data: "))
-      .map(_.drop(6))
-      .flatMap(line => decode[JsonRpcResponse](line).toOption)
+      .map(line => JsonRpcResponse.fromJson(JValue.parse(line.drop(6))))
       .toList

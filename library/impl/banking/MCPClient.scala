@@ -1,4 +1,4 @@
-package tacit.library.banking.mcp
+package tacit.library.banking
 
 import io.circe.*
 import io.circe.syntax.*

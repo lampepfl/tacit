@@ -32,6 +32,7 @@ lazy val lib = project
     libraryDependencies ++= Seq(
       "com.openai" % "openai-java" % "4.30.0",
       "io.circe" %% "circe-core" % circeVersion,
+      "io.circe" %% "circe-generic" % circeVersion,
       "io.circe" %% "circe-parser" % circeVersion,
     ),
     scalacOptions ++= Seq(
@@ -57,31 +58,9 @@ lazy val lib = project
     }
   )
 
-lazy val libBanking = project
-  .in(file("library-banking"))
-  .settings(
-    name := "TACIT-library-banking",
-    scalaVersion := scala3Version,
-    Compile / unmanagedSourceDirectories := Seq(baseDirectory.value),
-    Compile / unmanagedSources / excludeFilter :=
-      "*.test.scala" || "project.scala" || "README.md",
-    libraryDependencies ++= Seq(
-      "io.circe" %% "circe-core" % circeVersion,
-      "io.circe" %% "circe-generic" % circeVersion,
-      "io.circe" %% "circe-parser" % circeVersion,
-    ),
-    scalacOptions ++= Seq(
-      "-language:experimental.captureChecking",
-      "-language:experimental.modularity",
-      "-deprecation", "-feature", "-unchecked",
-      "-Yexplicit-nulls", "-Wsafe-init",
-      "-release:17",
-    ),
-  )
-
 lazy val root = project
   .in(file("."))
-  .aggregate(lib, libBanking)
+  .aggregate(lib)
   .settings(
     name := "TACIT",
     version := "0.1.4-SNAPSHOT",

@@ -1,4 +1,4 @@
-package tacit.library.banking.mcp
+package tacit.library.banking
 
 import io.circe.*
 import io.circe.syntax.*
@@ -142,14 +142,14 @@ class BankingService(endpoint: String) extends AutoCloseable:
 
 object BankingService:
   /** Convert Python repr string to JSON.
-   *  Handles: single quotes → double quotes, True/False/None → true/false/null */
+   *  Handles: single quotes to double quotes, True/False/None to true/false/null */
   def pythonReprToJson(s: String): String =
     val sb = new StringBuilder
     var i = 0
     while i < s.length do
       val c = s.charAt(i)
       if c == '\'' then
-        // String literal — scan until matching unescaped single quote
+        // String literal: scan until matching unescaped single quote
         sb.append('"')
         i += 1
         while i < s.length && s.charAt(i) != '\'' do

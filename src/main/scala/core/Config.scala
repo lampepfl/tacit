@@ -10,7 +10,6 @@ case class Config(
   recordPath: Option[String] = None,
   quiet: Boolean = false,
   wrappedCode: Boolean = false,
-  sessionEnabled: Boolean = true,
   libraryJarPath: String = Option(System.getProperty("tacit.library.jar")).getOrElse(""),
   libraryConfig: Json = Json.obj(),
   agentdojoPort: Option[Int] = None,
@@ -27,7 +26,6 @@ private case class FileConfig(
   recordPath: Option[String] = None,
   quiet: Option[Boolean] = None,
   wrappedCode: Option[Boolean] = None,
-  sessionEnabled: Option[Boolean] = None,
   libraryJarPath: Option[String] = None,
   libraryConfig: Option[Json] = None,
   agentdojoPort: Option[Int] = None,
@@ -53,7 +51,6 @@ object Config:
       recordPath = fc.recordPath.orElse(base.recordPath),
       quiet = fc.quiet.getOrElse(base.quiet),
       wrappedCode = fc.wrappedCode.getOrElse(base.wrappedCode),
-      sessionEnabled = fc.sessionEnabled.getOrElse(base.sessionEnabled),
       libraryJarPath = fc.libraryJarPath.getOrElse(base.libraryJarPath),
       libraryConfig = fc.libraryConfig.getOrElse(Json.obj()).deepMerge(base.libraryConfig),
       agentdojoPort = base.agentdojoPort.orElse(fc.agentdojoPort),
@@ -97,9 +94,6 @@ object Config:
       opt[Unit]("no-wrap")
         .action((_, c) => c.copy(wrappedCode = false))
         .text("Disable wrapping user code in def run() = ... ; run() (workaround for capture checking REPL errors)."),
-      opt[Unit]("no-session")
-        .action((_, c) => c.copy(sessionEnabled = false))
-        .text("Disable session-related tools (create/execute/delete/list sessions)."),
       opt[String]("library-jar")
         .action((x, c) => c.copy(libraryJarPath = x))
         .text("Path to the library JAR (TACIT-library.jar). Required."),

@@ -1,4 +1,4 @@
-import tacit.executor.{CodeValidator, ScalaExecutor, SessionManager, ValidationViolation}
+import tacit.executor.{CodeValidator, ReplSession, ScalaExecutor, ValidationViolation}
 import tacit.core.{Context, Config}
 
 class CodeValidatorSuite extends munit.FunSuite:
@@ -336,14 +336,11 @@ class CodeValidatorSuite extends munit.FunSuite:
     assert(result.success)
     assert(result.output.contains("java.io is just a string"))
 
-  test("SessionManager rejects forbidden code"):
-    val sm = new SessionManager
-    val sid = sm.createSession()
-    val result = sm.executeInSession(sid, "import java.io.File")
-    assert(result.isRight) // Right(ExecutionResult) from executeInSession
-    assert(!result.toOption.get.success)
-    assert(result.toOption.get.error.exists(_.contains("file-io-java")))
-    sm.deleteSession(sid)
+  test("ReplSession rejects forbidden code"):
+    val session = ReplSession.create
+    val result = session.execute("import java.io.File")
+    assert(!result.success)
+    assert(result.error.exists(_.contains("file-io-java")))
 
   // ---- Security bypass edge cases ----
 

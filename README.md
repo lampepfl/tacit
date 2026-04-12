@@ -11,7 +11,7 @@ It provides an [MCP](https://modelcontextprotocol.io/) interface, so that it can
 The framework has three main components:
 
 - **Scala 3 compiler.** Agent-submitted code is validated and type-checked with capture checking enabled in *safe mode*, which enforces a capability-safe language subset.
-- **Scala REPL.** A local REPL instance executes compiled code and manages state across interactions. Supports both stateless one-shot execution and stateful sessions.
+- **Scala REPL.** A local REPL instance executes compiled code and maintains state across interactions within a persistent default session.
 - **Capability safety library.** A typed API that serves as the sole gateway through which agent code interacts with the real world: file system, process execution, network, and sub-agents. The library is extensible: add new capabilities by modifying only the library code, without changing the MCP server itself.
 
 ## Quick Start
@@ -317,7 +317,7 @@ In your VS Code `settings.json`, restrict the tools available to Copilot:
 
 The server can be configured via CLI flags or a JSON config file. Pass flags directly in your agent's MCP args, or use `--config` to point to a JSON file.
 
-Configuration is split into **server config** (transport, recording, sessions) and **library config** (sandbox behavior, capabilities). In the JSON config file, library settings live under the `libraryConfig` key and are passed directly to the library for processing.
+Configuration is split into **server config** (transport, recording) and **library config** (sandbox behavior, capabilities). In the JSON config file, library settings live under the `libraryConfig` key and are passed directly to the library for processing.
 
 ### CLI Flags
 
@@ -329,7 +329,6 @@ Configuration is split into **server config** (transport, recording, sessions) a
 | `-r`/`--record <dir>` | Log every execution to disk |
 | `-q`/`--quiet` | Suppress startup banner and request/response logging |
 | `--no-wrap` | Disable wrapping user code in `def run() = ... ; run()` |
-| `--no-session` | Disable session-related tools |
 | `-c`/`--config <path>` | JSON config file (flags after `--config` override file values) |
 
 **Library flags** (shorthand for some `libraryConfig` fields):
@@ -349,7 +348,6 @@ Configuration is split into **server config** (transport, recording, sessions) a
   "recordPath": "/tmp/recordings",
   "quiet": false,
   "wrappedCode": false,
-  "sessionEnabled": true,
   "libraryJarPath": "/path/to/TACIT-library.jar",
   "libraryConfig": {
     "strictMode": true,
@@ -385,22 +383,19 @@ Default classified patterns (when `classifiedPaths` is not configured): `.ssh`, 
 
 ## Tools
 
+The MCP server exposes a single tool:
+
 | Tool | Parameters | Description |
 |------|-----------|-------------|
-| `execute_scala` | `code` | Execute a Scala snippet in a fresh REPL (stateless) |
-| `create_repl_session` | - | Create a persistent REPL session, returns `session_id` |
-| `execute_in_session` | `session_id`, `code` | Execute code in an existing session (stateful) |
-| `list_sessions` | - | List active session IDs |
-| `delete_repl_session` | `session_id` | Delete a session |
-| `show_interface` | - | Show the full capability API reference |
+| `eval_scala` | `code` | Evaluate Scala in the default REPL session — state (vals, defs, imports) persists across calls |
 
-### Example: Stateful Session
+The full capability-scoped API lives in `Interface.scala` (see [library/Interface.scala](library/Interface.scala)). Configure your agent's system prompt with that reference so the model knows what methods are available.
+
+### Example
 
 ```
-1. create_repl_session          → session_id: "abc-123"
-2. execute_in_session(code: "val x = 42")   → x: Int = 42
-3. execute_in_session(code: "x * 2")        → val res0: Int = 84
-4. delete_repl_session(session_id: "abc-123")
+1. eval_scala(code: "val x = 42")   → x: Int = 42
+2. eval_scala(code: "x * 2")        → val res0: Int = 84
 ```
 
 ## Security Features
@@ -658,7 +653,7 @@ java -jar server.jar --library-jar new-library.jar
 
 - **The library uses Scala 3 nightly.** The build automatically fetches the latest Scala 3 nightly. This means your code must be compatible with bleeding-edge Scala. Pin a specific version in `build.sbt` (`val scala3Version = "3.x.y"`) if you need stability.
 
-- **`Interface.scala` is bundled as a resource.** The server copies `Interface.scala` into its resources at build time so the `show_interface` tool can display it. If you add new APIs, users will see them via `show_interface` automatically, no extra work needed.
+- **`Interface.scala` is the agent-facing API reference.** Point your agent's system prompt at this file so the model knows what methods it can call inside `eval_scala`.
 
 - **Forbidden patterns run on user code, not library code.** The validator in `CodeValidator.scala` only checks user-submitted code. The library itself can freely use `java.io`, `java.net`, `ProcessBuilder`, etc. in its implementation. But if your new API wraps a Java API, you should add a corresponding forbidden pattern so users cannot bypass your capability wrapper.
 

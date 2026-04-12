@@ -40,7 +40,6 @@ class ConfigSuite extends munit.FunSuite:
     assertEquals(cfg.recordPath, None)
     assertEquals(cfg.quiet, false)
     assertEquals(cfg.wrappedCode, false)
-    assertEquals(cfg.sessionEnabled, true)
     assertEquals(cfg.libraryConfig, Json.obj())
 
   // ── Server CLI flags ────────────────────────────────────────
@@ -52,10 +51,6 @@ class ConfigSuite extends munit.FunSuite:
   test("--quiet sets quiet"):
     val cfg = parse("-q").get
     assert(cfg.quiet)
-
-  test("--no-session disables sessions"):
-    val cfg = parse("--no-session").get
-    assert(!cfg.sessionEnabled)
 
   test("--no-wrap disables code wrapping"):
     val cfg = parse("--no-wrap").get
@@ -112,7 +107,6 @@ class ConfigSuite extends munit.FunSuite:
       {
         "recordPath": "/tmp/rec",
         "quiet": true,
-        "sessionEnabled": false,
         "libraryJarPath": "$jarPath"
       }
     """) { path =>
@@ -120,7 +114,6 @@ class ConfigSuite extends munit.FunSuite:
       assert(cfg.isDefined)
       assertEquals(cfg.get.recordPath, Some("/tmp/rec"))
       assert(cfg.get.quiet)
-      assert(!cfg.get.sessionEnabled)
     }
 
   test("config file sets libraryConfig"):
@@ -241,7 +234,6 @@ class ConfigSuite extends munit.FunSuite:
       val cfg = Config.parseCliArgs(Array("--config", path)).get
       assertEquals(cfg.recordPath, None)
       assertEquals(cfg.quiet, false)
-      assertEquals(cfg.sessionEnabled, true)
       assertEquals(cfg.libraryConfig, Json.obj())
     }
 

@@ -89,14 +89,6 @@ lazy val root = project
       "org.scalameta" %% "munit" % "1.2.2" % Test,
     ),
 
-    // Bundle Interface.scala source as a classpath resource so show_interface can serve it
-    Compile / resourceGenerators += Def.task {
-      val src = (lib / baseDirectory).value / "Interface.scala"
-      val dst = (Compile / resourceManaged).value / "Interface.scala"
-      IO.copyFile(src, dst)
-      Seq(dst)
-    }.taskValue,
-
     // Generate version.properties so the server can read its own version at runtime
     Compile / resourceGenerators += Def.task {
       val dst = (Compile / resourceManaged).value / "version.properties"

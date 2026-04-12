@@ -82,18 +82,16 @@ class McpServerIntegrationSuite extends munit.FunSuite:
       // Send initialized notification
       client.send("initialized")
 
-      // 2. List tools
+      // 2. List tools — should be exactly one
       val toolsResponse = client.request("tools/list")
       val tools = toolsResponse.hcursor.downField("result").get[List[Json]]("tools")
       assert(tools.isRight)
       val toolNames = tools.toOption.get.flatMap(_.hcursor.get[String]("name").toOption)
-      assert(toolNames.contains("execute_scala"))
-      assert(toolNames.contains("create_repl_session"))
-      assert(toolNames.contains("execute_in_session"))
+      assertEquals(toolNames, List("eval_scala"))
 
-      // 3. Execute simple Scala code (stateless)
+      // 3. Evaluate simple Scala code
       val execResponse = client.request("tools/call", Some(Json.obj(
-        "name" -> "execute_scala".asJson,
+        "name" -> "eval_scala".asJson,
         "arguments" -> Json.obj(
           "code" -> "1 + 1".asJson
         )
@@ -108,84 +106,32 @@ class McpServerIntegrationSuite extends munit.FunSuite:
 
       assert(execContent.contains("2"), s"Expected output to contain '2', got: $execContent")
 
-      // 4. Create REPL session
-      val createResponse = client.request("tools/call", Some(Json.obj(
-        "name" -> "create_repl_session".asJson,
-        "arguments" -> Json.obj()
-      )))
-
-      val createContent = createResponse.hcursor
-        .downField("result")
-        .get[List[Json]]("content")
-        .toOption.get
-        .head
-        .hcursor.get[String]("text").toOption.get
-
-      assert(createContent.contains("Created REPL session:"), s"Unexpected create response: $createContent")
-      val sessionId = createContent.split(": ").last.trim
-      assert(sessionId.nonEmpty, "Session ID should not be empty")
-
-      // 5. Execute in session - define variable
-      val session1Response = client.request("tools/call", Some(Json.obj(
-        "name" -> "execute_in_session".asJson,
+      // 4. Define a variable
+      val defResponse = client.request("tools/call", Some(Json.obj(
+        "name" -> "eval_scala".asJson,
         "arguments" -> Json.obj(
-          "session_id" -> sessionId.asJson,
           "code" -> "val x = 42".asJson
         )
       )))
+      val defError = defResponse.hcursor.downField("error").focus
+      assert(defError.isEmpty || defError.exists(_.isNull), s"Unexpected error: $defResponse")
 
-      val session1Error = session1Response.hcursor.downField("error").focus
-      assert(session1Error.isEmpty || session1Error.exists(_.isNull), s"Unexpected error in session execution: $session1Response")
-
-      // 6. Execute in session - use variable (proves state is maintained)
-      val session2Response = client.request("tools/call", Some(Json.obj(
-        "name" -> "execute_in_session".asJson,
+      // 5. Use variable (proves default session keeps state)
+      val useResponse = client.request("tools/call", Some(Json.obj(
+        "name" -> "eval_scala".asJson,
         "arguments" -> Json.obj(
-          "session_id" -> sessionId.asJson,
           "code" -> "x * 2".asJson
         )
       )))
 
-      val session2Content = session2Response.hcursor
+      val useContent = useResponse.hcursor
         .downField("result")
         .get[List[Json]]("content")
         .toOption.get
         .head
         .hcursor.get[String]("text").toOption.get
 
-      assert(session2Content.contains("84"), s"Expected '84' in output, got: $session2Content")
-
-      // 7. List sessions
-      val listResponse = client.request("tools/call", Some(Json.obj(
-        "name" -> "list_sessions".asJson,
-        "arguments" -> Json.obj()
-      )))
-
-      val listContent = listResponse.hcursor
-        .downField("result")
-        .get[List[Json]]("content")
-        .toOption.get
-        .head
-        .hcursor.get[String]("text").toOption.get
-
-      assert(listContent.contains(sessionId))
-
-      // 8. Delete session
-      val deleteResponse = client.request("tools/call", Some(Json.obj(
-        "name" -> "delete_repl_session".asJson,
-        "arguments" -> Json.obj(
-          "session_id" -> sessionId.asJson
-        )
-      )))
-
-      val deleteContent = deleteResponse.hcursor
-        .downField("result")
-        .get[List[Json]]("content")
-        .toOption.get
-        .head
-        .hcursor.get[String]("text").toOption.get
-
-      assert(deleteContent.contains("Deleted session:"))
+      assert(useContent.contains("84"), s"Expected '84' in output, got: $useContent")
 
     finally
       client.close()

@@ -36,7 +36,6 @@ import java.io.PrintWriter
         val recordingStatus = config.recordPath match
           case Some(dir) => s"Recording: ON -> $dir"
           case None      => "Recording: OFF"
-        val sessionStatus = if config.sessionEnabled then "Sessions:  ON" else "Sessions:  OFF"
         val libConfigStr = config.libraryConfig.spaces2
           .linesIterator.map(l => s"             $l").mkString("\n")
 
@@ -46,7 +45,6 @@ import java.io.PrintWriter
             | Transport: stdio (JSON-RPC 2.0)
             | Protocol:  Model Context Protocol (MCP)
             | $recordingStatus
-            | $sessionStatus
             | Library:   ${config.libraryJarPath}
             | LibConfig:
 $libConfigStr

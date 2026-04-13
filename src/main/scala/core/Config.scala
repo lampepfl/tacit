@@ -11,6 +11,7 @@ case class Config(
   quiet: Boolean = false,
   wrappedCode: Boolean = false,
   sessionEnabled: Boolean = true,
+  safeMode: Boolean = false,
   libraryJarPath: String = Option(System.getProperty("tacit.library.jar")).getOrElse(""),
   libraryConfig: Json = Json.obj(),
 ):
@@ -27,6 +28,7 @@ private case class FileConfig(
   quiet: Option[Boolean] = None,
   wrappedCode: Option[Boolean] = None,
   sessionEnabled: Option[Boolean] = None,
+  safeMode: Option[Boolean] = None,
   libraryJarPath: Option[String] = None,
   libraryConfig: Option[Json] = None,
 ) derives Decoder
@@ -52,6 +54,7 @@ object Config:
       quiet = fc.quiet.getOrElse(base.quiet),
       wrappedCode = fc.wrappedCode.getOrElse(base.wrappedCode),
       sessionEnabled = fc.sessionEnabled.getOrElse(base.sessionEnabled),
+      safeMode = fc.safeMode.getOrElse(base.safeMode),
       libraryJarPath = fc.libraryJarPath.getOrElse(base.libraryJarPath),
       libraryConfig = fc.libraryConfig.getOrElse(Json.obj()).deepMerge(base.libraryConfig),
     )
@@ -97,6 +100,9 @@ object Config:
       opt[Unit]("no-session")
         .action((_, c) => c.copy(sessionEnabled = false))
         .text("Disable session-related tools (create/execute/delete/list sessions)."),
+      opt[Unit]("safe-mode")
+        .action((_, c) => c.copy(safeMode = true))
+        .text("Enable Scala `language.experimental.safe` in the REPL for every execution."),
       opt[String]("library-jar")
         .action((x, c) => c.copy(libraryJarPath = x))
         .text("Path to the library JAR (TACIT-library.jar). Required."),

@@ -59,7 +59,7 @@ object ScalaExecutor:
       .replace("\"", "\\\"")
     s"""|import tacit.library.*
         |import caps.*
-        |@assumeSafe val api: Interface^ = new InterfaceImpl(LibraryConfig.fromJson("$jsonStr")) {
+        |@assumeSafe object api extends InterfaceImpl(LibraryConfig.fromJson("$jsonStr")) {
         |  def createFS(root: String, filter: String -> Boolean, classifiedPatterns: Set[String]): FileSystem =
         |    new RealFileSystem(java.nio.file.Path.of(root), filter, classifiedPatterns)
         |}
@@ -122,8 +122,9 @@ object ScalaExecutor:
       val driver = new ReplDriver(replClasspathArgs, printStream, Some(sandboxedClassLoader))
       // If library preamble fails to compile, move this line inside withOutputCapture 
       // to capture the error output.
-      var state = driver.run(libraryPreamble)(using driver.initialState)  
-      // state = driver.run("import language.experimental.safe")(using state)
+      var state = driver.run(libraryPreamble)(using driver.initialState)
+      if ctx.config.safeMode then
+        state = driver.run("import language.experimental.safe")(using state)
       withOutputCapture(outputCapture, printStream):
         state = driver.run(wrapCode(code, ctx.config.wrappedCode))(using state)
 end ScalaExecutor

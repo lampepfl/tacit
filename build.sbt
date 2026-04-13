@@ -30,7 +30,7 @@ lazy val lib = project
     Compile / unmanagedSources / excludeFilter :=
       "*.test.scala" || "project.scala" || "README.md",
     libraryDependencies ++= Seq(
-      "com.openai" % "openai-java" % "4.30.0",
+      "com.openai" % "openai-java" % "4.31.0",
       "io.circe" %% "circe-core" % circeVersion,
       "io.circe" %% "circe-parser" % circeVersion,
     ),
@@ -86,7 +86,7 @@ lazy val root = project
       "com.github.scopt" %% "scopt" % "4.1.1-M3",
       "org.scala-lang" %% "scala3-compiler" % scala3Version,
       "org.scala-lang" %% "scala3-repl" % scala3Version,
-      "org.scalameta" %% "munit" % "1.2.2" % Test,
+      "org.scalameta" %% "munit" % "1.3.0" % Test,
     ),
 
     // Bundle Interface.scala source as a classpath resource so show_interface can serve it

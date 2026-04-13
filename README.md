@@ -354,6 +354,7 @@ Configuration is split into **server config** (transport, recording, sessions) a
   "libraryConfig": {
     "strictMode": true,
     "classifiedPaths": [".ssh", ".env", ".env.*", "secrets"],
+    "secureOutput": "/tmp/secure.log",
     "llm": {
       "baseUrl": "https://api.example.com",
       "apiKey": "sk-...",
@@ -362,6 +363,13 @@ Configuration is split into **server config** (transport, recording, sessions) a
   }
 }
 ```
+
+**`secureOutput`** (optional) — path to an append-only file that mirrors every
+`println`/`print`/`printf` call from the isolation, but with `Classified[_]`
+values *unwrapped*. The agent's main output still shows the masked form
+(`Classified(***)`), so only whoever can read this file sees the real content.
+Parent directories are created automatically. When unset, printing behaves
+normally and nothing is written to disk.
 
 ### Classified Path Patterns
 

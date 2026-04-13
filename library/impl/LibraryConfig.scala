@@ -8,7 +8,8 @@ import caps.assumeSafe
 case class LibraryConfig(
   strictMode: Option[Boolean] = None,
   classifiedPaths: Option[Set[String]] = None,
-  llm: Option[LlmConfig] = None
+  llm: Option[LlmConfig] = None,
+  secureOutput: Option[String] = None
 ) derives Decoder
 
 @assumeSafe

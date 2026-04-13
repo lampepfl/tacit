@@ -26,6 +26,32 @@ abstract class InterfaceImpl(
   private val classifiedPatterns: Set[String] = config.classifiedPaths.getOrElse(DefaultClassifiedPatterns)
   private val llmConfig: Option[LlmConfig] = config.llm
 
+  /** Optional secondary sink that receives the *unmasked* form of printed values.
+   *  When configured, `println`/`print`/`printf` still write a masked view
+   *  (`Classified(***)`) to the normal output, but also append the fully
+   *  unwrapped content to this file — only the end user reading that file
+   *  can see classified data. */
+  private val secureWriter: Option[java.io.PrintStream] = config.secureOutput.map { path =>
+    val file = new java.io.File(path)
+    Option(file.getAbsoluteFile.nn.getParentFile).foreach(_.mkdirs())
+    new java.io.PrintStream(new java.io.FileOutputStream(file, true), true, "UTF-8")
+  }
+
+  private def withSecureOut(op: => Unit): Unit =
+    secureWriter.foreach(w => scala.Console.withOut(w)(op))
+
+  private def unwrapForSecure(x: Any): Any = x match
+    case c: Classified[?] =>
+      ClassifiedImpl.unwrap(c).fold(
+        e => s"<classified error: ${e.getMessage}>",
+        v => v
+      )
+    case other => other
+
+  private def maskForMain(x: Any): Any = x match
+    case _: Classified[?] => "Classified(***)"
+    case other => other
+
   protected def createFS(root: String, filter: String -> Boolean, classifiedPatterns: Set[String]): FileSystem
 
   export FileOps.*
@@ -40,13 +66,25 @@ abstract class InterfaceImpl(
   private val llmOps = new LlmOps(llmConfig)
   export llmOps.chat
 
-  def println(x: Any)(using IOCapability): Unit = scala.Predef.println(x)
-  
-  def println()(using IOCapability): Unit = scala.Predef.println()
+  def println(x: Any)(using IOCapability): Unit =
+    // Classified.toString already returns "Classified(***)" so the
+    // main stream is automatically masked.
+    scala.Predef.println(x)
+    withSecureOut(scala.Predef.println(unwrapForSecure(x)))
 
-  def print(x: Any)(using IOCapability): Unit = scala.Predef.print(x)
+  def println()(using IOCapability): Unit =
+    scala.Predef.println()
+    withSecureOut(scala.Predef.println())
 
-  def printf(fmt: String, args: Any*)(using IOCapability): Unit = scala.Predef.printf(fmt, args*)
+  def print(x: Any)(using IOCapability): Unit =
+    scala.Predef.print(x)
+    withSecureOut(scala.Predef.print(unwrapForSecure(x)))
+
+  def printf(fmt: String, args: Any*)(using IOCapability): Unit =
+    // printf's format specifiers bypass toString, so mask Classified args
+    // explicitly for the main stream.
+    scala.Predef.printf(fmt, args.map(maskForMain)*)
+    withSecureOut(scala.Predef.printf(fmt, args.map(unwrapForSecure)*))
 
   def requestFileSystem[T](root: String)(op: FileSystem^ ?=> T)(using IOCapability): T =
     val fs = createFS(root, _ => true, classifiedPatterns)

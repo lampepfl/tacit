@@ -68,6 +68,14 @@ class LibraryConfigSuite extends munit.FunSuite:
     val cfg = LibraryConfig.fromJson("""{"strictMode": true, "unknownField": 42}""")
     assertEquals(cfg.strictMode, Some(true))
 
+  test("parses secureOutput"):
+    val cfg = LibraryConfig.fromJson("""{"secureOutput": "/tmp/tacit-secure.log"}""")
+    assertEquals(cfg.secureOutput, Some("/tmp/tacit-secure.log"))
+
+  test("secureOutput defaults to None"):
+    val cfg = LibraryConfig.fromJson("""{"strictMode": true}""")
+    assertEquals(cfg.secureOutput, None)
+
   // ── LlmConfig toString hides API key ────────────────────────
 
   test("LlmConfig toString hides apiKey"):

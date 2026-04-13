@@ -238,9 +238,19 @@ trait Interface extends SharedCapability:
 
   // ── print ─────────────────────────────────────────────────────────-
 
+  /** Print to the standard output stream visible to the agent.
+   *
+   *  If the argument is a `Classified[_]`, only the masked form
+   *  `Classified(***)` is written here — the actual content is never shown
+   *  to the agent. When the host has configured a secure output sink, the
+   *  unwrapped content is additionally written to that sink, which only
+   *  the end user can read. Non-classified arguments are printed normally
+   *  in both places. */
   def println(x: Any)(using IOCapability): Unit
   def println()(using IOCapability): Unit
+  /** See `println(x)` for the classified-data handling contract. */
   def print(x: Any)(using IOCapability): Unit
+  /** See `println(x)` for the classified-data handling contract. */
   def printf(fmt: String, args: Any*)(using IOCapability): Unit
 
   // ── Classified ──────────────────────────────────────────────────────

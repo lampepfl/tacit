@@ -213,6 +213,56 @@ class LibrarySuite extends munit.FunSuite:
     }
   }
 
+  test("secureOutput: classified println masks main stream, reveals in secure file") {
+    val secureFile = tmpDir.resolve("secure.log")
+    val secureInterface: Interface^ = new InterfaceImpl(
+      LibraryConfig(secureOutput = Some(secureFile.toString))
+    ) {
+      def createFS(root: String, filter: String -> Boolean, classifiedPatterns: Set[String]): FileSystem =
+        new RealFileSystem(Path.of(root), filter, classifiedPatterns)
+    }
+    given (IOCapability^{}) = secureInterface.iocap.unsafeAssumePure
+
+    val mainBuf = new java.io.ByteArrayOutputStream()
+    scala.Console.withOut(new java.io.PrintStream(mainBuf, true, "UTF-8")) {
+      secureInterface.println(secureInterface.classify("top-secret"))
+      secureInterface.println("plain message")
+      secureInterface.print(secureInterface.classify("hidden"))
+      secureInterface.println()
+      secureInterface.printf("score=%d name=%s%n", 42, secureInterface.classify("alice"))
+    }
+
+    val mainOut = mainBuf.toString("UTF-8")
+    val secureOut = Files.readString(secureFile).nn
+
+    // Main stream never leaks classified content
+    assert(!mainOut.contains("top-secret"), s"main stream leaked: $mainOut")
+    assert(!mainOut.contains("hidden"))
+    assert(!mainOut.contains("alice"))
+    assert(mainOut.contains("Classified(***)"))
+    assert(mainOut.contains("plain message"))
+    assert(mainOut.contains("score=42 name=Classified(***)"))
+
+    // Secure sink sees the unwrapped content
+    assert(secureOut.contains("top-secret"))
+    assert(secureOut.contains("hidden"))
+    assert(secureOut.contains("plain message"))
+    assert(secureOut.contains("score=42 name=alice"))
+  }
+
+  test("secureOutput: when unset, println behaves like Predef and only writes to main") {
+    val mainBuf = new java.io.ByteArrayOutputStream()
+    scala.Console.withOut(new java.io.PrintStream(mainBuf, true, "UTF-8")) {
+      println(classify("top-secret"))
+      println("visible")
+    }
+
+    val mainOut = mainBuf.toString("UTF-8")
+    assert(mainOut.contains("Classified(***)"))
+    assert(!mainOut.contains("top-secret"))
+    assert(mainOut.contains("visible"))
+  }
+
   test("mkdir on existing directory is idempotent") {
     requestFileSystem(tmpDir.toString) {
       val dir = access(tmpDir.resolve("existing").toString)

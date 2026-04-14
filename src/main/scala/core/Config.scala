@@ -33,6 +33,7 @@ case class Config(
   libraryConfig: Json = Json.obj(),
   agentdojoPort: Option[Int] = None,
   agentdojoDomain: Option[AgentdojoDomain] = None,
+  agentdojoSecureChannel: Option[String] = None,
 ):
   def withLibrary(key: String, value: Json): Config =
     copy(libraryConfig = libraryConfig.deepMerge(Json.obj(key -> value)))
@@ -50,6 +51,7 @@ private case class FileConfig(
   libraryConfig: Option[Json] = None,
   agentdojoPort: Option[Int] = None,
   agentdojoDomain: Option[AgentdojoDomain] = None,
+  agentdojoSecureChannel: Option[String] = None,
 ) derives Decoder
 
 object Config:
@@ -76,6 +78,7 @@ object Config:
       libraryConfig = fc.libraryConfig.getOrElse(Json.obj()).deepMerge(base.libraryConfig),
       agentdojoPort = base.agentdojoPort.orElse(fc.agentdojoPort),
       agentdojoDomain = base.agentdojoDomain.orElse(fc.agentdojoDomain),
+      agentdojoSecureChannel = base.agentdojoSecureChannel.orElse(fc.agentdojoSecureChannel),
     )
 
   private def validateLlmConfig(config: Config): Config =
@@ -128,6 +131,9 @@ object Config:
       opt[AgentdojoDomain]("agentdojo-domain")
         .action((x, c) => c.copy(agentdojoDomain = Some(x)))
         .text(s"AgentDojo domain (${AgentdojoDomain.choices})."),
+      opt[String]("agentdojo-secure-channel")
+        .action((x, c) => c.copy(agentdojoSecureChannel = Some(x)))
+        .text("Path to the secure output file used by BankingImpl for displaySecurely."),
       opt[String]("llm-base-url")
         .action((x, c) => c.withLlm("baseUrl", x))
         .text("LLM API base URL."),

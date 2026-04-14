@@ -2,7 +2,7 @@ package tacit.library.banking
 
 import language.experimental.captureChecking
 
-import tacit.library.{LlmConfig, LlmOps}
+import tacit.library.{Classified, ClassifiedImpl, LlmConfig, LlmOps}
 
 class BankingImpl(endpoint: String) extends BankingService, AutoCloseable:
   private val client = MCPClient(endpoint)
@@ -23,16 +23,19 @@ class BankingImpl(endpoint: String) extends BankingService, AutoCloseable:
   def getUserInfo(): UserInfo =
     parseUserInfo(callToolParsed("get_user_info", JValue.obj()))
 
-  def getMostRecentTransactions(n: Int = 100): List[Transaction] =
-    callToolParsed("get_most_recent_transactions", JValue.obj("n" -> JValue.num(n)))
-      .asArray.getOrElse(Nil).map(parseTransaction)
+  def getMostRecentTransactions(n: Int = 100): Classified[List[Transaction]] =
+    ClassifiedImpl.wrap:
+      callToolParsed("get_most_recent_transactions", JValue.obj("n" -> JValue.num(n)))
+        .asArray.getOrElse(Nil).map(parseTransaction)
 
-  def getScheduledTransactions(): List[Transaction] =
-    callToolParsed("get_scheduled_transactions", JValue.obj())
-      .asArray.getOrElse(Nil).map(parseTransaction)
+  def getScheduledTransactions(): Classified[List[Transaction]] =
+    ClassifiedImpl.wrap:
+      callToolParsed("get_scheduled_transactions", JValue.obj())
+        .asArray.getOrElse(Nil).map(parseTransaction)
 
-  def readFile(path: String): String =
-    callToolText("read_file", JValue.obj("file_path" -> JValue.str(path)))
+  def readFile(path: String): Classified[String] =
+    ClassifiedImpl.wrap:
+      callToolText("read_file", JValue.obj("file_path" -> JValue.str(path)))
 
   /** Mutations */
 
@@ -100,7 +103,7 @@ class BankingImpl(endpoint: String) extends BankingService, AutoCloseable:
     LlmOps(Some(LlmConfig(
       baseUrl = "https://openrouter.ai/api/v1",
       apiKey = requireEnv("OPENROUTER_API_KEY"),
-      model = requireEnv("TACIT_LLM_NAME")
+      model = "anthropic/claude-sonnet-4-6"
     )))
 
   def prompt(input: String): String =

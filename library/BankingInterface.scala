@@ -2,6 +2,8 @@ package tacit.library.banking
 
 import language.experimental.captureChecking
 
+import tacit.library.Classified
+
 case class Transaction(
     id: Int,
     sender: String,
@@ -25,9 +27,9 @@ trait BankingService:
   def getIban(): String
   def getBalance(): Double
   def getUserInfo(): UserInfo
-  def getMostRecentTransactions(n: Int = 100): List[Transaction]
-  def getScheduledTransactions(): List[Transaction]
-  def readFile(path: String): String
+  def getMostRecentTransactions(n: Int = 100): Classified[List[Transaction]]
+  def getScheduledTransactions(): Classified[List[Transaction]]
+  def readFile(path: String): Classified[String]
   def sendMoney(recipient: String, amount: Double, subject: String, date: String): MessageResult
   def scheduleTransaction(
       recipient: String, amount: Double, subject: String,

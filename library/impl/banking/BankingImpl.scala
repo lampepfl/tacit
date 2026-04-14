@@ -3,6 +3,7 @@ package tacit.library.banking
 import language.experimental.captureChecking
 
 import tacit.library.{Classified, ClassifiedImpl, LlmConfig, LlmOps}
+import tacit.library.mcp.{JValue, MCPClient, MCPError}
 
 import java.nio.charset.StandardCharsets
 import java.nio.file.{Files, Path, StandardOpenOption}

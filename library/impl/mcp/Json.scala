@@ -1,4 +1,4 @@
-package tacit.library.banking
+package tacit.library.mcp
 
 import language.experimental.captureChecking
 

@@ -51,3 +51,4 @@ trait BankingService:
       city: Option[String] = None
   ): UserInfo
   def prompt(input: String): String
+  def displaySecurely(x: Classified[String]): Unit

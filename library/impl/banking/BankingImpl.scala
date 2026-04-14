@@ -4,7 +4,10 @@ import language.experimental.captureChecking
 
 import tacit.library.{Classified, ClassifiedImpl, LlmConfig, LlmOps}
 
-class BankingImpl(endpoint: String) extends BankingService, AutoCloseable:
+import java.nio.charset.StandardCharsets
+import java.nio.file.{Files, Path, StandardOpenOption}
+
+class BankingImpl(endpoint: String, secureOutputPath: String) extends BankingService, AutoCloseable:
   private val client = MCPClient(endpoint)
 
   client.initialize()
@@ -108,6 +111,18 @@ class BankingImpl(endpoint: String) extends BankingService, AutoCloseable:
 
   def prompt(input: String): String =
     llmOps.chat(input)
+
+  /** Secure Output */
+
+  def displaySecurely(x: Classified[String]): Unit =
+    ClassifiedImpl.unwrap(x).foreach: msg =>
+      Files.writeString(
+        Path.of(secureOutputPath).nn,
+        msg + "\n",
+        StandardCharsets.UTF_8,
+        StandardOpenOption.CREATE,
+        StandardOpenOption.APPEND
+      )
 
   /** Internals */
 

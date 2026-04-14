@@ -105,6 +105,6 @@ trait WorkspaceService:
   def appendToFile(fileId: String, content: String): CloudDriveFile
   def shareFile(fileId: String, email: String, permission: SharingPermission): CloudDriveFile
 
-  // LLM + secure output (matches BankingService)
+  // LLM + secure output
   def prompt(input: String): String
   def displaySecurely(x: Classified[String]): Unit

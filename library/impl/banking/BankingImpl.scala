@@ -2,6 +2,8 @@ package tacit.library.banking
 
 import language.experimental.captureChecking
 
+import tacit.library.{LlmConfig, LlmOps}
+
 class BankingImpl(endpoint: String) extends BankingService, AutoCloseable:
   private val client = MCPClient(endpoint)
 
@@ -88,6 +90,21 @@ class BankingImpl(endpoint: String) extends BankingService, AutoCloseable:
       "street" -> street.map(JValue.str),
       "city" -> city.map(JValue.str)
     )))
+
+  /** LLM */
+
+  private lazy val llmOps: LlmOps =
+    def requireEnv(name: String): String =
+      sys.env.getOrElse(name,
+        throw RuntimeException(s"$name environment variable is not set"))
+    LlmOps(Some(LlmConfig(
+      baseUrl = "https://openrouter.ai/api/v1",
+      apiKey = requireEnv("OPENROUTER_API_KEY"),
+      model = requireEnv("TACIT_LLM_NAME")
+    )))
+
+  def prompt(input: String): String =
+    llmOps.chat(input)
 
   /** Internals */
 

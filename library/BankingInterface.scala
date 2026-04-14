@@ -48,3 +48,4 @@ trait BankingService:
       street: Option[String] = None,
       city: Option[String] = None
   ): UserInfo
+  def prompt(input: String): String

@@ -1,7 +1,7 @@
 package tacit
 package executor
 
-import core.Context
+import core.{AgentdojoDomain, Context}
 import Context.*
 
 import dotty.tools.repl.{ReplDriver, State}
@@ -52,9 +52,19 @@ object ScalaExecutor:
 
   /** Preamble code injected before user code to make the library API available. */
   private[executor] def libraryPreamble(using Context): String =
-    ctx.config.agentdojoPort match
-      case Some(port) => bankingPreamble(port)
+    ctx.config.agentdojoDomain match
       case None => defaultPreamble
+      case Some(AgentdojoDomain.Banking) =>
+        val port = ctx.config.agentdojoPort.getOrElse(
+          throw new IllegalStateException("--agentdojo-port is required when --agentdojo-domain is set")
+        )
+        bankingPreamble(port)
+      case Some(AgentdojoDomain.Slack) =>
+        throw new NotImplementedError("AgentDojo domain 'slack' is not yet implemented")
+      case Some(AgentdojoDomain.Workspace) =>
+        throw new NotImplementedError("AgentDojo domain 'workspace' is not yet implemented")
+      case Some(AgentdojoDomain.Travel) =>
+        throw new NotImplementedError("AgentDojo domain 'travel' is not yet implemented")
 
   private def defaultPreamble(using Context): String =
     val jsonStr = ctx.config.libraryConfig.noSpaces

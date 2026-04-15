@@ -63,7 +63,13 @@ object ScalaExecutor:
         )
         bankingPreamble(port, secureChannel)
       case Some(AgentdojoDomain.Slack) =>
-        throw new NotImplementedError("AgentDojo domain 'slack' is not yet implemented")
+        val port = ctx.config.agentdojoPort.getOrElse(
+          throw new IllegalStateException("--agentdojo-port is required when --agentdojo-domain is set")
+        )
+        val secureChannel = ctx.config.agentdojoSecureChannel.getOrElse(
+          throw new IllegalStateException("--agentdojo-secure-channel is required when --agentdojo-domain=slack")
+        )
+        slackPreamble(port, secureChannel)
       case Some(AgentdojoDomain.Workspace) =>
         val port = ctx.config.agentdojoPort.getOrElse(
           throw new IllegalStateException("--agentdojo-port is required when --agentdojo-domain is set")
@@ -101,6 +107,14 @@ object ScalaExecutor:
         |import tacit.library.banking.*
         |val banking: BankingService = new BankingImpl("http://localhost:$port/mcp", "$escaped")
         |import banking.*
+        |""".stripMargin
+
+  private def slackPreamble(port: Int, secureChannel: String): String =
+    val escaped = secureChannel.replace("\\", "\\\\").replace("\"", "\\\"")
+    s"""|import tacit.library.Classified
+        |import tacit.library.slack.*
+        |val slack: SlackService = new SlackImpl("http://localhost:$port/mcp", "$escaped")
+        |import slack.*
         |""".stripMargin
 
   private def workspacePreamble(port: Int, secureChannel: String): String =

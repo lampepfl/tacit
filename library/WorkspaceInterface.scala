@@ -70,6 +70,7 @@ trait WorkspaceService:
       recipients: List[String],
       subject: String,
       body: String,
+      attachments: Option[List[Attachment]] = None,
       cc: Option[List[String]] = None,
       bcc: Option[List[String]] = None
   ): Email

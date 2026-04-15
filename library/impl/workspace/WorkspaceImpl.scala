@@ -62,16 +62,17 @@ class WorkspaceImpl(endpoint: String, secureOutputPath: String) extends Workspac
       recipients: List[String],
       subject: String,
       body: String,
+      attachments: Option[List[Attachment]] = None,
       cc: Option[List[String]] = None,
       bcc: Option[List[String]] = None
   ): Email =
-    // attachments intentionally not exposed in the initial facade — add if a use case emerges
     val base = JValue.obj(
       "recipients" -> JValue.arr(recipients.map(JValue.str)*),
       "subject" -> JValue.str(subject),
       "body" -> JValue.str(body)
     )
     val opts = JValue.objOpt(
+      "attachments" -> attachments.map(xs => JValue.arr(xs.map(attachmentToJValue)*)),
       "cc" -> cc.map(xs => JValue.arr(xs.map(JValue.str)*)),
       "bcc" -> bcc.map(xs => JValue.arr(xs.map(JValue.str)*))
     )
@@ -297,3 +298,32 @@ class WorkspaceImpl(endpoint: String, secureOutputPath: String) extends Workspac
   private def sharingPermissionToWire(p: SharingPermission): String = p match
     case SharingPermission.Read => "r"
     case SharingPermission.ReadWrite => "rw"
+
+  private def eventStatusToWire(s: EventStatus): String = s match
+    case EventStatus.Confirmed => "confirmed"
+    case EventStatus.Canceled => "canceled"
+
+  private def attachmentToJValue(a: Attachment): JValue = a match
+    case Attachment.FileRef(fileId) =>
+      JValue.obj(
+        "type" -> JValue.str("file"),
+        "file_id" -> JValue.str(fileId)
+      )
+    case Attachment.EventRef(event) =>
+      JValue.obj(
+        "type" -> JValue.str("event"),
+        "event_details" -> calendarEventToJValue(event)
+      )
+
+  private def calendarEventToJValue(e: CalendarEvent): JValue =
+    JValue.obj(
+      "id_" -> JValue.str(e.id),
+      "title" -> JValue.str(e.title),
+      "description" -> JValue.str(e.description),
+      "start_time" -> JValue.str(e.startTime),
+      "end_time" -> JValue.str(e.endTime),
+      "location" -> e.location.map(JValue.str).getOrElse(JValue.nil),
+      "participants" -> JValue.arr(e.participants.map(JValue.str)*),
+      "all_day" -> JValue.bool(e.allDay),
+      "status" -> JValue.str(eventStatusToWire(e.status))
+    )

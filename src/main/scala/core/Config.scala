@@ -133,7 +133,7 @@ object Config:
         .text(s"AgentDojo domain (${AgentdojoDomain.choices})."),
       opt[String]("agentdojo-secure-channel")
         .action((x, c) => c.copy(agentdojoSecureChannel = Some(x)))
-        .text("Path to the secure output file used by BankingImpl for displaySecurely."),
+        .text("Path to the secure output file used by AgentDojo domain facades for displaySecurely."),
       opt[String]("llm-base-url")
         .action((x, c) => c.withLlm("baseUrl", x))
         .text("LLM API base URL."),

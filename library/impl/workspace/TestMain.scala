@@ -25,6 +25,17 @@ private def assertEquals[T](actual: T, expected: T, label: String): Unit =
 private def section(name: String): Unit =
   System.out.nn.println(s"\n--- $name ---")
 
+private def expectError(label: String)(thunk: => Any): Unit =
+  try
+    val _ = thunk
+    failed += 1
+    System.err.nn.println(s"  FAIL: $label: expected MCPError, got success")
+  catch
+    case _: MCPError => passed += 1
+    case e: Throwable =>
+      failed += 1
+      System.err.nn.println(s"  FAIL: $label: expected MCPError, got ${e.getClass.getSimpleName}: ${e.getMessage}")
+
 @main def TestWorkspace(args: String*): Unit =
   val argList = args.toList
   val port = argList.sliding(2).collectFirst {
@@ -150,6 +161,48 @@ private def section(name: String): Unit =
     assert(delMsg.contains(sentEmail.id), s"delete message mentions id (got '$delMsg')")
     val sentAfterDelete = unwrap(svc.getSentEmails())
     assert(sentAfterDelete.forall(_.id != sentEmail.id), "deleted email is gone from getSentEmails")
+
+    // ── sendEmail with attachments ───────────────────────────────
+
+    section("sendEmail with attachments")
+    val attachFileId = s"tacit-attach-file-$testTag"
+    val attachEvent = CalendarEvent(
+      id = s"tacit-attach-event-$testTag",
+      title = s"Attached event $testTag",
+      description = "inline event attached to an email",
+      startTime = "2024-05-30T09:00:00",
+      endTime = "2024-05-30T10:00:00",
+      location = Some("Somewhere"),
+      participants = List("alice@example.com"),
+      allDay = false,
+      status = EventStatus.Confirmed
+    )
+    val withAttachments = svc.sendEmail(
+      recipients = List("test.recipient@example.com"),
+      subject = s"$uniqueSubject-attach",
+      body = "body with attachments",
+      attachments = Some(List(
+        Attachment.FileRef(attachFileId),
+        Attachment.EventRef(attachEvent)
+      ))
+    )
+    assertEquals(withAttachments.attachments.size, 2, "attachments round-trip count")
+    assert(
+      withAttachments.attachments.exists {
+        case Attachment.FileRef(id) => id == attachFileId
+        case _ => false
+      },
+      "attachments include FileRef with round-tripped id"
+    )
+    assert(
+      withAttachments.attachments.exists {
+        case Attachment.EventRef(e) =>
+          e.title == attachEvent.title && e.description == attachEvent.description
+        case _ => false
+      },
+      "attachments include EventRef with round-tripped title + description"
+    )
+    svc.deleteEmail(withAttachments.id)
 
     // ── Calendar reads ────────────────────────────────────────────
 
@@ -291,15 +344,284 @@ private def section(name: String): Unit =
     val afterDelete = unwrap(svc.listFiles())
     assert(afterDelete.forall(_.id != createdFile.id), "deleted file gone from listFiles")
 
+    // ═══════════════════════════════════════════════════════════════
+    // Corner cases & error-path verification
+    // ═══════════════════════════════════════════════════════════════
+
+    // ── Email error paths ────────────────────────────────────────
+
+    section("Email error paths")
+    expectError("searchEmails with no match raises MCPError") {
+      unwrap(svc.searchEmails(s"no-match-query-$testTag-xyzabc123"))
+    }
+    expectError("searchContactsByName with no match raises MCPError") {
+      unwrap(svc.searchContactsByName(s"ghost-name-$testTag-xyz"))
+    }
+    expectError("searchContactsByEmail with no match raises MCPError") {
+      unwrap(svc.searchContactsByEmail(s"nobody-$testTag@nonexistent.invalid"))
+    }
+    expectError("deleteEmail with bogus id raises MCPError") {
+      svc.deleteEmail(s"bogus-email-id-$testTag")
+    }
+
+    // ── sendEmail cc/bcc variations ──────────────────────────────
+
+    section("sendEmail cc only")
+    val sentCcOnly = svc.sendEmail(
+      recipients = List("to1@example.com"),
+      subject = s"$uniqueSubject-cc-only",
+      body = "cc only",
+      cc = Some(List("cc1@example.com", "cc2@example.com"))
+    )
+    assertEquals(sentCcOnly.cc.size, 2, "cc list size")
+    assert(sentCcOnly.cc.contains("cc1@example.com"), "cc contains cc1")
+    assert(sentCcOnly.cc.contains("cc2@example.com"), "cc contains cc2")
+    assertEquals(sentCcOnly.bcc.size, 0, "bcc empty when not passed")
+    svc.deleteEmail(sentCcOnly.id)
+
+    section("sendEmail bcc only")
+    val sentBccOnly = svc.sendEmail(
+      recipients = List("to1@example.com"),
+      subject = s"$uniqueSubject-bcc-only",
+      body = "bcc only",
+      bcc = Some(List("bcc1@example.com"))
+    )
+    assertEquals(sentBccOnly.bcc.size, 1, "bcc list size")
+    assert(sentBccOnly.bcc.contains("bcc1@example.com"), "bcc contains bcc1")
+    assertEquals(sentBccOnly.cc.size, 0, "cc empty when not passed")
+    svc.deleteEmail(sentBccOnly.id)
+
+    section("sendEmail mixed cc + bcc + attachments")
+    val sentMixed = svc.sendEmail(
+      recipients = List("to1@example.com", "to2@example.com"),
+      subject = s"$uniqueSubject-mixed",
+      body = "cc, bcc, and attachments together",
+      attachments = Some(List(
+        Attachment.FileRef(s"fileref-a-$testTag"),
+        Attachment.FileRef(s"fileref-b-$testTag")
+      )),
+      cc = Some(List("cc@example.com")),
+      bcc = Some(List("bcc@example.com"))
+    )
+    assertEquals(sentMixed.recipients.size, 2, "recipients count = 2")
+    assertEquals(sentMixed.cc.size, 1, "cc count = 1")
+    assertEquals(sentMixed.bcc.size, 1, "bcc count = 1")
+    assertEquals(sentMixed.attachments.size, 2, "attachments count = 2")
+    assert(
+      sentMixed.attachments.forall {
+        case Attachment.FileRef(_) => true
+        case _ => false
+      },
+      "all attachments are FileRefs"
+    )
+    svc.deleteEmail(sentMixed.id)
+
+    section("sendEmail with empty attachments list")
+    val sentEmptyAttach = svc.sendEmail(
+      recipients = List("to1@example.com"),
+      subject = s"$uniqueSubject-empty-attach",
+      body = "empty attachments list",
+      attachments = Some(Nil)
+    )
+    assertEquals(sentEmptyAttach.attachments.size, 0, "empty attachments list persists as empty")
+    svc.deleteEmail(sentEmptyAttach.id)
+
+    section("sendEmail only event attachment (allDay, null location, Canceled)")
+    val onlyEvent = CalendarEvent(
+      id = s"attached-event-$testTag",
+      title = s"Only Event $testTag",
+      description = "single event attachment with edge-case fields",
+      startTime = "2024-06-01T10:00:00",
+      endTime = "2024-06-01T11:00:00",
+      location = None,
+      participants = List("p1@example.com", "p2@example.com"),
+      allDay = true,
+      status = EventStatus.Canceled
+    )
+    val sentOnlyEvent = svc.sendEmail(
+      recipients = List("to@example.com"),
+      subject = s"$uniqueSubject-only-event",
+      body = "single event attachment",
+      attachments = Some(List(Attachment.EventRef(onlyEvent)))
+    )
+    assertEquals(sentOnlyEvent.attachments.size, 1, "only-event attachment count")
+    sentOnlyEvent.attachments.headOption match
+      case Some(Attachment.EventRef(e)) =>
+        assertEquals(e.title, onlyEvent.title, "event attachment title")
+        assertEquals(e.description, onlyEvent.description, "event attachment description")
+        assertEquals(e.allDay, true, "allDay=true round-trip")
+        assertEquals(e.status, EventStatus.Canceled, "status=Canceled round-trip")
+        assertEquals(e.location, None, "null location round-trip")
+        assertEquals(e.participants.size, 2, "participants size round-trip")
+        assert(e.participants.contains("p1@example.com"), "participant p1 round-trip")
+      case other =>
+        assert(false, s"expected EventRef, got $other")
+    svc.deleteEmail(sentOnlyEvent.id)
+
+    // ── Calendar error paths ────────────────────────────────────
+
+    section("Calendar error paths")
+    expectError("searchCalendarEvents with no match raises MCPError") {
+      unwrap(svc.searchCalendarEvents(s"no-event-match-$testTag-xyz"))
+    }
+    expectError("cancelCalendarEvent with bogus id raises MCPError") {
+      svc.cancelCalendarEvent(s"bogus-event-id-$testTag")
+    }
+    expectError("rescheduleCalendarEvent with bogus id raises MCPError") {
+      svc.rescheduleCalendarEvent(s"bogus-event-$testTag", "2024-06-01 10:00")
+    }
+    expectError("addCalendarEventParticipants with bogus id raises MCPError") {
+      svc.addCalendarEventParticipants(s"bogus-event-$testTag", List("x@example.com"))
+    }
+
+    // ── createCalendarEvent defaults ─────────────────────────────
+
+    section("createCalendarEvent defaults")
+    val defaultEvent = svc.createCalendarEvent(
+      title = s"Default event $testTag",
+      startTime = "2024-06-15 09:00",
+      endTime = "2024-06-15 10:00"
+    )
+    assertEquals(defaultEvent.description, "", "default description is empty")
+    assertEquals(defaultEvent.location, None, "default location is None")
+    assertEquals(defaultEvent.allDay, false, "default allDay is false")
+    assertEquals(defaultEvent.status, EventStatus.Confirmed, "default status is Confirmed")
+    assertEquals(defaultEvent.participants.size, 1, "default participants = only owner")
+    assertEquals(defaultEvent.participants.head, "emma.johnson@bluesparrowtech.com", "owner auto-added")
+    svc.cancelCalendarEvent(defaultEvent.id)
+
+    // ── rescheduleCalendarEvent duration preservation ───────────
+
+    section("rescheduleCalendarEvent preserves duration")
+    val durEvent = svc.createCalendarEvent(
+      title = s"Duration test $testTag",
+      startTime = "2024-06-20 14:00",
+      endTime = "2024-06-20 16:00",
+      description = "duration-preservation test"
+    )
+    val durRescheduled = svc.rescheduleCalendarEvent(
+      eventId = durEvent.id,
+      newStartTime = "2024-06-20 10:00"
+    )
+    assert(durRescheduled.startTime.startsWith("2024-06-20T10:00"),
+      s"moved start (got ${durRescheduled.startTime})")
+    assert(durRescheduled.endTime.startsWith("2024-06-20T12:00"),
+      s"2h duration preserved (got ${durRescheduled.endTime})")
+    svc.cancelCalendarEvent(durEvent.id)
+
+    // ── Drive error paths ───────────────────────────────────────
+
+    section("Drive error paths")
+    expectError("searchFiles with no match raises MCPError") {
+      unwrap(svc.searchFiles(s"no-file-content-match-$testTag-xyzabc"))
+    }
+    expectError("getFileById with bogus id raises MCPError") {
+      unwrap(svc.getFileById(s"bogus-file-id-$testTag"))
+    }
+    expectError("deleteFile with bogus id raises MCPError") {
+      svc.deleteFile(s"bogus-file-id-$testTag")
+    }
+    expectError("appendToFile with bogus id raises MCPError") {
+      svc.appendToFile(s"bogus-file-id-$testTag", "content")
+    }
+    expectError("shareFile with bogus id raises MCPError") {
+      svc.shareFile(s"bogus-file-id-$testTag", "x@example.com", SharingPermission.Read)
+    }
+
+    // ── searchFilesByFilename with no match returns empty list ──
+
+    section("searchFilesByFilename no-match returns empty list")
+    val noFileByName = unwrap(svc.searchFilesByFilename(s"no-file-name-$testTag-xyz"))
+    assertEquals(noFileByName.size, 0, "empty list for no filename match")
+
+    // ── Drive share variations ──────────────────────────────────
+
+    section("Drive share variations (Read, multi-user, re-share upgrade)")
+    val shareTarget = svc.createFile(
+      filename = s"share-test-$testTag.txt",
+      content = "share test content"
+    )
+
+    val sharedRead = svc.shareFile(shareTarget.id, "reader1@example.com", SharingPermission.Read)
+    assertEquals(
+      sharedRead.sharedWith.get("reader1@example.com"),
+      Some(SharingPermission.Read),
+      "first share is Read"
+    )
+
+    val sharedTwo = svc.shareFile(shareTarget.id, "writer@example.com", SharingPermission.ReadWrite)
+    assertEquals(sharedTwo.sharedWith.size, 2, "two users in sharedWith")
+    assertEquals(
+      sharedTwo.sharedWith.get("reader1@example.com"),
+      Some(SharingPermission.Read),
+      "first user still Read"
+    )
+    assertEquals(
+      sharedTwo.sharedWith.get("writer@example.com"),
+      Some(SharingPermission.ReadWrite),
+      "second user is ReadWrite"
+    )
+
+    val sharedUpgraded = svc.shareFile(shareTarget.id, "reader1@example.com", SharingPermission.ReadWrite)
+    assertEquals(
+      sharedUpgraded.sharedWith.get("reader1@example.com"),
+      Some(SharingPermission.ReadWrite),
+      "reader1 upgraded to ReadWrite"
+    )
+    assertEquals(sharedUpgraded.sharedWith.size, 2, "still two users after re-share")
+    svc.deleteFile(shareTarget.id)
+
+    // ── createFile edge cases ───────────────────────────────────
+
+    section("createFile with empty content")
+    val emptyFile = svc.createFile(s"empty-$testTag.txt", "")
+    assertEquals(emptyFile.content, "", "empty content preserved")
+    assertEquals(emptyFile.size, 0, "empty file size is 0")
+    svc.deleteFile(emptyFile.id)
+
+    // ── Classified integrity ────────────────────────────────────
+
+    section("Classified map / flatMap / toString")
+    val receivedClassified = svc.getReceivedEmails()
+    // toString MUST NOT leak
+    assertEquals(receivedClassified.toString, "Classified(***)", "toString masks classified")
+
+    // map preserves size
+    val subjectsClassified: Classified[List[String]] = receivedClassified.map(_.map(_.subject))
+    val countClassified: Classified[Int] = subjectsClassified.map(_.size)
+    val baseCount = unwrap(receivedClassified).size
+    assertEquals(unwrap(countClassified), baseCount, "map chain preserves list size")
+
+    // flatMap chains inside the wrapper
+    val doubledCount: Classified[Int] = receivedClassified.flatMap { emails =>
+      ClassifiedImpl.wrap(emails.size * 2)
+    }
+    assertEquals(unwrap(doubledCount), baseCount * 2, "flatMap chain: doubled size")
+
+    // Deeply-nested map chain
+    val deepSum: Classified[Int] = receivedClassified
+      .map(_.map(_.subject.length))
+      .map(_.sum)
+    val manualDeepSum = unwrap(receivedClassified).map(_.subject.length).sum
+    assertEquals(unwrap(deepSum), manualDeepSum, "deeply nested map chain")
+
     // ── displaySecurely ──────────────────────────────────────────
 
     section("displaySecurely")
     svc.displaySecurely(ClassifiedImpl.wrap("hello secure workspace"))
     svc.displaySecurely(ClassifiedImpl.wrap("second workspace message"))
+    // Edge cases: empty, unicode (emoji + Japanese), tab
+    svc.displaySecurely(ClassifiedImpl.wrap(""))
+    svc.displaySecurely(ClassifiedImpl.wrap("unicode: 🎉 日本語"))
+    svc.displaySecurely(ClassifiedImpl.wrap("line with\ttab char"))
     val secureContent = Files.readString(secureOutputFile, StandardCharsets.UTF_8).nn
     assert(secureContent.contains("hello secure workspace"), "secure output contains first message")
     assert(secureContent.contains("second workspace message"), "secure output contains second message")
-    assertEquals(secureContent.count(_ == '\n'), 2, "two lines written")
+    assert(secureContent.contains("🎉"), "unicode emoji preserved")
+    assert(secureContent.contains("日本語"), "japanese text preserved")
+    assert(secureContent.contains("\t"), "tab char preserved")
+    // 5 messages → 5 newlines total (one per write)
+    assertEquals(secureContent.count(_ == '\n'), 5, "five lines written")
 
     // ── Summary ──────────────────────────────────────────────────
 

@@ -73,7 +73,13 @@ object ScalaExecutor:
         )
         workspacePreamble(port, secureChannel)
       case Some(AgentdojoDomain.Travel) =>
-        throw new NotImplementedError("AgentDojo domain 'travel' is not yet implemented")
+        val port = ctx.config.agentdojoPort.getOrElse(
+          throw new IllegalStateException("--agentdojo-port is required when --agentdojo-domain is set")
+        )
+        val secureChannel = ctx.config.agentdojoSecureChannel.getOrElse(
+          throw new IllegalStateException("--agentdojo-secure-channel is required when --agentdojo-domain=travel")
+        )
+        travelPreamble(port, secureChannel)
 
   private def defaultPreamble(using Context): String =
     val jsonStr = ctx.config.libraryConfig.noSpaces
@@ -103,6 +109,14 @@ object ScalaExecutor:
         |import tacit.library.workspace.*
         |val workspace: WorkspaceService = new WorkspaceImpl("http://localhost:$port/mcp", "$escaped")
         |import workspace.*
+        |""".stripMargin
+
+  private def travelPreamble(port: Int, secureChannel: String): String =
+    val escaped = secureChannel.replace("\\", "\\\\").replace("\"", "\\\"")
+    s"""|import tacit.library.Classified
+        |import tacit.library.travel.*
+        |val travel: TravelService = new TravelImpl("http://localhost:$port/mcp", "$escaped")
+        |import travel.*
         |""".stripMargin
 
   /** Wraps user code in a `def run() = ...; run()` block to avoid capture checking REPL errors. */

@@ -3,7 +3,7 @@ package tacit.library.banking
 import language.experimental.captureChecking
 
 import tacit.library.{Classified, ClassifiedImpl, LlmConfig, LlmOps}
-import tacit.library.mcp.{JValue, MCPClient, MCPError}
+import tacit.library.mcp.{JValue, MCPClient, MCPError, TextParsers}
 
 import java.nio.charset.StandardCharsets
 import java.nio.file.{Files, Path, StandardOpenOption}
@@ -135,7 +135,7 @@ class BankingImpl(endpoint: String, secureOutputPath: String) extends BankingSer
 
   private def callToolParsed(name: String, arguments: JValue): JValue =
     val text = callToolText(name, arguments)
-    val json = BankingImpl.pythonReprToJson(text)
+    val json = TextParsers.pythonReprToJson(text)
     JValue.parse(json)
 
   private def parseTransaction(j: JValue): Transaction =
@@ -161,40 +161,5 @@ class BankingImpl(endpoint: String, secureOutputPath: String) extends BankingSer
     MessageResult(message = j.field("message").asString.getOrElse(""))
 
 object BankingImpl:
-  /** Convert Python repr string to JSON.
-   *  Handles: single quotes to double quotes, True/False/None to true/false/null */
   def pythonReprToJson(s: String): String =
-    val sb = new StringBuilder
-    var i = 0
-    while i < s.length do
-      val c = s.charAt(i)
-      if c == '\'' then
-        sb.append('"')
-        i += 1
-        while i < s.length && s.charAt(i) != '\'' do
-          val ch = s.charAt(i)
-          if ch == '"' then sb.append("\\\"")
-          else if ch == '\\' && i + 1 < s.length then
-            sb.append(ch)
-            i += 1
-            sb.append(s.charAt(i))
-          else sb.append(ch)
-          i += 1
-        sb.append('"')
-        i += 1
-      else if s.startsWith("True", i) && !isIdentContinue(s, i + 4) then
-        sb.append("true")
-        i += 4
-      else if s.startsWith("False", i) && !isIdentContinue(s, i + 5) then
-        sb.append("false")
-        i += 5
-      else if s.startsWith("None", i) && !isIdentContinue(s, i + 4) then
-        sb.append("null")
-        i += 4
-      else
-        sb.append(c)
-        i += 1
-    sb.toString
-
-  private def isIdentContinue(s: String, pos: Int): Boolean =
-    pos < s.length && s.charAt(pos).isLetterOrDigit
+    TextParsers.pythonReprToJson(s)

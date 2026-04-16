@@ -153,17 +153,17 @@ object CodeValidator:
   private val originalCodePatterns: Set[String] = Set("directive-using", "directive-import")
 
   /** Validate code against all forbidden patterns.
-    * Returns Right(code) if valid, Left(violations) if forbidden patterns found.
+    * Returns an empty list if the code is valid, or the list of violations otherwise.
     */
-  def validate(code: String): Either[List[ValidationViolation], String] =
+  def validate(code: String): List[ValidationViolation] =
     val stripped = stripLiteralsAndComments(code)
     val originalLines = code.linesIterator.toArray
     val strippedLines = stripped.linesIterator.toArray
 
-    val violations = for
+    for
       pattern <- forbiddenPatterns
       lines = if originalCodePatterns.contains(pattern.id) then originalLines else strippedLines
-      (line, idx) <- lines.zipWithIndex
+      (line, idx) <- lines.zipWithIndex.toList
       if pattern.regex.findFirstIn(line).isDefined
     yield ValidationViolation(
       ruleId = pattern.id,
@@ -171,9 +171,6 @@ object CodeValidator:
       lineNumber = idx + 1,
       snippet = originalLines.lift(idx).getOrElse(line).trim
     )
-
-    if violations.isEmpty then Right(code)
-    else Left(violations)
 
   /** Format validation violations into a human-readable error report. */
   def formatErrors(violations: List[ValidationViolation]): String =

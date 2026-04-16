@@ -8,205 +8,205 @@ class CodeValidatorSuite extends munit.FunSuite:
 
   test("reject java.io"):
     val result = CodeValidator.validate("import java.io.File")
-    assert(result.isLeft)
-    assert(result.left.exists(_.exists(_.ruleId == "file-io-java")))
+    assert(result.nonEmpty)
+    assert(result.exists(_.ruleId =="file-io-java"))
 
   test("reject java.nio"):
     val result = CodeValidator.validate("import java.nio.file.Files")
-    assert(result.isLeft)
-    assert(result.left.exists(_.exists(_.ruleId == "file-io-nio")))
+    assert(result.nonEmpty)
+    assert(result.exists(_.ruleId =="file-io-nio"))
 
   test("reject scala.io"):
     val result = CodeValidator.validate("import scala.io.Source")
-    assert(result.isLeft)
-    assert(result.left.exists(_.exists(_.ruleId == "file-io-scala")))
+    assert(result.nonEmpty)
+    assert(result.exists(_.ruleId =="file-io-scala"))
 
   test("reject ProcessBuilder"):
     val result = CodeValidator.validate("new ProcessBuilder(\"ls\").start()")
-    assert(result.isLeft)
-    assert(result.left.exists(_.exists(_.ruleId == "proc-builder")))
+    assert(result.nonEmpty)
+    assert(result.exists(_.ruleId =="proc-builder"))
 
   test("reject Runtime.getRuntime"):
     val result = CodeValidator.validate("Runtime.getRuntime.exec(\"ls\")")
-    assert(result.isLeft)
-    assert(result.left.exists(_.exists(_.ruleId == "proc-runtime")))
+    assert(result.nonEmpty)
+    assert(result.exists(_.ruleId =="proc-runtime"))
 
   test("reject scala.sys.process"):
     val result = CodeValidator.validate("import scala.sys.process._")
-    assert(result.isLeft)
-    assert(result.left.exists(_.exists(_.ruleId == "proc-scala")))
+    assert(result.nonEmpty)
+    assert(result.exists(_.ruleId =="proc-scala"))
 
   test("reject java.net"):
     val result = CodeValidator.validate("import java.net.URL")
-    assert(result.isLeft)
-    assert(result.left.exists(_.exists(_.ruleId == "net-java")))
+    assert(result.nonEmpty)
+    assert(result.exists(_.ruleId =="net-java"))
 
   test("reject javax.net"):
     val result = CodeValidator.validate("import javax.net.ssl.SSLContext")
-    assert(result.isLeft)
-    assert(result.left.exists(_.exists(_.ruleId == "net-javax")))
+    assert(result.nonEmpty)
+    assert(result.exists(_.ruleId =="net-javax"))
 
   test("reject HttpClient"):
     val result = CodeValidator.validate("val c = HttpClient.newHttpClient()")
-    assert(result.isLeft)
-    assert(result.left.exists(_.exists(_.ruleId == "net-http-client")))
+    assert(result.nonEmpty)
+    assert(result.exists(_.ruleId =="net-http-client"))
 
   test("reject HttpURLConnection"):
     val result = CodeValidator.validate("val c: HttpURLConnection = ???")
-    assert(result.isLeft)
-    assert(result.left.exists(_.exists(_.ruleId == "net-http-conn")))
+    assert(result.nonEmpty)
+    assert(result.exists(_.ruleId =="net-http-conn"))
 
   test("reject .asInstanceOf"):
     val result = CodeValidator.validate("x.asInstanceOf[String]")
-    assert(result.isLeft)
-    assert(result.left.exists(_.exists(_.ruleId == "cast-escape")))
+    assert(result.nonEmpty)
+    assert(result.exists(_.ruleId =="cast-escape"))
 
   test("reject caps.unsafe"):
     val result = CodeValidator.validate("import caps.unsafe.given")
-    assert(result.isLeft)
-    assert(result.left.exists(_.exists(_.ruleId == "cc-unsafe-caps")))
+    assert(result.nonEmpty)
+    assert(result.exists(_.ruleId =="cc-unsafe-caps"))
 
   test("reject unsafeAssumePure"):
     val result = CodeValidator.validate("val x = unsafeAssumePure(ref)")
-    assert(result.isLeft)
-    assert(result.left.exists(_.exists(_.ruleId == "cc-unsafe-pure")))
+    assert(result.nonEmpty)
+    assert(result.exists(_.ruleId =="cc-unsafe-pure"))
 
   test("reject getDeclaredMethod"):
     val result = CodeValidator.validate("cls.getDeclaredMethod(\"foo\")")
-    assert(result.isLeft)
-    assert(result.left.exists(_.exists(_.ruleId == "reflect-method")))
+    assert(result.nonEmpty)
+    assert(result.exists(_.ruleId =="reflect-method"))
 
   test("reject getDeclaredField"):
     val result = CodeValidator.validate("cls.getDeclaredField(\"bar\")")
-    assert(result.isLeft)
-    assert(result.left.exists(_.exists(_.ruleId == "reflect-field")))
+    assert(result.nonEmpty)
+    assert(result.exists(_.ruleId =="reflect-field"))
 
   test("reject getDeclaredConstructor"):
     val result = CodeValidator.validate("cls.getDeclaredConstructor()")
-    assert(result.isLeft)
-    assert(result.left.exists(_.exists(_.ruleId == "reflect-ctor")))
+    assert(result.nonEmpty)
+    assert(result.exists(_.ruleId =="reflect-ctor"))
 
   test("reject setAccessible"):
     val result = CodeValidator.validate("field.setAccessible(true)")
-    assert(result.isLeft)
-    assert(result.left.exists(_.exists(_.ruleId == "reflect-accessible")))
+    assert(result.nonEmpty)
+    assert(result.exists(_.ruleId =="reflect-accessible"))
 
   test("reject java.lang.reflect"):
     val result = CodeValidator.validate("import java.lang.reflect.Method")
-    assert(result.isLeft)
-    assert(result.left.exists(_.exists(_.ruleId == "reflect-java")))
+    assert(result.nonEmpty)
+    assert(result.exists(_.ruleId =="reflect-java"))
 
   test("reject scala.reflect.runtime"):
     val result = CodeValidator.validate("import scala.reflect.runtime.universe._")
-    assert(result.isLeft)
-    assert(result.left.exists(_.exists(_.ruleId == "reflect-scala")))
+    assert(result.nonEmpty)
+    assert(result.exists(_.ruleId =="reflect-scala"))
 
   test("reject Class.forName"):
     val result = CodeValidator.validate("Class.forName(\"java.lang.String\")")
-    assert(result.isLeft)
-    assert(result.left.exists(_.exists(_.ruleId == "reflect-forname")))
+    assert(result.nonEmpty)
+    assert(result.exists(_.ruleId =="reflect-forname"))
 
   test("reject sun.misc"):
     val result = CodeValidator.validate("import sun.misc.Unsafe")
-    assert(result.isLeft)
+    assert(result.nonEmpty)
 
   test("reject jdk.internal"):
     val result = CodeValidator.validate("import jdk.internal.misc.Unsafe")
-    assert(result.isLeft)
-    assert(result.left.exists(_.exists(_.ruleId == "jvm-jdk-internal")))
+    assert(result.nonEmpty)
+    assert(result.exists(_.ruleId =="jvm-jdk-internal"))
 
   test("reject com.sun.*"):
     val result = CodeValidator.validate("import com.sun.net.httpserver.HttpServer")
-    assert(result.isLeft)
-    assert(result.left.exists(_.exists(_.ruleId == "jvm-com-sun")))
+    assert(result.nonEmpty)
+    assert(result.exists(_.ruleId =="jvm-com-sun"))
 
   test("reject System.out"):
     val result = CodeValidator.validate("System.out.println(\"hello\")")
-    assert(result.isLeft)
-    assert(result.left.exists(_.exists(_.ruleId == "io-system-out")))
+    assert(result.nonEmpty)
+    assert(result.exists(_.ruleId =="io-system-out"))
 
   test("reject System.err"):
     val result = CodeValidator.validate("System.err.println(\"hello\")")
-    assert(result.isLeft)
-    assert(result.left.exists(_.exists(_.ruleId == "io-system-err")))
+    assert(result.nonEmpty)
+    assert(result.exists(_.ruleId =="io-system-err"))
 
   test("reject Console"):
     val result = CodeValidator.validate("Console.println(\"hello\")")
-    assert(result.isLeft)
-    assert(result.left.exists(_.exists(_.ruleId == "io-console")))
+    assert(result.nonEmpty)
+    assert(result.exists(_.ruleId =="io-console"))
 
   test("reject Predef.print"):
     val result = CodeValidator.validate("scala.Predef.println(\"hello\")")
-    assert(result.isLeft)
-    assert(result.left.exists(_.exists(_.ruleId == "io-predef-print")))
+    assert(result.nonEmpty)
+    assert(result.exists(_.ruleId =="io-predef-print"))
 
   test("allow System.out in string literal"):
     val result = CodeValidator.validate("""println("System.out is just text")""")
-    assert(result.isRight)
+    assert(result.isEmpty)
 
   test("allow Console in string literal"):
     val result = CodeValidator.validate("""println("Console is just text")""")
-    assert(result.isRight)
+    assert(result.isEmpty)
 
   test("reject System.exit"):
     val result = CodeValidator.validate("System.exit(0)")
-    assert(result.isLeft)
-    assert(result.left.exists(_.exists(_.ruleId == "sys-exit")))
+    assert(result.nonEmpty)
+    assert(result.exists(_.ruleId =="sys-exit"))
 
   test("reject System.setProperty"):
     val result = CodeValidator.validate("System.setProperty(\"foo\", \"bar\")")
-    assert(result.isLeft)
-    assert(result.left.exists(_.exists(_.ruleId == "sys-setprop")))
+    assert(result.nonEmpty)
+    assert(result.exists(_.ruleId =="sys-setprop"))
 
   test("reject System.getenv"):
     val result = CodeValidator.validate("System.getenv(\"PATH\")")
-    assert(result.isLeft)
-    assert(result.left.exists(_.exists(_.ruleId == "sys-getenv")))
+    assert(result.nonEmpty)
+    assert(result.exists(_.ruleId =="sys-getenv"))
 
   test("reject System.getProperty"):
     val result = CodeValidator.validate("System.getProperty(\"user.home\")")
-    assert(result.isLeft)
-    assert(result.left.exists(_.exists(_.ruleId == "sys-getprop")))
+    assert(result.nonEmpty)
+    assert(result.exists(_.ruleId =="sys-getprop"))
 
   test("reject new Thread"):
     val result = CodeValidator.validate("new Thread(() => println(\"hi\")).start()")
-    assert(result.isLeft)
-    assert(result.left.exists(_.exists(_.ruleId == "sys-thread")))
+    assert(result.nonEmpty)
+    assert(result.exists(_.ruleId =="sys-thread"))
 
   test("reject //> using directive"):
     val result = CodeValidator.validate("//> using dep \"com.lihaoyi::os-lib:0.9.1\"")
-    assert(result.isLeft)
-    assert(result.left.exists(_.exists(_.ruleId == "directive-using")))
+    assert(result.nonEmpty)
+    assert(result.exists(_.ruleId =="directive-using"))
 
   test("reject import $ directive"):
     val result = CodeValidator.validate("import $ivy.`com.lihaoyi::os-lib:0.9.1`")
-    assert(result.isLeft)
-    assert(result.left.exists(_.exists(_.ruleId == "directive-import")))
+    assert(result.nonEmpty)
+    assert(result.exists(_.ruleId =="directive-import"))
 
   test("reject ClassLoader"):
     val result = CodeValidator.validate("Thread.currentThread().getContextClassLoader")
-    assert(result.isLeft)
-    assert(result.left.exists(_.exists(_.ruleId == "classloader")))
+    assert(result.nonEmpty)
+    assert(result.exists(_.ruleId =="classloader"))
 
   test("reject URLClassLoader"):
     val result = CodeValidator.validate("new URLClassLoader(Array())")
-    assert(result.isLeft)
+    assert(result.nonEmpty)
 
   test("reject dotty.tools"):
     val result = CodeValidator.validate("import dotty.tools.repl.ReplDriver")
-    assert(result.isLeft)
-    assert(result.left.exists(_.exists(_.ruleId == "dotty-tools")))
+    assert(result.nonEmpty)
+    assert(result.exists(_.ruleId =="dotty-tools"))
 
   test("reject scala.tools"):
     val result = CodeValidator.validate("import scala.tools.nsc.Global")
-    assert(result.isLeft)
-    assert(result.left.exists(_.exists(_.ruleId == "scala-tools")))
+    assert(result.nonEmpty)
+    assert(result.exists(_.ruleId =="scala-tools"))
 
   // ---- Allowlist tests ----
 
   test("allow simple arithmetic"):
     val result = CodeValidator.validate("1 + 1")
-    assert(result.isRight)
+    assert(result.isEmpty)
 
   test("allow val/def definitions"):
     val result = CodeValidator.validate("""
@@ -214,23 +214,23 @@ class CodeValidatorSuite extends munit.FunSuite:
       def add(a: Int, b: Int): Int = a + b
       add(x, 1)
     """)
-    assert(result.isRight)
+    assert(result.isEmpty)
 
   test("allow java.time"):
     val result = CodeValidator.validate("import java.time.LocalDate")
-    assert(result.isRight)
+    assert(result.isEmpty)
 
   test("allow java.util"):
     val result = CodeValidator.validate("import java.util.ArrayList")
-    assert(result.isRight)
+    assert(result.isEmpty)
 
   test("allow scala.collection"):
     val result = CodeValidator.validate("import scala.collection.mutable.ListBuffer")
-    assert(result.isRight)
+    assert(result.isEmpty)
 
   test("allow scala.util.Try"):
     val result = CodeValidator.validate("import scala.util.Try")
-    assert(result.isRight)
+    assert(result.isEmpty)
 
   test("allow List/Map/Set usage"):
     val result = CodeValidator.validate("""
@@ -238,26 +238,26 @@ class CodeValidatorSuite extends munit.FunSuite:
       val m = Map("a" -> 1)
       val s = Set(1, 2, 3)
     """)
-    assert(result.isRight)
+    assert(result.isEmpty)
 
   // ---- String/comment stripping tests ----
 
   test("allow forbidden pattern inside double-quoted string"):
     val result = CodeValidator.validate("""println("java.io is blocked")""")
-    assert(result.isRight)
+    assert(result.isEmpty)
 
   test("allow forbidden pattern inside triple-quoted string"):
     val code = "val s = \"\"\"java.io.File is mentioned here\"\"\""
     val result = CodeValidator.validate(code)
-    assert(result.isRight)
+    assert(result.isEmpty)
 
   test("allow forbidden pattern inside line comment"):
     val result = CodeValidator.validate("val x = 1 // java.io.File is fine here")
-    assert(result.isRight)
+    assert(result.isEmpty)
 
   test("allow forbidden pattern inside block comment"):
     val result = CodeValidator.validate("val x = 1 /* java.io.File */ + 2")
-    assert(result.isRight)
+    assert(result.isEmpty)
 
   test("reject forbidden pattern on code line even if comment exists on another line"):
     val code = """
@@ -265,7 +265,7 @@ class CodeValidatorSuite extends munit.FunSuite:
       import java.io.File
     """
     val result = CodeValidator.validate(code)
-    assert(result.isLeft)
+    assert(result.nonEmpty)
 
   // ---- Strip function unit tests ----
 
@@ -299,15 +299,15 @@ class CodeValidatorSuite extends munit.FunSuite:
   test("violation includes correct line number"):
     val code = "val x = 1\nimport java.io.File\nval y = 2"
     val result = CodeValidator.validate(code)
-    assert(result.isLeft)
-    val violations = result.left.getOrElse(Nil)
+    assert(result.nonEmpty)
+    val violations = result
     assert(violations.exists(_.lineNumber == 2))
 
   test("multiple violations reported"):
     val code = "import java.io.File\nimport java.net.URL"
     val result = CodeValidator.validate(code)
-    assert(result.isLeft)
-    val violations = result.left.getOrElse(Nil)
+    assert(result.nonEmpty)
+    val violations = result
     assert(violations.size >= 2)
 
   test("formatErrors produces readable output"):
@@ -340,7 +340,7 @@ class CodeValidatorSuite extends munit.FunSuite:
     val sm = new SessionManager
     val sid = sm.createSession()
     val result = sm.executeInSession(sid, "import java.io.File")
-    assert(result.isRight) // Right(ExecutionResult) from executeInSession
+    assert(result.toOption.nonEmpty) // Right(ExecutionResult) from executeInSession
     assert(!result.toOption.get.success)
     assert(result.toOption.get.error.exists(_.contains("file-io-java")))
     sm.deleteSession(sid)
@@ -353,46 +353,46 @@ class CodeValidatorSuite extends munit.FunSuite:
     // This documents the limitation: forbidden code inside interpolation is NOT caught.
     val code = """val s = s"${java.io.File("/tmp")}""""
     val result = CodeValidator.validate(code)
-    assert(result.isRight, "interpolation expressions are currently not analyzed — known limitation")
+    assert(result.isEmpty, "interpolation expressions are currently not analyzed — known limitation")
 
   test("reject pattern at very start of code"):
     val result = CodeValidator.validate("java.io.File")
-    assert(result.isLeft)
+    assert(result.nonEmpty)
 
   test("reject pattern at very end of code"):
     val result = CodeValidator.validate("val x = 1; System.exit")
-    assert(result.isLeft)
+    assert(result.nonEmpty)
 
   test("reject multiple forbidden patterns on same line"):
     val code = "import java.io.File; import java.net.URL"
     val result = CodeValidator.validate(code)
-    assert(result.isLeft)
-    val violations = result.left.getOrElse(Nil)
+    assert(result.nonEmpty)
+    val violations = result
     assert(violations.size >= 2, s"expected at least 2 violations, got ${violations.size}")
 
   test("reject Thread creation with extra whitespace"):
     val result = CodeValidator.validate("new   Thread(() => ())")
-    assert(result.isLeft)
-    assert(result.left.exists(_.exists(_.ruleId == "sys-thread")))
+    assert(result.nonEmpty)
+    assert(result.exists(_.ruleId =="sys-thread"))
 
   test("reject sun.misc.Signal"):
     val result = CodeValidator.validate("import sun.misc.Signal")
-    assert(result.isLeft)
+    assert(result.nonEmpty)
 
   test("reject sun.reflect"):
     val result = CodeValidator.validate("import sun.reflect.Reflection")
-    assert(result.isLeft)
-    assert(result.left.exists(_.exists(_.ruleId == "jvm-sun")))
+    assert(result.nonEmpty)
+    assert(result.exists(_.ruleId =="jvm-sun"))
 
   test("reject forbidden pattern after safe code on same line"):
     val code = "val x = 42; import java.io.File"
     val result = CodeValidator.validate(code)
-    assert(result.isLeft)
+    assert(result.nonEmpty)
 
   test("reject asInstanceOf even with generic type"):
     val result = CodeValidator.validate("x.asInstanceOf[List[String]]")
-    assert(result.isLeft)
-    assert(result.left.exists(_.exists(_.ruleId == "cast-escape")))
+    assert(result.nonEmpty)
+    assert(result.exists(_.ruleId =="cast-escape"))
 
   // ---- String/comment stripping edge cases ----
 
@@ -426,12 +426,12 @@ class CodeValidatorSuite extends munit.FunSuite:
   test("reject forbidden pattern between two string literals"):
     val code = """val s = "safe"; import java.io.File; val t = "safe""""
     val result = CodeValidator.validate(code)
-    assert(result.isLeft)
+    assert(result.nonEmpty)
 
   test("allow forbidden pattern inside nested string with escapes"):
     val code = """val s = "foo \"java.io.File\" bar""""
     val result = CodeValidator.validate(code)
-    assert(result.isRight)
+    assert(result.isEmpty)
 
   test("stripLiteralsAndComments preserves code between strings"):
     val code = """val a = "x"; java.io.File; val b = "y""""
@@ -442,15 +442,15 @@ class CodeValidatorSuite extends munit.FunSuite:
 
   test("validate empty code returns Right"):
     val result = CodeValidator.validate("")
-    assert(result.isRight)
+    assert(result.isEmpty)
 
   test("validate whitespace-only code returns Right"):
     val result = CodeValidator.validate("   \n\n  ")
-    assert(result.isRight)
+    assert(result.isEmpty)
 
   test("validate code with only comments returns Right"):
     val result = CodeValidator.validate("// just a comment\n/* block comment */")
-    assert(result.isRight)
+    assert(result.isEmpty)
 
   test("formatErrors with multiple violations uses plural"):
     val violations = List(
@@ -463,20 +463,20 @@ class CodeValidatorSuite extends munit.FunSuite:
   test("violation snippet is trimmed"):
     val code = "   import java.io.File   "
     val result = CodeValidator.validate(code)
-    assert(result.isLeft)
-    val violations = result.left.getOrElse(Nil)
+    assert(result.nonEmpty)
+    val violations = result
     assert(violations.head.snippet == "import java.io.File")
 
   test("directive //> using is checked on original code, not stripped"):
     // Even though comments are stripped, directive detection uses original code
     val code = "//> using dep \"com.lihaoyi::os-lib:0.9.1\""
     val result = CodeValidator.validate(code)
-    assert(result.isLeft)
-    assert(result.left.exists(_.exists(_.ruleId == "directive-using")))
+    assert(result.nonEmpty)
+    assert(result.exists(_.ruleId =="directive-using"))
 
   test("directive inside a string is allowed"):
     val code = """val s = "//> using dep foo""""
     val result = CodeValidator.validate(code)
     // //> using is checked on original code, so it will match even in a string
     // This documents the current behavior
-    assert(result.isLeft) // directive patterns check original code
+    assert(result.nonEmpty) // directive patterns check original code

@@ -80,8 +80,8 @@ class LibraryIntegrationSuite extends munit.FunSuite:
     val r1 = manager.executeInSession(sessionId, """
       requestFileSystem("/tmp") { access("/tmp").exists }
     """)
-    assert(r1.isRight, s"session execution failed: $r1")
-    assert(r1.toOption.get.output.contains("true"), s"unexpected output: ${r1.toOption.get.output}")
+    assert(r1.success, s"session execution failed: ${r1.error}")
+    assert(r1.output.contains("true"), s"unexpected output: ${r1.output}")
 
     manager.deleteSession(sessionId)
 
@@ -183,8 +183,8 @@ class LibraryIntegrationSuite extends munit.FunSuite:
     """)
 
     val r2 = manager.executeInSession(sessionId, "testResult")
-    assert(r2.isRight)
-    assert(r2.toOption.get.output.contains("true"), s"unexpected output: ${r2.toOption.get.output}")
+    assert(r2.success)
+    assert(r2.output.contains("true"), s"unexpected output: ${r2.output}")
 
     manager.deleteSession(sessionId)
 

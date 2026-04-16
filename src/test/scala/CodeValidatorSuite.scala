@@ -340,9 +340,8 @@ class CodeValidatorSuite extends munit.FunSuite:
     val sm = new SessionManager
     val sid = sm.createSession()
     val result = sm.executeInSession(sid, "import java.io.File")
-    assert(result.toOption.nonEmpty) // Right(ExecutionResult) from executeInSession
-    assert(!result.toOption.get.success)
-    assert(result.toOption.get.error.exists(_.contains("file-io-java")))
+    assert(!result.success)
+    assert(result.error.exists(_.contains("file-io-java")))
     sm.deleteSession(sid)
 
   // ---- Security bypass edge cases ----

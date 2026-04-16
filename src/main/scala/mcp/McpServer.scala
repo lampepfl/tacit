@@ -164,8 +164,8 @@ class McpServer(using Context):
       args <- arguments.toRight("Missing arguments")
       sessionId <- args.hcursor.get[String]("session_id").left.map(_.message)
       code <- args.hcursor.get[String]("code").left.map(_.message)
-      result <- sessionManager.executeInSession(sessionId, code)
     yield
+      val result = sessionManager.executeInSession(sessionId, code)
       recorder.foreach(_.record(code, sessionId, result))
       formatExecutionResult(result)
   

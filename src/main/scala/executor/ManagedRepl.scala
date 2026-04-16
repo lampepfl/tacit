@@ -93,6 +93,10 @@ object ManagedRepl:
     outputCapture: ByteArrayOutputStream,
     printStream: PrintStream
   )(run: => Unit): (String, Option[Exception]) =
+    // Although the REPL Driver will redirect `out` to the provided `printStream`, 
+    // some messages (e.g. from the compiler) may still go to the original `System.out`.
+    // To ensure we capture everything, we also redirect `System.out` and `System.err` 
+    // to the same `printStream` for the duration of the execution.
     outputCaptureLock.synchronized:
       outputCapture.reset()
       val oldOut = System.out

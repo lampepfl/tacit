@@ -42,10 +42,10 @@ class SessionManager(using Context):
     sessions.get(sessionId)
 
   /** Execute code in a specific session */
-  def executeInSession(sessionId: String, code: String): Either[String, ExecutionResult] =
+  def executeInSession(sessionId: String, code: String): ExecutionResult =
     sessions.get(sessionId) match
-      case Some(session) => Right(session.execute(code))
-      case None => Left(s"Session not found: $sessionId")
+      case Some(session) => session.execute(code)
+      case None => ExecutionResult(false, "", Some(s"Session not found: $sessionId"))
 
   /** List all active session IDs */
   def listSessions(): List[String] =

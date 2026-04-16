@@ -1,4 +1,4 @@
-import tacit.executor.ScalaExecutor
+import tacit.executor.{ScalaExecutor, SessionManager}
 import tacit.core.{Context, Config}
 
 class ScalaExecutorSuite extends munit.FunSuite:
@@ -156,3 +156,45 @@ class ScalaExecutorSuite extends munit.FunSuite:
     """)
     assert(result.success)
     assert(result.output.contains("List(10, 20, 20, 40, 30, 60)"))
+
+  // ── REPL command allowlist ──────────────────────────────────────
+
+  private def assertCommandRejected(cmd: String): Unit =
+    val result = ScalaExecutor.execute(cmd)
+    assert(!result.success, s"'$cmd' should be rejected")
+    assert(result.error.exists(_.contains("Only :type, :doc, and :imports")),
+      s"'$cmd' error should mention the allowlist, got: ${result.error}")
+
+  test("rejects :quit"):
+    assertCommandRejected(":quit")
+
+  test("rejects :q"):
+    assertCommandRejected(":q")
+
+  test("rejects :settings"):
+    assertCommandRejected(":settings")
+
+  test("rejects :dep"):
+    assertCommandRejected(":dep com.example::lib:1.0")
+
+  test("rejects :sh"):
+    assertCommandRejected(":sh echo hello")
+
+  test("rejects :load"):
+    assertCommandRejected(":load /tmp/evil.scala")
+
+  test("rejects :reset"):
+    assertCommandRejected(":reset")
+
+  test("rejects :help"):
+    assertCommandRejected(":help")
+
+  // ── Allowed REPL commands ────────────────────────────────────────
+
+  test(":type returns type information"):
+    val manager = new SessionManager
+    val sid = manager.createSession()
+    manager.executeInSession(sid, "val x = 42")
+    val result = manager.executeInSession(sid, ":type x")
+    assert(result.success, s"':type x' should succeed, got error: ${result.error}")
+    assert(result.output.contains("Int"), s"':type x' should mention Int, got: ${result.output}")

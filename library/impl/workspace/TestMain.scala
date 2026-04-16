@@ -2,8 +2,9 @@ package tacit.library.workspace
 
 import language.experimental.captureChecking
 
-import tacit.library.{Classified, ClassifiedImpl}
+import tacit.library.{Classified, ClassifiedImpl, IOCapability}
 import tacit.library.mcp.MCPError
+import caps.unsafe.unsafeAssumePure
 
 import java.nio.charset.StandardCharsets
 import java.nio.file.Files
@@ -53,6 +54,7 @@ private def expectError(label: String)(thunk: => Any): Unit =
   val uniqueEventTitle = s"tacit-test-event-$testTag"
   val uniqueFilename = s"tacit-test-file-$testTag.txt"
   val uniqueFileContent = s"tacit-test-content-$testTag apple"
+  given (IOCapability^{}) = IOCapability.iocap.unsafeAssumePure
 
   try
     // ── getCurrentDay ─────────────────────────────────────────────

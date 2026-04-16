@@ -2,8 +2,9 @@ package tacit.library.slack
 
 import language.experimental.captureChecking
 
-import tacit.library.{Classified, ClassifiedImpl}
+import tacit.library.{Classified, ClassifiedImpl, IOCapability}
 import tacit.library.mcp.MCPError
+import caps.unsafe.unsafeAssumePure
 
 import java.nio.charset.StandardCharsets
 import java.nio.file.Files
@@ -58,6 +59,7 @@ private def expectError(label: String)(thunk: => Any): Unit =
   val uniqueWebContent = s"slack webpage content $testTag\nwith second line and unicode: 日本語"
   val overwrittenWebContent = s"overwritten slack webpage content $testTag"
   val emptyUrl = s"www.tacit-slack-empty-$testTag.com"
+  given (IOCapability^{}) = IOCapability.iocap.unsafeAssumePure
 
   try
     // ── Channel / membership reads ───────────────────────────────

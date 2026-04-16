@@ -2,7 +2,7 @@ package tacit.library.slack
 
 import language.experimental.captureChecking
 
-import tacit.library.{Classified, ClassifiedImpl, LlmConfig, LlmOps}
+import tacit.library.{Classified, ClassifiedImpl, IOCapability, LlmConfig, LlmOps}
 import tacit.library.mcp.{JValue, MCPClient, MCPError}
 
 import java.nio.charset.StandardCharsets
@@ -19,7 +19,7 @@ class SlackImpl(endpoint: String, secureOutputPath: String) extends SlackService
   def getChannels(): List[String] =
     parseStringList(callToolJson("get_channels", JValue.obj()))
 
-  def addUserToChannel(user: String, channel: String): Unit =
+  def addUserToChannel(user: String, channel: String)(using IOCapability): Unit =
     callToolUnit("add_user_to_channel", JValue.obj(
       "user" -> JValue.str(user),
       "channel" -> JValue.str(channel)
@@ -37,13 +37,13 @@ class SlackImpl(endpoint: String, secureOutputPath: String) extends SlackService
         "user" -> JValue.str(user)
       )))
 
-  def sendDirectMessage(recipient: String, body: String): Unit =
+  def sendDirectMessage(recipient: String, body: String)(using IOCapability): Unit =
     callToolUnit("send_direct_message", JValue.obj(
       "recipient" -> JValue.str(recipient),
       "body" -> JValue.str(body)
     ))
 
-  def sendChannelMessage(channel: String, body: String): Unit =
+  def sendChannelMessage(channel: String, body: String)(using IOCapability): Unit =
     callToolUnit("send_channel_message", JValue.obj(
       "channel" -> JValue.str(channel),
       "body" -> JValue.str(body)
@@ -54,13 +54,13 @@ class SlackImpl(endpoint: String, secureOutputPath: String) extends SlackService
       "channel" -> JValue.str(channel)
     )))
 
-  def inviteUserToSlack(user: String, userEmail: String): Unit =
+  def inviteUserToSlack(user: String, userEmail: String)(using IOCapability): Unit =
     callToolUnit("invite_user_to_slack", JValue.obj(
       "user" -> JValue.str(user),
       "user_email" -> JValue.str(userEmail)
     ))
 
-  def removeUserFromSlack(user: String): Unit =
+  def removeUserFromSlack(user: String)(using IOCapability): Unit =
     callToolUnit("remove_user_from_slack", JValue.obj(
       "user" -> JValue.str(user)
     ))
@@ -69,7 +69,7 @@ class SlackImpl(endpoint: String, secureOutputPath: String) extends SlackService
     ClassifiedImpl.wrap:
       callToolText("get_webpage", JValue.obj("url" -> JValue.str(url)))
 
-  def postWebpage(url: String, content: String): Unit =
+  def postWebpage(url: String, content: String)(using IOCapability): Unit =
     callToolUnit("post_webpage", JValue.obj(
       "url" -> JValue.str(url),
       "content" -> JValue.str(content)
@@ -88,7 +88,7 @@ class SlackImpl(endpoint: String, secureOutputPath: String) extends SlackService
   def prompt(input: String): String =
     llmOps.chat(input)
 
-  def displaySecurely(x: Classified[String]): Unit =
+  def displaySecurely(x: Classified[String])(using IOCapability): Unit =
     ClassifiedImpl.unwrap(x).foreach: msg =>
       Files.writeString(
         Path.of(secureOutputPath).nn,

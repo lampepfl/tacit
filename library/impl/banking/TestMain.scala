@@ -2,8 +2,9 @@ package tacit.library.banking
 
 import language.experimental.captureChecking
 
-import tacit.library.{Classified, ClassifiedImpl}
+import tacit.library.{Classified, ClassifiedImpl, IOCapability}
 import tacit.library.mcp.MCPError
+import caps.unsafe.unsafeAssumePure
 
 import java.nio.charset.StandardCharsets
 import java.nio.file.Files
@@ -36,6 +37,7 @@ private def section(name: String): Unit =
 
   val secureOutputFile = Files.createTempFile("banking-secure-", ".txt").nn
   val svc = BankingImpl(endpoint, secureOutputFile.toString)
+  given (IOCapability^{}) = IOCapability.iocap.unsafeAssumePure
   try
     // ── Initial state: verify known fixtures are present ────────
 

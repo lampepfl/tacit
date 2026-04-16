@@ -2,7 +2,7 @@ package tacit.library.travel
 
 import language.experimental.captureChecking
 
-import tacit.library.Classified
+import tacit.library.{Classified, IOCapability}
 
 type Attachment = tacit.library.workspace.Attachment
 val Attachment: tacit.library.workspace.Attachment.type = tacit.library.workspace.Attachment
@@ -77,14 +77,14 @@ trait TravelService:
       description: String = "",
       participants: Option[List[String]] = None,
       location: Option[String] = None
-  ): CalendarEvent
+  )(using IOCapability): CalendarEvent
   def searchCalendarEvents(query: String, date: Option[String] = None): Classified[List[CalendarEvent]]
   def getDayCalendarEvents(day: String): Classified[List[CalendarEvent]]
-  def cancelCalendarEvent(eventId: String): String
+  def cancelCalendarEvent(eventId: String)(using IOCapability): String
 
-  def reserveHotel(hotel: String, startDay: String, endDay: String): String
-  def reserveCarRental(company: String, startTime: String, endTime: Option[String]): String
-  def reserveRestaurant(restaurant: String, startTime: String): String
+  def reserveHotel(hotel: String, startDay: String, endDay: String)(using IOCapability): String
+  def reserveCarRental(company: String, startTime: String, endTime: Option[String])(using IOCapability): String
+  def reserveRestaurant(restaurant: String, startTime: String)(using IOCapability): String
 
   def getFlightInformation(departureCity: String, arrivalCity: String): List[FlightInformation]
 
@@ -95,7 +95,7 @@ trait TravelService:
       attachments: Option[List[Attachment]] = None,
       cc: Option[List[String]] = None,
       bcc: Option[List[String]] = None
-  ): Email
+  )(using IOCapability): Email
 
   def prompt(input: String): String
-  def displaySecurely(x: Classified[String]): Unit
+  def displaySecurely(x: Classified[String])(using IOCapability): Unit

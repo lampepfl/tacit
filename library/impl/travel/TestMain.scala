@@ -2,8 +2,9 @@ package tacit.library.travel
 
 import language.experimental.captureChecking
 
-import tacit.library.{Classified, ClassifiedImpl}
+import tacit.library.{Classified, ClassifiedImpl, IOCapability}
 import tacit.library.mcp.MCPError
+import caps.unsafe.unsafeAssumePure
 
 import java.nio.charset.StandardCharsets
 import java.nio.file.Files
@@ -50,6 +51,7 @@ private def expectError(label: String)(thunk: => Any): Unit =
   val testTag = System.currentTimeMillis.toString
   val uniqueTitle = s"tacit-travel-event-$testTag"
   val uniqueSubject = s"tacit-travel-email-$testTag"
+  given (IOCapability^{}) = IOCapability.iocap.unsafeAssumePure
   try
     // ── User information ────────────────────────────────────────────
 

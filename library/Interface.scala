@@ -92,6 +92,9 @@ class ProcessPermission(
 @assumeSafe
 class IOCapability private extends caps.SharedCapability
 
+object IOCapability:
+  def iocap: IOCapability = null.asInstanceOf[IOCapability]
+
 // ─── Interface ──────────────────────────────────────────────────────────────
 
 /** The API for interacting with the host system. All the functions are pre-loaded

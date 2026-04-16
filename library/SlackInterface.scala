@@ -2,7 +2,7 @@ package tacit.library.slack
 
 import language.experimental.captureChecking
 
-import tacit.library.Classified
+import tacit.library.{Classified, IOCapability}
 
 case class Message(
     sender: String,
@@ -12,15 +12,15 @@ case class Message(
 
 trait SlackService:
   def getChannels(): List[String]
-  def addUserToChannel(user: String, channel: String): Unit
+  def addUserToChannel(user: String, channel: String)(using IOCapability): Unit
   def readChannelMessages(channel: String): Classified[List[Message]]
   def readInbox(user: String): Classified[List[Message]]
-  def sendDirectMessage(recipient: String, body: String): Unit
-  def sendChannelMessage(channel: String, body: String): Unit
+  def sendDirectMessage(recipient: String, body: String)(using IOCapability): Unit
+  def sendChannelMessage(channel: String, body: String)(using IOCapability): Unit
   def getUsersInChannel(channel: String): List[String]
-  def inviteUserToSlack(user: String, userEmail: String): Unit
-  def removeUserFromSlack(user: String): Unit
+  def inviteUserToSlack(user: String, userEmail: String)(using IOCapability): Unit
+  def removeUserFromSlack(user: String)(using IOCapability): Unit
   def getWebpage(url: String): Classified[String]
-  def postWebpage(url: String, content: String): Unit
+  def postWebpage(url: String, content: String)(using IOCapability): Unit
   def prompt(input: String): String
-  def displaySecurely(x: Classified[String]): Unit
+  def displaySecurely(x: Classified[String])(using IOCapability): Unit

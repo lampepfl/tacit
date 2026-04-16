@@ -16,8 +16,9 @@ class SlackImpl(endpoint: String, secureOutputPath: String) extends SlackService
 
   def close(): Unit = client.close()
 
-  def getChannels(): List[String] =
-    parseStringList(callToolJson("get_channels", JValue.obj()))
+  def getChannels(): Classified[List[String]] =
+    ClassifiedImpl.wrap:
+      parseStringList(callToolJson("get_channels", JValue.obj()))
 
   def addUserToChannel(user: String, channel: String)(using IOCapability): Unit =
     callToolUnit("add_user_to_channel", JValue.obj(
@@ -49,10 +50,11 @@ class SlackImpl(endpoint: String, secureOutputPath: String) extends SlackService
       "body" -> JValue.str(body)
     ))
 
-  def getUsersInChannel(channel: String): List[String] =
-    parseStringList(callToolJson("get_users_in_channel", JValue.obj(
-      "channel" -> JValue.str(channel)
-    )))
+  def getUsersInChannel(channel: String): Classified[List[String]] =
+    ClassifiedImpl.wrap:
+      parseStringList(callToolJson("get_users_in_channel", JValue.obj(
+        "channel" -> JValue.str(channel)
+      )))
 
   def inviteUserToSlack(user: String, userEmail: String)(using IOCapability): Unit =
     callToolUnit("invite_user_to_slack", JValue.obj(

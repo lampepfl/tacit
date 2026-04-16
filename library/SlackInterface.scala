@@ -11,13 +11,13 @@ case class Message(
 )
 
 trait SlackService:
-  def getChannels(): List[String]
+  def getChannels(): Classified[List[String]]
   def addUserToChannel(user: String, channel: String)(using IOCapability): Unit
   def readChannelMessages(channel: String): Classified[List[Message]]
   def readInbox(user: String): Classified[List[Message]]
   def sendDirectMessage(recipient: String, body: String)(using IOCapability): Unit
   def sendChannelMessage(channel: String, body: String)(using IOCapability): Unit
-  def getUsersInChannel(channel: String): List[String]
+  def getUsersInChannel(channel: String): Classified[List[String]]
   def inviteUserToSlack(user: String, userEmail: String)(using IOCapability): Unit
   def removeUserFromSlack(user: String)(using IOCapability): Unit
   def getWebpage(url: String): Classified[String]

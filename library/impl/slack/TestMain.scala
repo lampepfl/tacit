@@ -65,21 +65,23 @@ private def expectError(label: String)(thunk: => Any): Unit =
     // ── Channel / membership reads ───────────────────────────────
 
     section("getChannels")
-    val channels = svc.getChannels()
+    val channels = unwrap(svc.getChannels())
     assertEquals(channels.size, 4, "channel count")
     assert(channels.contains("general"), "general channel exists")
     assert(channels.contains("random"), "random channel exists")
     assert(channels.contains("private"), "private channel exists")
-    assertEquals(svc.getChannels(), channels, "getChannels idempotent")
+    assertEquals(unwrap(svc.getChannels()), channels, "getChannels idempotent")
+    assertEquals(svc.getChannels().toString, "Classified(***)", "channels are classified")
     val externalChannel = channels.find(_.startsWith("External_"))
     assert(externalChannel.isDefined, "external channel exists")
     val ext = externalChannel.getOrElse("")
 
     section("getUsersInChannel")
-    assertEquals(svc.getUsersInChannel("general").sorted, List("Alice", "Bob", "Charlie", "Eve"), "general members")
-    assertEquals(svc.getUsersInChannel("random").sorted, List("Alice", "Bob"), "random members")
-    assertEquals(svc.getUsersInChannel("private"), List("Charlie"), "private members")
-    assertEquals(svc.getUsersInChannel(ext), List("Eve"), "external members")
+    assertEquals(unwrap(svc.getUsersInChannel("general")).sorted, List("Alice", "Bob", "Charlie", "Eve"), "general members")
+    assertEquals(unwrap(svc.getUsersInChannel("random")).sorted, List("Alice", "Bob"), "random members")
+    assertEquals(unwrap(svc.getUsersInChannel("private")), List("Charlie"), "private members")
+    assertEquals(unwrap(svc.getUsersInChannel(ext)), List("Eve"), "external members")
+    assertEquals(svc.getUsersInChannel("general").toString, "Classified(***)", "channel membership is classified")
 
     // ── Message reads ────────────────────────────────────────────
 
@@ -154,14 +156,14 @@ private def expectError(label: String)(thunk: => Any): Unit =
     svc.inviteUserToSlack(uniqueUser, uniqueEmail)
     val invitedInbox = unwrap(svc.readInbox(uniqueUser))
     assertEquals(invitedInbox, Nil, "newly invited user inbox empty")
-    assert(!svc.getUsersInChannel("general").contains(uniqueUser), "newly invited user not yet in general")
-    assertEquals(svc.getChannels(), channels, "inviting user does not change channel list")
+    assert(!unwrap(svc.getUsersInChannel("general")).contains(uniqueUser), "newly invited user not yet in general")
+    assertEquals(unwrap(svc.getChannels()), channels, "inviting user does not change channel list")
 
     section("addUserToChannel")
     svc.addUserToChannel(uniqueUser, "general")
-    assert(svc.getUsersInChannel("general").contains(uniqueUser), "invited user added to general")
+    assert(unwrap(svc.getUsersInChannel("general")).contains(uniqueUser), "invited user added to general")
     svc.addUserToChannel(uniqueUser, ext)
-    assert(svc.getUsersInChannel(ext).contains(uniqueUser), "invited user added to external channel")
+    assert(unwrap(svc.getUsersInChannel(ext)).contains(uniqueUser), "invited user added to external channel")
 
     section("sendDirectMessage")
     svc.sendDirectMessage(uniqueUser, uniqueDm)
@@ -205,8 +207,8 @@ private def expectError(label: String)(thunk: => Any): Unit =
 
     section("removeUserFromSlack")
     svc.removeUserFromSlack(uniqueUser)
-    assert(!svc.getUsersInChannel("general").contains(uniqueUser), "removed user no longer in general")
-    assert(!svc.getUsersInChannel(ext).contains(uniqueUser), "removed user no longer in external channel")
+    assert(!unwrap(svc.getUsersInChannel("general")).contains(uniqueUser), "removed user no longer in general")
+    assert(!unwrap(svc.getUsersInChannel(ext)).contains(uniqueUser), "removed user no longer in external channel")
     expectError("removed user inbox")(unwrap(svc.readInbox(uniqueUser)))
     expectError("removed user DM")(svc.sendDirectMessage(uniqueUser, "after removal"))
     expectError("removed user add to channel")(svc.addUserToChannel(uniqueUser, "general"))
@@ -215,7 +217,7 @@ private def expectError(label: String)(thunk: => Any): Unit =
     svc.inviteUserToSlack(uniqueUser, uniqueEmail)
     assertEquals(unwrap(svc.readInbox(uniqueUser)), Nil, "reinvited user inbox reset")
     svc.addUserToChannel(uniqueUser, "random")
-    assert(svc.getUsersInChannel("random").contains(uniqueUser), "reinvited user added to random")
+    assert(unwrap(svc.getUsersInChannel("random")).contains(uniqueUser), "reinvited user added to random")
     svc.removeUserFromSlack(uniqueUser)
     expectError("removed user inbox after reinvite")(unwrap(svc.readInbox(uniqueUser)))
 
@@ -226,7 +228,7 @@ private def expectError(label: String)(thunk: => Any): Unit =
     expectError("readInbox missing user")(unwrap(svc.readInbox("MissingUser")))
     expectError("sendDirectMessage missing recipient")(svc.sendDirectMessage("MissingUser", "hi"))
     expectError("sendChannelMessage missing channel")(svc.sendChannelMessage("missing-channel", "hi"))
-    expectError("getUsersInChannel missing channel")(svc.getUsersInChannel("missing-channel"))
+    expectError("getUsersInChannel missing channel")(unwrap(svc.getUsersInChannel("missing-channel")))
     expectError("addUserToChannel missing user")(svc.addUserToChannel("MissingUser", "general"))
     expectError("addUserToChannel missing channel")(svc.addUserToChannel("Alice", "missing-channel"))
     expectError("inviteUserToSlack duplicate user")(svc.inviteUserToSlack("Alice", "alice@example.com"))

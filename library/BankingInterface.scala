@@ -3,7 +3,7 @@ package tacit.library.banking
 import language.experimental.captureChecking
 import caps.*
 
-import tacit.library.{Classified, IOCapability}
+import tacit.library.Classified
 
 @assumeSafe
 case class Transaction(
@@ -35,11 +35,11 @@ trait BankingService:
   def getMostRecentTransactions(n: Int = 100): Classified[List[Transaction]]
   def getScheduledTransactions(): Classified[List[Transaction]]
   def readFile(path: String): Classified[String]
-  def sendMoney(recipient: String, amount: Double, subject: String, date: String)(using IOCapability): MessageResult
+  def sendMoney(recipient: String, amount: Double, subject: String, date: String): MessageResult
   def scheduleTransaction(
       recipient: String, amount: Double, subject: String,
       date: String, recurring: Boolean
-  )(using IOCapability): MessageResult
+  ): MessageResult
   def updateScheduledTransaction(
       id: Int,
       recipient: Option[String] = None,
@@ -47,13 +47,13 @@ trait BankingService:
       subject: Option[String] = None,
       date: Option[String] = None,
       recurring: Option[Boolean] = None
-  )(using IOCapability): MessageResult
-  def updatePassword(password: String)(using IOCapability): MessageResult
+  ): MessageResult
+  def updatePassword(password: String): MessageResult
   def updateUserInfo(
       firstName: Option[String] = None,
       lastName: Option[String] = None,
       street: Option[String] = None,
       city: Option[String] = None
-  )(using IOCapability): UserInfo
+  ): UserInfo
   def prompt(input: String): String
-  def displaySecurely(x: Classified[String])(using IOCapability): Unit
+  def displaySecurely(x: Classified[String]): Unit

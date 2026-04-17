@@ -3,7 +3,7 @@ package tacit.library.travel
 import language.experimental.captureChecking
 import caps.*
 
-import tacit.library.{Classified, ClassifiedImpl, IOCapability, LlmConfig, LlmOps}
+import tacit.library.{Classified, ClassifiedImpl, LlmConfig, LlmOps}
 import tacit.library.mcp.{JValue, MCPClient, MCPError, TextParsers}
 
 import java.nio.charset.StandardCharsets
@@ -117,7 +117,7 @@ class TravelImpl(endpoint: String, secureOutputPath: String) extends TravelServi
       description: String = "",
       participants: Option[List[String]] = None,
       location: Option[String] = None
-  )(using IOCapability): CalendarEvent =
+  ): CalendarEvent =
     val base = JValue.obj(
       "title" -> JValue.str(title),
       "start_time" -> JValue.str(startTime),
@@ -143,24 +143,24 @@ class TravelImpl(endpoint: String, secureOutputPath: String) extends TravelServi
       callToolJson("get_day_calendar_events", JValue.obj("day" -> JValue.str(day)))
         .asArray.getOrElse(Nil).map(parseEvent)
 
-  def cancelCalendarEvent(eventId: String)(using IOCapability): String =
+  def cancelCalendarEvent(eventId: String): String =
     callToolText("cancel_calendar_event", JValue.obj("event_id" -> JValue.str(eventId)))
 
-  def reserveHotel(hotel: String, startDay: String, endDay: String)(using IOCapability): String =
+  def reserveHotel(hotel: String, startDay: String, endDay: String): String =
     callToolText("reserve_hotel", JValue.obj(
       "hotel" -> JValue.str(hotel),
       "start_day" -> JValue.str(startDay),
       "end_day" -> JValue.str(endDay)
     ))
 
-  def reserveCarRental(company: String, startTime: String, endTime: Option[String])(using IOCapability): String =
+  def reserveCarRental(company: String, startTime: String, endTime: Option[String]): String =
     callToolText("reserve_car_rental", JValue.obj(
       "company" -> JValue.str(company),
       "start_time" -> JValue.str(startTime),
       "end_time" -> endTime.map(JValue.str).getOrElse(JValue.nil)
     ))
 
-  def reserveRestaurant(restaurant: String, startTime: String)(using IOCapability): String =
+  def reserveRestaurant(restaurant: String, startTime: String): String =
     callToolText("reserve_restaurant", JValue.obj(
       "restaurant" -> JValue.str(restaurant),
       "start_time" -> JValue.str(startTime)
@@ -183,7 +183,7 @@ class TravelImpl(endpoint: String, secureOutputPath: String) extends TravelServi
       attachments: Option[List[Attachment]] = None,
       cc: Option[List[String]] = None,
       bcc: Option[List[String]] = None
-  )(using IOCapability): Email =
+  ): Email =
     val base = JValue.obj(
       "recipients" -> JValue.arr(recipients.map(JValue.str)*),
       "subject" -> JValue.str(subject),
@@ -209,7 +209,7 @@ class TravelImpl(endpoint: String, secureOutputPath: String) extends TravelServi
   def prompt(input: String): String =
     llmOps.chat(input)
 
-  def displaySecurely(x: Classified[String])(using IOCapability): Unit =
+  def displaySecurely(x: Classified[String]): Unit =
     ClassifiedImpl.unwrap(x).foreach: msg =>
       Files.writeString(
         Path.of(secureOutputPath).nn,

@@ -3,7 +3,7 @@ package tacit.library.workspace
 import language.experimental.captureChecking
 import caps.*
 
-import tacit.library.{Classified, IOCapability}
+import tacit.library.Classified
 
 @assumeSafe
 enum EmailStatus:
@@ -87,8 +87,8 @@ trait WorkspaceService:
       attachments: Option[List[Attachment]] = None,
       cc: Option[List[String]] = None,
       bcc: Option[List[String]] = None
-  )(using IOCapability): Email
-  def deleteEmail(emailId: String)(using IOCapability): String
+  ): Email
+  def deleteEmail(emailId: String): String
 
   // Calendar
   def getCurrentDay(): String
@@ -101,25 +101,25 @@ trait WorkspaceService:
       description: String = "",
       participants: Option[List[String]] = None,
       location: Option[String] = None
-  )(using IOCapability): CalendarEvent
-  def cancelCalendarEvent(eventId: String)(using IOCapability): String
+  ): CalendarEvent
+  def cancelCalendarEvent(eventId: String): String
   def rescheduleCalendarEvent(
       eventId: String,
       newStartTime: String,
       newEndTime: Option[String] = None
-  )(using IOCapability): CalendarEvent
-  def addCalendarEventParticipants(eventId: String, participants: List[String])(using IOCapability): CalendarEvent
+  ): CalendarEvent
+  def addCalendarEventParticipants(eventId: String, participants: List[String]): CalendarEvent
 
   // Drive
   def listFiles(): Classified[List[CloudDriveFile]]
   def searchFilesByFilename(filename: String): Classified[List[CloudDriveFile]]
   def searchFiles(query: String): Classified[List[CloudDriveFile]]
   def getFileById(fileId: String): Classified[CloudDriveFile]
-  def createFile(filename: String, content: String)(using IOCapability): CloudDriveFile
-  def deleteFile(fileId: String)(using IOCapability): CloudDriveFile
-  def appendToFile(fileId: String, content: String)(using IOCapability): CloudDriveFile
-  def shareFile(fileId: String, email: String, permission: SharingPermission)(using IOCapability): CloudDriveFile
+  def createFile(filename: String, content: String): CloudDriveFile
+  def deleteFile(fileId: String): CloudDriveFile
+  def appendToFile(fileId: String, content: String): CloudDriveFile
+  def shareFile(fileId: String, email: String, permission: SharingPermission): CloudDriveFile
 
   // LLM + secure output
   def prompt(input: String): String
-  def displaySecurely(x: Classified[String])(using IOCapability): Unit
+  def displaySecurely(x: Classified[String]): Unit

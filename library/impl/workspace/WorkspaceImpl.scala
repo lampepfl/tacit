@@ -3,7 +3,7 @@ package tacit.library.workspace
 import language.experimental.captureChecking
 import caps.*
 
-import tacit.library.{Classified, ClassifiedImpl, IOCapability, LlmConfig, LlmOps}
+import tacit.library.{Classified, ClassifiedImpl, LlmConfig, LlmOps}
 import tacit.library.mcp.{JValue, MCPClient, MCPError}
 
 import java.nio.charset.StandardCharsets
@@ -67,7 +67,7 @@ class WorkspaceImpl(endpoint: String, secureOutputPath: String) extends Workspac
       attachments: Option[List[Attachment]] = None,
       cc: Option[List[String]] = None,
       bcc: Option[List[String]] = None
-  )(using IOCapability): Email =
+  ): Email =
     val base = JValue.obj(
       "recipients" -> JValue.arr(recipients.map(JValue.str)*),
       "subject" -> JValue.str(subject),
@@ -80,7 +80,7 @@ class WorkspaceImpl(endpoint: String, secureOutputPath: String) extends Workspac
     )
     parseEmail(callToolJson("send_email", base.merge(opts)))
 
-  def deleteEmail(emailId: String)(using IOCapability): String =
+  def deleteEmail(emailId: String): String =
     callToolText("delete_email", JValue.obj("email_id" -> JValue.str(emailId)))
 
   // ── Calendar ───────────────────────────────────────────────────
@@ -108,7 +108,7 @@ class WorkspaceImpl(endpoint: String, secureOutputPath: String) extends Workspac
       description: String = "",
       participants: Option[List[String]] = None,
       location: Option[String] = None
-  )(using IOCapability): CalendarEvent =
+  ): CalendarEvent =
     val base = JValue.obj(
       "title" -> JValue.str(title),
       "start_time" -> JValue.str(startTime),
@@ -121,14 +121,14 @@ class WorkspaceImpl(endpoint: String, secureOutputPath: String) extends Workspac
     )
     parseEvent(callToolJson("create_calendar_event", base.merge(opts)))
 
-  def cancelCalendarEvent(eventId: String)(using IOCapability): String =
+  def cancelCalendarEvent(eventId: String): String =
     callToolText("cancel_calendar_event", JValue.obj("event_id" -> JValue.str(eventId)))
 
   def rescheduleCalendarEvent(
       eventId: String,
       newStartTime: String,
       newEndTime: Option[String] = None
-  )(using IOCapability): CalendarEvent =
+  ): CalendarEvent =
     val base = JValue.obj(
       "event_id" -> JValue.str(eventId),
       "new_start_time" -> JValue.str(newStartTime)
@@ -136,7 +136,7 @@ class WorkspaceImpl(endpoint: String, secureOutputPath: String) extends Workspac
     val opts = JValue.objOpt("new_end_time" -> newEndTime.map(JValue.str))
     parseEvent(callToolJson("reschedule_calendar_event", base.merge(opts)))
 
-  def addCalendarEventParticipants(eventId: String, participants: List[String])(using IOCapability): CalendarEvent =
+  def addCalendarEventParticipants(eventId: String, participants: List[String]): CalendarEvent =
     parseEvent(callToolJson("add_calendar_event_participants", JValue.obj(
       "event_id" -> JValue.str(eventId),
       "participants" -> JValue.arr(participants.map(JValue.str)*)
@@ -163,22 +163,22 @@ class WorkspaceImpl(endpoint: String, secureOutputPath: String) extends Workspac
     ClassifiedImpl.wrap:
       parseFile(callToolJson("get_file_by_id", JValue.obj("file_id" -> JValue.str(fileId))))
 
-  def createFile(filename: String, content: String)(using IOCapability): CloudDriveFile =
+  def createFile(filename: String, content: String): CloudDriveFile =
     parseFile(callToolJson("create_file", JValue.obj(
       "filename" -> JValue.str(filename),
       "content" -> JValue.str(content)
     )))
 
-  def deleteFile(fileId: String)(using IOCapability): CloudDriveFile =
+  def deleteFile(fileId: String): CloudDriveFile =
     parseFile(callToolJson("delete_file", JValue.obj("file_id" -> JValue.str(fileId))))
 
-  def appendToFile(fileId: String, content: String)(using IOCapability): CloudDriveFile =
+  def appendToFile(fileId: String, content: String): CloudDriveFile =
     parseFile(callToolJson("append_to_file", JValue.obj(
       "file_id" -> JValue.str(fileId),
       "content" -> JValue.str(content)
     )))
 
-  def shareFile(fileId: String, email: String, permission: SharingPermission)(using IOCapability): CloudDriveFile =
+  def shareFile(fileId: String, email: String, permission: SharingPermission): CloudDriveFile =
     parseFile(callToolJson("share_file", JValue.obj(
       "file_id" -> JValue.str(fileId),
       "email" -> JValue.str(email),
@@ -202,7 +202,7 @@ class WorkspaceImpl(endpoint: String, secureOutputPath: String) extends Workspac
 
   // ── Secure output ──────────────────────────────────────────────
 
-  def displaySecurely(x: Classified[String])(using IOCapability): Unit =
+  def displaySecurely(x: Classified[String]): Unit =
     ClassifiedImpl.unwrap(x).foreach: msg =>
       Files.writeString(
         Path.of(secureOutputPath).nn,

@@ -3,7 +3,7 @@ package tacit.library.banking
 import language.experimental.captureChecking
 import caps.*
 
-import tacit.library.{Classified, ClassifiedImpl, IOCapability, LlmConfig, LlmOps}
+import tacit.library.{Classified, ClassifiedImpl, LlmConfig, LlmOps}
 import tacit.library.mcp.{JValue, MCPClient, MCPError, TextParsers}
 
 import java.nio.charset.StandardCharsets
@@ -45,7 +45,7 @@ class BankingImpl(endpoint: String, secureOutputPath: String) extends BankingSer
 
   /** Mutations */
 
-  def sendMoney(recipient: String, amount: Double, subject: String, date: String)(using IOCapability): MessageResult =
+  def sendMoney(recipient: String, amount: Double, subject: String, date: String): MessageResult =
     parseMessage(callToolParsed("send_money", JValue.obj(
       "recipient" -> JValue.str(recipient),
       "amount" -> JValue.num(amount),
@@ -56,7 +56,7 @@ class BankingImpl(endpoint: String, secureOutputPath: String) extends BankingSer
   def scheduleTransaction(
       recipient: String, amount: Double, subject: String,
       date: String, recurring: Boolean
-  )(using IOCapability): MessageResult =
+  ): MessageResult =
     parseMessage(callToolParsed("schedule_transaction", JValue.obj(
       "recipient" -> JValue.str(recipient),
       "amount" -> JValue.num(amount),
@@ -72,7 +72,7 @@ class BankingImpl(endpoint: String, secureOutputPath: String) extends BankingSer
       subject: Option[String] = None,
       date: Option[String] = None,
       recurring: Option[Boolean] = None
-  )(using IOCapability): MessageResult =
+  ): MessageResult =
     val base = JValue.obj("id" -> JValue.num(id))
     val opts = JValue.objOpt(
       "recipient" -> recipient.map(JValue.str),
@@ -83,7 +83,7 @@ class BankingImpl(endpoint: String, secureOutputPath: String) extends BankingSer
     )
     parseMessage(callToolParsed("update_scheduled_transaction", base.merge(opts)))
 
-  def updatePassword(password: String)(using IOCapability): MessageResult =
+  def updatePassword(password: String): MessageResult =
     parseMessage(callToolParsed("update_password",
       JValue.obj("password" -> JValue.str(password))))
 
@@ -92,7 +92,7 @@ class BankingImpl(endpoint: String, secureOutputPath: String) extends BankingSer
       lastName: Option[String] = None,
       street: Option[String] = None,
       city: Option[String] = None
-  )(using IOCapability): UserInfo =
+  ): UserInfo =
     parseUserInfo(callToolParsed("update_user_info", JValue.objOpt(
       "first_name" -> firstName.map(JValue.str),
       "last_name" -> lastName.map(JValue.str),
@@ -117,7 +117,7 @@ class BankingImpl(endpoint: String, secureOutputPath: String) extends BankingSer
 
   /** Secure Output */
 
-  def displaySecurely(x: Classified[String])(using IOCapability): Unit =
+  def displaySecurely(x: Classified[String]): Unit =
     ClassifiedImpl.unwrap(x).foreach: msg =>
       Files.writeString(
         Path.of(secureOutputPath).nn,

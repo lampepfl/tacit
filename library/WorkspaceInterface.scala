@@ -107,8 +107,8 @@ trait WorkspaceService:
       eventId: String,
       newStartTime: String,
       newEndTime: Option[String] = None
-  ): CalendarEvent
-  def addCalendarEventParticipants(eventId: String, participants: List[String]): CalendarEvent
+  ): Classified[CalendarEvent]
+  def addCalendarEventParticipants(eventId: String, participants: List[String]): Classified[CalendarEvent]
 
   // Drive
   def listFiles(): Classified[List[CloudDriveFile]]
@@ -116,9 +116,9 @@ trait WorkspaceService:
   def searchFiles(query: String): Classified[List[CloudDriveFile]]
   def getFileById(fileId: String): Classified[CloudDriveFile]
   def createFile(filename: String, content: String): CloudDriveFile
-  def deleteFile(fileId: String): CloudDriveFile
-  def appendToFile(fileId: String, content: String): CloudDriveFile
-  def shareFile(fileId: String, email: String, permission: SharingPermission): CloudDriveFile
+  def deleteFile(fileId: String): Classified[CloudDriveFile]
+  def appendToFile(fileId: String, content: String): Classified[CloudDriveFile]
+  def shareFile(fileId: String, email: String, permission: SharingPermission): Classified[CloudDriveFile]
 
   // LLM + secure output
   def prompt(input: String): String

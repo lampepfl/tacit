@@ -128,19 +128,21 @@ class WorkspaceImpl(endpoint: String, secureOutputPath: String) extends Workspac
       eventId: String,
       newStartTime: String,
       newEndTime: Option[String] = None
-  ): CalendarEvent =
-    val base = JValue.obj(
-      "event_id" -> JValue.str(eventId),
-      "new_start_time" -> JValue.str(newStartTime)
-    )
-    val opts = JValue.objOpt("new_end_time" -> newEndTime.map(JValue.str))
-    parseEvent(callToolJson("reschedule_calendar_event", base.merge(opts)))
+  ): Classified[CalendarEvent] =
+    ClassifiedImpl.wrap:
+      val base = JValue.obj(
+        "event_id" -> JValue.str(eventId),
+        "new_start_time" -> JValue.str(newStartTime)
+      )
+      val opts = JValue.objOpt("new_end_time" -> newEndTime.map(JValue.str))
+      parseEvent(callToolJson("reschedule_calendar_event", base.merge(opts)))
 
-  def addCalendarEventParticipants(eventId: String, participants: List[String]): CalendarEvent =
-    parseEvent(callToolJson("add_calendar_event_participants", JValue.obj(
-      "event_id" -> JValue.str(eventId),
-      "participants" -> JValue.arr(participants.map(JValue.str)*)
-    )))
+  def addCalendarEventParticipants(eventId: String, participants: List[String]): Classified[CalendarEvent] =
+    ClassifiedImpl.wrap:
+      parseEvent(callToolJson("add_calendar_event_participants", JValue.obj(
+        "event_id" -> JValue.str(eventId),
+        "participants" -> JValue.arr(participants.map(JValue.str)*)
+      )))
 
   // ── Drive ──────────────────────────────────────────────────────
 
@@ -169,21 +171,24 @@ class WorkspaceImpl(endpoint: String, secureOutputPath: String) extends Workspac
       "content" -> JValue.str(content)
     )))
 
-  def deleteFile(fileId: String): CloudDriveFile =
-    parseFile(callToolJson("delete_file", JValue.obj("file_id" -> JValue.str(fileId))))
+  def deleteFile(fileId: String): Classified[CloudDriveFile] =
+    ClassifiedImpl.wrap:
+      parseFile(callToolJson("delete_file", JValue.obj("file_id" -> JValue.str(fileId))))
 
-  def appendToFile(fileId: String, content: String): CloudDriveFile =
-    parseFile(callToolJson("append_to_file", JValue.obj(
-      "file_id" -> JValue.str(fileId),
-      "content" -> JValue.str(content)
-    )))
+  def appendToFile(fileId: String, content: String): Classified[CloudDriveFile] =
+    ClassifiedImpl.wrap:
+      parseFile(callToolJson("append_to_file", JValue.obj(
+        "file_id" -> JValue.str(fileId),
+        "content" -> JValue.str(content)
+      )))
 
-  def shareFile(fileId: String, email: String, permission: SharingPermission): CloudDriveFile =
-    parseFile(callToolJson("share_file", JValue.obj(
-      "file_id" -> JValue.str(fileId),
-      "email" -> JValue.str(email),
-      "permission" -> JValue.str(sharingPermissionToWire(permission))
-    )))
+  def shareFile(fileId: String, email: String, permission: SharingPermission): Classified[CloudDriveFile] =
+    ClassifiedImpl.wrap:
+      parseFile(callToolJson("share_file", JValue.obj(
+        "file_id" -> JValue.str(fileId),
+        "email" -> JValue.str(email),
+        "permission" -> JValue.str(sharingPermissionToWire(permission))
+      )))
 
   // ── LLM ────────────────────────────────────────────────────────
 

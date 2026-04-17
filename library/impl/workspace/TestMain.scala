@@ -254,11 +254,11 @@ private def expectError(label: String)(thunk: => Any): Unit =
     assert(dayAfterCreate.exists(_.id == newEvent.id), "new event appears in day query")
 
     section("rescheduleCalendarEvent")
-    val rescheduled = svc.rescheduleCalendarEvent(
+    val rescheduled = unwrap(svc.rescheduleCalendarEvent(
       eventId = newEvent.id,
       newStartTime = "2024-05-25 14:00",
       newEndTime = Some("2024-05-25 15:30")
-    )
+    ))
     assertEquals(rescheduled.id, newEvent.id, "rescheduled id preserved")
     assert(rescheduled.startTime.startsWith("2024-05-25T14:00"),
       s"rescheduled start (got ${rescheduled.startTime})")
@@ -266,10 +266,10 @@ private def expectError(label: String)(thunk: => Any): Unit =
       s"rescheduled end (got ${rescheduled.endTime})")
 
     section("addCalendarEventParticipants")
-    val withCarol = svc.addCalendarEventParticipants(
+    val withCarol = unwrap(svc.addCalendarEventParticipants(
       eventId = newEvent.id,
       participants = List("carol@example.com")
-    )
+    ))
     assert(withCarol.participants.contains("carol@example.com"), "carol added")
     assert(withCarol.participants.contains("alice@example.com"), "alice preserved")
     assert(withCarol.participants.contains("bob@example.com"), "bob preserved")
@@ -327,13 +327,13 @@ private def expectError(label: String)(thunk: => Any): Unit =
     assert(initialSize > 0, "created size > 0")
 
     section("appendToFile")
-    val appended = svc.appendToFile(createdFile.id, " banana")
+    val appended = unwrap(svc.appendToFile(createdFile.id, " banana"))
     assert(appended.content.contains("apple"), "appended content keeps original 'apple'")
     assert(appended.content.contains("banana"), "appended content has new 'banana'")
     assert(appended.size > initialSize, "size grew after append")
 
     section("shareFile")
-    val shared = svc.shareFile(createdFile.id, "recipient@example.com", SharingPermission.ReadWrite)
+    val shared = unwrap(svc.shareFile(createdFile.id, "recipient@example.com", SharingPermission.ReadWrite))
     assertEquals(
       shared.sharedWith.get("recipient@example.com"),
       Some(SharingPermission.ReadWrite),
@@ -341,7 +341,7 @@ private def expectError(label: String)(thunk: => Any): Unit =
     )
 
     section("deleteFile")
-    val deleted = svc.deleteFile(createdFile.id)
+    val deleted = unwrap(svc.deleteFile(createdFile.id))
     assertEquals(deleted.id, createdFile.id, "deleted file id")
     val afterDelete = unwrap(svc.listFiles())
     assert(afterDelete.forall(_.id != createdFile.id), "deleted file gone from listFiles")
@@ -501,10 +501,10 @@ private def expectError(label: String)(thunk: => Any): Unit =
       endTime = "2024-06-20 16:00",
       description = "duration-preservation test"
     )
-    val durRescheduled = svc.rescheduleCalendarEvent(
+    val durRescheduled = unwrap(svc.rescheduleCalendarEvent(
       eventId = durEvent.id,
       newStartTime = "2024-06-20 10:00"
-    )
+    ))
     assert(durRescheduled.startTime.startsWith("2024-06-20T10:00"),
       s"moved start (got ${durRescheduled.startTime})")
     assert(durRescheduled.endTime.startsWith("2024-06-20T12:00"),
@@ -544,14 +544,14 @@ private def expectError(label: String)(thunk: => Any): Unit =
       content = "share test content"
     )
 
-    val sharedRead = svc.shareFile(shareTarget.id, "reader1@example.com", SharingPermission.Read)
+    val sharedRead = unwrap(svc.shareFile(shareTarget.id, "reader1@example.com", SharingPermission.Read))
     assertEquals(
       sharedRead.sharedWith.get("reader1@example.com"),
       Some(SharingPermission.Read),
       "first share is Read"
     )
 
-    val sharedTwo = svc.shareFile(shareTarget.id, "writer@example.com", SharingPermission.ReadWrite)
+    val sharedTwo = unwrap(svc.shareFile(shareTarget.id, "writer@example.com", SharingPermission.ReadWrite))
     assertEquals(sharedTwo.sharedWith.size, 2, "two users in sharedWith")
     assertEquals(
       sharedTwo.sharedWith.get("reader1@example.com"),
@@ -564,7 +564,7 @@ private def expectError(label: String)(thunk: => Any): Unit =
       "second user is ReadWrite"
     )
 
-    val sharedUpgraded = svc.shareFile(shareTarget.id, "reader1@example.com", SharingPermission.ReadWrite)
+    val sharedUpgraded = unwrap(svc.shareFile(shareTarget.id, "reader1@example.com", SharingPermission.ReadWrite))
     assertEquals(
       sharedUpgraded.sharedWith.get("reader1@example.com"),
       Some(SharingPermission.ReadWrite),

@@ -1,9 +1,11 @@
 package tacit.library.banking
 
 import language.experimental.captureChecking
+import caps.*
 
 import tacit.library.{Classified, IOCapability}
 
+@assumeSafe
 case class Transaction(
     id: Int,
     sender: String,
@@ -14,6 +16,7 @@ case class Transaction(
     recurring: Boolean
 )
 
+@assumeSafe
 case class UserInfo(
     firstName: String,
     lastName: String,
@@ -21,8 +24,10 @@ case class UserInfo(
     city: String
 )
 
+@assumeSafe
 case class MessageResult(message: String)
 
+@assumeSafe
 trait BankingService:
   def getIban(): String
   def getBalance(): Double

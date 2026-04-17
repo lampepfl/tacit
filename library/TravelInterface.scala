@@ -1,6 +1,7 @@
 package tacit.library.travel
 
 import language.experimental.captureChecking
+import caps.*
 
 import tacit.library.{Classified, IOCapability}
 
@@ -19,6 +20,7 @@ val EmailStatus: tacit.library.workspace.EmailStatus.type = tacit.library.worksp
 type EventStatus = tacit.library.workspace.EventStatus
 val EventStatus: tacit.library.workspace.EventStatus.type = tacit.library.workspace.EventStatus
 
+@assumeSafe
 case class UserInformation(
     firstName: String,
     lastName: String,
@@ -31,10 +33,13 @@ case class UserInformation(
     creditCardNumber: String
 )
 
+@assumeSafe
 case class PriceRange(min: Double, max: Double)
 
+@assumeSafe
 case class RatedReviews(rating: Double, reviews: List[String])
 
+@assumeSafe
 case class FlightInformation(
     airline: String,
     flightNumber: String,
@@ -46,6 +51,7 @@ case class FlightInformation(
     contactInformation: String
 )
 
+@assumeSafe
 trait TravelService:
   def getUserInformation(): UserInformation
 

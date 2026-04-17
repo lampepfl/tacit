@@ -36,6 +36,7 @@ object ScalaExecutor:
       "-Ycheck-all-patmat",
       "-Wsafe-init",
       "-language:experimental.captureChecking",
+      "-language:experimental.safe",
       "-language:experimental.modularity"
     )
 

@@ -1,15 +1,18 @@
 package tacit.library.slack
 
 import language.experimental.captureChecking
+import caps.*
 
 import tacit.library.{Classified, IOCapability}
 
+@assumeSafe
 case class Message(
     sender: String,
     recipient: String,
     body: String
 )
 
+@assumeSafe
 trait SlackService:
   def getChannels(): Classified[List[String]]
   def addUserToChannel(user: String, channel: String)(using IOCapability): Unit

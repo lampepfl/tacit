@@ -1,24 +1,31 @@
 package tacit.library.workspace
 
 import language.experimental.captureChecking
+import caps.*
 
 import tacit.library.{Classified, IOCapability}
 
+@assumeSafe
 enum EmailStatus:
   case Sent, Received, Draft
 
+@assumeSafe
 enum EventStatus:
   case Confirmed, Canceled
 
+@assumeSafe
 enum SharingPermission:
   case Read, ReadWrite
 
+@assumeSafe
 enum Attachment:
   case FileRef(fileId: String)
   case EventRef(event: CalendarEvent)
 
+@assumeSafe
 case class EmailContact(email: String, name: String)
 
+@assumeSafe
 case class Email(
     id: String,
     sender: String,
@@ -33,6 +40,7 @@ case class Email(
     attachments: List[Attachment]
 )
 
+@assumeSafe
 case class CalendarEvent(
     id: String,
     title: String,
@@ -45,6 +53,7 @@ case class CalendarEvent(
     status: EventStatus
 )
 
+@assumeSafe
 case class CloudDriveFile(
     id: String,
     filename: String,
@@ -55,6 +64,7 @@ case class CloudDriveFile(
     size: Int
 )
 
+@assumeSafe
 trait WorkspaceService:
   // Email — reads (wrapped in Classified: content may come from external senders)
   def getUnreadEmails(): Classified[List[Email]]

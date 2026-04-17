@@ -7,20 +7,24 @@ import tacit.library.{Classified, IOCapability}
 
 @assumeSafe
 enum EmailStatus:
-  case Sent, Received, Draft
+  @assumeSafe case Sent
+  @assumeSafe case Received
+  @assumeSafe case Draft
 
 @assumeSafe
 enum EventStatus:
-  case Confirmed, Canceled
+  @assumeSafe case Confirmed
+  @assumeSafe case Canceled
 
 @assumeSafe
 enum SharingPermission:
-  case Read, ReadWrite
+  @assumeSafe case Read
+  @assumeSafe case ReadWrite
 
 @assumeSafe
 enum Attachment:
-  case FileRef(fileId: String)
-  case EventRef(event: CalendarEvent)
+  @assumeSafe case FileRef(fileId: String)
+  @assumeSafe case EventRef(event: CalendarEvent)
 
 @assumeSafe
 case class EmailContact(email: String, name: String)

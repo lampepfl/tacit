@@ -92,6 +92,7 @@ class ProcessPermission(
 @assumeSafe
 class IOCapability private extends caps.SharedCapability
 
+@assumeSafe
 object IOCapability:
   def iocap: IOCapability = null.asInstanceOf[IOCapability]
 

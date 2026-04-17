@@ -1,6 +1,7 @@
 package tacit.library.banking
 
 import language.experimental.captureChecking
+import caps.*
 
 import tacit.library.{Classified, ClassifiedImpl, IOCapability, LlmConfig, LlmOps}
 import tacit.library.mcp.{JValue, MCPClient, MCPError, TextParsers}
@@ -8,6 +9,7 @@ import tacit.library.mcp.{JValue, MCPClient, MCPError, TextParsers}
 import java.nio.charset.StandardCharsets
 import java.nio.file.{Files, Path, StandardOpenOption}
 
+@assumeSafe
 class BankingImpl(endpoint: String, secureOutputPath: String) extends BankingService, AutoCloseable:
   private val client = MCPClient(endpoint)
 
@@ -160,6 +162,7 @@ class BankingImpl(endpoint: String, secureOutputPath: String) extends BankingSer
   private def parseMessage(j: JValue): MessageResult =
     MessageResult(message = j.field("message").asString.getOrElse(""))
 
+@assumeSafe
 object BankingImpl:
   def pythonReprToJson(s: String): String =
     TextParsers.pythonReprToJson(s)

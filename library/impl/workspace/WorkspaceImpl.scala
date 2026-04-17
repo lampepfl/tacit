@@ -1,6 +1,7 @@
 package tacit.library.workspace
 
 import language.experimental.captureChecking
+import caps.*
 
 import tacit.library.{Classified, ClassifiedImpl, IOCapability, LlmConfig, LlmOps}
 import tacit.library.mcp.{JValue, MCPClient, MCPError}
@@ -8,6 +9,7 @@ import tacit.library.mcp.{JValue, MCPClient, MCPError}
 import java.nio.charset.StandardCharsets
 import java.nio.file.{Files, Path, StandardOpenOption}
 
+@assumeSafe
 class WorkspaceImpl(endpoint: String, secureOutputPath: String) extends WorkspaceService, AutoCloseable:
   private val client = MCPClient(endpoint)
 

@@ -106,40 +106,36 @@ object ScalaExecutor:
     val escaped = secureChannel.replace("\\", "\\\\").replace("\"", "\\\"")
     s"""|import tacit.library.{Classified, IOCapability}
         |import tacit.library.banking.*
-        |import caps.*
         |val banking: BankingService = new BankingImpl("http://localhost:$port/mcp", "$escaped")
         |import banking.*
-        |@assumeSafe given IOCapability = IOCapability.iocap
+        |given IOCapability = IOCapability.iocap
         |""".stripMargin
 
   private def slackPreamble(port: Int, secureChannel: String): String =
     val escaped = secureChannel.replace("\\", "\\\\").replace("\"", "\\\"")
     s"""|import tacit.library.{Classified, IOCapability}
         |import tacit.library.slack.*
-        |import caps.*
         |val slack: SlackService = new SlackImpl("http://localhost:$port/mcp", "$escaped")
         |import slack.*
-        |@assumeSafe given IOCapability = IOCapability.iocap
+        |given IOCapability = IOCapability.iocap
         |""".stripMargin
 
   private def workspacePreamble(port: Int, secureChannel: String): String =
     val escaped = secureChannel.replace("\\", "\\\\").replace("\"", "\\\"")
     s"""|import tacit.library.{Classified, IOCapability}
         |import tacit.library.workspace.*
-        |import caps.*
         |val workspace: WorkspaceService = new WorkspaceImpl("http://localhost:$port/mcp", "$escaped")
         |import workspace.*
-        |@assumeSafe given IOCapability = IOCapability.iocap
+        |given IOCapability = IOCapability.iocap
         |""".stripMargin
 
   private def travelPreamble(port: Int, secureChannel: String): String =
     val escaped = secureChannel.replace("\\", "\\\\").replace("\"", "\\\"")
     s"""|import tacit.library.{Classified, IOCapability}
         |import tacit.library.travel.*
-        |import caps.*
         |val travel: TravelService = new TravelImpl("http://localhost:$port/mcp", "$escaped")
         |import travel.*
-        |@assumeSafe given IOCapability = IOCapability.iocap
+        |given IOCapability = IOCapability.iocap
         |""".stripMargin
 
   /** Wraps user code in a `def run() = ...; run()` block to avoid capture checking REPL errors. */
@@ -218,7 +214,13 @@ class ReplSession(val id: String)(using Context):
   private var state: State =
     val s0 = driver.initialState
     // Run preamble once to make library API available in the session
-    driver.run(libraryPreamble)(using s0)
+    var s1 = s0
+    val result = withOutputCapture(outputCapture, printStream):
+      s1 = driver.run(libraryPreamble)(using s0)
+    if !result.success then
+      val details = result.error.fold(result.output)(e => s"${result.output}\n$e")
+      throw new RuntimeException(s"Library preamble failed to compile:\n$details")
+    s1
 
   /** Execute code in this session and return the result */
   def execute(code: String): ExecutionResult =

@@ -1,6 +1,7 @@
 package tacit.library.travel
 
 import language.experimental.captureChecking
+import caps.*
 
 import tacit.library.{Classified, ClassifiedImpl, IOCapability, LlmConfig, LlmOps}
 import tacit.library.mcp.{JValue, MCPClient, MCPError, TextParsers}
@@ -9,6 +10,7 @@ import java.nio.charset.StandardCharsets
 import java.nio.file.{Files, Path, StandardOpenOption}
 import scala.util.matching.Regex
 
+@assumeSafe
 class TravelImpl(endpoint: String, secureOutputPath: String) extends TravelService, AutoCloseable:
   private val client = MCPClient(endpoint)
 
@@ -391,6 +393,7 @@ class TravelImpl(endpoint: String, secureOutputPath: String) extends TravelServi
     case EventStatus.Confirmed => "confirmed"
     case EventStatus.Canceled => "canceled"
 
+@assumeSafe
 object TravelImpl:
   private val PriceRangePattern: Regex =
     raw"Price range: ([0-9]+(?:\.[0-9]+)?) - ([0-9]+(?:\.[0-9]+)?)".r

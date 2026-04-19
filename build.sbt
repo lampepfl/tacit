@@ -56,6 +56,8 @@ lazy val lib = project
   .in(file("library"))
   .settings(
     name := "TACIT-library",
+    organization := "lampepfl",
+    version := "0.1.0-SNAPSHOT",
     scalaVersion := scala3Version,
     Compile / unmanagedSourceDirectories := Seq(
       baseDirectory.value,
@@ -88,7 +90,10 @@ lazy val lib = project
       case x =>
         val oldStrategy = (assembly / assemblyMergeStrategy).value
         oldStrategy(x)
-    }
+    },
+    // Publish the assembled fat JAR as the primary artifact so downstream consumers
+    // (e.g. capybaraclaw, loaded into a REPL classpath) get a single self-contained JAR.
+    Compile / packageBin := (Compile / assembly).value,
   )
 
 lazy val capybaraclaw = project
@@ -129,6 +134,7 @@ lazy val root = project
   .dependsOn(agents)
   .settings(
     name := "TACIT",
+    organization := "lampepfl",
     version := "0.1.4-SNAPSHOT",
 
     scalaVersion := scala3Version,

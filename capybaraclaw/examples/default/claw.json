@@ -1,6 +1,0 @@
-{
-  "provider": "openrouter",
-  "model": "minimax/minimax-m2.7:nitro",
-  "max_tokens": 16000,
-  "classified_paths": ["emails/", "CLAW.md", "claw.json"]
-}

@@ -18,39 +18,8 @@ ThisBuild / resolvers += Resolver.scalaNightlyRepository
 
 val circeVersion = "0.14.15"
 
-addCommandAlias("claw", "set capybaraclaw / run / baseDirectory := file(\"capybaraclaw/examples/default\"); capybaraclaw/run")
-addCommandAlias("slackbot", "capybaraclaw/runMain capybaraclaw.slackTestMain")
-
-val stableScala3Version = "3.8.2"
-
 val MUnitFramework = new TestFramework("munit.Framework")
 val TestFull = config("testFull").extend(Test)
-
-lazy val agents = project
-  .in(file("agents"))
-  .configs(TestFull)
-  .settings(
-    name := "tacit-agents",
-    organization := "lampepfl",
-    version := "0.1.0-SNAPSHOT",
-    scalaVersion := stableScala3Version,
-    scalacOptions ++= Seq(
-      "-deprecation", "-feature", "-unchecked",
-      "-Yexplicit-nulls", "-Wsafe-init",
-      "-language:experimental.modularity",
-    ),
-    libraryDependencies ++= Seq(
-      "com.openai" % "openai-java" % "4.29.1",
-      "com.anthropic" % "anthropic-java" % "2.18.0",
-      "ch.epfl.lamp" %% "gears" % "0.2.0",
-      "com.lihaoyi" %% "ujson" % "4.1.0",
-      "org.scalameta" %% "munit" % "1.2.2" % Test,
-    ),
-    testFrameworks += MUnitFramework,
-    Test / testOptions += Tests.Argument(MUnitFramework, "--exclude-tags=Network"),
-    inConfig(TestFull)(Defaults.testTasks),
-    TestFull / testOptions := Seq.empty,
-  )
 
 lazy val lib = project
   .in(file("library"))
@@ -92,46 +61,13 @@ lazy val lib = project
         oldStrategy(x)
     },
     // Publish the assembled fat JAR as the primary artifact so downstream consumers
-    // (e.g. capybaraclaw, loaded into a REPL classpath) get a single self-contained JAR.
+    // loaded into a REPL classpath get a single self-contained JAR.
     Compile / packageBin := (Compile / assembly).value,
-  )
-
-lazy val capybaraclaw = project
-  .in(file("capybaraclaw"))
-  .dependsOn(agents, root)
-  .configs(TestFull)
-  .settings(
-    name := "capybaraclaw",
-    scalaVersion := scala3Version,
-    scalacOptions ++= Seq(
-      "-deprecation", "-feature", "-unchecked",
-      "-Yexplicit-nulls", "-Wsafe-init",
-      "-language:experimental.modularity",
-    ),
-    libraryDependencies ++= Seq(
-      "com.slack.api" % "bolt" % "1.48.0",
-      "com.slack.api" % "bolt-socket-mode" % "1.48.0",
-      "org.glassfish.tyrus.bundles" % "tyrus-standalone-client" % "1.21",
-      "org.scalameta" %% "munit" % "1.2.2" % Test,
-    ),
-    testFrameworks += MUnitFramework,
-    Test / testOptions += Tests.Argument(MUnitFramework, "--exclude-tags=Network"),
-    inConfig(TestFull)(Defaults.testTasks),
-    TestFull / testOptions := Seq.empty,
-    fork := true,
-    run / connectInput := true,
-    Compile / mainClass := Some("capybaraclaw.main"),
-    Compile / run := (Compile / run dependsOn (lib / assembly)).evaluated,
-    javaOptions += {
-      val jarPath = (lib / assembly / assemblyOutputPath).value.getAbsolutePath
-      s"-Dtacit.library.jar=$jarPath"
-    },
   )
 
 lazy val root = project
   .in(file("."))
   .aggregate(lib)
-  .dependsOn(agents)
   .settings(
     name := "TACIT",
     organization := "lampepfl",

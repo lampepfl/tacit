@@ -47,6 +47,16 @@ class WebOpsSuite extends munit.FunSuite:
       os.close()
     )
 
+    server.createContext("/no-content", (ex: HttpExchange) =>
+      ex.sendResponseHeaders(204, -1)
+      ex.close()
+    )
+
+    server.createContext("/error-empty", (ex: HttpExchange) =>
+      ex.sendResponseHeaders(500, -1)
+      ex.close()
+    )
+
     server.start()
     baseUrl = s"http://localhost:$port"
 
@@ -73,6 +83,16 @@ class WebOpsSuite extends munit.FunSuite:
     val result = WebOps.httpGet(s"$baseUrl/server-error")
     assert(result.contains("something broke"), s"Expected error body, got: $result")
 
+  test("httpGet returns fallback message when success response has no body"):
+    given Network = NetworkImpl(Set("localhost"))
+    val result = WebOps.httpGet(s"$baseUrl/no-content")
+    assertEquals(result, "HTTP 204 (no response body)")
+
+  test("httpGet returns fallback message when error response has no body"):
+    given Network = NetworkImpl(Set("localhost"))
+    val result = WebOps.httpGet(s"$baseUrl/error-empty")
+    assertEquals(result, "HTTP 500 (no response body)")
+
   test("httpGet rejects host not matching allowlist"):
     given Network = NetworkImpl(Set("example.com"))
     val ex = intercept[SecurityException]:
@@ -89,6 +109,18 @@ class WebOpsSuite extends munit.FunSuite:
     given Network = NetworkImpl(Set("localhost"))
     val result = WebOps.httpPost(s"$baseUrl/not-found", "{}", "application/json")
     assert(result.contains("not found"), s"Expected error body, got: $result")
+
+  test("httpPost rejects host not matching allowlist"):
+    given Network = NetworkImpl(Set("example.com"))
+    val ex = intercept[SecurityException]:
+      WebOps.httpPost(s"$baseUrl/echo", "ping", "text/plain")
+    assert(ex.getMessage.nn.contains("does not match any permitted pattern"))
+
+  test("httpPost rejects URL with no host"):
+    given Network = NetworkImpl(Set("localhost"))
+    val ex = intercept[SecurityException]:
+      WebOps.httpPost("file:///etc/passwd", "ping", "text/plain")
+    assert(ex.getMessage.nn.contains("no host"))
 
   // ── glob matching in the allowlist ──────────────────────────
 

@@ -91,6 +91,12 @@ object Config:
       opt[String]("classified-paths")
         .action((x, c) => c.withLibrary("classifiedPaths", x.split(",").map(_.trim).filter(_.nonEmpty).toSeq.asJson))
         .text("Comma-separated classified path patterns ('.ssh' matches any .ssh dir, '/abs/path' matches that path)."),
+      opt[String]("command-permissions")
+        .action((x, c) => c.withLibrary("commandPermissions", x.split(",").map(_.trim).filter(_.nonEmpty).toSeq.asJson))
+        .text("Comma-separated glob patterns of exec-able commands (e.g. 'echo,py*'). When set, --strict is ignored."),
+      opt[String]("network-permissions")
+        .action((x, c) => c.withLibrary("networkPermissions", x.split(",").map(_.trim).filter(_.nonEmpty).toSeq.asJson))
+        .text("Comma-separated glob patterns of reachable network hosts (e.g. '*.example.com,api.github.com')."),
       opt[Unit]('q', "quiet")
         .action((_, c) => c.copy(quiet = true))
         .text("Suppress startup banner and request/response logging."),

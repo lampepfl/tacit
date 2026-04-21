@@ -54,38 +54,51 @@ class WebOpsSuite extends munit.FunSuite:
     server.stop(0)
 
   test("httpGet returns response body on success"):
-    given Network = Network(Set("localhost"))
+    given Network = NetworkImpl(Set("localhost"))
     val result = WebOps.httpGet(s"$baseUrl/ok")
     assertEquals(result, "hello")
 
   test("httpPost sends body and returns response"):
-    given Network = Network(Set("localhost"))
+    given Network = NetworkImpl(Set("localhost"))
     val result = WebOps.httpPost(s"$baseUrl/echo", "ping", "text/plain")
     assertEquals(result, "ping")
 
   test("httpGet returns error body on 404"):
-    given Network = Network(Set("localhost"))
+    given Network = NetworkImpl(Set("localhost"))
     val result = WebOps.httpGet(s"$baseUrl/not-found")
     assert(result.contains("not found"), s"Expected error body, got: $result")
 
   test("httpGet returns error body on 500"):
-    given Network = Network(Set("localhost"))
+    given Network = NetworkImpl(Set("localhost"))
     val result = WebOps.httpGet(s"$baseUrl/server-error")
     assert(result.contains("something broke"), s"Expected error body, got: $result")
 
-  test("httpGet rejects host not in allowed set"):
-    given Network = Network(Set("example.com"))
+  test("httpGet rejects host not matching allowlist"):
+    given Network = NetworkImpl(Set("example.com"))
     val ex = intercept[SecurityException]:
       WebOps.httpGet(s"$baseUrl/ok")
-    assert(ex.getMessage.nn.contains("localhost"))
+    assert(ex.getMessage.nn.contains("does not match any permitted pattern"))
 
   test("httpGet rejects URL with no host"):
-    given Network = Network(Set("localhost"))
+    given Network = NetworkImpl(Set("localhost"))
     val ex = intercept[SecurityException]:
       WebOps.httpGet("file:///etc/passwd")
     assert(ex.getMessage.nn.contains("no host"))
 
   test("httpPost returns error body on 404"):
-    given Network = Network(Set("localhost"))
+    given Network = NetworkImpl(Set("localhost"))
     val result = WebOps.httpPost(s"$baseUrl/not-found", "{}", "application/json")
     assert(result.contains("not found"), s"Expected error body, got: $result")
+
+  // ── glob matching in the allowlist ──────────────────────────
+
+  test("httpGet allows host matching a glob pattern"):
+    given Network = NetworkImpl(Set("local*"))
+    val result = WebOps.httpGet(s"$baseUrl/ok")
+    assertEquals(result, "hello")
+
+  test("httpGet rejects host not matching any glob pattern"):
+    given Network = NetworkImpl(Set("*.example.com"))
+    val ex = intercept[SecurityException]:
+      WebOps.httpGet(s"$baseUrl/ok")
+    assert(ex.getMessage.nn.contains("does not match any permitted pattern"))

@@ -20,7 +20,7 @@ object ProcessOps:
     workingDir: Option[String] = None,
     timeoutMs: Long = 30000
   )(using pp: ProcessPermission): ProcessResult =
-    CommandValidator.validate(command, pp)
+    pp.validateCommand(command, args)
     val pb = new ProcessBuilder((command :: args).asJava)
     workingDir.foreach(d => pb.directory(java.io.File(d)))
     val process = pb.start().nn

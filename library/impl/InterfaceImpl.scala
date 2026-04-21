@@ -24,6 +24,8 @@ abstract class InterfaceImpl(
   )
   private val strictMode: Boolean = config.strictMode.getOrElse(true)
   private val classifiedPatterns: Set[String] = config.classifiedPaths.getOrElse(DefaultClassifiedPatterns)
+  private val commandPermissions: Option[Set[String]] = config.commandPermissions
+  private val networkPermissions: Option[Set[String]] = config.networkPermissions
   private val llmConfig: Option[LlmConfig] = config.llm
 
   /** Optional secondary sink that receives the *unmasked* form of printed values.
@@ -90,12 +92,38 @@ abstract class InterfaceImpl(
     val fs = createFS(root, _ => true, classifiedPatterns)
     op(using fs)
 
+  /** Entry-time subset check shared by [[requestExecPermission]] and
+   *  [[requestNetwork]]: each item in `scope` must match at least one pattern
+   *  in `policy`. For command patterns that carry args (e.g. `"sbt run *"`),
+   *  we match against the pattern's command-word (the part before the first
+   *  space) so a bare scope command like `"sbt"` passes entry — per-invocation
+   *  arg filtering still happens at runtime. */
+  private def requireSubset(
+    scope: Set[String],
+    policy: Set[String],
+    kind: String
+  ): Unit =
+    scope.foreach: item =>
+      val matched = policy.exists: pattern =>
+        val head = pattern.takeWhile(_ != ' ')
+        GlobMatcher.matches(item, head)
+      if !matched then
+        throw SecurityException(
+          s"Access denied: scope $kind '$item' is not permitted by server policy $policy"
+        )
+
   def requestExecPermission[T](commands: Set[String])(op: ProcessPermission^ ?=> T)(using IOCapability): T =
-    val perm = new ProcessPermission(commands, strictMode)
+    // Server-configured commandPermissions is the outer bound: every command
+    // the scope declares must be permitted by some pattern's command-word.
+    commandPermissions.foreach(p => requireSubset(commands, p, "command"))
+    val perm = new ProcessPermissionImpl(commands, strictMode, commandPermissions)
     op(using perm)
 
   def requestNetwork[T](hosts: Set[String])(op: Network^ ?=> T)(using IOCapability): T =
-    val net = new Network(hosts)
+    // Server-configured networkPermissions is the outer bound: every host the
+    // scope declares must match at least one pattern.
+    networkPermissions.foreach(p => requireSubset(hosts, p, "host"))
+    val net = new NetworkImpl(hosts)
     op(using net)
 
   def classify[T](value: T): Classified[T] = ClassifiedImpl.wrap(value)

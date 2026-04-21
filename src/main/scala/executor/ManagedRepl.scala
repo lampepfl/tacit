@@ -75,14 +75,14 @@ object ManagedRepl:
         |@assumeSafe given IOCapability = iocap
         |""".stripMargin
 
-  /** Wrap user code in `def run()(using IOCapability) = ...; run()` so top-level
-    * expressions type-check under experimental capture checking.
-    */
-  private[executor] def wrapCode(code: String, wrap: Boolean): String =
-    if !wrap then code
-    else
-      val indented = code.linesIterator.map(line => s"  $line").mkString("\n")
-      s"def run()(using IOCapability): Any =\n$indented\nrun()"
+  // /** Wrap user code in `def run()(using IOCapability) = ...; run()` so top-level
+  //   * expressions type-check under experimental capture checking.
+  //   */
+  // private[executor] def wrapCode(code: String, wrap: Boolean): String =
+  //   if !wrap then code
+  //   else
+  //     val indented = code.linesIterator.map(line => s"  $line").mkString("\n")
+  //     s"def run()(using IOCapability): Any =\n$indented\nrun()"
 
   /** The REPL compiler writes to `System.out`/`System.err` directly, so output
     * redirection is process-global and only one execution can capture at a time.

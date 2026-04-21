@@ -336,7 +336,9 @@ Configuration is split into **server config** (transport, recording, sessions) a
 
 | Flag | Description |
 |------|-------------|
-| `-s`/`--strict` | Block file ops (cat, ls, rm, etc.) through exec |
+| `-s`/`--strict` | Block a built-in list of file-op commands (cat, ls, rm, ...) through exec. Convenient for quick experiments; for real deployments prefer `--command-permissions`. |
+| `--command-permissions <patterns>` | Comma-separated glob patterns of exec-able commands (e.g. `echo,py*,ls`). Only `*` is interpreted as a wildcard. When set, `--strict` is ignored. |
+| `--network-permissions <patterns>` | Comma-separated glob patterns of reachable hosts (e.g. `*.example.com,api.github.com`). Only `*` is interpreted as a wildcard. |
 | `--classified-paths <patterns>` | Comma-separated classified path patterns (gitignore-style, see below) |
 | `--llm-base-url <url>` | LLM API base URL |
 | `--llm-api-key <key>` | LLM API key |
@@ -352,7 +354,8 @@ Configuration is split into **server config** (transport, recording, sessions) a
   "sessionEnabled": true,
   "libraryJarPath": "/path/to/TACIT-library.jar",
   "libraryConfig": {
-    "strictMode": true,
+    "commandPermissions": ["sbt", "scala", "javac", "java", "make"],
+    "networkPermissions": ["*.scala-lang.org", "github.com", "docs.oracle.com"],
     "classifiedPaths": [".ssh", ".env", ".env.*", "secrets"],
     "secureOutput": "/tmp/secure.log",
     "llm": {
@@ -363,6 +366,24 @@ Configuration is split into **server config** (transport, recording, sessions) a
   }
 }
 ```
+
+**`commandPermissions`** (optional) — the exec allowlist: a list
+of glob patterns (only `*` is a wildcard) that every command passed to `exec`
+must match. This sits on top of the per-scope set declared by
+`requestExecPermission(...)` — a command must be in both to actually run. When
+set, `strictMode` is ignored. In real deployments you should always configure
+this list explicitly.
+
+**`strictMode`** (optional, default `true`) — a quick-experiment default that
+blocks a built-in list of file-op commands (`cat`, `ls`, `rm`, `tar`, `chmod`,
+shells, ...) through `exec`. Convenient when you just want to try things out,
+but too coarse for real use — prefer `commandPermissions`.
+
+**`networkPermissions`** (optional) — the network allowlist: a
+list of glob patterns (only `*` is a wildcard) that every host reached via
+`httpGet`/`httpPost` must match. Like `commandPermissions`, this layers on
+top of the per-scope set declared by `requestNetwork(...)` — a host must be
+in both. When unset, only the per-scope `requestNetwork` allowlist applies.
 
 **`secureOutput`** (optional) — path to an append-only file that mirrors every
 `println`/`print`/`printf` call from the isolation, but with `Classified[_]`
@@ -552,7 +573,9 @@ library/
 │   ├── RealFileSystem.scala    # FileSystem on real disk
 │   ├── VirtualFileSystem.scala # In-memory FileSystem (for testing)
 │   ├── ClassifiedImpl.scala    # Classified[T] wrapper implementation
-│   ├── CommandValidator.scala  # Command allowlist enforcement
+│   ├── ProcessPermissionImpl.scala # Concrete ProcessPermission
+│   ├── NetworkImpl.scala       # Concrete Network
+│   ├── GlobMatcher.scala       # Shared `*`-glob to regex utility
 │   ├── LibraryConfig.scala     # Library configuration with JSON parsing
 │   └── LlmConfig.scala        # LLM configuration case class
 └── test/                    # Library-level tests

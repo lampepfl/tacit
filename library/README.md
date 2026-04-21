@@ -33,6 +33,16 @@ requestExecPermission(Set("ls", "cat")) {
   println(result.stdout)
 }
 
+// A command must both be in the scope set AND satisfy the host-level policy.
+// The host policy is one of:
+//   - commandPermissions (recommended): glob allowlist, e.g. ["echo", "py*"]
+//   - strictMode         (default): blocks built-in file-op commands (cat, ls, rm, ...).
+//     Convenient for quick experiments; configure commandPermissions in real use.
+
+// Network requests have the same layering: a host must be in the scope set
+// AND, if `networkPermissions` is configured, match one of its glob patterns
+// (e.g. ["*.example.com", "api.github.com"]).
+
 // Network - scoped to allowed hosts
 requestNetwork(Set("api.example.com")) {
   val body = httpGet("https://api.example.com/data")

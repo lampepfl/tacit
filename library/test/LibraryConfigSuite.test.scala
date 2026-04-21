@@ -76,6 +76,22 @@ class LibraryConfigSuite extends munit.FunSuite:
     val cfg = LibraryConfig.fromJson("""{"strictMode": true}""")
     assertEquals(cfg.secureOutput, None)
 
+  test("parses commandPermissions"):
+    val cfg = LibraryConfig.fromJson("""{"commandPermissions": ["echo", "sbt*"]}""")
+    assertEquals(cfg.commandPermissions, Some(Set("echo", "sbt*")))
+
+  test("commandPermissions defaults to None"):
+    val cfg = LibraryConfig.fromJson("""{"strictMode": true}""")
+    assertEquals(cfg.commandPermissions, None)
+
+  test("parses networkPermissions"):
+    val cfg = LibraryConfig.fromJson("""{"networkPermissions": ["*.example.com", "api.github.com"]}""")
+    assertEquals(cfg.networkPermissions, Some(Set("*.example.com", "api.github.com")))
+
+  test("networkPermissions defaults to None"):
+    val cfg = LibraryConfig.fromJson("""{"strictMode": true}""")
+    assertEquals(cfg.networkPermissions, None)
+
   // ── LlmConfig toString hides API key ────────────────────────
 
   test("LlmConfig toString hides apiKey"):

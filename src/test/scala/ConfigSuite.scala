@@ -76,6 +76,16 @@ class ConfigSuite extends munit.FunSuite:
     val paths = cfg.libraryConfig.hcursor.get[List[String]]("classifiedPaths").toOption
     assertEquals(paths, Some(List("/a", "/b", "/c")))
 
+  test("--command-permissions sets commandPermissions in libraryConfig"):
+    val cfg = parse("--command-permissions", "echo, py*,ls").get
+    val perms = cfg.libraryConfig.hcursor.get[List[String]]("commandPermissions").toOption
+    assertEquals(perms, Some(List("echo", "py*", "ls")))
+
+  test("--network-permissions sets networkPermissions in libraryConfig"):
+    val cfg = parse("--network-permissions", "*.example.com, api.github.com").get
+    val perms = cfg.libraryConfig.hcursor.get[List[String]]("networkPermissions").toOption
+    assertEquals(perms, Some(List("*.example.com", "api.github.com")))
+
   test("--llm flags set llm object in libraryConfig"):
     val cfg = parse(
       "--llm-base-url", "https://api.example.com",

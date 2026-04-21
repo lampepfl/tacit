@@ -310,6 +310,113 @@ class LibraryIntegrationSuite extends munit.FunSuite:
     assert(result.output.toLowerCase.contains("strict") || result.output.contains("SecurityException"),
       s"expected strict mode error, got: ${result.output}")
 
+  test("commandPermissions allows matching command via REPL"):
+    val cfg = Config(libraryConfig = io.circe.Json.obj(
+      "commandPermissions" -> io.circe.Json.arr(io.circe.Json.fromString("echo"))
+    ))
+    given Context = Context(cfg, None)
+    val result = ScalaExecutor.execute("""
+      requestExecPermission(Set("echo")) {
+        exec("echo", List("hi")).stdout.trim
+      }
+    """)
+    assert(result.success, s"execution failed: ${result.error.getOrElse(result.output)}")
+    assert(result.output.contains("hi"), s"unexpected output: ${result.output}")
+
+  test("commandPermissions blocks unmatched command via REPL"):
+    val cfg = Config(libraryConfig = io.circe.Json.obj(
+      "commandPermissions" -> io.circe.Json.arr(io.circe.Json.fromString("echo"))
+    ))
+    given Context = Context(cfg, None)
+    val result = ScalaExecutor.execute("""
+      requestExecPermission(Set("ls")) {
+        exec("ls", List.empty)
+      }
+    """)
+    assert(result.success, s"should compile but throw at runtime: ${result.error.getOrElse(result.output)}")
+    assert(result.output.contains("SecurityException") || result.output.toLowerCase.contains("permitted pattern"),
+      s"expected permissions error, got: ${result.output}")
+
+  test("commandPermissions overrides strict mode for file ops via REPL"):
+    // With strict mode alone, `cat` would be blocked. commandPermissions
+    // overrides that and allows it.
+    val cfg = Config(libraryConfig = io.circe.Json.obj(
+      "strictMode" -> io.circe.Json.fromBoolean(true),
+      "commandPermissions" -> io.circe.Json.arr(io.circe.Json.fromString("cat"))
+    ))
+    given Context = Context(cfg, None)
+    val result = ScalaExecutor.execute("""
+      requestExecPermission(Set("cat")) {
+        // /dev/null exists on macOS and Linux; cat of it is empty output.
+        exec("cat", List("/dev/null")).exitCode
+      }
+    """)
+    assert(result.success, s"execution failed: ${result.error.getOrElse(result.output)}")
+    assert(!result.output.toLowerCase.contains("strict mode"),
+      s"strict mode should have been overridden, got: ${result.output}")
+    assert(result.output.contains("0"), s"expected exit code 0, got: ${result.output}")
+
+  test("commandPermissions with glob pattern via REPL"):
+    val cfg = Config(libraryConfig = io.circe.Json.obj(
+      "commandPermissions" -> io.circe.Json.arr(io.circe.Json.fromString("ec*"))
+    ))
+    given Context = Context(cfg, None)
+    val result = ScalaExecutor.execute("""
+      requestExecPermission(Set("echo")) {
+        exec("echo", List("ok")).stdout.trim
+      }
+    """)
+    assert(result.success, s"execution failed: ${result.error.getOrElse(result.output)}")
+    assert(result.output.contains("ok"), s"unexpected output: ${result.output}")
+
+  test("commandPermissions rejects scope command outside policy at entry"):
+    // Entry-time subset check: requestExecPermission(Set("rm")) must fail
+    // immediately because policy only permits "echo" — no exec call needed.
+    val cfg = Config(libraryConfig = io.circe.Json.obj(
+      "commandPermissions" -> io.circe.Json.arr(io.circe.Json.fromString("echo"))
+    ))
+    given Context = Context(cfg, None)
+    val result = ScalaExecutor.execute("""
+      requestExecPermission(Set("rm")) {
+        "unreachable"
+      }
+    """)
+    assert(result.success, s"should compile but throw at runtime: ${result.error.getOrElse(result.output)}")
+    assert(result.output.contains("SecurityException") || result.output.toLowerCase.contains("not permitted by server policy"),
+      s"expected entry-time permissions error, got: ${result.output}")
+
+  test("commandPermissions arg-aware pattern passes scope entry but filters args"):
+    // Policy "sbt run *" allows command-word "sbt" at scope entry,
+    // but per-invocation matching still rejects `sbt clean`.
+    val cfg = Config(libraryConfig = io.circe.Json.obj(
+      "commandPermissions" -> io.circe.Json.arr(io.circe.Json.fromString("sbt run *"))
+    ))
+    given Context = Context(cfg, None)
+    val result = ScalaExecutor.execute("""
+      requestExecPermission(Set("sbt")) {
+        exec("sbt", List("clean"))
+      }
+    """)
+    assert(result.success, s"should compile but throw at runtime: ${result.error.getOrElse(result.output)}")
+    assert(result.output.contains("SecurityException") || result.output.toLowerCase.contains("permitted pattern"),
+      s"expected runtime arg-aware error, got: ${result.output}")
+
+  test("networkPermissions blocks unmatched host via REPL"):
+    val cfg = Config(libraryConfig = io.circe.Json.obj(
+      "networkPermissions" -> io.circe.Json.arr(io.circe.Json.fromString("*.example.com"))
+    ))
+    given Context = Context(cfg, None)
+    // requestNetwork allows "localhost" at the scope level, but global policy
+    // only permits *.example.com, so validateHost must throw.
+    val result = ScalaExecutor.execute("""
+      requestNetwork(Set("localhost")) {
+        httpGet("http://localhost:1/")
+      }
+    """)
+    assert(result.success, s"should compile but throw at runtime: ${result.error.getOrElse(result.output)}")
+    assert(result.output.contains("SecurityException") || result.output.toLowerCase.contains("permitted pattern"),
+      s"expected permissions error, got: ${result.output}")
+
   test("requestFileSystem blocks path escape via REPL"):
     val result = ScalaExecutor.execute("""
       requestFileSystem("/tmp") {

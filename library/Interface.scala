@@ -69,23 +69,22 @@ case class ProcessResult(exitCode: Int, stdout: String, stderr: String)
 // ─── Capabilities ───────────────────────────────────────────────────────────
 
 /** Capability granting access to a set of network hosts.
- *  Obtained via `requestNetwork(hosts)`. */
+ *  Obtained via `requestNetwork(hosts)`.
+ *
+ *  `validateHost` throws `SecurityException` if a host is not permitted by the
+ *  scope or by the host-level policy configured on the server. */
 @assumeSafe
-class Network(val allowedHosts: Set[String]) extends caps.SharedCapability:
-  def validateHost(host: String): Unit =
-    if !allowedHosts.contains(host) then
-      throw SecurityException(
-        s"Access denied: host '$host' is not in allowed hosts $allowedHosts"
-      )
+trait Network extends caps.SharedCapability:
+  def validateHost(host: String): Unit
 
 /** Capability granting permission to run a set of commands.
  *  Obtained via `requestExecPermission(commands)`.
- *  In strict mode, file-operation commands (cat, ls, rm, ...) are also blocked. */
+ *
+ *  `validateCommand` throws `SecurityException` if a command is not permitted
+ *  by the scope or by the host-level policy configured on the server. */
 @assumeSafe
-class ProcessPermission(
-  val allowedCommands: Set[String],
-  val strictMode: Boolean = false
-) extends caps.SharedCapability
+trait ProcessPermission extends caps.SharedCapability:
+  def validateCommand(command: String, args: List[String] = List.empty): Unit
 
 /** Capability gating access to standard output (`println`, `print`, `printf`).
  *  An implicit instance is available at the REPL top level. */

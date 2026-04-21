@@ -681,6 +681,15 @@ You do **not** need to rebuild the server JAR unless you changed `CodeValidator`
 java -jar server.jar --library-jar new-library.jar
 ```
 
+#### 7. Try your new API in the dev REPL
+
+For quick iteration without spinning up an agent, launch the **dev REPL**, an interactive Scala prompt preloaded with the capability API and the same `CodeValidator` the MCP server uses:
+
+```bash
+sbt devRepl                                  # default config
+sbt "devRepl --strict --config my.json"      # with flags
+```
+
 ### Things to Keep in Mind
 
 - **Capabilities must extend `caps.SharedCapability`.** This is what makes capture checking work. Without it, the compiler cannot track the capability's scope and users could leak it out of the `request*` block.
@@ -712,6 +721,7 @@ sbt test                       # Run all tests
 sbt "testOnly *McpServerSuite" # Run a single suite
 sbt assembly                   # Build both JARs (server + library)
 sbt "lib/assembly"             # Build library JAR only
+sbt devRepl                    # Interactive REPL for testing the library
 ```
 
 <details>

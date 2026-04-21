@@ -116,7 +116,6 @@ lazy val root = project
     Test / test := ((Test / test) dependsOn (lib / assembly)).value,
     Test / testOnly := ((Test / testOnly) dependsOn (lib / assembly)).evaluated,
     Compile / run := (Compile / run dependsOn (lib / assembly)).evaluated,
-    assembly := (assembly dependsOn (lib / assembly)).value,
     javaOptions += {
       val jarPath = (lib / assembly / assemblyOutputPath).value.getAbsolutePath
       s"-Dtacit.library.jar=$jarPath"
@@ -124,9 +123,19 @@ lazy val root = project
 
     // Enable forking for the REPL execution
     fork := true,
-    // Connect stdin to the forked process (needed for MCP stdio communication)
-    run / connectInput := true,
+    // Connect stdin to the forked process.
+    connectInput := true,
     
+    // Quick launcher for the developer REPL (tacit.StartDevRepl).
+    // Usage: `sbt devRepl` or `sbt "devRepl --strict --config path.json"`.
+    commands += Command.args("devRepl", "<args>") { (state, args) =>
+      val cmd = ("runMain" :: "tacit.StartDevRepl" :: args.toList).mkString(" ")
+      "lib/assembly" :: cmd :: state
+    },
+
+    // Default `sbt run` to the MCP server
+    Compile / run / mainClass := Some("tacit.StartMCP"),
+
     // Assembly settings for creating a fat JAR
     assembly / mainClass := Some("tacit.StartMCP"),
     assembly / assemblyMergeStrategy := {

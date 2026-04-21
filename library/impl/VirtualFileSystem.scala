@@ -1,14 +1,12 @@
 package tacit.library
 
 import language.experimental.captureChecking
-import caps.assumeSafe
 
 import scala.collection.concurrent.TrieMap
 import scala.util.{Success, Failure}
 import java.nio.charset.StandardCharsets
 import java.nio.file.{Path, Paths}
 
-@assumeSafe
 class VirtualFileSystem(
   val root: Path,
   check: String -> Boolean = _ => true,
@@ -20,11 +18,10 @@ class VirtualFileSystem(
   private val files: TrieMap[Path, Array[Byte]] = TrieMap.empty
   private val directories: TrieMap[Path, Unit] = TrieMap(normalizedRoot -> ())
 
-  initialFiles.foreach { (relPath, content) =>
+  initialFiles.foreach: (relPath, content) =>
     val resolved = normalizedRoot.resolve(relPath).normalize
     ensureParentDirs(resolved)
     files(resolved) = content.getBytes(StandardCharsets.UTF_8)
-  }
 
   private def ensureParentDirs(path: Path): Unit =
     var parent: Path | Null = path.getParent
@@ -100,21 +97,19 @@ class VirtualFileSystem(
       requireNotClassified(resolved, "children")
       if !directories.contains(resolved) then
         throw java.nio.file.NoSuchFileException(resolved.toString)
-      val childFiles = files.keys.filter { p =>
+      val childFiles = files.keys.filter: p =>
         val parent = p.getParent
         parent != null && parent.nn == resolved
-      }
-      val childDirs = directories.keys.filter { d =>
+      val childDirs = directories.keys.filter: d =>
         val parent = d.getParent
         d != resolved && parent != null && parent.nn == resolved
-      }
-      (childFiles ++ childDirs).toList.map(p => new FileEntryImpl(p)).sortBy(_.path)
+      (childFiles ++ childDirs).toList.map(FileEntryImpl(_)).sortBy(_.path)
 
     def walk(): List[FileEntry^{origin}] =
       requireNotClassified(resolved, "walk")
       val allPaths = directories.keys.filter(d => d.startsWith(resolved) && d != resolved) ++
         files.keys.filter(_.startsWith(resolved))
-      allPaths.toList.map(p => new FileEntryImpl(p))
+      allPaths.toList.map(FileEntryImpl(_))
 
     def isClassified: Boolean = isClassifiedPath(resolved)
 
@@ -135,4 +130,4 @@ class VirtualFileSystem(
   def access(path: String): FileEntry^{this} =
     val resolved = resolvePath(path)
     checkPath(resolved)
-    new FileEntryImpl(resolved)
+    FileEntryImpl(resolved)

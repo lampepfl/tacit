@@ -9,7 +9,6 @@ import scopt.OParser
 case class Config(
   recordPath: Option[String] = None,
   quiet: Boolean = false,
-  wrappedCode: Boolean = false,
   sessionEnabled: Boolean = true,
   safeMode: Boolean = false,
   libraryJarPath: String = Option(System.getProperty("tacit.library.jar")).getOrElse(""),
@@ -26,7 +25,6 @@ case class Config(
 private case class FileConfig(
   recordPath: Option[String] = None,
   quiet: Option[Boolean] = None,
-  wrappedCode: Option[Boolean] = None,
   sessionEnabled: Option[Boolean] = None,
   safeMode: Option[Boolean] = None,
   libraryJarPath: Option[String] = None,
@@ -44,15 +42,18 @@ object Config:
     val source = scala.io.Source.fromFile(file)
     try source.mkString finally source.close()
 
+  /** Merges a JSON config file into `base`. Scalar fields come from the file when
+   *  present, falling back to `base`; for `libraryConfig` we deep-merge with
+   *  `base` on top, so library CLI flags set *before* `--config` still override
+   *  file values. CLI flags *after* `--config` override either way, since they
+   *  run after this merge completes. */
   private def mergeFromFile(base: Config, path: String): Config =
     val fc = decode[FileConfig](readFile(path)) match
       case Left(err) => throw RuntimeException(s"Failed to parse config file '$path': ${err.getMessage}")
       case Right(fc) => fc
-    // File values fill in defaults; CLI-provided libraryConfig fields override file values
     base.copy(
       recordPath = fc.recordPath.orElse(base.recordPath),
       quiet = fc.quiet.getOrElse(base.quiet),
-      wrappedCode = fc.wrappedCode.getOrElse(base.wrappedCode),
       sessionEnabled = fc.sessionEnabled.getOrElse(base.sessionEnabled),
       safeMode = fc.safeMode.getOrElse(base.safeMode),
       libraryJarPath = fc.libraryJarPath.getOrElse(base.libraryJarPath),
@@ -100,9 +101,6 @@ object Config:
       opt[Unit]('q', "quiet")
         .action((_, c) => c.copy(quiet = true))
         .text("Suppress startup banner and request/response logging."),
-      opt[Unit]("no-wrap")
-        .action((_, c) => c.copy(wrappedCode = false))
-        .text("Disable wrapping user code in def run() = ... ; run() (workaround for capture checking REPL errors)."),
       opt[Unit]("no-session")
         .action((_, c) => c.copy(sessionEnabled = false))
         .text("Disable session-related tools (create/execute/delete/list sessions)."),

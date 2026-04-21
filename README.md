@@ -328,8 +328,8 @@ Configuration is split into **server config** (transport, recording, sessions) a
 | `--library-jar <path>` | **Required.** Path to the library JAR (`TACIT-library.jar`) |
 | `-r`/`--record <dir>` | Log every execution to disk |
 | `-q`/`--quiet` | Suppress startup banner and request/response logging |
-| `--no-wrap` | Disable wrapping user code in `def run() = ... ; run()` |
 | `--no-session` | Disable session-related tools |
+| `--safe-mode` | Enable Scala 3's `language.experimental.safe` in the REPL for every execution (see [Safe Mode](#safe-mode)) |
 | `-c`/`--config <path>` | JSON config file (flags after `--config` override file values) |
 
 **Library flags** (shorthand for some `libraryConfig` fields):
@@ -349,9 +349,9 @@ Configuration is split into **server config** (transport, recording, sessions) a
 ```json
 {
   "recordPath": "/tmp/recordings",
-  "quiet": false,
-  "wrappedCode": false,
+  "quiet": true,
   "sessionEnabled": true,
+  "safeMode": true,
   "libraryJarPath": "/path/to/TACIT-library.jar",
   "libraryConfig": {
     "commandPermissions": ["sbt", "scala", "javac", "java", "make"],
@@ -525,7 +525,7 @@ Agent-generated code is compiled under Scala 3's *safe mode* (`import language.e
 
 These restrictions prevent agents from "forgetting" capabilities through unsafe casts, reflection, or type system holes. Code that does not pass compilation is never executed.
 
-Safe mode is an experimental feature still under active development. We currently use a static code validator that checks for forbidden patterns to enforce the safe mode subset, and plan to migrate to the official Scala 3 safe mode once it is stable.
+Safe mode is an experimental feature still under active development. By default, TACIT uses a static code validator that checks for forbidden patterns to enforce the safe mode subset. The `--safe-mode` flag (or `"safeMode": true` in the JSON config) additionally imports `language.experimental.safe` into every REPL execution, opting into Scala 3's in-compiler enforcement.
 
 ### LLM Integration
 

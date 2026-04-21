@@ -21,7 +21,7 @@ class ReplSession(val id: String)(using Context):
   def execute(code: String): ExecutionResult = repl.run(code)
 
 object ReplSession:
-  def create(using Context): ReplSession = new ReplSession(UUID.randomUUID().toString)
+  def create(using Context): ReplSession = ReplSession(UUID.randomUUID().toString)
 
 /** Manages multiple REPL sessions. Thread-safe via TrieMap. */
 class SessionManager(using Context):

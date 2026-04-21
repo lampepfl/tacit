@@ -1,12 +1,10 @@
 package tacit.library
 
 import language.experimental.captureChecking
-import caps.assumeSafe
 
 import java.util.concurrent.TimeUnit
 import scala.jdk.CollectionConverters.*
 
-@assumeSafe
 object ProcessOps:
   /** Drains an input stream into a string on the current thread. */
   private def drainStream(stream: java.io.InputStream): String =
@@ -21,7 +19,7 @@ object ProcessOps:
     timeoutMs: Long = 30000
   )(using pp: ProcessPermission): ProcessResult =
     pp.validateCommand(command, args)
-    val pb = new ProcessBuilder((command :: args).asJava)
+    val pb = ProcessBuilder((command :: args).asJava)
     workingDir.foreach(d => pb.directory(java.io.File(d)))
     val process = pb.start().nn
     try

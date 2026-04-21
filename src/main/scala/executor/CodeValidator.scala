@@ -36,8 +36,8 @@ object CodeValidator:
     ForbiddenPattern("net-http-client", raw"HttpClient".r, "HttpClient is forbidden; use requestNetwork"),
     ForbiddenPattern("net-http-conn", raw"HttpURLConnection".r, "HttpURLConnection is forbidden; use requestNetwork"),
 
-    // Cast escape
-    ForbiddenPattern("cast-escape", raw"\.asInstanceOf\[".r, ".asInstanceOf is forbidden"),
+    // Cast escape (whitespace before `[` is legal Scala and would otherwise evade us).
+    ForbiddenPattern("cast-escape", raw"\.asInstanceOf\s*\[".r, ".asInstanceOf is forbidden"),
 
     // CC unsafe
     ForbiddenPattern("cc-unsafe-caps", raw"caps\.unsafe".r, "caps.unsafe explicitly escapes capture checking"),
@@ -85,7 +85,7 @@ object CodeValidator:
     * Preserves newlines so line numbers remain correct.
     */
   def stripLiteralsAndComments(code: String): String =
-    val sb = new StringBuilder(code.length)
+    val sb = StringBuilder(code.length)
     var i = 0
     val len = code.length
 
@@ -152,13 +152,21 @@ object CodeValidator:
   /** Patterns that must be checked against the original (unstripped) code. */
   private val originalCodePatterns: Set[String] = Set("directive-using", "directive-import")
 
+  /** Squeeze whitespace around dots so `caps . unsafe` collapses to `caps.unsafe`.
+   *  Scala allows spaces around member-access dots, but the forbidden patterns
+   *  are written without them; normalizing here keeps patterns readable without
+   *  inviting whitespace-based evasion.
+   */
+  private val dotWhitespace = raw"\s*\.\s*".r
+  private def squeezeDots(line: String): String = dotWhitespace.replaceAllIn(line, ".")
+
   /** Validate code against all forbidden patterns.
     * Returns an empty list if the code is valid, or the list of violations otherwise.
     */
   def validate(code: String): List[ValidationViolation] =
     val stripped = stripLiteralsAndComments(code)
     val originalLines = code.linesIterator.toArray
-    val strippedLines = stripped.linesIterator.toArray
+    val strippedLines = stripped.linesIterator.toArray.map(squeezeDots)
 
     for
       pattern <- forbiddenPatterns

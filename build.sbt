@@ -35,7 +35,7 @@ lazy val lib = project
     Compile / unmanagedSources / excludeFilter :=
       "*.test.scala" || "project.scala" || "README.md",
     libraryDependencies ++= Seq(
-      "com.openai" % "openai-java" % "4.31.0",
+      "com.openai" % "openai-java" % "4.32.0",
       "io.circe" %% "circe-core" % circeVersion,
       "io.circe" %% "circe-parser" % circeVersion,
     ),

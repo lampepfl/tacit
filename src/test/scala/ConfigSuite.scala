@@ -39,7 +39,6 @@ class ConfigSuite extends munit.FunSuite:
     val cfg = parseRaw().get
     assertEquals(cfg.recordPath, None)
     assertEquals(cfg.quiet, false)
-    assertEquals(cfg.wrappedCode, false)
     assertEquals(cfg.sessionEnabled, true)
     assertEquals(cfg.libraryConfig, Json.obj())
 
@@ -56,10 +55,6 @@ class ConfigSuite extends munit.FunSuite:
   test("--no-session disables sessions"):
     val cfg = parse("--no-session").get
     assert(!cfg.sessionEnabled)
-
-  test("--no-wrap disables code wrapping"):
-    val cfg = parse("--no-wrap").get
-    assert(!cfg.wrappedCode)
 
   test("--library-jar sets libraryJarPath"):
     val cfg = parse().get

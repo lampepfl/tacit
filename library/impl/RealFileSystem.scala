@@ -1,7 +1,6 @@
 package tacit.library
 
 import language.experimental.captureChecking
-import caps.assumeSafe
 
 import scala.collection.mutable.ListBuffer
 import scala.jdk.CollectionConverters.*
@@ -11,7 +10,6 @@ import java.nio.charset.StandardCharsets
 import java.nio.file.{Files, FileVisitResult, Path, Paths, SimpleFileVisitor}
 import java.nio.file.attribute.BasicFileAttributes
 
-@assumeSafe
 class RealFileSystem(
   val root: Path,
   check: String -> Boolean = _ => true,
@@ -101,9 +99,10 @@ class RealFileSystem(
 
     def children: List[FileEntry^{origin}] =
       requireNotClassified(jpath, "children")
-      Files.list(jpath).nn.iterator.nn.asScala
-        .map(p => new FileEntryImpl(p))
-        .toList
+      // Files.list holds an open DirectoryStream; must close it explicitly.
+      val stream = Files.list(jpath).nn
+      try stream.iterator.nn.asScala.map(FileEntryImpl(_)).toList
+      finally stream.close()
 
     def walk(): List[FileEntry^{origin}] =
       requireNotClassified(jpath, "walk")
@@ -114,11 +113,10 @@ class RealFileSystem(
           FileVisitResult.CONTINUE
         override def preVisitDirectory(dir: Path | Null, attrs: BasicFileAttributes | Null): FileVisitResult =
           val d = dir.nn
-          if d != jpath then
-            paths += d
+          if d != jpath then paths += d
           FileVisitResult.CONTINUE
       )
-      paths.toList.map(p => new FileEntryImpl(p))
+      paths.toList.map(FileEntryImpl(_))
 
     def isClassified: Boolean = isClassifiedPath(jpath)
 
@@ -139,4 +137,4 @@ class RealFileSystem(
   def access(path: String): FileEntry^{this} =
     val resolved = resolvePath(path)
     checkPath(resolved)
-    new FileEntryImpl(resolved)
+    FileEntryImpl(resolved)

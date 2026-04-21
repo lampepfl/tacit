@@ -2,9 +2,7 @@ package tacit.library
 
 import io.circe.*
 import io.circe.parser.decode
-import caps.assumeSafe
 
-@assumeSafe
 case class LibraryConfig(
   strictMode: Option[Boolean] = None,
   classifiedPaths: Option[Set[String]] = None,
@@ -14,7 +12,6 @@ case class LibraryConfig(
   secureOutput: Option[String] = None
 ) derives Decoder
 
-@assumeSafe
 object LibraryConfig:
   def fromJson(json: String): LibraryConfig =
     if json.isBlank || json.trim == "{}" then return LibraryConfig()

@@ -1,12 +1,10 @@
 package tacit.library
 
 import language.experimental.captureChecking
-import caps.assumeSafe
 
 import java.nio.file.{FileSystems, Path}
 
 /** Shared path-validation and classified-path logic for file-system implementations. */
-@assumeSafe
 abstract class BaseFileSystem extends FileSystem:
 
   protected def normalizedRoot: Path

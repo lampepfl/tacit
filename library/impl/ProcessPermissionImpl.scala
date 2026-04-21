@@ -1,14 +1,11 @@
 package tacit.library
 
-import caps.assumeSafe
-
 /** Concrete [[ProcessPermission]] capability. Carries the per-scope
  *  `allowedCommands`, the `strictMode` flag (for quick experiments), and the
  *  optional host-level glob allowlist (`commandPermissions`).
  *
  *  These fields live here — not on [[ProcessPermission]] — so the public
  *  capability surface the agent sees stays abstract. */
-@assumeSafe
 final class ProcessPermissionImpl(
   val allowedCommands: Set[String],
   val strictMode: Boolean = false,
@@ -33,7 +30,6 @@ final class ProcessPermissionImpl(
             s"Strict mode: command '$command' is an unsafe operation. Use requestFileSystem instead."
           )
 
-@assumeSafe
 object ProcessPermissionImpl:
   /** Commands that perform unsafe operations - blocked in strict mode */
   private val unsafeCommands: Set[String] = Set(

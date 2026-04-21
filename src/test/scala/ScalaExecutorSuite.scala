@@ -1,4 +1,4 @@
-import tacit.executor.{ScalaExecutor, SessionManager}
+import tacit.executor.ScalaExecutor
 import tacit.core.{Context, Config}
 
 class ScalaExecutorSuite extends munit.FunSuite:
@@ -138,14 +138,6 @@ class ScalaExecutorSuite extends munit.FunSuite:
     """)
     assert(result.success)
     assert(result.output.contains("List(20, 40)"))
-
-  // ── Configuration ───────────────────────────────────────────────
-
-  test("unwrapped mode executes code directly"):
-    given Context = Context(Config(wrappedCode = false), None)
-    val result = ScalaExecutor.execute("val unwrapped = 99\nunwrapped")
-    assert(result.success)
-    assert(result.output.contains("99"))
 
   test("for comprehension"):
     val result = ScalaExecutor.execute("""

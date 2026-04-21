@@ -5,11 +5,10 @@ package tacit.library
  *  every other character matches literally (including regex metacharacters). */
 object GlobMatcher:
   def matches(value: String, pattern: String): Boolean =
-    val sb = new StringBuilder("^")
-    pattern.foreach {
-      case '*' => sb.append(".*")
+    val sb = StringBuilder("^")
+    pattern.foreach:
+      case '*'                               => sb.append(".*")
       case c if "\\^$.|?+(){}[]".contains(c) => sb.append('\\').append(c)
-      case c => sb.append(c)
-    }
+      case c                                 => sb.append(c)
     sb.append("$")
     value.matches(sb.toString)

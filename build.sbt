@@ -59,7 +59,9 @@ lazy val lib = project
       case x =>
         val oldStrategy = (assembly / assemblyMergeStrategy).value
         oldStrategy(x)
-    }
+    },
+    // Publish the assembled fat jar for the library
+    Compile / packageBin := (Compile / assembly).value
   )
 
 lazy val root = project

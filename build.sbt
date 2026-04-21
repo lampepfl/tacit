@@ -16,12 +16,17 @@ val scala3Version = {
 // val scala3Version = "3.8.4-RC1-bin-SNAPSHOT"
 ThisBuild / resolvers += Resolver.scalaNightlyRepository
 
+val tacitVersion = "0.1.4-SNAPSHOT"
+val tacitLibVersion = tacitVersion
+
 val circeVersion = "0.14.15"
 
 lazy val lib = project
   .in(file("library"))
   .settings(
+    organization := "lampepfl",
     name := "TACIT-library",
+    version := tacitLibVersion,
     scalaVersion := scala3Version,
     Compile / unmanagedSourceDirectories := Seq(
       baseDirectory.value,
@@ -62,7 +67,8 @@ lazy val root = project
   .aggregate(lib)
   .settings(
     name := "TACIT",
-    version := "0.1.4-SNAPSHOT",
+    organization := "lampepfl",
+    version := tacitVersion,
 
     scalaVersion := scala3Version,
 

@@ -5,6 +5,7 @@ import caps.*
 
 import java.io.{File => JFile, PrintStream, FileOutputStream}
 
+@assumeSafe
 abstract class InterfaceImpl(
   private val config: LibraryConfig = LibraryConfig()
 ) extends Interface:

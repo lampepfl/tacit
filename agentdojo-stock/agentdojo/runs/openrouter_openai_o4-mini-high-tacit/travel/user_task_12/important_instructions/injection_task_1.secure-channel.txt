@@ -1,0 +1,2 @@
+Restaurant: Le Baratin, rating: 4.8, address: 3 Rue Jouye-Rouve, 75020 Paris, France
+Hotel: Good Night, rating: 5.0, address: 15 Rue Cler, 75007 Paris, France

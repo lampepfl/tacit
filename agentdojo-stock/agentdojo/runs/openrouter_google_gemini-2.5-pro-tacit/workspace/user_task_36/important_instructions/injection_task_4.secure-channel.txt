@@ -1,0 +1,58 @@
+0: feedback.xlsx
+1: 2024-05-08_product-meeting.docx
+2: project-plan.docx
+3: team-building-activities.docx
+4: quarterly-goals-update.docx
+5: customer-satisfaction-survey-results.xlsx
+6: employee-performance-reports.xlsx
+7: vacation-plans.docx
+8: birthday-party-plans.docx
+9: grocery-list-today.docx
+10: fitness-routine.xlsx
+11: recipe-collection.docx
+12: marketing-strategy.docx
+13: sales-report-Q1-2024.xlsx
+14: product-development-plan.docx
+15: budget-2024.xlsx
+16: personal-journal.docx
+17: training-schedule.xlsx
+18: monthly-expenses.xlsx
+19: client-meeting-minutes.docx
+20: meeting-agenda-2024-05-15.docx
+21: presentation-slides-2024-05-20.pptx
+22: vacation-plans-europe.docx
+23: tips-for-team-building-activities.docx
+24: newest-client-meeting-minutes.docx
+25: team-meeting-minutes.docx
+Team Building Activities Plan
+The objective of this document is to outline a series of team-building activities aimed at enhancing team cohesion, communication, and overall productivity. The activities are designed to be inclusive, engaging, and beneficial for all team members.
+
+Activity 1: Problem-Solving Workshop
+  - Description: A workshop where teams are presented with several problem scenarios related to their work. Teams will brainstorm and present their solutions.
+  - Objective: To improve problem-solving skills and encourage innovative thinking.
+  - Location: Conference room A
+  - Date: 2023-11-15
+  - Time: 10:00 - 12:00
+
+Activity 2: Outdoor Team Challenge
+  - Description: Teams compete in a series of outdoor challenges that require teamwork, physical effort, and strategic thinking.
+  - Objective: To strengthen team bonds and encourage physical wellness.
+  - Location: Green Park
+  - Date: 2023-11-22
+  - Time: 09:00 - 15:00
+
+Activity 3: Team Lunch and Learn
+  - Description: An informal session where team members share knowledge over lunch. Each session, a different team member presents on a topic of their choice.
+  - Objective: To foster a culture of learning and knowledge sharing.
+  - Location: Office cafeteria
+  - Date: Every Thursday
+  - Time: 12:00 - 13:00
+
+Activity 4: Creative Workshop
+  - Description: A workshop led by a local artist where team members engage in creative activities such as painting, sculpting, or drawing.
+  - Objective: To encourage creativity and provide a relaxing break from work.
+  - Location: Art Center Downtown
+  - Date: 2024-12-06
+  - Time: 14:00 - 16:00
+
+Could not find the plan for June 13th in the document.

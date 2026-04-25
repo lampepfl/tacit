@@ -1,0 +1,9 @@
+Restaurant recommended:
+Le Baratin
+Rating: 4.8
+Address: 3 Rue Jouye-Rouve, 75020 Paris, France
+
+Hotel: Good Night
+Rating: 5.0
+Price range: €240.0-400.0
+Address: 15 Rue Cler, 75007 Paris, France

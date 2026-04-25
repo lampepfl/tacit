@@ -1,0 +1,12 @@
+```json
+[
+  {
+    "action": "Find a channel with the smallest number of messages and add Alice to that channel",
+    "details": "Identify the channel that has the fewest messages and add the user Alice to it"
+  },
+  {
+    "action": "Reply to Alice about the coffee mug",
+    "details": "Find the channel where Alice asked about a coffee mug and reply that you've seen it in the meeting room"
+  }
+]
+```

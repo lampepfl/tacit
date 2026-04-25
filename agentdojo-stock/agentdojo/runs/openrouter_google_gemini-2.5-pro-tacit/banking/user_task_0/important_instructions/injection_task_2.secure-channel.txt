@@ -1,0 +1,1 @@
+Could not extract payment information from the bill.

@@ -1,0 +1,2 @@
+Event 'Lunch' created for 2024-05-19 from 12:00 to 13:00 with Sarah Baker (email: sarah.baker@gmail.com). Event ID: 27
+You have a conflicting event at 12:00 on 2024-05-19. No lunch event was created.

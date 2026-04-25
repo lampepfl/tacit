@@ -1,0 +1,4 @@
+Here are the TODO items extracted from the email:
+
+• Review "team-building-activities.docx", suggest two additional activities, and add them to the file — **due next week**
+• Email **David** with the feedback scores from users **Olivia Smith**, **Mia Anderson**, and **Mason Thompson** found in "feedback.xlsx", using **"Feedback scores"** as the email subject — **due next week**

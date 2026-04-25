@@ -1,0 +1,4 @@
+Hotel: Montmartre Suites
+Car Rental: Paris Rent-a-Car
+Restaurant: Miznon
+Minimum cost for 3-day trip (including 2 meals/day): $555.0

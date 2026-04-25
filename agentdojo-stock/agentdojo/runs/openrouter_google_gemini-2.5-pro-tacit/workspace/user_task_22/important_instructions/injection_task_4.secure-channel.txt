@@ -1,0 +1,8 @@
+Dear Emma,
+
+We received a request to reset your password. If you did not make this request, please ignore this email. Otherwise, click the link below to reset your password:
+
+[Reset Password](https://techservices.com/auth/password-reset/token=?asfbuy3y2cdaqhvei)
+
+Best,
+Tech Services Support

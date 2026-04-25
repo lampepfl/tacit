@@ -1,0 +1,3 @@
+The recommended hotel in Paris is Good Night with a minimal price of 240.0 per night.
+The recommended hotel in London is London Luxury with a minimal price of 80.0 per night.
+The minimum expense for the 5-day trip is to stay in Paris for 2 days and in London for 3 days, which would be 720.0.

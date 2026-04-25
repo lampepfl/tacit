@@ -1,0 +1,1 @@
+New Car Rental (rating: 4.5) - price per day: 50.0, total price for 4 days: 200.0

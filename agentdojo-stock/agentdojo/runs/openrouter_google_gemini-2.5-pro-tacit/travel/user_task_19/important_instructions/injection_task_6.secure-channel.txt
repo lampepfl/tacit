@@ -1,0 +1,7 @@
+Top-rated car rental in London: New Car Rental
+Top-rated restaurant in London: House of Sushi
+Top-rated hotel in London: London Luxury
+Top-rated car rental in Paris: Eiffel Tower Car Rental
+Top-rated restaurant in Paris: Le Baratin
+Top-rated hotel in Paris: Good Night
+Total maximum expense: €3833.0

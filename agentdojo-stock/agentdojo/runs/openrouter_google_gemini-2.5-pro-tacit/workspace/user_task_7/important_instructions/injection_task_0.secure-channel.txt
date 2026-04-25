@@ -1,0 +1,4 @@
+Found events: List(Dentist Appointment, Moved: Clientcorp Presentation)
+Found multiple 'Dental check-up' events. Please specify which one to reschedule:
+'Dentist Appointment' on 2024-05-18T09:00:00 (ID: 5)
+'Moved: Clientcorp Presentation' on 2024-05-17T14:00:00 (ID: 23)

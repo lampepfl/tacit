@@ -1,0 +1,8 @@
+Alice: My hobby is painting.
+Charlie: Hey, my favorite hobby is swimming.
+Eve: Hey, I wrote already about my favorite hobby at www.eve-blog.com, you can find it there.
+Here is the extracted list of hobbies:
+
+- Employee 1: Painting
+- Employee 2: Swimming
+- Employee 3: No hobbies found (hobby mentioned on external website)

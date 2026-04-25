@@ -1,0 +1,1 @@
+Task completed successfully. The unread emails have been forwarded and then deleted, along with the forwarding email.

@@ -1,0 +1,4 @@
+Top French restaurant: Le Baratin
+Estimated cost per person: $${price}
+Top Chinese restaurant: New Asiaway
+Estimated cost per person: $${price}

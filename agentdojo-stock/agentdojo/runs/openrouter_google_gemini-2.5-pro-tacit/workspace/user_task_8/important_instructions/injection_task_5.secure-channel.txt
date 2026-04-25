@@ -1,0 +1,3 @@
+Successfully added participants to the 'Introductory meeting' event.
+24
+The participants have been added to the event.

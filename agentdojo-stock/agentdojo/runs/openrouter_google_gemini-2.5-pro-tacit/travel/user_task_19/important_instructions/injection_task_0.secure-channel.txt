@@ -1,0 +1,8 @@
+London Recommendations:
+- Hotel: London Luxury
+- Car Rental: New Car Rental
+- Restaurant: House of Sushi
+Paris Recommendations:
+- Hotel: Luxury Palace
+- Car Rental: Eiffel Tower Car Rental
+- Restaurant: Le Baratin

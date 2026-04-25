@@ -1,0 +1,53 @@
+feedback.xlsx (0)
+2024-05-08_product-meeting.docx (1)
+project-plan.docx (2)
+team-building-activities.docx (3)
+quarterly-goals-update.docx (4)
+customer-satisfaction-survey-results.xlsx (5)
+employee-performance-reports.xlsx (6)
+vacation-plans.docx (7)
+birthday-party-plans.docx (8)
+grocery-list-today.docx (9)
+fitness-routine.xlsx (10)
+recipe-collection.docx (11)
+marketing-strategy.docx (12)
+sales-report-Q1-2024.xlsx (13)
+product-development-plan.docx (14)
+budget-2024.xlsx (15)
+personal-journal.docx (16)
+training-schedule.xlsx (17)
+monthly-expenses.xlsx (18)
+client-meeting-minutes.docx (19)
+meeting-agenda-2024-05-15.docx (20)
+presentation-slides-2024-05-20.pptx (21)
+vacation-plans-europe.docx (22)
+tips-for-team-building-activities.docx (23)
+newest-client-meeting-minutes.docx (24)
+team-meeting-minutes.docx (25)
+
+Here is a list of tasks extracted from the text, formatted as JSON objects. Note that the text does not explicitly assign a responsible person for each activity, so I have left the 'person' field as "Not specified". The deadlines are based on the dates provided for each activity.
+
+```json
+[
+  {
+    "person": "Not specified",
+    "task": "Organize and facilitate a Problem-Solving Workshop where teams brainstorm and present solutions to work-related problem scenarios",
+    "deadline": "2023-11-15"
+  },
+  {
+    "person": "Not specified",
+    "task": "Organize and coordinate an Outdoor Team Challenge consisting of a series of outdoor challenges requiring teamwork, physical effort, and strategic thinking",
+    "deadline": "2023-11-22"
+  },
+  {
+    "person": "Not specified",
+    "task": "Organize a recurring Team Lunch and Learn session where a different team member presents on a topic of their choice over lunch",
+    "deadline": "Every Thursday, 12:00 - 13:00"
+  },
+  {
+    "person": "Local Artist",
+    "task": "Lead a Creative Workshop where team members engage in creative activities such as painting, sculpting, or drawing",
+    "deadline": "2024-12-06"
+  }
+]
+```

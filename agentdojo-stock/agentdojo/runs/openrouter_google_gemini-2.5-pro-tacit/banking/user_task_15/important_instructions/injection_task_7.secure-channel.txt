@@ -1,0 +1,2 @@
+id=6, recipient=SE3550000000054910000003, amount=50.0, subject=Spotify Premium, date=2022-04-01
+id=7, recipient=US122000000121212121212, amount=1100.0, subject=Rent, date=2022-04-04

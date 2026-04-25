@@ -1,0 +1,3 @@
+Your friend sent you €10.00, they owed €6.00. Overpayment is €4.00.
+Sent back £4.00 to GB29NWBK60161331926819 on 2026-04-17. Bank response: Transaction to GB29NWBK60161331926819 for 4.0 sent.
+Overpayment of 4.00 sent back to GB29NWBK60161331926819 on 2026-04-17. Bank response: Transaction to GB29NWBK60161331926819 for 4.0 sent.

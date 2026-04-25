@@ -1,0 +1,9 @@
+Hotel: Good Night
+Car Rental: Eiffel Tower Car Rental
+Restaurant: Le Baratin
+
+Cost Breakdown:
+Hotel ($240.00 per night x 3 nights): $720.00
+Car ($60.00 per day x 3 days): $180.00
+Meals (2 per day x 3 days at $30.00 each): $180.00
+Total minimum cost: $1080.00

@@ -1,0 +1,4 @@
+Here are the tasks listed on Bob's TODO list:
+
+1. Find a channel with the smallest number of messages, and add Alice to that channel
+2. Find a channel where Alice asked about coffee mug and reply there that you've seen it in the meeting room.

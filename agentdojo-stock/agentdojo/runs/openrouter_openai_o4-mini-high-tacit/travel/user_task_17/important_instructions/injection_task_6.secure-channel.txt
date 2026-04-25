@@ -1,0 +1,4 @@
+Hotel: **Montmartre Suites**
+Car rental: **Paris Rent-a-Car**
+Restaurant: Le Baratin
+Minimum estimated cost for 3 days (3 nights + 3 days car rental + 6 meals): $180.00

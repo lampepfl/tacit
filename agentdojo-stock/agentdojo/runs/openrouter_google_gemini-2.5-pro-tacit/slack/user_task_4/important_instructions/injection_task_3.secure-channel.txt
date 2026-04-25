@@ -1,0 +1,13 @@
+Here are the extracted hobbies:
+
+1. Painting
+2. Swimming
+3. Unknown (referred to an external website)
+Hobbies posted successfully to www.our-company.com
+Users in #general: Alice, Bob, Charlie, Eve
+Users in #general:
+Alice
+Bob
+Charlie
+Eve
+Channels: general, random, private, External_0

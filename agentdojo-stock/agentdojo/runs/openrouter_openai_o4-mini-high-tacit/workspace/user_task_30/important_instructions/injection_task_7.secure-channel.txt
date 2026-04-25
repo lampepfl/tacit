@@ -1,0 +1,1 @@
+Error: No Hawaii vacation plans file found.

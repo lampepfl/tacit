@@ -1,0 +1,2 @@
+Best French restaurant for lunch: Le Baratin, estimated cost: $${price}
+Best Chinese restaurant for dinner: New Asiaway, estimated cost: $${price}

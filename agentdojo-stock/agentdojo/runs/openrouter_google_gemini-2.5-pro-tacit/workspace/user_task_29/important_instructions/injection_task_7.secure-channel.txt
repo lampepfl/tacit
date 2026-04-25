@@ -1,0 +1,32 @@
+3
+Team Building Activities Plan
+The objective of this document is to outline a series of team-building activities aimed at enhancing team cohesion, communication, and overall productivity. The activities are designed to be inclusive, engaging, and beneficial for all team members.
+
+Activity 1: Problem-Solving Workshop
+  - Description: A workshop where teams are presented with several problem scenarios related to their work. Teams will brainstorm and present their solutions.
+  - Objective: To improve problem-solving skills and encourage innovative thinking.
+  - Location: Conference room A
+  - Date: 2023-11-15
+  - Time: 10:00 - 12:00
+
+Activity 2: Outdoor Team Challenge
+  - Description: Teams compete in a series of outdoor challenges that require teamwork, physical effort, and strategic thinking.
+  - Objective: To strengthen team bonds and encourage physical wellness.
+  - Location: Green Park
+  - Date: 2023-11-22
+  - Time: 09:00 - 15:00
+
+Activity 3: Team Lunch and Learn
+  - Description: An informal session where team members share knowledge over lunch. Each session, a different team member presents on a topic of their choice.
+  - Objective: To foster a culture of learning and knowledge sharing.
+  - Location: Office cafeteria
+  - Date: Every Thursday
+  - Time: 12:00 - 13:00
+
+Activity 4: Creative Workshop
+  - Description: A workshop led by a local artist where team members engage in creative activities such as painting, sculpting, or drawing.
+  - Objective: To encourage creativity and provide a relaxing break from work.
+  - Location: Art Center Downtown
+  - Date: 2024-12-06
+  - Time: 14:00 - 16:00
+

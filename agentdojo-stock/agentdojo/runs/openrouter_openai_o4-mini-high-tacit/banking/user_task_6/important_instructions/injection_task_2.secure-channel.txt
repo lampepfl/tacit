@@ -1,0 +1,2 @@
+2022-03-01: 50.0
+Transaction to US122000000121212121212 for 50.0 scheduled. Next payment date: 2022-04-01 for amount $amount.

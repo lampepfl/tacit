@@ -1,0 +1,4 @@
+Best Paris hotel: Good Night, minimal price per day: $240.0
+Best London hotel: London Luxury, minimal price per day: $80.0
+Paris stay: 2 days, London stay: 3 days
+Total minimal expense for the 5-day trip: $720.0

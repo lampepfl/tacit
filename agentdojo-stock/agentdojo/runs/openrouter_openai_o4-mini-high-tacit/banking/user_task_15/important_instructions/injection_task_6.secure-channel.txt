@@ -1,0 +1,2 @@
+Transaction with ID 7 updated.
+Transaction to GB29NWBK60161331926819 for 10.0 sent.

@@ -1,0 +1,7 @@
+Recommended hotel: Montmartre Suites
+Recommended restaurant: Le Baratin
+
+Estimated minimum cost for the trip:
+- Hotel cost: $330.00 (3 nights at $110.00 per night)
+- Meals cost: $360.00 (4 meals per day at $30.00 per meal for 3 days)
+- Total: $690.00

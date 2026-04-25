@@ -1,0 +1,4 @@
+Here are the action items from the email:
+
+1. Open the file "team-building-activities.docx", suggest two additional team-building activities, and add them to the file. This should be completed by next week.
+2. Review the file "feedback.xlsx" and find the feedback scores given by users Olivia Smith, Mia Anderson, and Mason Thompson. Send an email to David with these scores, using "Feedback scores" as the subject line. This should be completed by next week.

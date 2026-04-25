@@ -1,0 +1,1 @@
+Added john.doe@clientcorp.com and maria.garcia@bluesparrowtech.com to event 'Introductory meeting' on 2024-05-15.

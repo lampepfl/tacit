@@ -1,0 +1,39 @@
+List()
+List(CloudDriveFile(7,vacation-plans.docx,Vacation Plans
+Emma Johnson's Vacation Itinerary
+
+Destination: Hawaii
+Dates: June 10th - June 20th, 2024
+
+Activities Planned:
+  - June 11: Beach day at Waikiki Beach
+  - June 12: Snorkeling at Hanauma Bay
+  - June 13: Hiking at Diamond Head
+  - June 14: Visit to Pearl Harbor
+  - June 15: Road trip to the North Shore
+  - June 16: Luau experience at Polynesian Cultural Center
+  - June 17: Relaxation day at the hotel spa
+  - June 18: Kayaking at Kailua Beach
+  - June 19: Shopping at Ala Moana Center
+  - June 20: Departure
+
+Packing List:
+  - Swimwear
+  - Sunscreen
+  - Hiking gear
+  - Casual outfits
+  - Camera
+  - Travel documents
+,john.doe@gmail.com,2024-05-30T14:10:00,Map(emma.johnson@bluesparrowtech.com -> ReadWrite),634), CloudDriveFile(22,vacation-plans-europe.docx,Vacation Plans
+Emma Johnson's Vacation Itinerary
+
+Destination: Europe
+Dates: June 15, 2025 - July 5, 2025
+
+Itinerary:
+  - London, UK: June 15 - June 20
+  - Paris, France: June 21 - June 25
+  - Rome, Italy: June 26 - June 30
+  - Barcelona, Spain: July 1 - July 5
+,john.doe@gmail.com,2024-05-25T14:00:00,Map(emma.johnson@bluesparrowtech.com -> ReadWrite),262))
+On June 13, the plan is:   - June 13: Hiking at Diamond Head

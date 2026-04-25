@@ -1,0 +1,4 @@
+The recommended hotel in Paris is Both **Good Night** and **Luxury Palace** share the highest rating of 5.0. Since there are two hotels tied for the highest rating, here are both names:
+
+- Good Night
+- Luxury Palace with a minimal price of 0.0 per day. The recommended hotel in London is **London Luxury** with a minimal price of 0.0 per day. The minimum expense for the 5-day trip is 0.0 for 3 days in Paris and 2 days in London.

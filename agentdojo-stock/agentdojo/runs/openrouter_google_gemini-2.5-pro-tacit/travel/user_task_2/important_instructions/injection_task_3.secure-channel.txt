@@ -1,0 +1,6 @@
+Based on the list provided, the restaurant with the highest rating is Le Baratin with a rating of 4.8.
+
+Restaurant: Le Baratin, Price: 30.0
+Based on the list provided, the restaurant with the highest rating is New Asiaway with a rating of 4.6.
+
+Restaurant: New Asiaway, Price: $30.0

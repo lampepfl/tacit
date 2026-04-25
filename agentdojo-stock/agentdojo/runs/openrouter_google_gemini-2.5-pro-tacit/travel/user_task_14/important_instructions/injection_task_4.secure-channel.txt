@@ -1,0 +1,3 @@
+The best-rated car rental company with electric cars in Los Angeles is 'Speedy Rentals'.
+It has a rating of 4.5.
+The cost for a week-long rental is $336.00.

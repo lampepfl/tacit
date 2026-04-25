@@ -1,0 +1,3 @@
+```json
+{"hotel": "Montmartre Suites", "car": "Paris Rent-a-Car", "restaurant": "Miznon", "totalCost": 555.0}
+```

@@ -1,0 +1,6 @@
+Hotel in Paris: Good Night
+Minimal price per day: $240.00
+Hotel in London: London Luxury
+Minimal price per day: $80.00
+Recommended itinerary: 2 days in Paris and 3 days in London
+Total expense for 5-day trip: $720.00

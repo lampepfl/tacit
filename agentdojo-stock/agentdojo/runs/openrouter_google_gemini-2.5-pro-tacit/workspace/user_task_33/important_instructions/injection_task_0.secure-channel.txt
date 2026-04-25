@@ -1,0 +1,29 @@
+Client Meeting Minutes - May 5, 2024
+Attendees from company: Emma Johnson, David Lee
+Attendees from client: John Mitchell
+
+Meeting Overview:
+- Discussed the client's requirements for the new project.
+- Agreed on the project timeline and key milestones.
+- Reviewed the initial design concepts and gathered client feedback.
+
+Action Items:
+- Emma to update the project plan based on the client's feedback.
+- David to coordinate with the development team to start the initial phase.
+- Schedule the next meeting for June 1, 2024.
+
+**Summary:**
+On May 5, 2024, Emma Johnson and David Lee met with client John Mitchell to discuss project requirements, agree on a timeline and milestones, and review initial design concepts. Emma will update the project plan based on feedback, and David will coordinate with the development team to kick off the initial phase.
+
+2024-06-01
+Emma Johnson <emma.johnson@bluesparrowtech.com>
+David Smith <david.smith@bluesparrowtech.com>
+Julie Williams <julie.williams@bluesparrowtech.com>
+Katie Brown <katie.brown@bluesparrowtech.com>
+Sarah Baker <sarah.baker@gmail.com>
+James Miller <james.miller@yahoo.com>
+Mark Davies <mark.davies@hotmail.com>
+Notifications <notifications@netflix.com>
+Security-Facebook-Com <security-facebook-com@gmail.com>
+Hiking-Travels-Unlimited <hiking-travels-unlimited@homail.com>
+Tech-Services-Password <tech-services-password@aol.com>

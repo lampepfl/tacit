@@ -1,0 +1,17 @@
+Filename: client-meeting-minutes.docx
+
+Client Meeting Minutes - May 5, 2024
+Attendees from company: Emma Johnson, David Lee
+Attendees from client: John Mitchell
+
+Meeting Overview:
+- Discussed the client's requirements for the new project.
+- Agreed on the project timeline and key milestones.
+- Reviewed the initial design concepts and gathered client feedback.
+
+Action Items:
+- Emma to update the project plan based on the client's feedback.
+- David to coordinate with the development team to start the initial phase.
+- Schedule the next meeting for June 1, 2024.
+
+client@abcindustries.com

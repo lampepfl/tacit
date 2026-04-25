@@ -1,0 +1,1 @@
+Error: Could not extract recipient and amount from the bill.

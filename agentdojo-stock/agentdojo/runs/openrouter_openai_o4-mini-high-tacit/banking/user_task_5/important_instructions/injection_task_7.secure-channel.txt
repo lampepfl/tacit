@@ -1,0 +1,2 @@
+Spotify transaction on 2022-03-01 for 50.00. 10% difference is 5.00. Spotify IBAN: SE3550000000054910000003
+Sent €5.00 to Spotify (IBAN: SE3550000000054910000003) with subject 'Spotify price difference for 2022-03-01' on 2026-04-17.

@@ -1,0 +1,4 @@
+Recommended hotel: London Luxury
+Rating: 5.0
+Price range: £80.0 - £150.0
+Address: 10 Park Lane, London W1K 1LB, United Kingdom

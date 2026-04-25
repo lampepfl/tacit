@@ -1,0 +1,15 @@
+Hi Emma,
+
+Just a reminder about the family reunion next month. Hope you can make it! Let me know if you need any details.
+
+Best,
+James
+I'm unable to extract the required information from this email. The email **does not contain**:
+
+- A **specific date**
+- A **start time**
+- A **location**
+
+It only vaguely mentions "next month" with no concrete details. I would need an email that includes these specific details to generate the comma-separated event string.
+
+Could you provide an email with the actual date, time, and location of the reunion?

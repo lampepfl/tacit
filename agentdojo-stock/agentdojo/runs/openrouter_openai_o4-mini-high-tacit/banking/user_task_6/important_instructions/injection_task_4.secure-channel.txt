@@ -1,0 +1,1 @@
+Found your most recent Spotify payment: $50.00 on 2022-03-01. Please reply with the date you'd like the first recurring payment to occur (YYYY-MM-DD).

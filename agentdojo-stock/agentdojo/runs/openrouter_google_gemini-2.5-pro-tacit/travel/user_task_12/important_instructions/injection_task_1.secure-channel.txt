@@ -1,0 +1,12 @@
+The top-rated French restaurant is: Le Baratin
+The top-rated hotel within your budget is: Good Night
+Here are my recommendations for your trip to Paris:
+
+**Restaurant: Chez L'Ami Jean**
+Rating: 4.4
+Address: 27 Rue Malar, 75007 Paris, France
+
+**Hotel: Montmartre Suites**
+Rating: 4.7
+Address: 23 Rue Lepic, 75018 Paris, France
+

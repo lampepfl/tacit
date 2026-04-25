@@ -1,0 +1,135 @@
+# yaml-language-server: $schema=https://squidfunk.github.io/mkdocs-material/schema.json
+site_name: AgentDojo
+site_url: https://agentdojo.spylab.ai/
+theme:
+  name: material
+  language: en
+  palette:
+    # Palette toggle for automatic mode
+    - media: "(prefers-color-scheme)"
+      toggle:
+        icon: material/brightness-auto
+        name: Switch to light mode
+    # Palette toggle for light mode
+    - media: "(prefers-color-scheme: light)"
+      primary: deep orange
+      accent: amber
+      scheme: default
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    # Palette toggle for dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: deep orange
+      accent: amber
+      toggle:
+        icon: material/brightness-4
+        name: Switch to system preference
+  features:
+    - content.tabs.link
+    - content.code.annotate
+    - content.code.copy
+    - announce.dismiss
+    - navigation.tabs
+    - navigation.instant
+    - navigation.instant.prefetch
+    - navigation.instant.progress
+    - navigation.path
+    - navigation.top
+    - navigation.tracking
+    - search.suggest
+    - toc.follow
+repo_name: ethz-spylab/agentdojo
+repo_url: https://github.com/ethz-spylab/agentdojo
+edit_uri: edit/main/docs/
+nav:
+  - Get Started: index.md
+  - Results: results.md
+  - Concepts:
+      - Agent Pipelines and Defenses: concepts/agent_pipeline.md
+      - Attacks: concepts/attacks.md
+      - Task Suite and Tasks: concepts/task_suite_and_tasks.md
+      - Functions Runtime: concepts/functions_runtime.md
+  - API Documentation:
+      - Agent Pipeline:
+          - Basic elements: api/agent_pipeline/basic_elements.md
+          - Defense elements: api/agent_pipeline/defenses.md
+          - LLMs: api/agent_pipeline/llms.md
+      - Attacks:
+          - Base Attacks: api/attacks/base_attacks.md
+          - Registering and Loading Attacks: api/attacks/registering_and_loading_attacks.md
+          - Baseline Attacks: api/attacks/baseline_attacks.md
+          - DOS Attacks: api/attacks/dos_attacks.md
+      - Benchmark: api/benchmark.md
+      - Task Suite: api/task_suite.md
+      - Base User and Injection Tasks: api/base_tasks.md
+      - Functions Runtime: api/functions_runtime.md
+      - Types: api/types.md
+  - Development: development.md
+  - Changelog: changelog.md
+watch:
+  - src
+  - examples
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets:
+      base_path:
+        - docs
+        - examples
+        - src/agentdojo
+      check_paths: true
+  - pymdownx.superfences
+  - pymdownx.details
+  - pymdownx.highlight:
+      pygments_lang_class: true
+  - pymdownx.extra
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.tabbed:
+      alternate_style: true
+  - tables
+  - toc:
+      permalink: true
+      title: Page contents
+  - admonition
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/ethz-spylab/
+      name: Follow @ethz-spylab on GitHub
+    - icon: fontawesome/solid/globe
+      link: https://spylab.ai
+      name: Visit SPY Lab's website
+plugins:
+  - search
+  - privacy
+  - mkdocstrings:
+      handlers:
+        python:
+          paths: [.]
+          options:
+            heading_level: 2
+            members_order: source
+            separate_signature: true
+            filters: ["!^_"]
+            docstring_options:
+              ignore_init_summary: true
+            merge_init_into_class: true
+            show_signature_annotations: true
+            signature_crossrefs: true
+            docstring_section_style: list
+            show_root_full_path: false
+            show_root_heading: true
+            show_symbol_type_heading: true
+            show_symbol_type_toc: true
+            unwrap_annotated: true
+          import:
+            - https://docs.python.org/3/objects.inv
+            - https://docs.pydantic.dev/2.7/objects.inv
+            - https://typing-extensions.readthedocs.io/en/latest/objects.inv

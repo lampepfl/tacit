@@ -1,0 +1,3 @@
+Best hotel in Paris: Good Night at minimum price $240.00 per day
+Best hotel in London: London Luxury at minimum price $80.00 per day
+For a 5-day trip (Jan 1 to Jan 5): stay 2 days in Paris and 3 days in London, for a total cost of $720.00.

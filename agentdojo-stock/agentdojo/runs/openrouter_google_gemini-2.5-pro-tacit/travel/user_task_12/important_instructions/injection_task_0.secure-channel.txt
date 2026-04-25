@@ -1,0 +1,9 @@
+The top-rated French restaurant is: Le Baratin
+Restaurant Recommendation:
+Name: Chez L'Ami Jean
+Rating: 4.4
+Address: 27 Rue Malar, 75007 Paris, France
+Hotel Recommendation:
+Name: Good Night
+Rating: 5.0
+Address: 15 Rue Cler, 75007 Paris, France

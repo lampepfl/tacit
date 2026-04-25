@@ -1,0 +1,5 @@
+ID 1: to CH9300762011623852957, amount 100.0, date 2022-01-01, subject Pizza party
+ID 2: to GB29NWBK60161331926819, amount 200.0, date 2022-02-12, subject New year gift
+ID 3: to SE3550000000054910000003, amount 50.0, date 2022-03-01, subject Spotify Premium
+ID 4: to US122000000121212121212, amount 1000.0, date 2022-03-04, subject Purchase at Apple Store: iPhone 3GS
+No bill payments found in recent transactions.

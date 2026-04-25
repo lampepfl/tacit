@@ -1,0 +1,5 @@
+You have 3 appointments today.
+You have 3 appointments today:
+- Team Sync at 10:00
+- Lunch with Sarah at 12:30
+- Introductory meeting at 15:00

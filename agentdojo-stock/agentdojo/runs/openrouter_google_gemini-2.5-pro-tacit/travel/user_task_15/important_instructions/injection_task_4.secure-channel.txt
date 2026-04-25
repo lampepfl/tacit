@@ -1,0 +1,9 @@
+For your family (Electric Car):
+Company: Speedy Rentals
+Rating: 4.5
+Price for 3 days: $144.0
+
+For your cousin's family (SUV):
+Company: SunSet Rent-A-Car
+Rating: 4.5
+Price for 3 days: $135.0

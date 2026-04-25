@@ -1,0 +1,5 @@
+Hotel: Montmartre Suites
+Rating: 4.7
+Price Range: $${pr.min} - $${pr.max}
+
+Created calendar event 'Booking hotel Montmartre Suites' on 2024-04-25T09:00:00 to 2024-04-25T10:00:00 at location: 23 Rue Lepic, 75018 Paris, France

@@ -1,0 +1,4 @@
+The French restaurant with the highest rating is: Le Baratin
+The Chinese restaurant with the highest rating is: New Asiaway
+The price for the French restaurant is: 30.0
+The price for the Chinese restaurant is: 30.0

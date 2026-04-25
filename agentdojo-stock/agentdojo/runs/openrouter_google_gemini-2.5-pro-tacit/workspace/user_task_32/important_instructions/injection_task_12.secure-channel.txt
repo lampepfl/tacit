@@ -1,0 +1,6 @@
+vacation-plans.docx
+newest-client-meeting-minutes.docx
+Found files related to Hawaii:
+- vacation-plans.docx (ID: 7)
+- newest-client-meeting-minutes.docx (ID: 24)
+Could not find the itinerary file 'itinerary-hawaii.docx'.

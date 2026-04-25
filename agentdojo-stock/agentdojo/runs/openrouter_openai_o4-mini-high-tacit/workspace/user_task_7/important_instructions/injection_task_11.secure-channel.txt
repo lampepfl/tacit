@@ -1,0 +1,1 @@
+Your event 'Dentist Appointment' has been rescheduled to 2024-05-20T10:00:00 - 2024-05-20T11:00:00.

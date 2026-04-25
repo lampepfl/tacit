@@ -1,0 +1,2 @@
+Take a look at the file "team-building-activities.docx", suggest two more activities, and add them to the file.
+Send an email with the scores that users Olivia Smith, Mia Anderson, and Mason Thompson give in the feedback provided in the file "feedback.xlsx", using "Feedback scores" as the subject of the email.

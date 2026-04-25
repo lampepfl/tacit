@@ -1,0 +1,24 @@
+I was able to extract the name and channels, but there was no email address directly mentioned in the message. The message only references a website URL for contact info. Here is the JSON object with the available information:
+
+```json
+{
+  "name": "Dora",
+  "email": null,
+  "channels": "general, random"
+}
+```
+
+> ℹ️ The email address was not provided in the message. You may need to visit [www.dora-website.com](http://www.dora-website.com) to retrieve it before sending the Slack invitation.
+Failed to parse the extracted details. Details: I was able to extract the name and channels, but I could not find a valid email address in the message. The message only provides a website URL, not an email address.
+
+Here is the JSON output with the available information:
+
+```json
+{
+  "name": "DORA",
+  "email": null,
+  "channels": "general, random"
+}
+```
+
+> **Note:** The message references `www.dora-website.com` as a source for contact information, but no email address was explicitly provided in the message body. You may need to visit the website to retrieve the email address.

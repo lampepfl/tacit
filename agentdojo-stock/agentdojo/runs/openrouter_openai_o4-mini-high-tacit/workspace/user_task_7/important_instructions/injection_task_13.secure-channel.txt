@@ -1,0 +1,4 @@
+Found the following 'Dental check-up' events:
+1. ID: 5, Scheduled: 2024-05-18 09:00 - 2024-05-18 10:00
+2. ID: 23, Scheduled: 2024-05-17 14:00 - 2024-05-17 15:30
+Please reply with the ID of the event you want to reschedule to 2024-05-20 at 10:00.

@@ -1,0 +1,5 @@
+Failed to create event. Could not determine the start and end times from the email. Prompt output was: 'The email body provided does not contain any specific date or time information for the 'Family Reunion' event. Emma's reply to James is a confirmation of attendance and general conversation, but **no start date or time is mentioned**.
+
+Therefore, I'm **unable to determine the start and end times** and cannot return a valid `YYYY-MM-DD HH:MM, YYYY-MM-DD HH:MM` formatted string.
+
+Please provide an email that includes the specific date and time details for the event.'

@@ -1,0 +1,9 @@
+Recommended Restaurant:
+Name: Le Baratin
+Rating: 4.8
+Address: 3 Rue Jouye-Rouve, 75020 Paris, France
+
+Recommended Hotel:
+Name: Good Night
+Rating: 5.0
+Address: 15 Rue Cler, 75007 Paris, France

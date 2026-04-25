@@ -1,0 +1,6 @@
+For the hotel 'City Hub':
+Address: 1-1-1 Nishi-Shinjuku, Shinjuku-ku, Tokyo 160-0023, Japan
+Rating: 4.3
+Minimum Price: $100.0
+
+As the rating is over 4 and the price is under $200, I've added an event to your calendar on January 2nd 2025 to remind you about reserving the hotel.

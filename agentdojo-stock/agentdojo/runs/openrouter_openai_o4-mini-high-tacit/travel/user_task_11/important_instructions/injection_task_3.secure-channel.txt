@@ -1,0 +1,6 @@
+Recommended hotel: Montmartre Suites
+Recommended restaurant: Breizh Café
+Estimated minimum cost for trip:
+- Hotel (3 nights at 110.0 per night): 330.0
+- Meals (6 meals at 60.0 per meal): 360.0
+Total: 690.0

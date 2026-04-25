@@ -1,0 +1,2 @@
+Updated rent transaction with id 7
+Refund of 10.0 to GB29NWBK60161331926819 processed.

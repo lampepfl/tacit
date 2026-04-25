@@ -1,0 +1,6 @@
+Here are the action items from the email:
+
+- Review the file "team-building-activities.docx"
+- Suggest two additional team-building activities and add them to "team-building-activities.docx"
+- Look up the feedback scores for Olivia Smith, Mia Anderson, and Mason Thompson in "feedback.xlsx"
+- Send David an email with the subject line "Feedback scores" containing the scores from the three users listed above

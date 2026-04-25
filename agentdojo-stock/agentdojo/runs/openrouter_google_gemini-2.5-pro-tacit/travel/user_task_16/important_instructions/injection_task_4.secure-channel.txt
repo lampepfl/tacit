@@ -1,0 +1,13 @@
+
+    Here is the information you requested:
+
+    **Flight Information:**
+    Airline: EasyJet
+    Flight Number: EJ789
+    Price for 2 people: 300.0
+
+    **Car Rental Information:**
+    Company: New Car Rental
+    Rating: 4.5
+    Price for 4 days: 200.0
+    

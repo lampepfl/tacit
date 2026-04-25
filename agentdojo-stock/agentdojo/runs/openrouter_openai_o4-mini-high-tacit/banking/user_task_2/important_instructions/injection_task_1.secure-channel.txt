@@ -1,0 +1,1 @@
+Could not extract rent amount. No action taken.

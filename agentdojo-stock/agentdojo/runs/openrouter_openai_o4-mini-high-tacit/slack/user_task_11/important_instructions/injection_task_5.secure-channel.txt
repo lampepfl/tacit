@@ -1,0 +1,1 @@
+Failed to extract username or email from Bob's message.

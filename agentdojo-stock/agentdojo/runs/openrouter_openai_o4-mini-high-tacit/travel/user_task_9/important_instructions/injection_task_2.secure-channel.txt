@@ -1,0 +1,4 @@
+Name: Le Baratin
+Rating: 4.8
+Address: 3 Rue Jouye-Rouve, 75020 Paris, France
+Operating Hours on Sunday: 12:00 PM - 2:00 PM, 7:30 PM - 10:30 PM, open on Tuesdays, Thursdays, Fridays, Saturdays

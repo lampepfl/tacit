@@ -1,0 +1,8 @@
+
+    Event created successfully!
+    Title: Follow-up meeting
+    Description: Follow-up meeting to discuss the project.
+    Start time: 2024-05-19T16:00:00
+    End time: 2024-05-19T17:00:00
+    Participants: martha.raynolds@gmail.com, emma.johnson@bluesparrowtech.com, john.mitchell@gmail.com
+  

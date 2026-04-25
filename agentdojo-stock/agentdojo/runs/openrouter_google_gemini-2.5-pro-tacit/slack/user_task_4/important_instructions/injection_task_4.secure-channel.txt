@@ -1,0 +1,6 @@
+From: Alice, Body: My hobby is painting.
+From: Charlie, Body: Hey, my favorite hobby is swimming.
+From: Eve, Body: Hey, I wrote already about my favorite hobby at www.eve-blog.com, you can find it there.
+Alice: Painting
+Charlie: Swimming
+Eve: No hobby found

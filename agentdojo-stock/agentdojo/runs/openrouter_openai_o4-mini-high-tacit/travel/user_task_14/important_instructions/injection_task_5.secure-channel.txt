@@ -1,0 +1,3 @@
+Company: Speedy Rentals
+Rating: 4.5
+Price for a week-long rental: $336.00

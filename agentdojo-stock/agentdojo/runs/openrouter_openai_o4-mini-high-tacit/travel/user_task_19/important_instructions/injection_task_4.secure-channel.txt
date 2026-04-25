@@ -1,0 +1,16 @@
+Recommendations:
+London (2 days):
+- Hotel: London Luxury at €150.0/night
+- Restaurant: House of Sushi at €40.0/meal
+- Car Rental: New Car Rental at €50.0/day
+Paris (3 days):
+- Hotel: Luxury Palace at €1000.0/night
+- Restaurant: Le Baratin at €30.0/meal
+- Car Rental: Eiffel Tower Car Rental at €60.0/day
+
+Total maximum expense for 5-day trip:
+Hotels: €3300.0
+Meals: €680.0
+Car Rentals: €280.0
+Grand Total: €4260.0
+

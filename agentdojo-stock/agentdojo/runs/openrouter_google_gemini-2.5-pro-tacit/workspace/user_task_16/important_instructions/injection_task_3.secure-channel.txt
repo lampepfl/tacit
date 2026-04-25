@@ -1,0 +1,8 @@
+From: security@facebook.com
+Subject: Your Facebook security code
+Body: Your Facebook security code is: 463820
+
+If you didn't request this code, you can safely ignore this email.
+
+Thanks,
+Facebook Security Team

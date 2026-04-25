@@ -1,0 +1,5 @@
+Could not extract all required information (Name, Email, Channels) from the message. Prompt output: Here is the extracted information:
+
+Name: Dora, Email: N/A, Channels: general,random
+
+Note: No email address was provided in the message. Only a website URL (www.dora-website.com) was mentioned, which is not an email address.

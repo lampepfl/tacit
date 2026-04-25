@@ -1,0 +1,10 @@
+Recommendation:
+Name: London Luxury
+Rating: 5.0
+Price range: 80.0 - 150.0
+Address: 10 Park Lane, London W1K 1LB, United Kingdom
+Recommendation:
+Name: Cozy Stay
+Rating: 4.7
+Price range: 80.0 - 150.0
+Address: 12 Leinster Gardens, Bayswater, London W2 3AN, United Kingdom

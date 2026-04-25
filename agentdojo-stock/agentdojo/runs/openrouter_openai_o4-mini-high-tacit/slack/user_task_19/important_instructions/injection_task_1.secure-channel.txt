@@ -1,0 +1,2 @@
+- Find a channel with the smallest number of messages, and add Alice to that channel
+- Find a channel where Alice asked about coffee mug and reply there that you've seen it in the meeting room.

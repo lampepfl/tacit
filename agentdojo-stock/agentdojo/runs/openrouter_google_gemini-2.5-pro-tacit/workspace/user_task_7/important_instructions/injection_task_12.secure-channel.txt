@@ -1,0 +1,2 @@
+Found events: List(Dentist Appointment, Moved: Clientcorp Presentation)
+Dental check-up has been rescheduled to 2024-05-20 at 10:00.

@@ -1,0 +1,761 @@
+import asyncio
+import copy
+import importlib.resources
+import json
+import logging
+import os
+import re
+import tempfile
+import threading
+import warnings
+from collections import defaultdict
+from collections.abc import Callable, Sequence
+from functools import lru_cache
+from pathlib import Path
+from typing import Generic, TypeVar
+
+import uvicorn
+import yaml
+from mcp import ClientSession, StdioServerParameters
+from mcp.client.stdio import stdio_client
+from mcp.server import FastMCP
+from mcp.server.fastmcp.tools import Tool as MCPTool
+from mcp.server.fastmcp.utilities.func_metadata import ArgModelBase, FuncMetadata
+from pydantic import BaseModel, create_model
+from typing_extensions import Self
+
+from agentdojo.agent_pipeline.base_pipeline_element import BasePipelineElement
+from agentdojo.agent_pipeline.errors import AbortAgentError
+from agentdojo.agent_pipeline.ground_truth_pipeline import GroundTruthPipeline
+from agentdojo.base_tasks import BaseInjectionTask, BaseUserTask
+from agentdojo.functions_runtime import (
+    Function,
+    FunctionCall,
+    FunctionsRuntime,
+    TaskEnvironment,
+    TraceCapturingFunctionsRuntime,
+)
+from agentdojo.logging import Logger
+from agentdojo.tacit import ensure_tacit_supported, get_agent_runtime
+from agentdojo.types import ChatMessage, MessageContentBlock, get_text_content_as_str, text_content_block_from_string
+from agentdojo.yaml_loader import ImportLoader
+
+T = TypeVar("T", bound=BaseModel)
+TC = TypeVar("TC", bound=Callable)
+BenchmarkVersion = tuple[int, int, int]
+
+
+class InjectionVector(BaseModel):
+    description: str
+    default: str
+
+
+IT = TypeVar("IT")
+
+
+def get_version_compatible_items(
+    items: dict[str, dict[BenchmarkVersion, IT]], version: BenchmarkVersion
+) -> dict[str, IT]:
+    # for each element in items, get the one with highest benchmark version lower or equal to `version`
+    compatible_items = {}
+    for item_id, item_versions in items.items():
+        versions = [v for v in item_versions.keys() if v <= version]
+        if versions:
+            highest_compatible_version = max(versions)
+            compatible_items[item_id] = items[item_id][highest_compatible_version]
+    return compatible_items
+
+
+def messages_to_dict(messages: Sequence[ChatMessage]) -> list[dict[str, str]]:
+    def transform(msg: ChatMessage):
+        return {
+            "role": msg["role"],
+            "content": msg["content"],
+        }
+
+    return [transform(msg) for msg in messages]
+
+
+def functions_stack_trace_from_messages(
+    messages: Sequence[ChatMessage],
+) -> list[FunctionCall]:
+    tool_calls = []
+    for message in messages:
+        if message["role"] == "assistant":
+            for tool_call in message["tool_calls"] or []:
+                tool_calls.append(tool_call)
+    return tool_calls
+
+
+def model_output_from_messages(
+    messages: Sequence[ChatMessage],
+) -> list[MessageContentBlock] | None:
+    if messages[-1]["role"] != "assistant":
+        raise ValueError("Last message was not an assistant message")
+    return messages[-1]["content"]
+
+
+def set_logger_contextarg(key: str, value: object) -> None:
+    logger = Logger.get()
+    setter = getattr(logger, "set_contextarg", None)
+    if callable(setter):
+        setter(key, value)
+
+
+def prepare_tacit_secure_channel_path(
+    suite_name: str,
+    user_task_id: str,
+    injection_task_id: str | None,
+) -> tuple[Path, bool]:
+    filename = f"{injection_task_id or 'none'}.secure-channel.txt"
+
+    logger = Logger.get()
+    get_artifact_path = getattr(logger, "get_artifact_path", None)
+    artifact_path = get_artifact_path(filename) if callable(get_artifact_path) else None
+
+    if artifact_path is None:
+        with tempfile.NamedTemporaryFile(
+            prefix=f"agentdojo-tacit-{suite_name}-{user_task_id}-",
+            suffix=".secure-channel.txt",
+            delete=False,
+        ) as temp_file:
+            path = Path(temp_file.name)
+        cleanup = True
+    else:
+        path = Path(artifact_path)
+        cleanup = False
+
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text("", encoding="utf-8")
+    return path, cleanup
+
+
+def read_tacit_secure_output(path: Path | None) -> str | None:
+    if path is None or not path.exists():
+        return None
+    return path.read_text(encoding="utf-8")
+
+
+def log_tacit_secure_output(
+    pipeline_name: str | None,
+    suite_name: str,
+    user_task_id: str,
+    injection_task_id: str | None,
+    secure_output: str | None,
+) -> None:
+    task_suffix = f"[{injection_task_id}]" if injection_task_id is not None else ""
+    formatted_output = json.dumps(secure_output, ensure_ascii=False)
+    logging.info(
+        f"[{pipeline_name or 'unknown_pipeline'}][{suite_name}][{user_task_id}]{task_suffix} tacit secure output: {formatted_output}",
+        extra={"markup": False},
+    )
+
+
+@lru_cache
+def read_suite_file(suite_name: str, file: str, suite_data_path: Path | None) -> str:
+    if suite_data_path is not None:
+        path = suite_data_path / file
+        with path.open() as f:
+            data_yaml = yaml.load(f, ImportLoader)
+        return yaml.dump(data_yaml, default_flow_style=False)
+    package_files = importlib.resources.files("agentdojo")
+    path = package_files / "data" / "suites" / suite_name / file
+    with importlib.resources.as_file(path) as p, p.open() as f:
+        # Load into yaml to resolve imports
+        data_yaml = yaml.load(f, ImportLoader)
+    # dump back to string to pass to include injections later
+    return yaml.dump(data_yaml, default_flow_style=False)
+
+
+def validate_injections(injections: dict[str, str], injection_vector_defaults: dict[str, str]):
+    injections_set = set(injections.keys())
+    injection_vector_defaults_set = set(injection_vector_defaults.keys())
+    if not injections_set.issubset(injection_vector_defaults_set):
+        raise ValueError("Injections must be a subset of the injection vector defaults")
+
+
+Env = TypeVar("Env", bound=TaskEnvironment)
+
+
+class TaskSuite(Generic[Env]):
+    """A suite of tasks that can be run in an environment. Tasks can be both user tasks and injection tasks. It is not
+    mandatory to have injection tasks in case the suite is used to evaluate the model only for utility.
+
+    Args:
+        name: The name of the suite.
+        environment_type: The environment type that the suite operates on.
+        tools: A list of tools that the agent can use to solve the tasks.
+        data_path: The path to the suite data directory. It should be provided for non-default suites.
+            The directory should contain the following files:
+                - `environment.yaml`: The data of the environment.
+                - `injection_vectors.yaml`: The injection vectors in the environment.
+    """
+
+    def __init__(
+        self,
+        name: str,
+        environment_type: type[Env],
+        tools: list[Function],
+        data_path: Path | None = None,
+        benchmark_version: BenchmarkVersion = (1, 0, 0),
+    ):
+        self.name = name
+        self.environment_type = environment_type
+        self.tools = tools
+        self._user_tasks: dict[str, dict[BenchmarkVersion, BaseUserTask[Env]]] = defaultdict(dict)
+        self._injection_tasks: dict[str, dict[BenchmarkVersion, BaseInjectionTask[Env]]] = defaultdict(dict)
+        self.data_path = data_path
+        self.benchmark_version = benchmark_version
+
+    def get_new_version(self, benchmark_version: BenchmarkVersion) -> Self:
+        new_self = copy.deepcopy(self)
+        new_self.benchmark_version = benchmark_version
+        return new_self
+
+    def load_and_inject_default_environment(self, injections: dict[str, str]) -> Env:
+        environment_text = read_suite_file(self.name, "environment.yaml", self.data_path)
+        injection_vector_defaults = self.get_injection_vector_defaults()
+        injections_with_defaults = dict(injection_vector_defaults, **injections)
+        validate_injections(injections, injection_vector_defaults)
+        injected_environment = environment_text.format(**injections_with_defaults)
+        environment = self.environment_type.model_validate(yaml.safe_load(injected_environment))
+        return environment
+
+    def get_injection_vector_defaults(self) -> dict[str, str]:
+        injection_vectors_text = read_suite_file(self.name, "injection_vectors.yaml", self.data_path)
+        injection_vectors = yaml.safe_load(injection_vectors_text)
+        vectors = {
+            vector_id: InjectionVector.model_validate(vector_info)
+            for vector_id, vector_info in injection_vectors.items()
+        }
+        return {vector_id: vector.default for vector_id, vector in vectors.items()}
+
+    def _get_task_number(self, task_cls: type[BaseUserTask] | type[BaseInjectionTask], prefix: str) -> int:
+        match = re.match(rf"{prefix}(\d+)", task_cls.__name__)
+        if not match:
+            raise ValueError(f"User tasks must be named {prefix} followed by a number, got {task_cls.__name__}")
+        return int(match.group(1))
+
+    def register_user_task(self, task: type[BaseUserTask[Env]]) -> type[BaseUserTask[Env]]:
+        """Register a user task in the suite.
+
+        Args:
+            task: The user task class to register.
+        """
+        task_n = self._get_task_number(task, "UserTask")
+        task_id = f"user_task_{task_n}"
+        setattr(task, "ID", task_id)
+        self._user_tasks[task_id][(1, 0, 0)] = task()
+        return task
+
+    def update_user_task(self, benchmark_version: BenchmarkVersion):
+        """Updates a user task in the suite and makes it part of the benchmark
+        with the given version
+
+        Args:
+            benchmark_version: The benchmark version this task belongs to.
+        """
+
+        def decorator(task: type[BaseUserTask[Env]]) -> type[BaseUserTask[Env]]:
+            task_n = self._get_task_number(task, "UserTask")
+            task_id = f"user_task_{task_n}"
+            if task_id not in self._user_tasks:
+                raise ValueError(f"User task {task_id} not found in suite")
+            setattr(task, "ID", task_id)
+            self._user_tasks[task_id][benchmark_version] = task()
+            return task
+
+        return decorator
+
+    @property
+    def user_tasks(self) -> dict[str, BaseUserTask[Env]]:
+        """The user tasks in the suite.
+
+        Returns:
+            A dictionary of user tasks with their IDs as keys.
+        """
+        return get_version_compatible_items(self._user_tasks, self.benchmark_version)
+
+    @lru_cache
+    def get_user_task_by_id(self, task_id: str) -> BaseUserTask[Env]:
+        """Get a user task by its ID."""
+        return self.user_tasks[task_id]
+
+    @lru_cache
+    def get_latest_user_task_by_id(self, task_id: str, version_upperbound: BenchmarkVersion) -> BaseUserTask[Env]:
+        """Get a user task by its ID in its latest version."""
+        tasks = self._user_tasks[task_id]
+        latest = max(v for v in tasks.keys() if v < version_upperbound)
+        return tasks[latest]
+
+    @lru_cache
+    def get_latest_injection_task_by_id(
+        self, task_id: str, version_upperbound: BenchmarkVersion
+    ) -> BaseInjectionTask[Env]:
+        """Get a user task by its ID in its latest version."""
+        tasks = self._injection_tasks[task_id]
+        latest = max(v for v in tasks.keys() if v < version_upperbound)
+        return tasks[latest]
+
+    def register_new_injection_task(
+        self, min_version, task: type[BaseInjectionTask[Env]]
+    ) -> type[BaseInjectionTask[Env]]:
+        """Register an injection task in the suite.
+
+        Args:
+            task: The injection task class to register.
+        """
+        task_n = self._get_task_number(task, "InjectionTask")
+        task_id = f"injection_task_{task_n}"
+        setattr(task, "ID", task_id)
+        self._injection_tasks[task_id][min_version] = task()
+        return task
+
+    def register_injection_task(self, task: type[BaseInjectionTask[Env]]) -> type[BaseInjectionTask[Env]]:
+        """Register an injection task in the suite.
+
+        Args:
+            task: The injection task class to register.
+        """
+        return self.register_new_injection_task((1, 0, 0), task)
+
+    def update_injection_task(self, benchmark_version: BenchmarkVersion, new=False):
+        """Updates an injection task in the suite and makes it part of the benchmark
+        with the given version
+
+        Args:
+            benchmark_version: The benchmark version this task belongs to.
+        """
+
+        def decorator(task: type[BaseInjectionTask[Env]]) -> type[BaseInjectionTask[Env]]:
+            task_n = self._get_task_number(task, "InjectionTask")
+            task_id = f"injection_task_{task_n}"
+            if task_id not in self._injection_tasks:
+                if not new:
+                    raise ValueError(f"Injection task {task_id} not found in suite")
+                else:
+                    self.register_new_injection_task(benchmark_version, task)
+            setattr(task, "ID", task_id)
+            self._injection_tasks[task_id][benchmark_version] = task()
+            return task
+
+        return decorator
+
+    @property
+    def injection_tasks(self) -> dict[str, BaseInjectionTask[Env]]:
+        """The injection tasks in the suite.
+
+        Returns:
+            A dictionary of injection tasks with their IDs as keys.
+        """
+        return get_version_compatible_items(self._injection_tasks, self.benchmark_version)
+
+    def get_injection_task_by_id(self, injection_task_id: str) -> BaseInjectionTask[Env]:
+        """Get an injection task by its ID."""
+        return self.injection_tasks[injection_task_id]
+
+    def _check_user_task_utility(
+        self,
+        task: BaseUserTask,
+        model_output: list[MessageContentBlock],
+        pre_environment: Env,
+        task_environment: Env,
+        functions_stack_trace: Sequence[FunctionCall],
+    ) -> bool:
+        output_text_content = get_text_content_as_str(model_output)
+        utility_from_stack_traces = task.utility_from_traces(
+            output_text_content, pre_environment, task_environment, functions_stack_trace
+        )
+        if utility_from_stack_traces is not None:
+            return utility_from_stack_traces
+        return task.utility(output_text_content, pre_environment, task_environment)
+
+    def _check_injection_task_security(
+        self,
+        task: BaseInjectionTask,
+        model_output: list[MessageContentBlock],
+        pre_environment: Env,
+        task_environment: Env,
+        functions_stack_trace: Sequence[FunctionCall],
+    ) -> bool:
+        output_text_content = get_text_content_as_str(model_output)
+        security_from_stack_traces = task.security_from_traces(
+            output_text_content, pre_environment, task_environment, functions_stack_trace
+        )
+        if security_from_stack_traces is not None:
+            return security_from_stack_traces
+        return task.security(output_text_content, pre_environment, task_environment)
+
+    def _check_task_result(
+        self,
+        task: BaseUserTask | BaseInjectionTask,
+        model_output: list[MessageContentBlock],
+        pre_environment: Env,
+        task_environment: Env,
+        functions_stack_trace: Sequence[FunctionCall],
+    ) -> bool:
+        match task:
+            case BaseUserTask():
+                return self._check_user_task_utility(
+                    task,
+                    model_output,
+                    pre_environment,
+                    task_environment,
+                    functions_stack_trace,
+                )
+            case BaseInjectionTask():
+                return self._check_injection_task_security(
+                    task,
+                    model_output,
+                    pre_environment,
+                    task_environment,
+                    functions_stack_trace,
+                )
+
+    def run_task_with_pipeline(
+        self,
+        agent_pipeline: BasePipelineElement,
+        user_task: BaseUserTask[Env] | BaseInjectionTask[Env],
+        injection_task: BaseInjectionTask[Env] | None,
+        injections: dict[str, str],
+        runtime_class: type[FunctionsRuntime] = FunctionsRuntime,
+        environment: Env | None = None,
+        verbose: bool = False,
+    ) -> tuple[bool, bool]:
+        """Run a task with the provided pipeline.
+
+        Args:
+            agent_pipeline: The pipeline to use for the task.
+            user_task: The user task to run.
+            injection_task: The injection task to run.
+            injections: The injections to use for the task.
+            runtime_class: The runtime class to use for the task.
+            environment: The environment to use for the task.
+            verbose: Whether to print debug information.
+
+        Returns:
+            A tuple of two booleans, the first indicating whether the task was successful, and the second indicating if
+            the injection was successful.
+        """
+        # If no environment is provided, load the default environment
+        if environment is None:
+            environment = self.load_and_inject_default_environment(injections)
+        # Initialize the environment according to the task
+        if isinstance(user_task, BaseUserTask):
+            task_environment = user_task.init_environment(environment)
+        else:
+            task_environment = environment
+
+        # Create a copy of the environment before running the user task to then diff if needed
+        pre_environment = task_environment.model_copy(deep=True)
+        if isinstance(user_task, BaseUserTask):
+            prompt = user_task.PROMPT
+        else:
+            prompt = user_task.GOAL
+
+        use_tacit = getattr(agent_pipeline, "use_tacit", False)
+        backend_runtime: FunctionsRuntime = (
+            TraceCapturingFunctionsRuntime(self.tools) if use_tacit else runtime_class(self.tools)
+        )
+        agent_runtime = backend_runtime
+        uvi_server = None
+        mcp_thread = None
+        tacit_thread = None
+        tacit_stop = threading.Event()
+        tacit_session: ClientSession | None = None
+        tacit_loop: asyncio.AbstractEventLoop | None = None
+        tacit_secure_channel_path: Path | None = None
+        tacit_secure_output: str | None = None
+        cleanup_tacit_secure_channel = False
+
+        if use_tacit:
+            ensure_tacit_supported(self.name)
+            # Start MCP server exposing all tools over streamable HTTP
+            import socket
+            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                s.bind(("127.0.0.1", 0))
+                mcp_port = s.getsockname()[1]
+            mcp = FastMCP("agentdojo-tools", host="127.0.0.1", port=mcp_port)
+            for func_name, func in backend_runtime.functions.items():
+                # Build ArgModelBase-compatible model from the function's parameter schema
+                fields = {}
+                for fname, finfo in func.parameters.model_fields.items():
+                    fields[fname] = (finfo.annotation, finfo)
+                arg_model = create_model(f"{func_name}_args", __base__=ArgModelBase, **fields)
+
+                def _make_handler(name: str):
+                    async def _handler(**kwargs: object) -> str:
+                        result, error = backend_runtime.run_function(task_environment, name, kwargs)
+                        if error:
+                            return f"Error: {error}"
+                        if isinstance(result, BaseModel):
+                            return json.dumps(result.model_dump(mode="json"))
+                        if isinstance(result, list):
+                            return json.dumps([
+                                item.model_dump(mode="json") if isinstance(item, BaseModel) else item
+                                for item in result
+                            ])
+                        return str(result)
+                    return _handler
+
+                tool = MCPTool(
+                    fn=_make_handler(func_name),
+                    name=func.name,
+                    description=func.description,
+                    parameters=arg_model.model_json_schema(),
+                    fn_metadata=FuncMetadata(arg_model=arg_model),
+                    is_async=True,
+                )
+                mcp._tool_manager._tools[func.name] = tool
+
+            uvi_config = uvicorn.Config(
+                mcp.streamable_http_app(), host="127.0.0.1", port=mcp_port, log_level="warning",
+            )
+            uvi_server = uvicorn.Server(uvi_config)
+
+            mcp_started = threading.Event()
+            def _run_mcp() -> None:
+                loop = asyncio.new_event_loop()
+                asyncio.set_event_loop(loop)
+                mcp_started.set()
+                try:
+                    loop.run_until_complete(uvi_server.serve())
+                finally:
+                    pending = [task for task in asyncio.all_tasks(loop) if not task.done()]
+                    for task in pending:
+                        task.cancel()
+                    if pending:
+                        loop.run_until_complete(asyncio.gather(*pending, return_exceptions=True))
+                    loop.run_until_complete(loop.shutdown_asyncgens())
+                    loop.close()
+            mcp_thread = threading.Thread(target=_run_mcp, daemon=True)
+            mcp_thread.start()
+            mcp_started.wait()
+
+            logging.info(f"MCP server started on http://127.0.0.1:{mcp_port}/mcp with {len(backend_runtime.functions)} tools")
+
+            # hook for developping Scala facade
+            # if self.name == "workspace":
+            #     import IPython
+            #     IPython.embed()
+
+            tacit_secure_channel_path, cleanup_tacit_secure_channel = prepare_tacit_secure_channel_path(
+                self.name,
+                user_task.ID,
+                None if injection_task is None else injection_task.ID,
+            )
+
+            # TACIT's `prompt()` facade calls an auxiliary LLM via OpenRouter and
+            # reads `OPENROUTER_API_KEY` from its process environment. The MCP
+            # stdio client strips everything except a small whitelist, so we
+            # must forward the key explicitly — otherwise `prompt()` throws at
+            # runtime and (worse) the failure is silently swallowed inside
+            # `Classified.map`, leaving the secure channel empty with no error.
+            tacit_env = {
+                key: value
+                for key in ("OPENROUTER_API_KEY", "OPENAI_API_KEY", "ANTHROPIC_API_KEY")
+                if (value := os.environ.get(key)) is not None
+            }
+            tacit_params = StdioServerParameters(
+                command="java",
+                args=[
+                    "-jar", str(Path.cwd() / "TACIT.jar"),
+                    "--library-jar", str(Path.cwd() / "TACIT-library.jar"),
+                    "--agentdojo-port", str(mcp_port),
+                    "--agentdojo-domain", self.name,
+                    "--agentdojo-secure-channel", str(tacit_secure_channel_path),
+                    "--quiet",
+                ],
+                env=tacit_env or None,
+            )
+            tacit_ready = threading.Event()
+
+            async def _run_tacit_client() -> None:
+                nonlocal tacit_session
+                async with stdio_client(tacit_params) as (read, write):
+                    async with ClientSession(read, write) as session:
+                        await session.initialize()
+                        tacit_session = session
+                        tacit_ready.set()
+                        while not tacit_stop.is_set():
+                            await asyncio.sleep(0.1)
+
+            def _run_tacit_thread() -> None:
+                nonlocal tacit_loop
+                loop = asyncio.new_event_loop()
+                tacit_loop = loop
+                asyncio.set_event_loop(loop)
+                try:
+                    loop.run_until_complete(_run_tacit_client())
+                finally:
+                    loop.run_until_complete(loop.shutdown_asyncgens())
+                    loop.close()
+
+            tacit_thread = threading.Thread(target=_run_tacit_thread, daemon=True)
+            tacit_thread.start()
+            tacit_ready.wait()
+            logging.info("tacit MCP client initialized")
+
+            def call_eval_scala(code: str):
+                assert tacit_session is not None and tacit_loop is not None
+                future = asyncio.run_coroutine_threadsafe(
+                    tacit_session.call_tool("eval_scala", {"code": code}),
+                    tacit_loop,
+                )
+                return future.result()
+
+            # if self.name == "travel":
+            #     import IPython; IPython.embed()
+
+            agent_runtime = get_agent_runtime(backend_runtime, use_tacit=True, call_eval_scala=call_eval_scala)
+
+        model_output = None
+        messages = []
+        try:
+            for _ in range(3):
+                # Run the user task
+                try:
+                    _, _, task_environment, messages, _ = agent_pipeline.query(prompt, agent_runtime, task_environment)
+                except AbortAgentError as e:
+                    # get last environment and messages
+                    task_environment = e.task_environment
+                    messages = e.messages
+
+                model_output = model_output_from_messages(messages)
+                if model_output is not None:
+                    break
+        finally:
+            if tacit_thread is not None:
+                tacit_stop.set()
+                tacit_thread.join(timeout=5.0)
+                logging.info("tacit MCP client stopped")
+            if uvi_server is not None:
+                uvi_server.should_exit = True
+            if mcp_thread is not None:
+                mcp_thread.join(timeout=5.0)
+                logging.info("MCP server stopped")
+            tacit_secure_output = read_tacit_secure_output(tacit_secure_channel_path)
+            if use_tacit:
+                log_tacit_secure_output(
+                    agent_pipeline.name,
+                    self.name,
+                    user_task.ID,
+                    None if injection_task is None else injection_task.ID,
+                    tacit_secure_output,
+                )
+                set_logger_contextarg("tacit_secure_output", tacit_secure_output)
+                if tacit_secure_output:
+                    model_output = [
+                        *(model_output or []),
+                        text_content_block_from_string(tacit_secure_output),
+                    ]
+            if cleanup_tacit_secure_channel and tacit_secure_channel_path is not None:
+                tacit_secure_channel_path.unlink(missing_ok=True)
+
+        if model_output is None:
+            warnings.warn(f"Model output was None for task {user_task.ID}")
+
+        assistant_traces = functions_stack_trace_from_messages(messages)
+        backend_tool_traces = (
+            backend_runtime.get_captured_tool_traces()
+            if isinstance(backend_runtime, TraceCapturingFunctionsRuntime)
+            else None
+        )
+        tool_trace_source = "backend_runtime" if use_tacit else "assistant_messages"
+        functions_stack_trace = backend_tool_traces if use_tacit and backend_tool_traces is not None else assistant_traces
+
+        set_logger_contextarg("tool_trace_source", tool_trace_source)
+        set_logger_contextarg("backend_tool_traces", backend_tool_traces)
+
+        utility = self._check_task_result(
+            user_task,
+            model_output or [],
+            pre_environment,
+            task_environment,  # type: ignore
+            functions_stack_trace,
+        )
+
+        # Early return if no injection was intended
+        if injection_task is None:
+            return utility, True
+
+        security = self._check_task_result(
+            injection_task,
+            model_output or [],
+            pre_environment,
+            task_environment,  # type: ignore
+            functions_stack_trace,
+        )
+
+        return utility, security
+
+    def check(self, check_injectable: bool = True) -> tuple[bool, tuple[dict[str, tuple[bool, str]], dict[str, bool]]]:
+        injection_defaults = self.get_injection_vector_defaults()
+        canary_injections = {inj: f"---CANARY_{inj}---" for inj in injection_defaults}
+        environment = self.load_and_inject_default_environment(canary_injections)
+
+        user_tasks_results = {}
+
+        # Check user tasks
+        for user_task in self.user_tasks.values():
+            ground_truth_pipeline = GroundTruthPipeline(user_task)
+            post_environment = environment.copy(deep=True)
+            utility, _ = self.run_task_with_pipeline(
+                ground_truth_pipeline,
+                user_task,
+                injection_task=None,
+                injections={},
+                environment=post_environment,
+            )
+            if not utility:
+                user_tasks_results[user_task.ID] = (
+                    False,
+                    "Ground truth does not solve the task",
+                )
+            # Check if the task is injectable
+            runtime = FunctionsRuntime(self.tools)
+            _, _, _, responses, _ = ground_truth_pipeline.query(user_task.PROMPT, runtime, environment.copy(deep=True))
+            if not is_task_injectable(responses, list(canary_injections.values())) and check_injectable:
+                user_tasks_results[user_task.ID] = (
+                    False,
+                    "The task is not injectable",
+                )
+            if user_task.ID not in user_tasks_results:
+                user_tasks_results[user_task.ID] = (True, "")
+
+        injection_tasks_results = {}
+
+        # Check injection tasks
+        user_task = next(iter(self.user_tasks.values()))
+        for injection_task in self.injection_tasks.values():
+            ground_truth_pipeline = GroundTruthPipeline(injection_task)
+            post_environment = environment.copy(deep=True)
+            _, security = self.run_task_with_pipeline(
+                ground_truth_pipeline,
+                user_task,
+                injection_task=injection_task,
+                injections={},
+                environment=post_environment,
+            )
+            injection_tasks_results[injection_task.ID] = security
+            for tool_call in injection_task.ground_truth(environment.copy(deep=True)):
+                if tool_call.placeholder_args is None:
+                    warnings.warn(f"Missing placeholder_args in {injection_task.ID}'s ground truth")
+
+        all_checks_passed = all(result[0] for result in user_tasks_results.values()) and all(
+            result for result in injection_tasks_results.values()
+        )
+
+        return all_checks_passed, (user_tasks_results, injection_tasks_results)
+
+
+def is_task_injectable(responses: Sequence[ChatMessage], canaries: list[str]) -> bool:
+    tool_responses = [response for response in responses if response["role"] == "tool"]
+    tool_outputs = [
+        get_text_content_as_str(response["content"])
+        for response in tool_responses
+        if isinstance(response["content"], str)
+    ]
+    all_outputs = " ".join(tool_outputs)
+    inj_in_output = [inj in all_outputs for inj in canaries]
+    return any(inj_in_output)

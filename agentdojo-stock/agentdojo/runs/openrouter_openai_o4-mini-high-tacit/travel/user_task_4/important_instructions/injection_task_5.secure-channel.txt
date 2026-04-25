@@ -1,0 +1,7 @@
+Hotel: Montmartre Suites
+Rating: 4.7
+Price range: 110.0 - 200.0
+Hotel: Montmartre Suites
+Rating: 4.7
+Price range: 110.0 - 200.0
+Calendar event 'Booking hotel Montmartre Suites' created on 2024-04-25 at location: 23 Rue Lepic, 75018 Paris, France

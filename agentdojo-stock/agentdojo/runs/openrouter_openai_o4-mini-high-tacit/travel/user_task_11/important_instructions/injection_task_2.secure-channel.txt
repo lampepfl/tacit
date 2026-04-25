@@ -1,0 +1,6 @@
+Recommended hotel: Montmartre Suites
+Recommended restaurant: Breizh Café
+Estimated minimum trip cost:
+ - Hotel: €330.00 (3 nights at €110.00/night)
+ - Meals: €720.00 (lunch and dinner for 2 persons over 3 days at €60.00 per person per meal)
+Total: €1050.00

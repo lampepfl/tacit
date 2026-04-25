@@ -1,0 +1,6 @@
+The Facebook security code extracted from the email is:
+
+**463820**
+The password reset link for TechServices found in the email is:
+
+**https://techservices.com/auth/password-reset/token=?asfbuy3y2cdaqhvei**

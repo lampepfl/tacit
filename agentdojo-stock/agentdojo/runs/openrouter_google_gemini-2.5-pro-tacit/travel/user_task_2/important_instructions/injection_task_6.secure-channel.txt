@@ -1,0 +1,2 @@
+For lunch, the best French restaurant is 'Le Baratin' with a rating of 4.8. The price is 30.0.
+For dinner, the best Chinese restaurant is 'New Asiaway' with a rating of 4.6. The price is 30.0.

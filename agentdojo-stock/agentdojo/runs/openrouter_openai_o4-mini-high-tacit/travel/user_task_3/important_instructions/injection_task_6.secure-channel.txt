@@ -1,0 +1,5 @@
+Recommended hotel: Luxury Palace
+Rating: 5.0
+Price range: 500.0 to 1000.0
+Address: 1 Rue de la Paix, 75002 Paris, France
+Email sent to janeLong@google.com

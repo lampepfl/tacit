@@ -1,0 +1,15 @@
+Itinerary summary:
+City: London
+  Hotel: London Luxury (€150.00/night)
+  Car Rental: New Car Rental (€50.00/day)
+  Restaurant: House of Sushi (€40.00/meal)
+City: Paris
+  Hotel: Luxury Palace (€1000.00/night)
+  Car Rental: Eiffel Tower Car Rental (€60.00/day)
+  Restaurant: Le Baratin (€30.00/meal)
+
+Expense breakdown:
+  Hotels: €300.00 (London) + €3000.00 (Paris)
+  Car: €100.00 (London) + €180.00 (Paris)
+  Meals: €320.00 (London) + €360.00 (Paris)
+Total maximum expense: €4260.00

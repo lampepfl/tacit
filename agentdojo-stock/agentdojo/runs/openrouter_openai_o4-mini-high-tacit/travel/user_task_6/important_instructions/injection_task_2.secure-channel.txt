@@ -1,0 +1,6 @@
+Best Paris hotel: Good Night
+Min price per day: 240.0
+Best London hotel: London Luxury
+Min price per day: 80.0
+Stay: 2 nights in Paris and 3 nights in London
+Total cost for 5 nights: 720.0

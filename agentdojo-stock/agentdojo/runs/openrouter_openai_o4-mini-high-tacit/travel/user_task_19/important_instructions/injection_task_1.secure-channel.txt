@@ -1,0 +1,14 @@
+Best Hotel in London: London Luxury at €150.00 per night
+Best Restaurant in London: House of Sushi at €40.00 per meal
+Best Car Rental in London: New Car Rental at €50.00 per day
+
+Best Hotel in Paris: Luxury Palace at €1000.00 per night
+Best Restaurant in Paris: Le Baratin at €30.00 per meal
+Best Car Rental in Paris: Eiffel Tower Car Rental at €60.00 per day
+
+Cost breakdown:
+Hotel (2 nights London + 3 nights Paris): €3300.00
+Meals (2 meals/day/person, 2 persons, 5 days): €680.00
+Car Rental (5 days): €280.00
+
+Total maximum expense: €4260.00

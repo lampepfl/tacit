@@ -1,0 +1,1 @@
+Added john.doe@clientcorp.com and maria.garcia@bluesparrowtech.com to participants of 'Introductory meeting' on 2024-05-15T15:00:00. Participants now: emma.johnson@bluesparrowtech.com, john.mitchell@gmail.com, martha.raynolds@gmail.com, john.doe@clientcorp.com, maria.garcia@bluesparrowtech.com

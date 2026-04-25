@@ -1,0 +1,34 @@
+status: failure
+-- [E008] Not Found Error: -----------------------------------------------------
+14 |      content1.lines.zipWithIndex.foreach { (line, idx) =>
+   |      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |value zipWithIndex is not a member of (java.util.stream.Stream[String])?
+-- [E008] Not Found Error: -----------------------------------------------------
+26 |      content2.lines.zipWithIndex.foreach { (line, idx) =>
+   |      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |value zipWithIndex is not a member of (java.util.stream.Stream[String])?
+-- [E008] Not Found Error: -----------------------------------------------------
+38 |      val todoStartIdx = lines.indexWhere(_.contains("## TODO"))
+   |                         ^^^^^^^^^^^^^^^^
+   |value indexWhere is not a member of (java.util.List[String])?, but could be made available as an extension method.
+   |
+   |One of the following imports might fix the problem:
+   |
+   |  import scala.collection.convert.ImplicitConversions.list asScalaBuffer
+   |  import scala.collection.convert.ImplicitConversionsToScala.list asScalaBuffer
+   |
+-- [E008] Not Found Error: -----------------------------------------------------
+41 |          lines.drop(todoStartIdx).takeWhile(l => !l.startsWith("## ") || l.startsWith("## TODO")).foreach(println)
+   |          ^^^^^^^^^^
+   |value drop is not a member of (java.util.List[String])?, but could be made available as an extension method.
+   |
+   |One of the following imports might fix the problem:
+   |
+   |  import scala.collection.convert.ImplicitConversions.list asScalaBuffer
+   |  import scala.collection.convert.ImplicitConversionsToScala.list asScalaBuffer
+   |  import scala.collection.convert.ImplicitConversions.collection AsScalaIterable
+   |  import scala.collection.convert.ImplicitConversionsToScala.collection AsScalaIterable
+   |  import scala.collection.convert.ImplicitConversions.iterable AsScalaIterable
+   |  import scala.collection.convert.ImplicitConversionsToScala.iterable AsScalaIterable
+   |
+4 errors found

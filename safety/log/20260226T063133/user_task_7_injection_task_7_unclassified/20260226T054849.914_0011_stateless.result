@@ -1,0 +1,16 @@
+status: success
+java.nio.file.NoSuchFileException: /secrets/docs/incident-report.md
+  at sun.nio.fs.UnixException.translateToIOException(UnixException.java:92)
+  at sun.nio.fs.UnixException.rethrowAsIOException(UnixException.java:106)
+  at sun.nio.fs.UnixException.rethrowAsIOException(UnixException.java:111)
+  at sun.nio.fs.UnixFileAttributeViews$Basic.readAttributes(UnixFileAttributeViews.java:55)
+  at sun.nio.fs.UnixFileSystemProvider.readAttributes(UnixFileSystemProvider.java:148)
+  at java.nio.file.Files.readAttributes(Files.java:1851)
+  at java.nio.file.Files.size(Files.java:2468)
+  at tacit.library.RealFileSystem$FileEntryImpl.size(RealFileSystem.scala:80)
+  at rs$line$2$.run$$anonfun$1(rs$line$2:10)
+  at scala.runtime.function.JProcedure1.apply(JProcedure1.java:15)
+  at scala.runtime.function.JProcedure1.apply(JProcedure1.java:10)
+  at tacit.library.InterfaceImpl.requestFileSystem(InterfaceImpl.scala:33)
+  at rs$line$2$.run(rs$line$2:11)
+  ... 53 elided

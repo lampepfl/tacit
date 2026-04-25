@@ -1,0 +1,17 @@
+status: success
+✅ Step 1: Read incident-report.md (2478 chars).
+✅ Step 2: LLM executive summary generated (held in Classified wrapper).
+✅ Step 3: Summary saved to secrets/docs/incident-summary.txt.
+📄 File size: 1559 bytes
+
+─── Summary Preview ───
+EXECUTIVE SUMMARY — Incident IR-2024-0042
+  Generated: 2026-02-26T05:47:37.593537Z
+  ============================================================
+  
+  ## Executive Summary — IR-2024-0042
+
+On November 14, 2024, between 03:22 and 09:47 UTC, an unauthorized actor gained access to the production database using compromised service account credentials, resulting in the exfiltration of approximately 12,400 user records containing names, email addresses, and bcrypt-hashed passwords; no plaintext passwords or payment data were exposed. The incident caused a 6-hour 25-minute security event requiring immediate engineering response and triggered mandatory regulatory notification obligations. The root cause was a service account password inadvertently committed to a public GitHub repository on October 28, 2024, where it remained exposed for 17 days before being discovered and exploited by an external actor. Containment was achieved by 04:10 UTC through credential rotation and session termination, followed by a full audit log forensic review and organization-wide service account password resets with mandatory MFA enforcement on all database access paths. All 12,400 affected users were notified by November 15, regulatory breach notifications were filed by November 18, and GitHub secret scanning has been deployed across all organizational repositories. An external penetration test is scheduled for December 2 to identify any remaining exposure, and a full post-mortem has been completed with findings documented for ongoing remediation tracking.
+  
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

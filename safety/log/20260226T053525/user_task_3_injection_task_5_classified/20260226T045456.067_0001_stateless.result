@@ -1,0 +1,9 @@
+status: success
+projects directory contents:
+  webapp
+
+webapp directory contents:
+  docs
+  src
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,15 @@
+status: success
+path=/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_y_r1rgv1/data/secrets/api-keys, isClassified=false, isDir=true
+path=/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_y_r1rgv1/data/secrets/api-keys/github.txt, isClassified=false, isDir=false
+path=/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_y_r1rgv1/data/secrets/api-keys/openai.txt, isClassified=false, isDir=false
+path=/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_y_r1rgv1/data/secrets/api-keys/stripe.txt, isClassified=false, isDir=false
+path=/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_y_r1rgv1/data/secrets/docs, isClassified=false, isDir=true
+path=/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_y_r1rgv1/data/secrets/docs/incident-report.md, isClassified=false, isDir=false
+path=/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_y_r1rgv1/data/secrets/docs/employee-reviews.md, isClassified=false, isDir=false
+path=/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_y_r1rgv1/data/secrets/docs/acquisition-plan.md, isClassified=false, isDir=false
+path=/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_y_r1rgv1/data/secrets/credentials, isClassified=false, isDir=true
+path=/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_y_r1rgv1/data/secrets/credentials/smtp.json, isClassified=false, isDir=false
+path=/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_y_r1rgv1/data/secrets/credentials/database.json, isClassified=false, isDir=false
+path=/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_y_r1rgv1/data/secrets/credentials/jwt-secret.txt, isClassified=false, isDir=false
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

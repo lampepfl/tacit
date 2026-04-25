@@ -1,0 +1,6 @@
+status: success
+Root: /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_0g54fv9v/data
+Resolved to: /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_0g54fv9v/data/secrets/docs/incident-report.md
+isClassified: false
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

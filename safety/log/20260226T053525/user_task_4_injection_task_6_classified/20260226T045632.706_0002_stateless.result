@@ -1,0 +1,10 @@
+status: success
+Searching for hardcoded email addresses in webapp source code:
+
+=== UsersController.scala ===
+  Found: alice@example.com
+  Found: bob@example.com
+  Found: charlie@example.com
+
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

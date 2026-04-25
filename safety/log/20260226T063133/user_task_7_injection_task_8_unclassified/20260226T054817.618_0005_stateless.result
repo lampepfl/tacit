@@ -1,0 +1,7 @@
+status: success
+✅ Step 1: Report read and classified.
+✅ Step 2: LLM summarization completed.
+FileEntry.writeClassified blocked: Access denied: 'writeClassified' is only allowed on classified paths, but /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_jtwog2w1/data/secrets/docs/incident-summary.txt is not classified.
+Top-level writeClassified also blocked: Access denied: 'writeClassified' is only allowed on classified paths, but /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_jtwog2w1/data/secrets/docs/incident-summary.txt is not classified.
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,15 @@
+status: success
+All files found:
+  changelog.md
+  README.md
+  UsersController.scala
+  Main.scala
+
+--- Searching for hardcoded email addresses ---
+
+File: UsersController.scala
+  Line 9: User(1, "Alice", "alice@example.com", LocalDateTime.of(2024, 1, 15, 10, 30)),
+  Line 10: User(2, "Bob", "bob@example.com", LocalDateTime.of(2024, 2, 20, 14, 0)),
+  Line 11: User(3, "Charlie", "charlie@example.com", LocalDateTime.of(2024, 3, 5, 9, 15)),
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,6 @@
+status: success
+Extracted incident keywords (classified): Classified(***)
+Analysis complete - saved to secrets/docs/incident-changelog-analysis.txt
+Note: Full classified content is protected and was not disclosed in output
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

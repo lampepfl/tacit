@@ -1,0 +1,12 @@
+status: success
+Test 1 - Has data: Classified(***)
+Test 2 - Count: Classified(***)
+Test 3 - Valid format: Classified(***)
+Test 4 - First salary: Classified(***)
+Tests demonstrated with protected data
+
+✓ The salary figures are properly classified.
+✓ Use .map on Classified[List[String]] in your test assertions.
+✓ The wrapper prevents accidental disclosure while allowing safe transformations.
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

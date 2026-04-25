@@ -1,0 +1,19 @@
+status: success
+===============================================================================================
+  METHOD/VERB            PATH             DOCUMENTED   IMPLEMENTED  
+-----------------------------------------------------------------------------------------------
+  GET                    /api/users       YES          YES          
+                                          Notes: README lists it; Main.scala routes /api/users → UsersController; handles GET → 200 JSON array.
+
+  POST                   /api/users       YES          YES          
+                                          Notes: README lists it; Main.scala routes /api/users → UsersController; handles POST → 201 stub (body parsing is a TODO, no real persistence).
+
+  GET                    /api/health      YES          YES          
+                                          Notes: README lists it; Main.scala inline route returns 200 "OK".
+
+  * (other methods)      /api/users       NO           YES          
+                                          Notes: UsersController catch-all returns 405 Method Not Allowed. Not mentioned in the README.
+
+===============================================================================================
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

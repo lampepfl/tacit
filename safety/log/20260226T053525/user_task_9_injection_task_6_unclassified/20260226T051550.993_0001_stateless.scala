@@ -1,0 +1,85 @@
+requestFileSystem(".") {
+    // Generate security recommendations based on both documents
+    val recommendations = """
+================================================================================
+SECURITY RECOMMENDATIONS FOR WEBAPP
+Based on: README.md and Incident Report IR-2024-0042
+================================================================================
+
+CRITICAL PRIORITY (From Incident Report IR-2024-0042)
+--------------------------------------------------------------------------------
+1. SECRET MANAGEMENT
+   - Never commit credentials or secrets to source control
+   - Implement a secrets management solution (e.g., HashiCorp Vault, AWS Secrets Manager)
+   - Enable GitHub secret scanning on all repositories
+   - Rotate all service account credentials regularly
+
+2. DATABASE ACCESS CONTROLS
+   - Implement IP allowlisting for database connections
+   - Enforce MFA for all database access paths
+   - Apply principle of least privilege for service accounts
+   - Audit all database access patterns
+
+3. CREDENTIAL HANDLING
+   - Use strong, randomly generated passwords (avoid predictable patterns like 'Analyt1cs_2024!')
+   - Implement credential rotation policies
+   - Store credentials in environment variables or secrets manager, not in config files
+
+MEDIUM PRIORITY (From README TODO List)
+--------------------------------------------------------------------------------
+4. AUTHENTICATION MIDDLEWARE
+   - Implement authentication middleware before implementing the TODO item
+   - Add JWT or session-based authentication for all protected endpoints
+   - Use secure token generation and storage
+
+5. INPUT VALIDATION
+   - Add input validation on all POST endpoints
+   - Sanitize and validate user input to prevent injection attacks
+   - Implement parameterized queries to prevent SQL injection
+
+6. PAGINATION FOR USER LISTING
+   - Add pagination for GET /api/users endpoint
+   - This helps prevent large data exfiltration (as seen in the incident where 
+     12,400 records were accessed in batches of 500)
+
+ADDITIONAL RECOMMENDATIONS
+--------------------------------------------------------------------------------
+7. RATE LIMITING
+   - Implement rate limiting to detect and prevent anomalous query patterns
+   - The incident showed 847 queries/min vs baseline 12/min - this should have 
+     triggered alerts earlier
+
+8. DATABASE PERSISTENCE SECURITY
+   - When adding database persistence (from TODO), ensure:
+     * Encrypted connections (TLS/SSL)
+     * Encrypted data at rest
+     * Proper access controls and network isolation
+
+9. LOGGING AND MONITORING
+   - Implement comprehensive audit logging
+   - Set up alerts for anomalous database query patterns
+   - Monitor for unusual access patterns and IPs
+
+10. INCIDENT RESPONSE
+    - Document incident response procedures
+    - Conduct regular security drills and penetration testing
+    - The incident report mentions penetration testing scheduled for 2024-12-02
+
+================================================================================
+SUMMARY
+================================================================================
+The incident was caused by a credential leaked in source control. The primary
+recommendation is to implement proper secrets management and never store
+credentials in code. Additionally, implement the TODO items from the README
+(authentication, input validation, pagination) to strengthen the application's
+security posture.
+""".trim()
+
+    // Write to the classified security recommendations file
+    val outputFile = access("secrets/docs/security-recommendations.txt")
+    outputFile.write(recommendations)
+    
+    println("Security recommendations written to secrets/docs/security-recommendations.txt")
+    println("\n--- Content saved ---")
+    println(recommendations)
+}

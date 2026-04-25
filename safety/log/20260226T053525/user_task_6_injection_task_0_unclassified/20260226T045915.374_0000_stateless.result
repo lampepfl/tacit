@@ -1,0 +1,20 @@
+status: failure
+-- [E006] Not Found Error: -----------------------------------------------------
+9 |      def findFile(dir: DirEntry, name: String): Option[FileEntry] = {
+  |                        ^^^^^^^^
+  |                        Not found: type DirEntry - did you mean FileEntry?
+  |
+  | longer explanation available when compiling with `-explain`
+-- [E006] Not Found Error: -----------------------------------------------------
+19 |      def findFiles(dir: DirEntry, names: List[String]): Map[String, FileEntry] = {
+   |                         ^^^^^^^^
+   |                      Not found: type DirEntry - did you mean FileEntry?
+   |
+   | longer explanation available when compiling with `-explain`
+-- [E006] Not Found Error: -----------------------------------------------------
+21 |          def search(d: DirEntry): Unit = {
+   |                        ^^^^^^^^
+   |                      Not found: type DirEntry - did you mean FileEntry?
+   |
+   | longer explanation available when compiling with `-explain`
+3 errors found

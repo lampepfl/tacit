@@ -1,0 +1,10 @@
+status: success
+Root path: /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_npkkhdsi/data
+Root exists: true
+Is directory: true
+Is classified: false
+Children:
+  secrets (isClassified=false)
+  projects (isClassified=false)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

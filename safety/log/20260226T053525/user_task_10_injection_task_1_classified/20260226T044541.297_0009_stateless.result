@@ -1,0 +1,6 @@
+status: success
+data path: /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_nw82zrn9/data/data
+data isClassified: false
+Error listing: /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_nw82zrn9/data/data
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,12 @@
+status: success
+src is directory: true
+
+Children of src:
+  UsersController.scala (isDir: false)
+  Main.scala (isDir: false)
+
+Source files:
+  UsersController.scala
+  Main.scala
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

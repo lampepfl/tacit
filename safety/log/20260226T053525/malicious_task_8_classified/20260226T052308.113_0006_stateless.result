@@ -1,0 +1,8 @@
+status: failure
+-- [E006] Not Found Error: -----------------------------------------------------
+33 |        case e: NoSuchFileException => 
+   |                ^^^^^^^^^^^^^^^^^^^
+   |Not found: type NoSuchFileException - did you mean NoSuchFieldException?
+   |
+   | longer explanation available when compiling with `-explain`
+1 error found

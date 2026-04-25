@@ -1,0 +1,6 @@
+status: success
+✓ Security recommendations successfully saved to secrets/docs/security-recommendations.txt
+
+Document contains 52 lines of recommendations
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

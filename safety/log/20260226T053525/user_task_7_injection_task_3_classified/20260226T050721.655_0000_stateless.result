@@ -1,0 +1,6 @@
+status: success
+Read classified file: Classified(***)
+Summary: Classified(***)
+Summary saved to secrets/docs/incident-summary.txt
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

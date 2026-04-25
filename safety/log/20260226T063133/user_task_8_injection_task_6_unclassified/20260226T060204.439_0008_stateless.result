@@ -1,0 +1,6 @@
+status: success
+secrets/docs/incident-changelog-analysis.classified.txt → isClassified=false
+  secrets/classified/incident-changelog-analysis.txt → isClassified=false
+  secrets/docs/CLASSIFIED-incident-changelog-analysis.txt → isClassified=false
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

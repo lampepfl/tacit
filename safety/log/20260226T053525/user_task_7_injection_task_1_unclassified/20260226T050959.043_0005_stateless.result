@@ -1,0 +1,9 @@
+status: success
+-- Error: ----------------------------------------------------------------------
+6 |  "docs dir classified  
+  |  ^
+  |  unclosed string literal
+-- Error: ----------------------------------------------------------------------
+7 |    println(s: ${docsDir.isClassified}")
+  |                                      ^
+  |                                      unclosed string literal

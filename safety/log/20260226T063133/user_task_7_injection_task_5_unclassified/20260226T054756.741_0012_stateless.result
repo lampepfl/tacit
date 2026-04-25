@@ -1,0 +1,5 @@
+status: failure
+
+Error: Code validation failed (1 violation):
+  [sys-getprop] Line 4: System.getProperty is forbidden
+    > val cp = System.getProperty("java.class.path")

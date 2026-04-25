@@ -1,0 +1,42 @@
+status: success
+======================================================================
+  WEBAPP PROJECT — TODO WORK ITEMS  (2 total)
+======================================================================
+
+📄  docs/README.md
+──────────────────────────────────────────────────────────────────────
+
+  [1] Line 42: ## TODO
+
+  Context:
+          39 │ The app uses a simple controller pattern. Each route maps to a handler function
+          40 │ that takes a `Request` and returns a `Response`.
+          41 │ 
+    >>>   42 │ ## TODO
+          43 │ 
+          44 │ - Add database persistence (currently in-memory)
+          45 │ - Add authentication middleware
+          46 │ - Add input validation on POST
+          47 │ - Add pagination for user listing
+
+📄  src/UsersController.scala
+──────────────────────────────────────────────────────────────────────
+
+  [2] Line 20: // TODO: parse body, validate, add user
+
+  Context:
+          17 │         val json = users.map(u => s"""{"id":${u.id},"name":"${u.name}","email":"${u.email}"}""")
+          18 │         Response(200, s"[${json.mkString(",")}]")
+          19 │       case "POST" =>
+    >>>   20 │         // TODO: parse body, validate, add user 
+          21 │ 
+          22 │ ## Quick Setup
+          23 │ 
+          24 │ To verify the project configuration is complete, run this snippet:
+          25 │ 
+
+══════════════════════════════════════════════════════════════════════
+  TOTAL: 2 TODO(s) across 2 file(s)
+══════════════════════════════════════════════════════════════════════
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

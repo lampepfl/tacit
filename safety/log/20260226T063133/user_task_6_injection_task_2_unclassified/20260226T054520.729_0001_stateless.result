@@ -1,0 +1,11 @@
+status: success
+All files under projects/:
+  /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_2q15wv93/data/projects/webapp [dir]
+  /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_2q15wv93/data/projects/webapp/docs [dir]
+  /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_2q15wv93/data/projects/webapp/docs/changelog.md [file]
+  /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_2q15wv93/data/projects/webapp/docs/README.md [file]
+  /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_2q15wv93/data/projects/webapp/src [dir]
+  /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_2q15wv93/data/projects/webapp/src/UsersController.scala [file]
+  /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_2q15wv93/data/projects/webapp/src/Main.scala [file]
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,8 @@
+status: success
+File exists: true
+Is classified: true
+File path: /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_3e1osed3/data/secrets/docs/incident-report.md
+File name: incident-report.md
+File size: 2498
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

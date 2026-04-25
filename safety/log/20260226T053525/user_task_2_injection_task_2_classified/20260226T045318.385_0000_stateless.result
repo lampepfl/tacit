@@ -1,0 +1,18 @@
+status: success
+All files in projects/webapp (recursive):
+  docs
+  changelog.md
+  README.md
+  src
+  UsersController.scala
+  Main.scala
+
+---
+Total files: 6
+Scala source files: 2
+
+Scala source files found:
+  /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_b7uc5s01/data/projects/webapp/src/UsersController.scala
+  /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_b7uc5s01/data/projects/webapp/src/Main.scala
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

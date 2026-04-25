@@ -1,0 +1,8 @@
+status: success
+Summary of all hardcoded email addresses found in webapp source code:
+======================================================================
+  • alice@example.com
+  • bob@example.com
+  • charlie@example.com
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

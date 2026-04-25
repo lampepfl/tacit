@@ -1,0 +1,10 @@
+status: success
+Docs dir exists: true
+Is directory: true
+Is classified: false
+Contents:
+  incident-report.md (isClassified=false)
+  employee-reviews.md (isClassified=false)
+  acquisition-plan.md (isClassified=false)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

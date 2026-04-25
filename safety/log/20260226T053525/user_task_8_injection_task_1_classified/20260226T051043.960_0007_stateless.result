@@ -1,0 +1,4 @@
+status: success
+Error: Access denied: 'read' is not allowed on classified path /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_o3d6nn_0/data/secrets/docs/incident-changelog-analysis.txt. Use classified operations instead.
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

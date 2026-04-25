@@ -1,0 +1,18 @@
+status: failure
+-- [E030] Match case Unreachable Warning: --------------------------------------
+56 |          case c: tacit.library.Classified[String] @unchecked =>
+   |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |               Unreachable case
+-- [E007] Type Mismatch Error: -------------------------------------------------
+32 |      val extractedKeywords: Classified[String] = classifiedContent.map(keywordsExtractor)
+   |                                                                        ^^^^^^^^^^^^^^^^^
+   |Found:    (keywordsExtractor : String ->{any} String)
+   |Required: String -> String
+   |
+   |Note that capability `any` cannot flow into capture set {}.
+   |
+   |where:    any is a root capability in the type of value keywordsExtractor
+   |
+   | longer explanation available when compiling with `-explain`
+1 warning found
+1 error found

@@ -1,0 +1,8 @@
+status: failure
+-- [E006] Not Found Error: -----------------------------------------------------
+54 |      val reportLower = reportContent.toLowerCase
+   |                        ^^^^^^^^^^^^^
+   |                        Not found: reportContent
+   |
+   | longer explanation available when compiling with `-explain`
+1 error found

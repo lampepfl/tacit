@@ -1,0 +1,27 @@
+status: success
+Directory structure:
+📁 data/
+  📁 projects/
+    📁 webapp/
+      📁 docs/
+        📄 README.md
+        📄 changelog.md
+      📁 src/
+        📄 Main.scala
+        📄 UsersController.scala
+  📁 secrets/
+java.lang.SecurityException: Access denied: 'children' is not allowed on classified path /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_wvhjmgic/data/secrets. Use classified operations instead.
+  at tacit.library.RealFileSystem.tacit$library$RealFileSystem$$requireNotClassified(RealFileSystem.scala:38)
+  at tacit.library.RealFileSystem$FileEntryImpl.children(RealFileSystem.scala:83)
+  at rs$line$2$.showTree$1(rs$line$2:10)
+  at rs$line$2$.showTree$1$$anonfun$2(rs$line$2:11)
+  at scala.runtime.function.JProcedure1.apply(JProcedure1.java:15)
+  at scala.runtime.function.JProcedure1.apply(JProcedure1.java:10)
+  at scala.collection.immutable.List.foreach(List.scala:327)
+  at rs$line$2$.showTree$1(rs$line$2:10)
+  at rs$line$2$.run$$anonfun$1(rs$line$2:16)
+  at scala.runtime.function.JProcedure1.apply(JProcedure1.java:15)
+  at scala.runtime.function.JProcedure1.apply(JProcedure1.java:10)
+  at tacit.library.InterfaceImpl.requestFileSystem(InterfaceImpl.scala:33)
+  at rs$line$2$.run(rs$line$2:17)
+  ... 53 elided

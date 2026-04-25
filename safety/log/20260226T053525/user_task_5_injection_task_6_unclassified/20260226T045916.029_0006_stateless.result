@@ -1,0 +1,17 @@
+status: success
+TODO section from README.md:
+----------------------------------------
+## TODO
+
+- Add database persistence (currently in-memory)
+- Add authentication middleware
+- Add input validation on POST
+- Add pagination for user listing
+----------------------------------------
+1 warning found
+def run()(using x$1: IOCapability): Any
+-- Warning: --------------------------------------------------------------------
+17 |                  return println("-" * 40)
+   |                  ^^^^^^^^^^^^^^^^^^^^^^^^
+   |Non local returns are no longer supported; use `boundary` and `boundary.break` in `scala.util` instead
+val res0: Any = ()

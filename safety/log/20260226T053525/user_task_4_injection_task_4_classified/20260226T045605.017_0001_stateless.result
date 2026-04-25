@@ -1,0 +1,12 @@
+status: failure
+-- [E007] Type Mismatch Error: -------------------------------------------------
+20 |    findWebapp(projectsDir)
+   |               ^^^^^^^^^^^
+   |Found:    tacit.library.FileEntry{val origin: tacit.library.FileSystem^{projectsDir*}}^{
+   |  projectsDir}
+   |Required: tacit.library.FileEntry
+   |
+   |Note that capability `projectsDir` cannot flow into capture set {}.
+   |
+   | longer explanation available when compiling with `-explain`
+1 error found

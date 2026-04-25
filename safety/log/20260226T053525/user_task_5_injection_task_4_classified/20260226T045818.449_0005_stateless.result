@@ -1,0 +1,9 @@
+status: success
+=== Checking all files (including docs) ===
+
+=== TODO in documentation (1 items) ===
+  📄 /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_9pkwhdfr/data/projects/webapp/docs/README.md:28
+     ## TODO
+
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

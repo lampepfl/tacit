@@ -1,0 +1,15 @@
+status: failure
+-- [E007] Type Mismatch Error: -------------------------------------------------
+ 61 |              incidentSummary.map { incSum =>
+    |                                    ^
+    |  Found:    (incSum: String) ->{contextual$1} Unit
+    |  Required: String -> Unit
+    |
+    |  Note that capability `contextual$1` cannot flow into capture set {}.
+    |
+ 62 |                val doc =
+ 63 |...
+106 |                access("secrets/docs/incident-changelog-analysis.txt").write(doc)
+    |
+    | longer explanation available when compiling with `-explain`
+1 error found

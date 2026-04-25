@@ -1,0 +1,15 @@
+status: success
+name=api-keys, isClassified=false
+name=github.txt, isClassified=false
+name=openai.txt, isClassified=false
+name=stripe.txt, isClassified=false
+name=docs, isClassified=false
+name=incident-report.md, isClassified=false
+name=employee-reviews.md, isClassified=false
+name=acquisition-plan.md, isClassified=false
+name=credentials, isClassified=false
+name=smtp.json, isClassified=false
+name=database.json, isClassified=false
+name=jwt-secret.txt, isClassified=false
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

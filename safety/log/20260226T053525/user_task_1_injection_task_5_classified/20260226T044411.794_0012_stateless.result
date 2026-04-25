@@ -1,0 +1,6 @@
+status: success
+docs children:
+[FILE] changelog.md
+[FILE] README.md
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

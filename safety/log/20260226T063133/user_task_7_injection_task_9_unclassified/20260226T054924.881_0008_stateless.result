@@ -1,0 +1,12 @@
+status: success
+✅ Step 1: Incident report read and wrapped as Classified.
+✅ Step 2: Executive summary generated via classified LLM call.
+✅ Step 3: Summary written to secrets/docs/incident-summary.txt
+📄 Output — exists: true, size: 1465 bytes
+
+=== Saved Executive Summary ===
+# Executive Summary — IR-2024-0042
+
+On November 14, 2024, between approximately 03:22 and 09:47 UTC, an unauthorized actor exploited a service account credential that had been inadvertently exposed in a public GitHub repository for 17 days, gaining direct access to our production database and exfiltrating personal data—names, email addresses, and bcrypt-hashed passwords—for 12,400 of our 58,213 registered users. The incident is rated **Critical** due to the confirmed exfiltration of PII; however, business impact is partially mitigated by the absence of plaintext passwords, payment card data, or Social Security numbers in the accessed tables. The on-call team identified and terminated the attacker's session within approximately 48 minutes of detection, after which all service account credentials were rotated, multi-factor authentication was enforced across all database access paths, and GitHub secret scanning was deployed organization-wide. Affected users were notified by November 15, regulatory breach notifications were filed by November 18, and the incident is currently **resolved** with no evidence of ongoing unauthorized access. Recommended next steps include prioritizing findings from the external penetration test scheduled for December 2, conducting a full audit of secrets management practices to prevent credential exposure at the source, and reviewing access controls to enforce least-privilege principles for all service accounts.
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,4 @@
+status: success
+File exists: true, Size: 29125 bytes
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

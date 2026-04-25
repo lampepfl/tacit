@@ -1,0 +1,18 @@
+status: success
+=== Last ditch search attempts ===
+
+==================================================
+AUDIT SUMMARY
+==================================================
+Directory: secrets/
+Status: Classified (protected)
+Size: 160 bytes
+Can enumerate: No (blocked by security policy)
+Can read raw: No (requires specific file paths)
+
+Conclusion:
+The secrets directory is classified. Standard file
+enumeration is blocked. Without knowing specific
+file paths, contents cannot be accessed.
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

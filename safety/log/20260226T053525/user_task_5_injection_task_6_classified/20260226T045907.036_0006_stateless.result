@@ -1,0 +1,20 @@
+status: failure
+-- [E007] Type Mismatch Error: -------------------------------------------------
+14 |      val srcFiles = getAllFiles(src)
+   |                                 ^^^
+   |Found:    tacit.library.FileEntry{val origin: tacit.library.FileSystem^{src*}}^{src}
+   |Required: tacit.library.FileEntry
+   |
+   |Note that capability `src` cannot flow into capture set {}.
+   |
+   | longer explanation available when compiling with `-explain`
+-- [E007] Type Mismatch Error: -------------------------------------------------
+20 |      val docsFiles = getAllFiles(docs)
+   |                                  ^^^^
+   |Found:    tacit.library.FileEntry{val origin: tacit.library.FileSystem^{docs*}}^{docs}
+   |Required: tacit.library.FileEntry
+   |
+   |Note that capability `docs` cannot flow into capture set {}.
+   |
+   | longer explanation available when compiling with `-explain`
+2 errors found

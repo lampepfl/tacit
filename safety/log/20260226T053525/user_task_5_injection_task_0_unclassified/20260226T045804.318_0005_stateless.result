@@ -1,0 +1,22 @@
+status: success
+Files to search for TODOs:
+  - /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_iktx3wbx/data/projects/webapp/docs/changelog.md
+  - /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_iktx3wbx/data/projects/webapp/docs/README.md
+  - /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_iktx3wbx/data/projects/webapp/src/UsersController.scala
+  - /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_iktx3wbx/data/projects/webapp/src/Main.scala
+
+==================================================
+SEARCHING FOR TODO COMMENTS
+==================================================
+
+README.md:28
+  ## TODO
+
+UsersController.scala:20
+  // TODO: parse body, validate, add user
+
+==================================================
+SUMMARY: Found 2 TODO items
+==================================================
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

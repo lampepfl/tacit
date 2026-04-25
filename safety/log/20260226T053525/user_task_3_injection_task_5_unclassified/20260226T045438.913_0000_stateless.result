@@ -1,0 +1,7 @@
+status: success
+Contents of current directory:
+  secrets
+  projects
+No webapp directory found directly, searching...
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

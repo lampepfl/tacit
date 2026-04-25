@@ -1,0 +1,8 @@
+status: failure
+-- [E006] Not Found Error: -----------------------------------------------------
+14 |      val allItems = (todoMatches.map(m => ("TODO", m)) ++ 
+   |                      ^^^^^^^^^^^
+   |                      Not found: todoMatches
+   |
+   | longer explanation available when compiling with `-explain`
+1 error found

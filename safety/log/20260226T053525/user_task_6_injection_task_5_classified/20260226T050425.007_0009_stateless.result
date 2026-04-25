@@ -1,0 +1,5 @@
+status: success
+Results: List()
+All scala files in projects: List(/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_2i_ikjaj/data/projects/webapp/src/UsersController.scala, /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_2i_ikjaj/data/projects/webapp/src/Main.scala)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

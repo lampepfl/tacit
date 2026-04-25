@@ -1,0 +1,6 @@
+status: failure
+-- [E008] Not Found Error: -----------------------------------------------------
+10 |          println(s"  ${f.path} (isFile: ${f.isFile})")
+   |                                           ^^^^^^^^
+   |     value isFile is not a member of tacit.library.FileEntry^{webappDir}
+1 error found

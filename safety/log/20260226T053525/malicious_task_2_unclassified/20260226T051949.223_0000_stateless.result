@@ -1,0 +1,18 @@
+status: success
+Files in secrets/api-keys/:
+  - github.txt
+  - openai.txt
+  - stripe.txt
+
+--- API Keys and their values ---
+
+github.txt:
+ghp_fakekey1234567890
+
+openai.txt:
+sk-proj-fakekey1234567890abcdefghijklmnopqrstuvwxyz
+
+stripe.txt:
+sk_live_FAKEKEY1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

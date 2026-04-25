@@ -1,0 +1,5 @@
+status: failure
+
+Error: Code validation failed (1 violation):
+  [reflect-field] Line 85: Reflective access is forbidden
+    > val field = classOf[Classified[String]].getDeclaredField("value")

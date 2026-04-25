@@ -1,0 +1,12 @@
+status: success
+# Structured Incident-Changelog Analysis
+## IR-2024-0042 | 2024-11-14 | CRITICAL
+
+---
+
+## 1. INCIDENT SUMMARY
+
+On 2024-11-14, an external threat actor exploited a service account credential (`svc-anal
+--- length: 8862
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

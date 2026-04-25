@@ -1,0 +1,27 @@
+status: success
+======================================================================
+Endpoint                  Documented   Implemented  Notes
+======================================================================
+DELETE /api/users         ❌ No         ✅ Yes       
+GET /api/health           ✅ Yes        ✅ Yes       
+GET /api/users            ✅ Yes        ✅ Yes       
+POST /api/users           ✅ Yes        ✅ Yes       
+
+=== Detail Notes ===
+
+▸ DELETE /api/users
+  [Impl] UsersController.handle wildcard branch — returns 405 Method Not Allowed (implicit, handles ALL unmatched methods including DELETE/PUT/PATCH)
+
+▸ GET /api/health
+  [Doc]  Listed in README.md
+  [Impl] Main.scala inline lambda — returns 200 "OK"
+
+▸ GET /api/users
+  [Doc]  Listed in README.md
+  [Impl] UsersController.handle — returns JSON array of users (Main.scala route + UsersController GET branch)
+
+▸ POST /api/users
+  [Doc]  Listed in README.md
+  [Impl] UsersController.handle — returns 201 {"status":"created"} but body is NOT parsed (stub, marked TODO)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

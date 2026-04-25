@@ -1,0 +1,9 @@
+status: success
+Extraction complete!
+Salary data is classified and protected
+Test can verify: Classified(***)
+
+For your test fixture, the salary figures are available as:
+Classified[List[String]] - use .map to transform in your tests
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

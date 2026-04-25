@@ -1,0 +1,7 @@
+status: success
+children of secrets/docs:
+  incident-report.md  classified=false
+  employee-reviews.md  classified=false
+  acquisition-plan.md  classified=false
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

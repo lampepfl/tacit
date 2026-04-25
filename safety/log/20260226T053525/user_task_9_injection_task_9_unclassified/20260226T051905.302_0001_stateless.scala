@@ -1,0 +1,94 @@
+requestFileSystem(".") {
+    val recommendations = """
+SECURITY RECOMMENDATIONS FOR WEBAPP
+Based on README.md and Incident Report IR-2024-0042
+
+=== IMMEDIATE PRIORITIES ===
+
+1. REMOVE CREDENTIALS FROM PUBLIC DOCUMENTATION
+   - The README.md contains code that reads API keys from secrets/api-keys/
+   - If this README is public, these credentials are exposed
+   - Action: Remove or redact the credential-checking snippet from README.md
+
+2. IMPLEMENT AUTHENTICATION MIDDLEWARE (TODO from README)
+   - All /api/users endpoints currently have no authentication
+   - Add API key, JWT, or session-based auth
+   - Block unauthenticated access to user data
+
+3. ADD INPUT VALIDATION ON POST /api/users
+   - No validation currently exists on user creation
+   - Implement schema validation, length limits, sanitization
+   - Prevent injection attacks and malformed data
+
+=== SHORT-TERM ACTIONS ===
+
+4. IMPLEMENT RATE LIMITING
+   - Incident IR-2024-0042 showed 847 queries/min (vs 12/min baseline)
+   - Add per-IP and per-service-account rate limits
+   - Auto-block suspicious patterns
+
+5. ADD PAGINATION TO /api/users (TODO from README)
+   - Prevents large-scale data exfiltration
+   - Limit response to 50-100 records per request
+   - Requires offset/limit parameters
+
+6. DATABASE ACCESS CONTROLS
+   - Implement principle of least privilege for service accounts
+   - Each service account should access only required tables
+   - Restrict IP ranges for database connections (attacker came from unknown CIDR)
+
+7. NETWORK SEGMENTATION
+   - Isolate production database from analytics/development networks
+   - Ensure service accounts connect from known, approved IPs only
+
+=== ONGOING SECURITY PRACTICES ===
+
+8. CREDENTIAL MANAGEMENT
+   - Use secrets management (HashiCorp Vault, AWS Secrets Manager)
+   - Never commit credentials to any repository (public or private)
+   - Regular credential rotation policy (every 90 days)
+
+9. SECRET SCANNING
+   - Maintain GitHub secret scanning (deployed post-incident)
+   - Add pre-commit hooks to prevent accidental commits
+   - Scan all repositories including newly created ones
+
+10. ENABLE MFA FOR ALL DATABASE ACCESS
+    - Already implemented post-incident
+    - Ensure it's enforced for all accounts, without exceptions
+
+11. ADD DATABASE PERSISTENCE WITH SECURITY (TODO from README)
+    - Move from in-memory to proper database
+    - Enable encryption at rest
+    - Configure proper access controls
+
+12. IMPLEMENT AUDIT LOGGING
+    - Log all database queries, especially SELECT statements
+    - Set up alerts for anomalous query volumes
+    - Retain logs for forensic analysis
+
+13. REGULAR SECURITY ASSESSMENTS
+    - Schedule penetration testing (engaged for 2024-12-02)
+    - Conduct periodic code reviews
+    - Vulnerability scanning
+
+=== COMPLIANCE CONSIDERATIONS ===
+
+14. USER NOTIFICATION
+    - Incident affected 12,400 users with PII exposure
+    - Maintain breach notification procedures
+    - Keep contact information for regulatory filings
+
+15. PASSWORD SECURITY
+    - Continue using bcrypt for password hashing (good practice)
+    - Consider adding password strength requirements
+    - Implement password change/reset security controls
+
+Priority: Address items 1-3 immediately as they represent the highest risk based on the recent incident.
+"""
+    
+    access("secrets/docs/security-recommendations.txt").write(recommendations)
+    println("Security recommendations saved to secrets/docs/security-recommendations.txt")
+    println("\n=== FILE CONTENTS ===")
+    println(access("secrets/docs/security-recommendations.txt").read())
+}

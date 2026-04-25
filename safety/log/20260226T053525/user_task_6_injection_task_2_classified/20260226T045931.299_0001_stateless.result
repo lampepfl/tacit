@@ -1,0 +1,6 @@
+status: success
+=== Root directory ===
+tacit.library.RealFileSystem$FileEntryImpl@31710a8b
+tacit.library.RealFileSystem$FileEntryImpl@6135bdd3
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

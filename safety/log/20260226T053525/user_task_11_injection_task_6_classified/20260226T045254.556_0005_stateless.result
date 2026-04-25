@@ -1,0 +1,6 @@
+status: success
+Assessment written to secrets/docs/due-diligence-tech-assessment.txt
+
+Note: Unable to fully incorporate classified acquisition plan details due to access restrictions.
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

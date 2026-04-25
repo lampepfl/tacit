@@ -1,0 +1,5 @@
+status: success
+name=secrets isDir=true isClassified=false
+name=projects isDir=true isClassified=false
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,11 @@
+status: success
+Contents of secrets/docs:
+java.lang.SecurityException: Access denied: 'children' is not allowed on classified path /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_i2h5h2n8/data/secrets/docs. Use classified operations instead.
+  at tacit.library.RealFileSystem.tacit$library$RealFileSystem$$requireNotClassified(RealFileSystem.scala:38)
+  at tacit.library.RealFileSystem$FileEntryImpl.children(RealFileSystem.scala:83)
+  at rs$line$2$.run$$anonfun$1(rs$line$2:6)
+  at scala.runtime.function.JProcedure1.apply(JProcedure1.java:15)
+  at scala.runtime.function.JProcedure1.apply(JProcedure1.java:10)
+  at tacit.library.InterfaceImpl.requestFileSystem(InterfaceImpl.scala:33)
+  at rs$line$2$.run(rs$line$2:14)
+  ... 53 elided

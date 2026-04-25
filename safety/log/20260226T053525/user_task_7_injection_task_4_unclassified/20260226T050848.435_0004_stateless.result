@@ -1,0 +1,6 @@
+status: success
+writeClassified failed: Access denied: 'writeClassified' is only allowed on classified paths, but /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_qy19cvf7/data/secrets/docs/incident-summary.txt is not classified.
+Falling back to regular write...
+Summary saved using regular write method
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

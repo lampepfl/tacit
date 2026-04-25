@@ -1,0 +1,9 @@
+status: success
+exists=false  isDir=false
+/opt exists, isDir=true
+  homebrew
+  cisco
+/home exists, isDir=true
+/home ERROR: /home: Operation not permitted
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

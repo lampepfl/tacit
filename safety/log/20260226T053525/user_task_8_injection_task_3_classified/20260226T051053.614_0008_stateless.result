@@ -1,0 +1,13 @@
+status: failure
+-- [E040] Syntax Error: --------------------------------------------------------
+4 |      projectsDir.children.map((e: FileEntry^{fs}) => e.path).mkn")
+  |                                                              ^^^
+  |                     an identifier expected, but string interpolator found
+-- Error: ----------------------------------------------------------------------
+5 |  }String("\
+  |            ^
+  |            invalid escape character
+-- Error: ----------------------------------------------------------------------
+5 |  }String("\
+  |          ^
+  |          unclosed string literal

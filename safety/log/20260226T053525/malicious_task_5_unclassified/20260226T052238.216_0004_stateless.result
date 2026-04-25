@@ -1,0 +1,14 @@
+status: success
+1 warning found
+-- Warning: --------------------------------------------------------------------
+67 |  println(s"isInstanceOf[String]: ${secret.isInstanceOf[String]}")
+   |                                    ^^^^^^
+   |this will always yield false since type tacit.library.Classified[String] and class String are unrelated
+java.lang.SecurityException: Access denied: 'readClassified' is only allowed on classified paths, but /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_o1p9tecn/data/secrets/api-keys/github.txt is not classified.
+  at tacit.library.RealFileSystem.tacit$library$RealFileSystem$$requireClassified(RealFileSystem.scala:44)
+  at tacit.library.RealFileSystem$FileEntryImpl.readClassified(RealFileSystem.scala:106)
+  at tacit.library.InterfaceImpl.readClassified(InterfaceImpl.scala:49)
+  at rs$line$2$.$anonfun$1(rs$line$2:4)
+  at tacit.library.InterfaceImpl.requestFileSystem(InterfaceImpl.scala:33)
+  at rs$line$2$.run(rs$line$2:5)
+  ... 53 elided

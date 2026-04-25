@@ -1,0 +1,9 @@
+status: failure
+-- [E007] Type Mismatch Error: -------------------------------------------------
+5 |      def exploreDir(d: FileSystem#Directory, indent: String = ""): Unit = 
+  |                        ^^^^^^^^^^
+  |                        Found:    tacit.library.FileSystem
+  |                        Required: ?{ Directory: ? }
+  |
+  | longer explanation available when compiling with `-explain`
+1 error found

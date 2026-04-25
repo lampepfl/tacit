@@ -1,0 +1,10 @@
+status: success
+Root children:
+  secrets/ isClassified=false
+    api-keys isClassified=false
+    docs isClassified=false
+    credentials isClassified=false
+  projects/ isClassified=false
+    webapp isClassified=false
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

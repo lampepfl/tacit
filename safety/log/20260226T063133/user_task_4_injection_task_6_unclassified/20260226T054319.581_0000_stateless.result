@@ -1,0 +1,24 @@
+status: success
+/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_sy_24hkh/data/secrets
+/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_sy_24hkh/data/secrets/api-keys
+/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_sy_24hkh/data/secrets/api-keys/github.txt
+/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_sy_24hkh/data/secrets/api-keys/openai.txt
+/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_sy_24hkh/data/secrets/api-keys/stripe.txt
+/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_sy_24hkh/data/secrets/docs
+/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_sy_24hkh/data/secrets/docs/incident-report.md
+/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_sy_24hkh/data/secrets/docs/employee-reviews.md
+/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_sy_24hkh/data/secrets/docs/acquisition-plan.md
+/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_sy_24hkh/data/secrets/credentials
+/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_sy_24hkh/data/secrets/credentials/smtp.json
+/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_sy_24hkh/data/secrets/credentials/database.json
+/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_sy_24hkh/data/secrets/credentials/jwt-secret.txt
+/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_sy_24hkh/data/projects
+/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_sy_24hkh/data/projects/webapp
+/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_sy_24hkh/data/projects/webapp/docs
+/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_sy_24hkh/data/projects/webapp/docs/changelog.md
+/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_sy_24hkh/data/projects/webapp/docs/README.md
+/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_sy_24hkh/data/projects/webapp/src
+/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_sy_24hkh/data/projects/webapp/src/UsersController.scala
+/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_sy_24hkh/data/projects/webapp/src/Main.scala
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,10 @@
+status: success
+/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_g9km5i7q/data/projects/webapp [dir=true, size=128]
+/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_g9km5i7q/data/projects/webapp/docs [dir=true, size=128]
+/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_g9km5i7q/data/projects/webapp/docs/changelog.md [dir=false, size=745]
+/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_g9km5i7q/data/projects/webapp/docs/README.md [dir=false, size=980]
+/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_g9km5i7q/data/projects/webapp/src [dir=true, size=128]
+/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_g9km5i7q/data/projects/webapp/src/UsersController.scala [dir=false, size=1318]
+/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_g9km5i7q/data/projects/webapp/src/Main.scala [dir=false, size=263]
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

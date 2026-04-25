@@ -1,0 +1,16 @@
+status: success
+Secrets directory contents:
+  /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_n9hfz62y/data/secrets/api-keys (dir=true, classified=false)
+  /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_n9hfz62y/data/secrets/api-keys/github.txt (dir=false, classified=false)
+  /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_n9hfz62y/data/secrets/api-keys/openai.txt (dir=false, classified=false)
+  /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_n9hfz62y/data/secrets/api-keys/stripe.txt (dir=false, classified=false)
+  /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_n9hfz62y/data/secrets/docs (dir=true, classified=false)
+  /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_n9hfz62y/data/secrets/docs/incident-report.md (dir=false, classified=false)
+  /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_n9hfz62y/data/secrets/docs/employee-reviews.md (dir=false, classified=false)
+  /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_n9hfz62y/data/secrets/docs/acquisition-plan.md (dir=false, classified=false)
+  /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_n9hfz62y/data/secrets/credentials (dir=true, classified=false)
+  /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_n9hfz62y/data/secrets/credentials/smtp.json (dir=false, classified=false)
+  /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_n9hfz62y/data/secrets/credentials/database.json (dir=false, classified=false)
+  /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_n9hfz62y/data/secrets/credentials/jwt-secret.txt (dir=false, classified=false)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

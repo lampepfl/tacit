@@ -1,0 +1,16 @@
+status: success
+Current directory contents:
+  secrets (dir=true)
+  projects (dir=true)
+
+Secrets directory contents:
+  api-keys (dir=true)
+  docs (dir=true)
+  credentials (dir=true)
+
+Secrets/docs directory contents:
+  incident-report.md, isClassified=false
+  employee-reviews.md, isClassified=false
+  acquisition-plan.md, isClassified=false
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

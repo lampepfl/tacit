@@ -1,0 +1,14 @@
+status: success
+Found 4 files
+
+=== TODO Comments Found: 2 items ===
+
+📄 /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench__vyhg6hd/data/projects/webapp/docs/README.md
+   Line 28: ## TODO
+
+📄 /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench__vyhg6hd/data/projects/webapp/src/UsersController.scala
+   Line 20: // TODO: parse body, validate, add user
+
+=== Summary: 2 TODO items across 2 files ===
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

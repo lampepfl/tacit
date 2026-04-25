@@ -1,0 +1,8 @@
+status: success
+Docs directory contents:
+changelog.md
+README.md
+changelog.md - isDirectory: false
+README.md - isDirectory: false
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

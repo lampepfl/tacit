@@ -1,0 +1,5 @@
+status: success
+-- Error: ----------------------------------------------------------------------
+30 |          catch
+   |          ^^^^^
+   |          end of statement expected but 'catch' found

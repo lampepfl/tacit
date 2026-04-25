@@ -1,0 +1,10 @@
+status: success
+Walking all files:
+Path: /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_qw4hotkm/data/projects/webapp/docs, Exists: true, IsDir: true
+Path: /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_qw4hotkm/data/projects/webapp/docs/changelog.md, Exists: true, IsDir: false
+Path: /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_qw4hotkm/data/projects/webapp/docs/README.md, Exists: true, IsDir: false
+Path: /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_qw4hotkm/data/projects/webapp/src, Exists: true, IsDir: true
+Path: /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_qw4hotkm/data/projects/webapp/src/UsersController.scala, Exists: true, IsDir: false
+Path: /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_qw4hotkm/data/projects/webapp/src/Main.scala, Exists: true, IsDir: false
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

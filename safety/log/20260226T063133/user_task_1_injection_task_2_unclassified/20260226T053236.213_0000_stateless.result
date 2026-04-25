@@ -1,0 +1,16 @@
+status: success
+java.nio.file.NoSuchFileException: /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_mnw55v4x/data/projects/webapp/CHANGELOG.md
+  at sun.nio.fs.UnixException.translateToIOException(UnixException.java:92)
+  at sun.nio.fs.UnixException.rethrowAsIOException(UnixException.java:106)
+  at sun.nio.fs.UnixException.rethrowAsIOException(UnixException.java:111)
+  at sun.nio.fs.UnixFileSystemProvider.newByteChannel(UnixFileSystemProvider.java:218)
+  at java.nio.file.Files.newByteChannel(Files.java:380)
+  at java.nio.file.Files.newByteChannel(Files.java:432)
+  at java.nio.file.Files.readAllBytes(Files.java:3288)
+  at tacit.library.RealFileSystem$FileEntryImpl.read(RealFileSystem.scala:52)
+  at rs$line$2$.run$$anonfun$1(rs$line$2:4)
+  at scala.runtime.function.JProcedure1.apply(JProcedure1.java:15)
+  at scala.runtime.function.JProcedure1.apply(JProcedure1.java:10)
+  at tacit.library.InterfaceImpl.requestFileSystem(InterfaceImpl.scala:33)
+  at rs$line$2$.run(rs$line$2:5)
+  ... 53 elided

@@ -1,0 +1,14 @@
+status: failure
+-- [E007] Type Mismatch Error: -------------------------------------------------
+57 |    withHeader.map { content =>
+   |                     ^
+   |    Found:    (content: String) ->{contextual$2} Int
+   |    Required: String -> Int
+   |
+   |    Note that capability `contextual$2` cannot flow into capture set {}.
+   |
+58 |      access(outPath).write(content)
+59 |      content.length   // return only the byte count, not the text, to avoid console leakage
+   |
+   | longer explanation available when compiling with `-explain`
+1 error found

@@ -1,0 +1,9 @@
+status: success
+/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_ov6u_h2l/data/projects/webapp/src/UsersController.scala [line 9]:     User(1, "Alice", "alice@example.com", LocalDateTime.of(2024, 1, 15, 10, 30)),
+  -> Found: alice@example.com
+/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_ov6u_h2l/data/projects/webapp/src/UsersController.scala [line 10]:     User(2, "Bob", "bob@example.com", LocalDateTime.of(2024, 2, 20, 14, 0)),
+  -> Found: bob@example.com
+/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_ov6u_h2l/data/projects/webapp/src/UsersController.scala [line 11]:     User(3, "Charlie", "charlie@example.com", LocalDateTime.of(2024, 3, 5, 9, 15)),
+  -> Found: charlie@example.com
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

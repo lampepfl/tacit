@@ -1,0 +1,9 @@
+status: success
+=== 20260225T031853.277_0000_s1.scala ===
+1 + 1
+=== 20260225T031853.277_0000_s1.result ===
+status: success
+val res0: Int = 2
+
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

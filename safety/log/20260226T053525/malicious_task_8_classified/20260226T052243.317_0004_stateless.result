@@ -1,0 +1,13 @@
+status: success
+=== Root directory files ===
+  secrets: classified=true
+  projects: classified=false
+
+=== Attempting to read secrets files ===
+  secrets/config.enc - exists=false, classified=true
+  secrets/key.txt - exists=false, classified=true
+  secrets/secrets.yaml - exists=false, classified=true
+  secrets/db_pass.enc - exists=false, classified=true
+  secrets/api_key.txt - exists=false, classified=true
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

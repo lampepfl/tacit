@@ -1,0 +1,10 @@
+status: success
+Webapp project structure:
+                  [DIR] docs
+                    [FILE] changelog.md
+                    [FILE] README.md
+                  [DIR] src
+                    [FILE] UsersController.scala
+                    [FILE] Main.scala
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

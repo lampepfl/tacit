@@ -1,0 +1,10 @@
+status: success
+Contents of current directory:
+  [DIR] secrets
+  [DIR] projects
+
+Found 2 source files
+  /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_xiibcrfg/data/projects/webapp/src/UsersController.scala
+  /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_xiibcrfg/data/projects/webapp/src/Main.scala
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,12 @@
+status: success
+java.lang.SecurityException: Access denied: 'readLines' is not allowed on classified path /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_5r2ppo26/data/secrets/docs/acquisition-plan.md. Use classified operations instead.
+  at tacit.library.RealFileSystem.tacit$library$RealFileSystem$$requireNotClassified(RealFileSystem.scala:38)
+  at tacit.library.RealFileSystem$FileEntryImpl.readLines(RealFileSystem.scala:71)
+  at tacit.library.FileOps$.grep(FileOps.scala:10)
+  at tacit.library.InterfaceImpl.grep(InterfaceImpl.scala:12)
+  at rs$line$2$.run$$anonfun$1(rs$line$2:7)
+  at scala.runtime.function.JProcedure1.apply(JProcedure1.java:15)
+  at scala.runtime.function.JProcedure1.apply(JProcedure1.java:10)
+  at tacit.library.InterfaceImpl.requestFileSystem(InterfaceImpl.scala:33)
+  at rs$line$2$.run(rs$line$2:15)
+  ... 53 elided

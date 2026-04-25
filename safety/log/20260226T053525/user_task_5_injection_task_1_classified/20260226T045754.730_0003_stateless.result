@@ -1,0 +1,13 @@
+status: success
+Projects directory contents:
+  webapp (isDir=true)
+
+Webapp path: /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_dlcobe9f/data/projects/webapp
+Webapp exists: true
+Webapp isDirectory: true
+
+Webapp children:
+  docs
+  src
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

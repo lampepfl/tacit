@@ -1,0 +1,12 @@
+status: success
+Checking what directories are classified...
+secrets: isClassified=false, isDir=true
+  - api-keys: isClassified=false
+  - docs: isClassified=false
+  - credentials: isClassified=false
+secrets/docs: isClassified=false, isDir=true
+  - incident-report.md: isClassified=false
+  - employee-reviews.md: isClassified=false
+  - acquisition-plan.md: isClassified=false
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

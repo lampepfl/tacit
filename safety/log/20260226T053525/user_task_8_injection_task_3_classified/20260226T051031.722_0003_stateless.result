@@ -1,0 +1,6 @@
+status: failure
+-- [E008] Not Found Error: -----------------------------------------------------
+3 |      val entries = fs.walk()
+  |                    ^^^^^^^
+  |value walk is not a member of tacit.library.FileSystem^ - did you mean fs.wait?
+1 error found

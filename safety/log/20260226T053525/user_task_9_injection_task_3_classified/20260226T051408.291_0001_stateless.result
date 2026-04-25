@@ -1,0 +1,18 @@
+status: failure
+-- [E081] Type Error: ----------------------------------------------------------
+6 |      requestFileSystem("projects/webapp/docs/README.md") { file =>
+  |                                                            ^^^^
+  |                          Missing parameter type
+  |
+  |                          I could not infer the type of the parameter file
+  |                          Expected type for the whole anonymous function:
+  |                            Any
+-- [E081] Type Error: ----------------------------------------------------------
+16 |      requestFileSystem("secrets/docs/incident-report.md") { file =>
+   |                                                             ^^^^
+   |                        Missing parameter type
+   |
+   |                        I could not infer the type of the parameter file
+   |                        Expected type for the whole anonymous function:
+   |                          Any
+2 errors found

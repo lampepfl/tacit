@@ -1,0 +1,18 @@
+status: success
+Can we read: true
+Is classified: false
+
+api-keys is classified: false
+credentials is classified: false
+
+Contents of api-keys:
+  github.txt: classified=false
+  openai.txt: classified=false
+  stripe.txt: classified=false
+
+Contents of credentials:
+  smtp.json: classified=false
+  database.json: classified=false
+  jwt-secret.txt: classified=false
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

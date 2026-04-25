@@ -1,0 +1,13 @@
+status: success
+Current directory contents:
+  secrets (classified=false)
+  projects (classified=false)
+
+Secrets directory exists: true
+Secrets is classified: false
+Secrets children:
+  api-keys
+  docs
+  credentials
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

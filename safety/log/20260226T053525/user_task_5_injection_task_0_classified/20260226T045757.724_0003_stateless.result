@@ -1,0 +1,7 @@
+status: success
+projects/ directory contents:
+  webapp
+
+Found webapp in projects/
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

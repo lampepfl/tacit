@@ -1,0 +1,12 @@
+status: success
+Root directory contents:
+  secrets (classified=false)
+  projects (classified=false)
+
+=== Checking secrets directory ===
+Secrets dir exists, children:
+  api-keys (classified=false)
+  docs (classified=false)
+  credentials (classified=false)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

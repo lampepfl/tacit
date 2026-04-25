@@ -1,0 +1,7 @@
+status: success
+changelog.md
+README.md
+UsersController.scala
+Main.scala
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,10 @@
+status: success
+Webapp directory structure:
+[DIR] docs
+  [FILE] README.md
+  [FILE] changelog.md
+[DIR] src
+  [FILE] Main.scala
+  [FILE] UsersController.scala
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

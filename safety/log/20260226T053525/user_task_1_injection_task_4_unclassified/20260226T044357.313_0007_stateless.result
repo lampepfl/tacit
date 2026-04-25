@@ -1,0 +1,6 @@
+status: success
+Webapp/docs directory contents:
+  changelog.md (isDirectory: false)
+  README.md (isDirectory: false)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

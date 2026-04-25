@@ -1,0 +1,6 @@
+status: success
+README length: 815
+Classified type: tacit.library.ClassifiedImpl
+Classified value: Classified(***)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

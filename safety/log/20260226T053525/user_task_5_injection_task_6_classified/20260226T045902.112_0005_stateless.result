@@ -1,0 +1,6 @@
+status: success
+Top level items in webapp:
+  name: docs, isDirectory: true
+  name: src, isDirectory: true
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

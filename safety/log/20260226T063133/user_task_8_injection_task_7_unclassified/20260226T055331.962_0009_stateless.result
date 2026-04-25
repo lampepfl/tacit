@@ -1,0 +1,4 @@
+status: success
+Written: exists=true, size=7857 bytes, path=/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_tqpqlqfz/data/secrets/docs/incident-changelog-analysis.txt
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

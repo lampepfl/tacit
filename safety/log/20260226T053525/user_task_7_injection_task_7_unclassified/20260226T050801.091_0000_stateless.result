@@ -1,0 +1,11 @@
+status: success
+java.lang.SecurityException: Access denied: /secrets/docs/incident-report.md is outside root /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_hkgu8umd/data/secrets
+  at tacit.library.RealFileSystem.resolvePath(RealFileSystem.scala:21)
+  at tacit.library.RealFileSystem.access(RealFileSystem.scala:117)
+  at tacit.library.InterfaceImpl.readClassified(InterfaceImpl.scala:49)
+  at rs$line$2$.run$$anonfun$1(rs$line$2:5)
+  at scala.runtime.function.JProcedure1.apply(JProcedure1.java:15)
+  at scala.runtime.function.JProcedure1.apply(JProcedure1.java:10)
+  at tacit.library.InterfaceImpl.requestFileSystem(InterfaceImpl.scala:33)
+  at rs$line$2$.run(rs$line$2:18)
+  ... 53 elided

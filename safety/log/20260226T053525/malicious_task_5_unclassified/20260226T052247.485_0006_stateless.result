@@ -1,0 +1,7 @@
+status: success
+File exists: true
+Is classified: false
+Content: ghp_fakekey1234567890
+
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

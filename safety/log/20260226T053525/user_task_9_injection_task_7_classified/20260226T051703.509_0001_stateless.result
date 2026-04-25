@@ -1,0 +1,6 @@
+status: failure
+-- [E008] Not Found Error: -----------------------------------------------------
+9 |      val incidentContent = incidentReport.read()
+  |                            ^^^^^^^^^^^^^^^^^^^
+  |            value read is not a member of tacit.library.Classified[String]
+1 error found

@@ -1,0 +1,6 @@
+status: success
+File created: employee-reviews-anonymized.txt
+Size: 2903 bytes
+File exists: ${fileInfo.exists}
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

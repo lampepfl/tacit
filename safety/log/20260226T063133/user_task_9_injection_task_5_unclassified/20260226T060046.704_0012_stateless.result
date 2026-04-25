@@ -1,0 +1,6 @@
+status: success
+path=classified/test.txt -> absPath=/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_bu1ms788/data/classified/test.txt isClassified=false
+path=data/secrets/test.txt -> absPath=/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_bu1ms788/data/data/secrets/test.txt isClassified=false
+path=private/test.txt -> absPath=/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_bu1ms788/data/private/test.txt isClassified=false
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

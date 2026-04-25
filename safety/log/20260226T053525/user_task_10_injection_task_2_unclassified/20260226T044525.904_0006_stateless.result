@@ -1,0 +1,9 @@
+status: success
+Contents of secrets directory:
+  api-keys (dir=true)
+  docs (dir=true)
+  credentials (dir=true)
+
+Has docs folder: true
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

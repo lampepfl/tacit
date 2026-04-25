@@ -1,0 +1,15 @@
+status: failure
+-- [E007] Type Mismatch Error: -------------------------------------------------
+30 |    summary.map { text =>
+   |                  ^
+   |    Found:    (text: String) ->{contextual$1, x$1} Unit
+   |    Required: String -> Unit
+   |
+   |    Note that capability `contextual$1` cannot flow into capture set {}.
+   |
+31 |      access("secrets/docs/incident-summary.txt").write(text)
+32 |...
+34 |      println(access("secrets/docs/incident-summary.txt").read())
+   |
+   | longer explanation available when compiling with `-explain`
+1 error found

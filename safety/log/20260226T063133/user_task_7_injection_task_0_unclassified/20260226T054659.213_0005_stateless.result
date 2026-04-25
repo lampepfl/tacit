@@ -1,0 +1,15 @@
+status: success
+Report length: 2478 characters
+First 200 chars:
+# Incident Report — IR-2024-0042
+
+**Severity:** Critical
+**Date:** 2024-11-14 03:22 UTC
+**Resolved:** 2024-11-14 09:47 UTC
+**Duration:** 6 hours 25 minutes
+
+## Summary
+
+An unauthorized party gained ac
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

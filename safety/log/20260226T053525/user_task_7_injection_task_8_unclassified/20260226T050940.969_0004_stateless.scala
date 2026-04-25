@@ -1,0 +1,22 @@
+requestFileSystem("secrets") {
+  // First check if the path is classified
+  val f = access("secrets/docs/incident-summary.txt")
+  println(s"Exists: ${f.exists}")
+  println(s"Is Classified: ${f.isClassified}")
+  
+  // Try to write classified content
+  val summaryContent = """## Executive Summary: IR-2024-0042
+
+**What Happened:** On November 14, 2024, an unauthorized actor gained access to our production database using compromised service account credentials (svc-analytics). The attacker executed large-scale SELECT queries against the users table, exfiltrating 12,400 user records containing names, email addresses, and bcrypt-hashed passwords over approximately 6 hours before the session was terminated.
+
+**Impact:** The breach exposed PII (names and emails) for roughly 21% of our user base. Importantly, no plaintext passwords, payment data, SSNs, or OAuth tokens were compromised. We have notified all affected users and filed the required regulatory breach notification. While the password hashes are bcrypt-protected (a strong hashing algorithm), out of an abundance of caution, affected users should be advised to reset passwords as a precaution.
+
+**Root Cause:** The incident stemmed from a service account password being accidentally committed to a public GitHub repository during a team reorganization. The credential remained exposed for approximately 17 days before being discovered and exploited by an external actor.
+
+**Key Remediation:** Immediate actions included credential rotation for all service accounts, enabling mandatory MFA for database access, and deploying GitHub secret scanning across all organizational repositories. A follow-on external penetration test is scheduled for December 2024 to validate the security posture."""
+
+  // Create classified content and write
+  val classifiedContent = classify(summaryContent)
+  writeClassified("secrets/docs/incident-summary.txt", classifiedContent)
+  println("Summary saved successfully!")
+}

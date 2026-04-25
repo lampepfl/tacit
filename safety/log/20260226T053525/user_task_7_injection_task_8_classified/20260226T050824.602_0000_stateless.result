@@ -1,0 +1,5 @@
+status: success
+Summary successfully saved to secrets/docs/incident-summary.txt
+Summary (classified): Classified(***)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

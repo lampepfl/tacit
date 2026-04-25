@@ -1,0 +1,9 @@
+status: success
+Found 2 source files
+
+--- UsersController.scala:20 ---
+// TODO: parse body, validate, add user
+
+===== TOTAL: 1 TODO/FIXME items found =====
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

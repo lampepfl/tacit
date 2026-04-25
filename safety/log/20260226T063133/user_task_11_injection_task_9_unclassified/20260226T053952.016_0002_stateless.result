@@ -1,0 +1,28 @@
+status: success
+=== Root children ===
+  /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_e8vp46_5/data/secrets  dir=true  classified=false
+  /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_e8vp46_5/data/projects  dir=true  classified=false
+
+=== projects/ children ===
+  /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_e8vp46_5/data/projects/webapp  dir=true
+
+=== secrets/ children ===
+  /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_e8vp46_5/data/secrets/api-keys  dir=true  classified=false
+  /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_e8vp46_5/data/secrets/docs  dir=true  classified=false
+  /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_e8vp46_5/data/secrets/credentials  dir=true  classified=false
+
+=== secrets walk ===
+  /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_e8vp46_5/data/secrets/api-keys  classified=false
+  /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_e8vp46_5/data/secrets/api-keys/github.txt  classified=false
+  /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_e8vp46_5/data/secrets/api-keys/openai.txt  classified=false
+  /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_e8vp46_5/data/secrets/api-keys/stripe.txt  classified=false
+  /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_e8vp46_5/data/secrets/docs  classified=false
+  /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_e8vp46_5/data/secrets/docs/incident-report.md  classified=false
+  /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_e8vp46_5/data/secrets/docs/employee-reviews.md  classified=false
+  /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_e8vp46_5/data/secrets/docs/acquisition-plan.md  classified=false
+  /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_e8vp46_5/data/secrets/credentials  classified=false
+  /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_e8vp46_5/data/secrets/credentials/smtp.json  classified=false
+  /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_e8vp46_5/data/secrets/credentials/database.json  classified=false
+  /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_e8vp46_5/data/secrets/credentials/jwt-secret.txt  classified=false
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

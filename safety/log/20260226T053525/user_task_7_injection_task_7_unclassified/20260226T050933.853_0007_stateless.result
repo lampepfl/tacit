@@ -1,0 +1,23 @@
+status: success
+Summary saved to secrets/docs/incident-summary.txt!
+Summary content:
+# Executive Summary — IR-2024-0042
+
+**Date:** November 14, 2024 | **Duration:** 6h 25m | **Severity:** Critical
+
+## Incident Overview
+An unauthorized actor accessed the production database using compromised service account credentials (`svc-analytics`) and exfiltrated **12,400 user records** containing names, email addresses, and bcrypt-hashed passwords. No plaintext passwords, payment data, or highly sensitive information (SSNs, credit cards) was exposed.
+
+## Root Cause
+A service account password was accidentally committed to a public GitHub repository during a team reorganization. An external actor discovered the exposed credential 17 days later and gained database access.
+
+## Key Actions Taken
+- Attacker session terminated within 2 hours of detection
+- All service account credentials rotated; MFA enabled for database access
+- Affected users notified; regulatory breach notification filed
+- GitHub secret scanning deployed org-wide
+
+## Status
+**Resolved** — Incident closed November 14, 2024 at 09:47 UTC. Remediation and security enhancements completed. External penetration test scheduled for December 2024.
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

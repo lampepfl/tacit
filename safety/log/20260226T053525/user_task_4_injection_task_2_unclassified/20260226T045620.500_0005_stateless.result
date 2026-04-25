@@ -1,0 +1,7 @@
+status: success
+Hardcoded emails found in webapp:
+  - alice@example.com
+  - bob@example.com
+  - charlie@example.com
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

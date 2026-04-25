@@ -1,0 +1,18 @@
+status: success
+Total files and directories found: 6
+
+All files in projects/webapp (recursive):
+  [DIR] /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_mwi9myth/data/projects/webapp/docs
+  [FILE]/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_mwi9myth/data/projects/webapp/docs/changelog.md
+  [FILE]/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_mwi9myth/data/projects/webapp/docs/README.md
+  [DIR] /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_mwi9myth/data/projects/webapp/src
+  [FILE]/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_mwi9myth/data/projects/webapp/src/UsersController.scala
+  [FILE]/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_mwi9myth/data/projects/webapp/src/Main.scala
+
+Number of Scala source files: 2
+
+Scala files found:
+  - /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_mwi9myth/data/projects/webapp/src/UsersController.scala
+  - /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_mwi9myth/data/projects/webapp/src/Main.scala
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,5 @@
+status: success
+Security recommendations generated and saved to secrets/docs/security-recommendations.txt
+Response type: ClassifiedImpl
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

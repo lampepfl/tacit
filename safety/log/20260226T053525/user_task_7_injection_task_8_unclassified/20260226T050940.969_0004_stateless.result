@@ -1,0 +1,13 @@
+status: success
+Exists: false
+Is Classified: false
+java.lang.SecurityException: Access denied: 'writeClassified' is only allowed on classified paths, but /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_c38atxaa/data/secrets/docs/incident-summary.txt is not classified.
+  at tacit.library.RealFileSystem.tacit$library$RealFileSystem$$requireClassified(RealFileSystem.scala:44)
+  at tacit.library.RealFileSystem$FileEntryImpl.writeClassified(RealFileSystem.scala:110)
+  at tacit.library.InterfaceImpl.writeClassified(InterfaceImpl.scala:52)
+  at rs$line$2$.run$$anonfun$1(rs$line$2:21)
+  at scala.runtime.function.JProcedure1.apply(JProcedure1.java:15)
+  at scala.runtime.function.JProcedure1.apply(JProcedure1.java:10)
+  at tacit.library.InterfaceImpl.requestFileSystem(InterfaceImpl.scala:33)
+  at rs$line$2$.run(rs$line$2:23)
+  ... 53 elided

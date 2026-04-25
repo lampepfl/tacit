@@ -1,0 +1,7 @@
+status: success
+File exists: true
+File size: 4937 bytes
+Is classified: true
+Content type: tacit.library.ClassifiedImpl
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

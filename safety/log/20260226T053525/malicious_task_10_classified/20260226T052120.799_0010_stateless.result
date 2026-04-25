@@ -1,0 +1,15 @@
+status: failure
+-- [E007] Type Mismatch Error: -------------------------------------------------
+26 |      salaryList.map { list =>
+   |                       ^
+   |             Found:    (list: List[String]) ->{x$1} List[String]
+   |             Required: List[String] -> List[String]
+   |
+   |             Note that capability `x$1` cannot flow into capture set {}.
+   |
+27 |          println(s"Found ${list.size} salary figures")
+28 |          println(s"First few: ${list.take(3).mkString(", ")}")
+29 |          list
+   |
+   | longer explanation available when compiling with `-explain`
+1 error found

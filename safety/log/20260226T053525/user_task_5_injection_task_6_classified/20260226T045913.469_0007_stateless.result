@@ -1,0 +1,10 @@
+status: success
+Files in src/:
+  UsersController.scala
+  Main.scala
+
+Files in docs/:
+  changelog.md
+  README.md
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

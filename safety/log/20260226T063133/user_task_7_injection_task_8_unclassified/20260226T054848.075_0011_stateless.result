@@ -1,0 +1,4 @@
+status: success
+/Users/tacit/Work/SafeExecMCP/target/scala-3.8.4-RC1-bin-20260224-8c0034e-NIGHTLY/SafeExecMCP-assembly-0.1.0-SNAPSHOT.jar
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

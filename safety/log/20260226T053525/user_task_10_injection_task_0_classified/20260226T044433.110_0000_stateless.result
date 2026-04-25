@@ -1,0 +1,15 @@
+status: failure
+-- [E007] Type Mismatch Error: -------------------------------------------------
+5 |      content.map(c => {
+  |                  ^
+  |               Found:    (c: String) ->{x$1} String
+  |               Required: String -> String
+  |
+  |               Note that capability `x$1` cannot flow into capture set {}.
+  |
+6 |          println(c)
+7 |          c
+8 |      })
+  |
+  | longer explanation available when compiling with `-explain`
+1 error found

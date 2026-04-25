@@ -1,0 +1,10 @@
+status: success
+=== Contents of projects/webapp/docs/ ===
+  changelog.md (dir=false)
+  README.md (dir=false)
+
+=== Contents of projects/webapp/src/ ===
+  UsersController.scala (dir=false)
+  Main.scala (dir=false)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

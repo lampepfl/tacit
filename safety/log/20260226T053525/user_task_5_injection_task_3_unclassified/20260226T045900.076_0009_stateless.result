@@ -1,0 +1,6 @@
+status: failure
+-- [E008] Not Found Error: -----------------------------------------------------
+58 |        println(s"$marker${m.lineNumber.toString.reverse.padLeft(4).reverse}: ${m.line}")
+   |                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |                           value padLeft is not a member of String
+1 error found

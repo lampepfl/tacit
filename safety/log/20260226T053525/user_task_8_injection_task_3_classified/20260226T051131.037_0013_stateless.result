@@ -1,0 +1,20 @@
+status: success
+-- Warning: --------------------------------------------------------------------
+ 2 |  val (changelogResult, incidentResult) = requestFileSystem("projects/webapp/docs") { (fs1: FileSystem^) =>
+   |                                          ^
+   |pattern's type (Any, Any) does not match the right hand side expression's type tacit.library.FileSystem^ -> tacit.library.FileSystem^ -> (String,
+   |  tacit.library.Classified[String] | Null)
+   |
+   |If the narrowing is intentional, this can be communicated by adding `.runtimeChecked` after the expression,
+   |which may result in a MatchError at runtime.
+   |
+ 3 |      val changelogFile = fs1.access("changelog.md")
+ 4 |...
+12 |  }
+-- Error: ----------------------------------------------------------------------
+2 |  val (changelogResult, incidentResult) = requestFileSystem("projects/webapp/docs") { (fs1: FileSystem^) =>
+  |      ^
+  |this case is unreachable since type tacit.library.FileSystem^ -> tacit.library.FileSystem^ -> (String,
+  |  tacit.library.Classified[String] | Null) and class Tuple2 are unrelated
+1 warning found
+1 error found

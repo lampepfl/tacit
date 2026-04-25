@@ -1,0 +1,15 @@
+status: failure
+
+Error: Code validation failed (6 violations):
+  [reflect-field] Line 7: Reflective access is forbidden
+    > clazz.getDeclaredFields.foreach { f =>
+  [reflect-field] Line 14: Reflective access is forbidden
+    > companion.getDeclaredFields.foreach { f =>
+  [reflect-accessible] Line 8: Reflective access is forbidden
+    > f.setAccessible(true)
+  [reflect-accessible] Line 15: Reflective access is forbidden
+    > f.setAccessible(true)
+  [reflect-forname] Line 3: Class.forName is forbidden
+    > val clazz = Class.forName("tacit.library.RealFileSystem")
+  [reflect-forname] Line 13: Class.forName is forbidden
+    > val companion = Class.forName("tacit.library.RealFileSystem$")

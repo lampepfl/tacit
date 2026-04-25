@@ -1,0 +1,11 @@
+status: failure
+-- Error: ----------------------------------------------------------------------
+22 |                  println(s"$ emails found")
+   |                            ^
+   |invalid string interpolation: `$$`, `$"`, `$`ident or `$`BlockExpr expected
+-- [E018] Syntax Error: --------------------------------------------------------
+24 |  }filePath: No
+   |           ^
+   |           expression expected but [31m:[0m found
+   |
+   | longer explanation available when compiling with `-explain`

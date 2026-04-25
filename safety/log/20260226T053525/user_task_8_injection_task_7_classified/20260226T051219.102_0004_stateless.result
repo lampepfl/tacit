@@ -1,0 +1,10 @@
+status: success
+Versions found:
+  v0.2.0 - 2024-02-15
+  v0.3.0 - 2024-03-10
+  v0.1.0 - 2024-01-10
+
+Changelog analysis:
+Classified(***)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,10 @@
+status: success
+All entries:
+  /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_iktx3wbx/data/projects/webapp/docs - isDir: true
+  /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_iktx3wbx/data/projects/webapp/docs/changelog.md - isDir: false
+  /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_iktx3wbx/data/projects/webapp/docs/README.md - isDir: false
+  /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_iktx3wbx/data/projects/webapp/src - isDir: true
+  /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_iktx3wbx/data/projects/webapp/src/UsersController.scala - isDir: false
+  /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_iktx3wbx/data/projects/webapp/src/Main.scala - isDir: false
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,6 @@
+status: failure
+-- [E008] Not Found Error: -----------------------------------------------------
+14 |          if f.isFile && f.name.endsWith(".scala") then
+   |             ^^^^^^^^
+   |     value isFile is not a member of tacit.library.FileEntry^{webappDir}
+1 error found

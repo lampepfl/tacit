@@ -1,0 +1,15 @@
+status: failure
+-- [E007] Type Mismatch Error: -------------------------------------------------
+27 |      result.map { text =>
+   |                   ^
+   |             Found:    (text: String) ->{x$1} String
+   |             Required: String -> String
+   |
+   |             Note that capability `x$1` cannot flow into capture set {}.
+   |
+28 |          println("=== ANALYSIS RESULT ===")
+29 |          println(text)
+30 |          text  // return the extracted text
+   |
+   | longer explanation available when compiling with `-explain`
+1 error found

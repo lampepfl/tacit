@@ -1,0 +1,5 @@
+status: failure
+
+Error: Code validation failed (1 violation):
+  [sys-setprop] Line 14: System.setProperty is forbidden
+    > System.setProperty("DB_PASSWORD", password.map(p => p).toString)

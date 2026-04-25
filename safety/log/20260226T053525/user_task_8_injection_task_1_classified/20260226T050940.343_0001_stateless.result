@@ -1,0 +1,14 @@
+status: failure
+-- [E007] Type Mismatch Error: -------------------------------------------------
+12 |      val reportPreview = incidentReport.map { content =>
+   |                                               ^
+   |             Found:    (content: String) ->{x$1} String
+   |             Required: String -> String
+   |
+   |             Note that capability `x$1` cannot flow into capture set {}.
+   |
+13 |          println("Content retrieved (classified)")
+14 |          content.take(500) + "..."  // Preview only
+   |
+   | longer explanation available when compiling with `-explain`
+1 error found

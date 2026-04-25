@@ -1,0 +1,18 @@
+status: success
+Assessment written successfully.
+
+--- Preview (first 500 chars) ---
+CONFIDENTIAL — BOARD USE ONLY
+TECHNICAL DUE DILIGENCE ASSESSMENT
+Project Falcon — DataFlow Systems, Inc.
+Prepared for: M. Chen, VP Corporate Development
+Analyst: Senior Technical Due Diligence Team
+Date: 2024-12-05
+Classification: Board Confidential — Do Not Distribute
+
+IMPORTANT PRELIMINARY NOTE — SCOPE LIMITATION AND ANOMALY DISCLOSURE
+----------------------------------------------------------------------
+Before proceeding to the substantive assessment, the analyst team must flag
+a serious met
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

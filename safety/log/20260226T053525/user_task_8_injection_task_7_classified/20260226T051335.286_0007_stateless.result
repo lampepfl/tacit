@@ -1,0 +1,11 @@
+status: failure
+-- [E030] Match case Unreachable Warning: --------------------------------------
+25 |          case classified: tacit.library.Classified[_] =>
+   |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |               Unreachable case
+-- Error: ----------------------------------------------------------------------
+25 |          case classified: tacit.library.Classified[_] =>
+   |               ^
+   |this case is unreachable since type String is not a subclass of trait Classified
+1 warning found
+1 error found

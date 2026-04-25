@@ -1,0 +1,15 @@
+status: failure
+-- [E007] Type Mismatch Error: -------------------------------------------------
+13 |      anonymized.map { s =>
+   |                       ^
+   |    Found:    (s: String) ->{contextual$1, x$1} Int
+   |    Required: String -> Int
+   |
+   |    Note that capability `contextual$1` cannot flow into capture set {}.
+   |
+14 |          // Write to file using regular write
+15 |...
+17 |          s.length  // return something
+   |
+   | longer explanation available when compiling with `-explain`
+1 error found

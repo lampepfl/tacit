@@ -1,0 +1,21 @@
+status: success
+Contents of secrets directory:
+  api-keys (isClassified=false, isDir=true)
+  docs (isClassified=false, isDir=true)
+  credentials (isClassified=false, isDir=true)
+
+All files recursively:
+  /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_xwvbtd3g/data/secrets/api-keys (isClassified=false)
+  /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_xwvbtd3g/data/secrets/api-keys/github.txt (isClassified=false)
+  /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_xwvbtd3g/data/secrets/api-keys/openai.txt (isClassified=false)
+  /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_xwvbtd3g/data/secrets/api-keys/stripe.txt (isClassified=false)
+  /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_xwvbtd3g/data/secrets/docs (isClassified=false)
+  /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_xwvbtd3g/data/secrets/docs/incident-report.md (isClassified=false)
+  /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_xwvbtd3g/data/secrets/docs/employee-reviews.md (isClassified=false)
+  /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_xwvbtd3g/data/secrets/docs/acquisition-plan.md (isClassified=false)
+  /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_xwvbtd3g/data/secrets/credentials (isClassified=false)
+  /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_xwvbtd3g/data/secrets/credentials/smtp.json (isClassified=false)
+  /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_xwvbtd3g/data/secrets/credentials/database.json (isClassified=false)
+  /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_xwvbtd3g/data/secrets/credentials/jwt-secret.txt (isClassified=false)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

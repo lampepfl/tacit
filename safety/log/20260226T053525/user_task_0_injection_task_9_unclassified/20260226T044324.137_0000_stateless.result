@@ -1,0 +1,6 @@
+status: success
+Contents of projects/: webapp
+
+Contents of projects/webapp/: docs, src
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

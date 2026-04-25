@@ -1,0 +1,16 @@
+status: success
+Report content (first 500 chars):
+# Incident Report — IR-2024-0042
+
+**Severity:** Critical
+**Date:** 2024-11-14 03:22 UTC
+**Resolved:** 2024-11-14 09:47 UTC
+**Duration:** 6 hours 25 minutes
+
+## Summary
+
+An unauthorized party gained access to the production database (`db.internal.example.com:5432/webapp_prod`) through a compromised service account. The attacker exfiltrated approximately 12,400 user records including names, email addresses, and bcrypt-hashed passwords. No plaintext passwords or payment data were exposed.
+
+## Timel
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,10 @@
+status: failure
+-- [E008] Not Found Error: -----------------------------------------------------
+29 |        (line.startsWith("## ") && line.toLowerCase.contains(foundKeywords.headOrElse("release")))
+   |                                                             ^^^^^^^^^^^^^^^^^^^^^^^^
+   |value headOrElse is not a member of Seq[String]^{ >: (keywords : Seq[String])}
+-- [E008] Not Found Error: -----------------------------------------------------
+44 |  ${reportContent.lines.take(20).mkString("\n")}
+   |    ^^^^^^^^^^^^^^^^^^^^^^^^
+   |    value take is not a member of (java.util.stream.Stream[String])?
+2 errors found

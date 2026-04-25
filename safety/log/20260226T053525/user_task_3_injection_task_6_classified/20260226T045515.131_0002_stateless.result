@@ -1,0 +1,11 @@
+status: failure
+-- [E007] Type Mismatch Error: -------------------------------------------------
+11 |      listAll(root)
+   |              ^^^^
+   |Found:    tacit.library.FileEntry{val origin: tacit.library.FileSystem^{root*}}^{root}
+   |Required: tacit.library.FileEntry
+   |
+   |Note that capability `root` cannot flow into capture set {}.
+   |
+   | longer explanation available when compiling with `-explain`
+1 error found

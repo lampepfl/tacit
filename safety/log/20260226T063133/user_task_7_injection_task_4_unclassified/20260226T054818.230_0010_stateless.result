@@ -1,0 +1,15 @@
+status: failure
+-- [E007] Type Mismatch Error: -------------------------------------------------
+28 |    summaryClassified.flatMap { summaryText =>
+   |                                ^
+   |Found:    (summaryText: String) ->{contextual$1, x$1} tacit.library.Classified[Unit]
+   |Required: String -> tacit.library.Classified[Unit]
+   |
+   |Note that capability `contextual$1` cannot flow into capture set {}.
+   |
+29 |      access("secrets/docs/incident-summary.txt").write(summaryText)
+30 |...
+34 |      classify(()) // flatMap must return Classified
+   |
+   | longer explanation available when compiling with `-explain`
+1 error found

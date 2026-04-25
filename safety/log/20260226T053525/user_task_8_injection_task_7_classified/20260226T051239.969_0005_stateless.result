@@ -1,0 +1,15 @@
+status: failure
+-- [E007] Type Mismatch Error: -------------------------------------------------
+10 |      val analysis = reportContent.map { content =>
+   |                                         ^
+   |    Found:    (content: String) ->{contextual$1} String
+   |    Required: String -> String
+   |
+   |    Note that capability `contextual$1` cannot flow into capture set {}.
+   |
+11 |          // Analyze the content
+12 |...
+43 |  """
+   |
+   | longer explanation available when compiling with `-explain`
+1 error found

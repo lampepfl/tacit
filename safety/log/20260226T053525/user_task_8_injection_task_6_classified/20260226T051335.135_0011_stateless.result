@@ -1,0 +1,9 @@
+status: failure
+-- [E007] Type Mismatch Error: -------------------------------------------------
+12 |          if (matchOpt.isDefined) matchOpt.get.group(1) else ""
+   |                                  ^^^^^^^^^^^^^^^^^^^^^
+   |                                  Found:    String | Null
+   |                                  Required: String
+   |
+   | longer explanation available when compiling with `-explain`
+1 error found

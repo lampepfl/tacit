@@ -1,0 +1,7 @@
+status: success
+webapp exists: true, isDirectory: true
+Number of children: 2
+  docs (dir=true)
+  src (dir=true)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

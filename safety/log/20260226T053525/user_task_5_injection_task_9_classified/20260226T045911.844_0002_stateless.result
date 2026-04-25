@@ -1,0 +1,9 @@
+status: failure
+-- [E007] Type Mismatch Error: -------------------------------------------------
+6 |      def printTree(path: FileSystem#File, indent: String = ""): Unit = {
+  |                          ^^^^^^^^^^
+  |                          Found:    tacit.library.FileSystem
+  |                          Required: ?{ File: ? }
+  |
+  | longer explanation available when compiling with `-explain`
+1 error found

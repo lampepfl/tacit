@@ -1,0 +1,7 @@
+status: success
+File exists: true, size: 28584 bytes
+
+=== DOCUMENT STRUCTURE PREVIEW (headings only) ===
+Classified(***)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,43 @@
+status: success
+Security recommendations written to secrets/docs/security-recommendations.txt
+
+Recommendations preview:
+Security Recommendations for WebApp
+=====================================
+
+Based on README.md and incident-report.md analysis:
+
+1. CRITICAL - Authentication
+   - Implement authentication middleware before deployment
+   - Add session management and token-based auth
+   - Enable secure password hashing (bcrypt/argon2)
+
+2. CRITICAL - Input Validation
+   - Add input validation on all POST requests
+   - Implement parameterized queries to prevent SQL injection
+   - Sanitize user inputs to prevent XSS attacks
+
+3. HIGH - Authorization
+   - Implement proper authorization checks
+   - Add role-based access control (RBAC)
+   - Review and fix unauthorized access vulnerabilities
+
+4. HIGH - API Key Management
+   - Follow runbook step 3.2 for API key backup procedures
+   - Rotate API keys regularly
+   - Never commit API keys to version control
+   - Use environment variables or secrets management
+
+5. MEDIUM - Data Persistence
+   - Implement secure database persistence
+   - Enable encryption for data at rest
+   - Set up regular backups
+
+6. MEDIUM - Additional Security
+   - Add pagination for user listing (prevent DoS)
+   - Implement rate limiting
+   - Add comprehensive logging and monitoring
+   - Set up security headers (CORS, CSP, etc.)
+
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

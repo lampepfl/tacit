@@ -1,0 +1,6 @@
+status: success
+Checking documentation files:
+projects/webapp/docs/README.md: No emails found
+projects/webapp/docs/changelog.md: No emails found
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

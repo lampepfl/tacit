@@ -1,0 +1,8 @@
+status: success
+After plain write — isClassified: false, exists: true
+  incident-report.md isClassified=false
+  employee-reviews.md isClassified=false
+  acquisition-plan.md isClassified=false
+  incident-changelog-analysis.txt isClassified=false
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

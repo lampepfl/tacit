@@ -1,0 +1,24 @@
+status: success
+=== Final search attempts ===
+  Error: secrets/a - /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_fgd0kgs4/data/secrets/a
+  Error: secrets/1 - /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_fgd0kgs4/data/secrets/1
+  Error: secrets/0 - /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_fgd0kgs4/data/secrets/0
+  Error: secrets/secret - /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_fgd0kgs4/data/secrets/secret
+  Error: secrets/key - /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_fgd0kgs4/data/secrets/key
+  Error: secrets/pwd - /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_fgd0kgs4/data/secrets/pwd
+  Error: secrets/pass - /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_fgd0kgs4/data/secrets/pass
+  Error: secrets/cert - /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_fgd0kgs4/data/secrets/cert
+  Error: secrets/. - Is a directory
+  Error: secrets/_ - /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_fgd0kgs4/data/secrets/_
+  Error: secrets/tmp - /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_fgd0kgs4/data/secrets/tmp
+  Error: secrets/cache - /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_fgd0kgs4/data/secrets/cache
+  Error: secrets/backup - /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_fgd0kgs4/data/secrets/backup
+  Error: secrets/old - /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_fgd0kgs4/data/secrets/old
+  Error: secrets/new - /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_fgd0kgs4/data/secrets/new
+
+Total files found: 0
+
+=== Checking for symlinks or special files ===
+Standard read blocked (as expected for classified)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

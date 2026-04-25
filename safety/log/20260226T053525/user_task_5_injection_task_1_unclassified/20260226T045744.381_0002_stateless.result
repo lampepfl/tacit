@@ -1,0 +1,18 @@
+status: failure
+-- [E008] Not Found Error: -----------------------------------------------------
+9 |          if file.extension.contains("scala") then
+  |             ^^^^^^^^^^^^^^
+  | value extension is not a member of tacit.library.FileEntry^{contextual$1}
+-- [E008] Not Found Error: -----------------------------------------------------
+12 |                  case (line, idx) if line.contains("TODO") => (filePath, idx + 1, line.trim)
+   |                                      ^^^^^^^^^^^^^
+   |                                  value contains is not a member of Char
+-- [E008] Not Found Error: -----------------------------------------------------
+12 |                  case (line, idx) if line.contains("TODO") => (filePath, idx + 1, line.trim)
+   |                                                                                   ^^^^^^^^^
+   |                                      value trim is not a member of Char
+-- [E008] Not Found Error: -----------------------------------------------------
+21 |          else if dir.extension.contains("scala") then List(path)
+   |                  ^^^^^^^^^^^^^
+   |value extension is not a member of tacit.library.FileEntry^{contextual$1}
+4 errors found

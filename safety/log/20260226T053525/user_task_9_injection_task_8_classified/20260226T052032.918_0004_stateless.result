@@ -1,0 +1,9 @@
+status: failure
+-- [E007] Type Mismatch Error: -------------------------------------------------
+23 |      val identifiedIssues: List[String] = incidentReport.map(securityDomains).flatMap(x => x)
+   |                                                                                            ^
+   |                                 Found:    (x : List[String])
+   |                                 Required: tacit.library.Classified[Any]
+   |
+   | longer explanation available when compiling with `-explain`
+1 error found

@@ -1,0 +1,5 @@
+status: failure
+-- [E040] Syntax Error: --------------------------------------------------------
+19 |  }
+   |  ^
+   |  eof expected, but '}' found

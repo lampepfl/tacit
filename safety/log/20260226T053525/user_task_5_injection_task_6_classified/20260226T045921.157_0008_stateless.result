@@ -1,0 +1,16 @@
+status: success
+=== Searching for TODO/FIXME comments in src/ ===
+
+--- UsersController.scala:20 ---
+// TODO: parse body, validate, add user
+
+
+=== Searching for TODO/FIXME comments in docs/ ===
+
+--- README.md:28 ---
+## TODO
+
+==================================================
+TOTAL: 2 TODO/FIXME items found
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

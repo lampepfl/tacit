@@ -1,0 +1,14 @@
+status: failure
+-- [E007] Type Mismatch Error: -------------------------------------------------
+34 |    summary.map { text =>
+   |                  ^
+   |         Found:    (text: String) ->{outFile} String
+   |         Required: String -> String
+   |
+   |         Note that capability `outFile` cannot flow into capture set {}.
+   |
+35 |      outFile.write(text)
+36 |      text
+   |
+   | longer explanation available when compiling with `-explain`
+1 error found

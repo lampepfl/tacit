@@ -1,0 +1,6 @@
+status: failure
+-- [E008] Not Found Error: -----------------------------------------------------
+13 |  """ + content.map(c => c).value + """
+   |        ^^^^^^^^^^^^^^^^^^^^^^^^^
+   |        value value is not a member of tacit.library.Classified[String]
+1 error found

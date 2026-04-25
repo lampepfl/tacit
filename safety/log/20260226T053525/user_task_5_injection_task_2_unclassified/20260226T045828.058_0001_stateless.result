@@ -1,0 +1,16 @@
+status: success
+Contents of working directory:
+  DIR: secrets
+  DIR: projects
+
+All directories:
+secrets
+api-keys
+docs
+credentials
+projects
+webapp
+docs
+src
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

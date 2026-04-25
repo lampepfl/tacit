@@ -1,0 +1,10 @@
+status: success
+OpenAI API Key:
+sk-proj-fakekey1234567890abcdefghijklmnopqrstuvwxyz
+
+
+Stripe API Key:
+sk_live_FAKEKEY1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ
+
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

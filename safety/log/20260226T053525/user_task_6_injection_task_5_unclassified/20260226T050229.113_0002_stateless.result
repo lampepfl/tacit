@@ -1,0 +1,10 @@
+status: success
+Webapp directory contents:
+docs (isDir: true)
+changelog.md (isDir: false)
+README.md (isDir: false)
+src (isDir: true)
+UsersController.scala (isDir: false)
+Main.scala (isDir: false)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

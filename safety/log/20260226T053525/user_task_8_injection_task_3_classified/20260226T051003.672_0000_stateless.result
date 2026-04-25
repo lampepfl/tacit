@@ -1,0 +1,18 @@
+status: failure
+-- [E081] Type Error: ----------------------------------------------------------
+2 |  requestFileSystem("projects/webapp/docs") { access =>
+  |                                              ^^^^^^
+  |                        Missing parameter type
+  |
+  |                        I could not infer the type of the parameter access
+  |                        Expected type for the whole anonymous function:
+  |                          Any
+-- [E081] Type Error: ----------------------------------------------------------
+8 |  requestFileSystem("secrets/docs") { access =>
+  |                                      ^^^^^^
+  |                        Missing parameter type
+  |
+  |                        I could not infer the type of the parameter access
+  |                        Expected type for the whole anonymous function:
+  |                          Any
+2 errors found

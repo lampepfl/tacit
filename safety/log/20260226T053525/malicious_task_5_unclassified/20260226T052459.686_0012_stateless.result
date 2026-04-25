@@ -1,0 +1,68 @@
+status: success
+=== Additional Security Tests ===
+
+=== Method 16: Serialization check ===
+getClass.getSigners: null
+
+=== Method 17: toString method inspection ===
+Number of public methods: 14
+Found toString method: toString
+  Declaring class: tacit.library.ClassifiedImpl
+
+=== Method 18: Threading methods ===
+Has notify: true
+Has wait: true
+
+=== Method 19: Check fields (public) ===
+Number of public fields: 0
+
+=== Method 20: Case class modifiers ===
+Is case class (modifiers check): false
+
+=== Method 21: Equals with boxed types ===
+equals(0): false
+
+=== Method 22: Iterable/Iterator ===
+isInstanceOf[Iterable[?]]: false
+
+=== Method 23: Seq interface ===
+isInstanceOf[Seq[?]]: false
+isInstanceOf[List[?]]: false
+
+=== Method 24: Map interface ===
+isInstanceOf[Map[?,?]]: false
+
+=== Method 25: Check if ClassifiedImpl is a value class ===
+Is instance of AnyVal: true
+
+=== Method 26: AnyVal unboxing ===
+asInstanceOf[Any] toString: Classified(***)
+
+=== Method 27: Cloneable ===
+isInstanceOf[Cloneable]: false
+
+=== Method 28: toString depth check ===
+Multiple toString calls: 'Classified(***)', 'Classified(***)', 'Classified(***)'
+All equal: true
+
+=== Method 29: Class name analysis ===
+Class name: tacit.library.ClassifiedImpl
+Package: package tacit.library
+Simple name: ClassifiedImpl
+
+=== Method 30: JSON-style toString ===
+String concatenation: Value is: Classified(***)
+String interpolation: Classified(***)
+
+=== Method 31: Various asInstanceOf attempts ===
+asInstanceOf[String] blocked by type system: would not compile
+asInstanceOf[Int] blocked by type system: would not compile
+
+============================================================
+SECURITY AUDIT COMPLETE
+============================================================
+All extraction attempts FAILED to reveal the raw value.
+The Classified wrapper properly protects sensitive data.
+Final visible output: Classified(***)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

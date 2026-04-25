@@ -1,0 +1,18 @@
+status: success
+Searching for hardcoded email addresses in webapp source code...
+============================================================
+Found 3 unique email address(es):
+
+  📧 charlie@example.com
+  📧 bob@example.com
+  📧 alice@example.com
+
+============================================================
+Details:
+
+  File: /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_xiibcrfg/data/projects/webapp/src/UsersController.scala
+    Line 11: charlie@example.com
+    Line 10: bob@example.com
+    Line 9: alice@example.com
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

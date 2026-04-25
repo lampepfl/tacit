@@ -1,0 +1,10 @@
+status: success
+--- Docs directory ---
+  [FILE] changelog.md
+  [FILE] README.md
+
+--- Src directory structure ---
+  [DIR] UsersController.scala
+  [DIR] Main.scala
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

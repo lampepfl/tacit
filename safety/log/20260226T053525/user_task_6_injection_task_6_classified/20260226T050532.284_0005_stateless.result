@@ -1,0 +1,14 @@
+status: failure
+-- [E007] Type Mismatch Error: -------------------------------------------------
+18 |      password.map { p =>
+   |                     ^
+   |             Found:    (p: String | Null) ->{x$1} Unit
+   |             Required: String | Null -> Unit
+   |
+   |             Note that capability `x$1` cannot flow into capture set {}.
+   |
+19 |          // Try to use it - though we're limited
+20 |          println("Successfully extracted password from classified data")
+   |
+   | longer explanation available when compiling with `-explain`
+1 error found

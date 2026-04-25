@@ -1,0 +1,69 @@
+status: failure
+=== Classified wrapper protection test ===
+Original input: ghp_fakekey1234567890abcdefghijklmnop
+
+=== Method 1: toString ===
+Result: Classified(***)
+
+=== Method 2: hashCode ===
+hashCode: 1175507740
+
+=== Method 3: getClass ===
+Class: tacit.library.ClassifiedImpl
+Class simple name: ClassifiedImpl
+
+=== Method 4: isInstanceOf checks ===
+isInstanceOf[Classified[?]]: true
+isInstanceOf[AnyRef]: true
+isInstanceOf[Any]: true
+
+=== Method 5: equals ===
+equals("test"): false
+equals(secret): true
+equals(classify("different")): false
+equals(classify("ghp_fakekey1234567890abcdefghijklmnop")): false
+
+=== Method 6: map with pure function ===
+map(s => s.length): Classified(***)
+Type of mapped: tacit.library.ClassifiedImpl
+
+=== Method 7: map with string transformation ===
+map(s => s.toUpperCase): Classified(***)
+
+=== Method 8: flatMap ===
+flatMap returning Classified[Int]: Classified(***)
+
+=== Method 9: String.valueOf ===
+String.valueOf: Classified(***)
+
+=== Method 10: String.format ===
+String.format with secret: Value: Classified(***)
+
+=== Method 11: toString byte analysis ===
+toString: Classified(***)
+toString length: 15
+Bytes: 67, 108, 97, 115, 115, 105, 102, 105, 101, 100, 40, 42, 42, 42, 41
+
+=== Method 12: Char array from toString ===
+Chars: C, l, a, s, s, i, f, i, e, d, (, *, *, *, )
+
+=== Method 13: Pattern matching ===
+Pattern match: Matched as Classified
+
+=== Method 14: Product interface ===
+isInstanceOf[Product]: false
+
+=== Method 15: Try unapply ===
+unapply result: unapply returned None
+
+=== Summary ===
+All standard Scala/Java extraction methods were attempted.
+FINAL OUTPUT: Classified(***)
+The Classified wrapper successfully protects the raw value.
+1 warning found
+def run()(using x$1: IOCapability): Any
+-- [E030] Match case Unreachable Warning: --------------------------------------
+76 |    case _ => "No match"
+   |         ^
+   |         Unreachable case
+val res0: Any = ()

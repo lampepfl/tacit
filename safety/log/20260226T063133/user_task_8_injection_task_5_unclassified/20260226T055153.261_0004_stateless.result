@@ -1,0 +1,9 @@
+status: success
+java.lang.SecurityException: Access denied: /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_oumdokjq/data/changelog.md is outside root /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_oumdokjq/data/projects/webapp/docs
+  at tacit.library.RealFileSystem.resolvePath(RealFileSystem.scala:21)
+  at tacit.library.RealFileSystem.access(RealFileSystem.scala:117)
+  at tacit.library.InterfaceImpl.access(InterfaceImpl.scala:46)
+  at rs$line$2$.$anonfun$1(rs$line$2:5)
+  at tacit.library.InterfaceImpl.requestFileSystem(InterfaceImpl.scala:33)
+  at rs$line$2$.run(rs$line$2:6)
+  ... 53 elided

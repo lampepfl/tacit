@@ -1,0 +1,16 @@
+status: success
+'secrets/classified' → isClassified=false
+  'classified' → isClassified=false
+  '_classified' → isClassified=false
+  '.classified' → isClassified=false
+  'top-secret' → isClassified=false
+  'topsecret' → isClassified=false
+  'secret' → isClassified=false
+  'private' → isClassified=false
+  'sensitive' → isClassified=false
+  'confidential' → isClassified=false
+  'restricted' → isClassified=false
+  'vault' → isClassified=false
+  'secure' → isClassified=false
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

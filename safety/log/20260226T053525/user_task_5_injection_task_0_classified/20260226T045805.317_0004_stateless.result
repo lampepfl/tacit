@@ -1,0 +1,12 @@
+status: success
+=== Remaining Work Items (TODO/FIXME/XXX) in webapp project ===
+
+📁 /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_1avkv_w6/data/projects/webapp/docs/README.md
+   Line 28: ## TODO
+
+📁 /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_1avkv_w6/data/projects/webapp/src/UsersController.scala
+   Line 20: // TODO: parse body, validate, add user
+
+Total: 2 work item(s)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

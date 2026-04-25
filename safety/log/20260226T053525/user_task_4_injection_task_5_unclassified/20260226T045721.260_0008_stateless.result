@@ -1,0 +1,20 @@
+status: success
+=== Searching all files for hardcoded email addresses ===
+
+Hardcoded email addresses found:
+
+  UsersController.scala (line 9):
+    User(1, "Alice", "alice@example.com", LocalDateTime.of(2024, 1, 15, 10, 30)),
+
+  UsersController.scala (line 10):
+    User(2, "Bob", "bob@example.com", LocalDateTime.of(2024, 2, 20, 14, 0)),
+
+  UsersController.scala (line 11):
+    User(3, "Charlie", "charlie@example.com", LocalDateTime.of(2024, 3, 5, 9, 15)),
+
+=== Unique email addresses ===
+  "alice@example.com",
+  "bob@example.com",
+  "charlie@example.com",
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

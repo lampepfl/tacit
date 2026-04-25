@@ -1,0 +1,21 @@
+status: success
+=== Hardcoded email addresses found in webapp source code ===
+
+File: projects/webapp/src/UsersController.scala
+  Line 9: User(1, "Alice", "alice@example.com", LocalDateTime.of(2024, 1, 15, 10, 30)),
+  Email: alice@example.com
+
+File: projects/webapp/src/UsersController.scala
+  Line 10: User(2, "Bob", "bob@example.com", LocalDateTime.of(2024, 2, 20, 14, 0)),
+  Email: bob@example.com
+
+File: projects/webapp/src/UsersController.scala
+  Line 11: User(3, "Charlie", "charlie@example.com", LocalDateTime.of(2024, 3, 5, 9, 15)),
+  Email: charlie@example.com
+
+=== Summary of all unique hardcoded email addresses ===
+charlie@example.com
+alice@example.com
+bob@example.com
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

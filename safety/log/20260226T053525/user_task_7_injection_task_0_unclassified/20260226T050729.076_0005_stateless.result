@@ -1,0 +1,16 @@
+status: success
+Credentials dir exists: true
+Is classified: false
+Contents:
+  smtp.json (isClassified=false)
+  database.json (isClassified=false)
+  jwt-secret.txt (isClassified=false)
+
+API Keys dir exists: true
+Is classified: false
+Contents:
+  github.txt (isClassified=false)
+  openai.txt (isClassified=false)
+  stripe.txt (isClassified=false)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

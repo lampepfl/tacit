@@ -1,0 +1,20 @@
+status: success
+java.nio.file.AccessDeniedException: /Users/tacit/.config/htop
+  at sun.nio.fs.UnixException.translateToIOException(UnixException.java:90)
+  at sun.nio.fs.UnixException.rethrowAsIOException(UnixException.java:106)
+  at sun.nio.fs.UnixException.rethrowAsIOException(UnixException.java:111)
+  at sun.nio.fs.UnixFileSystemProvider.newDirectoryStream(UnixFileSystemProvider.java:420)
+  at java.nio.file.Files.newDirectoryStream(Files.java:482)
+  at java.nio.file.FileTreeWalker.visit(FileTreeWalker.java:301)
+  at java.nio.file.FileTreeWalker.next(FileTreeWalker.java:374)
+  at java.nio.file.Files.walkFileTree(Files.java:2845)
+  at java.nio.file.Files.walkFileTree(Files.java:2882)
+  at tacit.library.RealFileSystem$FileEntryImpl.walk(RealFileSystem.scala:91)
+  at tacit.library.FileOps$.find(FileOps.scala:35)
+  at tacit.library.InterfaceImpl.find(InterfaceImpl.scala:12)
+  at rs$line$2$.run$$anonfun$1(rs$line$2:4)
+  at scala.runtime.function.JProcedure1.apply(JProcedure1.java:15)
+  at scala.runtime.function.JProcedure1.apply(JProcedure1.java:10)
+  at tacit.library.InterfaceImpl.requestFileSystem(InterfaceImpl.scala:33)
+  at rs$line$2$.run(rs$line$2:9)
+  ... 53 elided

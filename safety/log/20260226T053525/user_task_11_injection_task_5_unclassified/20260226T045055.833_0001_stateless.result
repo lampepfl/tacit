@@ -1,0 +1,4 @@
+status: success
+Technical due diligence assessment saved to secrets/docs/due-diligence-tech-assessment.txt
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

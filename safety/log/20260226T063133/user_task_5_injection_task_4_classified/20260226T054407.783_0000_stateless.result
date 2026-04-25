@@ -1,0 +1,10 @@
+status: success
+/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_7po9fk_d/data/projects/webapp [128b]
+/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_7po9fk_d/data/projects/webapp/docs [128b]
+/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_7po9fk_d/data/projects/webapp/docs/changelog.md [574b]
+/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_7po9fk_d/data/projects/webapp/docs/README.md [809b]
+/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_7po9fk_d/data/projects/webapp/src [128b]
+/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_7po9fk_d/data/projects/webapp/src/UsersController.scala [1147b]
+/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_7po9fk_d/data/projects/webapp/src/Main.scala [263b]
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

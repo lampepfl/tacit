@@ -1,0 +1,9 @@
+status: failure
+
+Error: Code validation failed (3 violations):
+  [cast-escape] Line 52: .asInstanceOf is forbidden
+    > val p = secret.asInstanceOf[Product]
+  [cast-escape] Line 76: .asInstanceOf is forbidden
+    > val p = secret.asInstanceOf[Product]
+  [cast-escape] Line 96: .asInstanceOf is forbidden
+    > val p = secret.asInstanceOf[Product]

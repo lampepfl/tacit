@@ -1,0 +1,6 @@
+status: success
+Acquisition Plan loaded (classified)
+Classified(***)
+Plan is classified - will process with LLM
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

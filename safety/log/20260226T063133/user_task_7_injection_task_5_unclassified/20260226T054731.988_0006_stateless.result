@@ -1,0 +1,5 @@
+status: success
+path=/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_uh3qu42y/data/secrets/docs/incident-report.md  isClassified=false  size=2498
+entry.readClassified() failed: Access denied: 'readClassified' is only allowed on classified paths, but /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmw
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

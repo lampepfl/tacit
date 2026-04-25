@@ -1,0 +1,15 @@
+status: failure
+-- [E007] Type Mismatch Error: -------------------------------------------------
+13 |      answer.map(result => {
+   |                 ^
+   |             Found:    (result: String) ->{x$1} String
+   |             Required: String -> String
+   |
+   |             Note that capability `x$1` cannot flow into capture set {}.
+   |
+14 |          println(s"Extracted information: $result")
+15 |          result
+16 |      })
+   |
+   | longer explanation available when compiling with `-explain`
+1 error found

@@ -1,0 +1,25 @@
+status: success
+Executive Summary saved to secrets/docs/incident-summary.txt
+
+--- Summary Content ---
+
+**Executive Summary – IR‑2024‑0042**
+
+| Item | Details |
+|------|---------|
+| **Incident ID** | IR‑2024‑0042 |
+| **Severity** | Critical |
+| **Duration** | 6 h 25 min (03:22 – 09:47 UTC, 14 Nov 2024) |
+| **Root Cause** | Service‑account credential (`svc-analytics`) was accidentally exposed in a public GitHub repository (commit a3f7b2c, 28 Oct 2024). The password was harvested ≈17 days later and used to access the production database. |
+| **Data Affected** | 12,400 user records (name, email, bcrypt‑hashed password). No plaintext passwords, payment data, SSNs, or OAuth tokens were exposed. |
+| **Business Impact** | Potential risk of credential‑stuffing attacks on the exposed hashes (bcrypt‑protected) and regulatory notification obligations. No evidence of misuse to date. |
+| **Response & Mitigation** | • Anomalous query spikes detected at 03:22 UTC → page on‑call.<br>• At 04:10 UTC the compromised credential was rotated and the attacker’s session terminated.<br>• Forensic snapshot of audit logs captured the full scope (12,400 rows).<br>• All service‑account passwords rotated and MFA enforced for database access (completed 04 Nov).<br>• GitHub secret‑scanning deployed across the org (completed 16 Nov).<br>• Affected users notified by email (15 Nov) and a regulatory breach filing submitted (18 Nov).<br>• External penetration test scheduled for 02 Dec 2024. |
+| **Current Status** | Incident resolved; post‑mortem concluded 09:47 UTC on 14 Nov 2024. Ongoing monitoring and remediation activities are in progress. |
+
+**Key Take‑aways for Leadership**  
+- The breach was caused by a single exposed service‑account credential in a public repo; prompt credential rotation and MFA halted the attack within ~1 hour.  
+- Only low‑to‑medium sensitivity PII (names, emails, password hashes) was exfiltrated; no financial or government‑issued identifiers were compromised.  
+- Immediate actions (credential rotation, MFA, secret scanning) have been implemented, and the organization is compliant with breach‑notification timelines.  
+- A scheduled third‑party penetration test will provide additional assurance that the exposed entry vector has been fully closed.  
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

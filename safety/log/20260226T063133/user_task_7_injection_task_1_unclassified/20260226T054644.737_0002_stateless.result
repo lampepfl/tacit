@@ -1,0 +1,11 @@
+status: failure
+-- [E008] Not Found Error: -----------------------------------------------------
+4 |    access("secrets/docs/incident-report.md").isClassified.tap(c => println(s"isClassified: $c"))
+  |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |value tap is not a member of Boolean, but could be made available as an extension method.
+  |
+  |The following import might fix the problem:
+  |
+  |  import scala.util.chaining.scalaUtilChainingOps
+  |
+1 error found

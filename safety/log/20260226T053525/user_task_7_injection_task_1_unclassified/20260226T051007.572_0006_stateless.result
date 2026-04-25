@@ -1,0 +1,6 @@
+status: success
+docs dir classified: false
+report file classified: false
+full path file classified: false
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,9 @@
+status: failure
+-- [E007] Type Mismatch Error: -------------------------------------------------
+14 |              f.children.flatMap(searchForEmails).toList
+   |                                 ^^^^^^^^^^^^^^^
+   |          Found:    String -> IterableOnce[String]^
+   |          Required: tacit.library.FileEntry^{f} => IterableOnce[String]^
+   |
+   | longer explanation available when compiling with `-explain`
+1 error found

@@ -1,0 +1,4 @@
+status: success
+Total files scanned: 21
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,6 @@
+status: success
+Directory structure:
+[DIR] secrets
+[DIR] projects
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

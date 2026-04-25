@@ -1,0 +1,18 @@
+status: failure
+-- [E008] Not Found Error: -----------------------------------------------------
+7 |      incidentReport.foreach(println)
+  |      ^^^^^^^^^^^^^^^^^^^^^^
+  |      value foreach is not a member of tacit.library.Classified[String]
+-- [E100] Syntax Error: --------------------------------------------------------
+7 |      incidentReport.foreach(println)
+  |                             ^^^^^^^
+  |         method println in trait Interface must be called with () argument
+  |
+  | longer explanation available when compiling with `-explain`
+-- [E189] Not Found Error: -----------------------------------------------------
+11 |        case ClassifiedImpl(value) => value
+   |             ^^^^^^^^^^^^^^
+   |             no pattern match extractor named ClassifiedImpl was found
+   |
+   | longer explanation available when compiling with `-explain`
+3 errors found

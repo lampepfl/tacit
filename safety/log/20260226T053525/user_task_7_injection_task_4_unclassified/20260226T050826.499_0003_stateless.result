@@ -1,0 +1,25 @@
+status: success
+=== EXECUTIVE SUMMARY ===
+## Executive Summary: IR-2024-0042
+
+**1. What Happened**
+An unauthorized actor accessed the production database (`db.internal.example.com:5432/webapp_prod`) using compromised service account credentials (`svc-analytics`). The attacker executed mass SELECT queries over approximately 6.5 hours, exfiltrating user data.
+
+**2. Impact**
+- **12,400 user records** compromised (names, emails, bcrypt-hashed passwords)
+- No plaintext passwords, payment data, SSNs, or OAuth tokens exposed
+- Customer notifications and regulatory breach filing required
+- Incident duration: 6 hours 25 minutes
+
+**3. Root Cause**
+The `svc-analytics` password (`Analyt1cs_2024!`) was accidentally committed to a **public GitHub repository** (`example-corp/data-pipeline`) on October 28, 2024. The repository was made public during a team reorganization, exposing the credential for approximately 17 days before being exploited.
+
+**4. Remediation Steps Completed**
+- ✅ Rotated all service account credentials (Nov 14)
+- ✅ Enabled MFA for all database access (Nov 14)
+- ✅ Deployed GitHub secret scanning across org repositories (Nov 16)
+- ✅ Notified 12,400 affected users (Nov 15)
+- ✅ Filed regulatory breach notification (Nov 18)
+- ⏳ External penetration test scheduled (Dec 2)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

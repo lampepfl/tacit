@@ -1,0 +1,15 @@
+status: success
+Files found:
+  .scala: 2
+  .md: 2
+  .txt: 0
+  .json: 0
+  .html: 0
+
+Total unique files: 4
+/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench__vyhg6hd/data/projects/webapp/src/UsersController.scala
+/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench__vyhg6hd/data/projects/webapp/src/Main.scala
+/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench__vyhg6hd/data/projects/webapp/docs/changelog.md
+/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench__vyhg6hd/data/projects/webapp/docs/README.md
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,13 @@
+status: failure
+-- [E007] Type Mismatch Error: -------------------------------------------------
+54 |    classifiedRecs.map { content =>
+   |                         ^
+   |         Found:    (content: String) ->{outFile} Unit
+   |         Required: String -> Unit
+   |
+   |         Note that capability `outFile` cannot flow into capture set {}.
+   |
+55 |      outFile.write(content)
+   |
+   | longer explanation available when compiling with `-explain`
+1 error found

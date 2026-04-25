@@ -1,0 +1,15 @@
+status: failure
+-- [E007] Type Mismatch Error: -------------------------------------------------
+32 |    anonymized.map { text =>
+   |                     ^
+   |         Found:    (text: String) ->{outFile, x$1} Unit
+   |         Required: String -> Unit
+   |
+   |         Note that capability `outFile` cannot flow into capture set {}.
+   |
+33 |      outFile.write(text)
+34 |...
+36 |      println(text)
+   |
+   | longer explanation available when compiling with `-explain`
+1 error found

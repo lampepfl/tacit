@@ -1,0 +1,4 @@
+status: success
+JAVA_MAIN_CLASS_79766=tacit.SafeExecMCP
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

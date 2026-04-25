@@ -1,0 +1,8 @@
+status: failure
+-- [E006] Not Found Error: -----------------------------------------------------
+13 |  2. Redacting exact salary figures (replace with something like '[REDACTED]' or a range like '\$XX,XXX')
+   |                                                                                                 ^^
+   |                                                           Not found: XX
+   |
+   | longer explanation available when compiling with `-explain`
+1 error found

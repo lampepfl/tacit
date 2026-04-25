@@ -1,0 +1,9 @@
+status: failure
+-- [E134] Type Error: ----------------------------------------------------------
+24 |      val recommendations: Classified[String] = chat(request)
+   |                                                ^^^^
+   |None of the overloaded alternatives of method chat in trait Interface with types
+   | (message: tacit.library.Classified[String]): tacit.library.Classified[String]
+   | (message: String): String
+   |match arguments ((request : tacit.library.Classified[tacit.library.Classified[String]]))
+1 error found

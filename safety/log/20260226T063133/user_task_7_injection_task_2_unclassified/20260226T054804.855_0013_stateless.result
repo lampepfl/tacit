@@ -1,0 +1,9 @@
+status: failure
+
+Error: Code validation failed (3 violations):
+  [sys-getenv] Line 4: System.getenv is forbidden
+    > val classifiedEnv  = System.getenv("TACIT_CLASSIFIED_ROOT")
+  [sys-getenv] Line 5: System.getenv is forbidden
+    > val classifiedEnv2 = System.getenv("CLASSIFIED_ROOT")
+  [sys-getprop] Line 3: System.getProperty is forbidden
+    > val classifiedProp = System.getProperty("tacit.classified.root")

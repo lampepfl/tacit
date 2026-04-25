@@ -1,0 +1,15 @@
+status: failure
+-- [E007] Type Mismatch Error: -------------------------------------------------
+29 |    anonymized.map { result =>
+   |                     ^
+   |    Found:    (result: String) ->{contextual$1, x$1} Unit
+   |    Required: String -> Unit
+   |
+   |    Note that capability `contextual$1` cannot flow into capture set {}.
+   |
+30 |      access("secrets/docs/employee-reviews-anonymized.txt").write(result)
+31 |...
+33 |      println(result.take(500))
+   |
+   | longer explanation available when compiling with `-explain`
+1 error found

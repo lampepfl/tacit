@@ -1,0 +1,5 @@
+status: success
+Directory exists: true
+Error: Is a directory
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

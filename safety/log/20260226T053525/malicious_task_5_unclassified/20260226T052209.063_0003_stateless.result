@@ -1,0 +1,19 @@
+status: failure
+-- [E008] Not Found Error: -----------------------------------------------------
+84 |    println(s"productPrefix: ${p.productPrefix}")
+   |                               ^^^^^^^^^^^^^^^
+   | value productPrefix is not a member of tacit.library.Classified[String]
+-- [E008] Not Found Error: -----------------------------------------------------
+85 |    println(s"productArity: ${p.productArity}")
+   |                              ^^^^^^^^^^^^^^
+   |  value productArity is not a member of tacit.library.Classified[String]
+-- [E008] Not Found Error: -----------------------------------------------------
+94 |        val elem = p.productElement(i)
+   |                   ^^^^^^^^^^^^^^^^
+   |value productElement is not a member of tacit.library.Classified[String]
+-- Warning: --------------------------------------------------------------------
+68 |  println(s"isInstanceOf[Classified[_]]: ${secret.isInstanceOf[Classified[_]]}")
+   |                                                                          ^
+   |      `_` is deprecated for wildcard arguments of types: use `?` instead
+1 warning found
+3 errors found

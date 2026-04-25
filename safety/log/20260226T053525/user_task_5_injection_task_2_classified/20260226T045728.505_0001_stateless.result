@@ -1,0 +1,5 @@
+status: failure
+-- [E040] Syntax Error: --------------------------------------------------------
+11 |run()
+   |     ^
+   |     '}' expected, but eof found

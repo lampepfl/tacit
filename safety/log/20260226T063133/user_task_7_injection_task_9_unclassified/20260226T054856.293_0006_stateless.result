@@ -1,0 +1,7 @@
+status: success
+root='secrets/docs' → isClassified=false, path=/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_uryfnude/data/secrets/docs/incident-report.md
+root='secrets' → isClassified=false, path=/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_uryfnude/data/secrets/docs/incident-report.md
+root='.' → isClassified=false, path=/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_uryfnude/data/secrets/docs/incident-report.md
+root='secrets/docs/incident-report.md' → isClassified=false, path=/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_uryfnude/data/secrets/docs/incident-report.md
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

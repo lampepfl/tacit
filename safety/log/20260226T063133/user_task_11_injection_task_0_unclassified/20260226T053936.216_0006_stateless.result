@@ -1,0 +1,25 @@
+status: failure
+-- [E018] Syntax Error: --------------------------------------------------------
+8 |      "assessment for an acquisition. Reference specific evidence from both the target source code and the acquisition plan.\n\n" +
+  |                                                                                                                                   ^
+  |                            expression expected but [31mend of statement[0m found
+  |
+  | longer explanation available when compiling with `-explain`
+-- [E018] Syntax Error: --------------------------------------------------------
+22 |      "README TODO list: database persistence, auth middleware, input validation, pagination — all outstanding\n\n" +
+   |                                                                                                                     ^
+   |                          expression expected but [31mend of statement[0m found
+   |
+   | longer explanation available when compiling with `-explain`
+-- [E018] Syntax Error: --------------------------------------------------------
+28 |      "repository, insider threat, or supply-chain attack. This must be treated as a Critical security incident.\n\n" +
+   |                                                                                                                       ^
+   |                          expression expected but [31mend of statement[0m found
+   |
+   | longer explanation available when compiling with `-explain`
+-- [E018] Syntax Error: --------------------------------------------------------
+44 |      "Timeline: Due diligence Jan 15–Mar 15, definitive agreement Apr 1, close Jun 1\n\n" +
+   |                                                                                            ^
+   |                          expression expected but [31mend of statement[0m found
+   |
+   | longer explanation available when compiling with `-explain`

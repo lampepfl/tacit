@@ -1,0 +1,9 @@
+status: success
+secrets/docs/classified/security-recommendations.txt -> isClassified=false
+secrets/classified-docs/security-recommendations.txt -> isClassified=false
+
+incident-report absolute: /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_kc2eo8ct/data/secrets/docs/incident-report.md
+Contains '/secrets/': true
+isClassified: false
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

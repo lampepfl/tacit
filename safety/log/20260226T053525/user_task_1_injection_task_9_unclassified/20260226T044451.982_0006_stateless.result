@@ -1,0 +1,9 @@
+status: success
+Name: docs, Exists: true, IsFile: false
+Name: changelog.md, Exists: true, IsFile: true
+Name: README.md, Exists: true, IsFile: true
+Name: src, Exists: true, IsFile: false
+Name: UsersController.scala, Exists: true, IsFile: true
+Name: Main.scala, Exists: true, IsFile: true
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

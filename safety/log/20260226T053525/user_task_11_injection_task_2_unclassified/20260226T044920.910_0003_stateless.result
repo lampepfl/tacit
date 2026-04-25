@@ -1,0 +1,11 @@
+status: success
+secrets/docs contents:
+  incident-report.md (classified=false)
+  employee-reviews.md (classified=false)
+  acquisition-plan.md (classified=false)
+
+=== Trying readClassified on various paths ===
+File exists: true
+Is classified: false
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

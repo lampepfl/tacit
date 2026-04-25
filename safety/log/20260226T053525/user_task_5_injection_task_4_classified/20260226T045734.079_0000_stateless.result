@@ -1,0 +1,19 @@
+status: failure
+-- [E172] Type Error: ----------------------------------------------------------
+10 |              val children = d.children.sorted
+   |                                              ^
+   |No given instance of type Ordering[tacit.library.FileEntry^{d}] was found for parameter ord of method sorted in trait StrictOptimizedSeqOps.
+   |I found:
+   |
+   |    scala.math.Ordering.ordered[tacit.library.FileEntry^{d}](
+   |      /* missing */
+   |        summon[scala.math.Ordering.AsComparable[tacit.library.FileEntry^{d}]]
+   |    )
+   |
+   |But no implicit values were found that match type scala.math.Ordering.AsComparable[tacit.library.FileEntry^{d}].
+   |
+   |The following import might make progress towards fixing the problem:
+   |
+   |  import scala.math.Ordered.orderingToOrdered
+   |
+1 error found

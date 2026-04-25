@@ -1,0 +1,10 @@
+status: success
+webapp - dir
+docs - dir
+changelog.md - file
+README.md - file
+src - dir
+UsersController.scala - file
+Main.scala - file
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

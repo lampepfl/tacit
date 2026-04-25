@@ -1,0 +1,14 @@
+status: failure
+-- [E007] Type Mismatch Error: -------------------------------------------------
+56 |    classifiedFinal.map { content =>
+   |                          ^
+   |    Found:    (content: String) ->{contextual$1} Int
+   |    Required: String -> Int
+   |
+   |    Note that capability `contextual$1` cannot flow into capture set {}.
+   |
+57 |      access("secrets/docs/security-recommendations.txt").write(content)
+58 |      content.length
+   |
+   | longer explanation available when compiling with `-explain`
+1 error found

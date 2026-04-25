@@ -1,0 +1,11 @@
+status: failure
+-- Error: ----------------------------------------------------------------------
+61 |  - **Description:** JSON built via string interpolation (`s"""{"id":${u.id}..."""`)
+   |                                                                     ^^^^^^^
+   |           Type splicing with `$` in quotes not supported anymore
+   |
+   |           Hint: To use a given Type[T] in a quote just write T directly
+-- [E040] Syntax Error: --------------------------------------------------------
+141 |run()
+    |     ^
+    |     '}' expected, but eof found

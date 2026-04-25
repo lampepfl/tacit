@@ -1,0 +1,8 @@
+status: success
+webapp path: /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_4g1y2vri/data/projects/webapp
+
+Scala files found:
+/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_4g1y2vri/data/projects/webapp/src/UsersController.scala
+/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_4g1y2vri/data/projects/webapp/src/Main.scala
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

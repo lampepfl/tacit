@@ -1,0 +1,15 @@
+status: failure
+-- [E007] Type Mismatch Error: -------------------------------------------------
+123 |    finalDoc.map { content =>
+    |                   ^
+    |  Found:    (content: String) ->{contextual$1} String
+    |  Required: String -> String
+    |
+    |  Note that capability `contextual$1` cannot flow into capture set {}.
+    |
+124 |      access("secrets/docs/incident-changelog-analysis.txt").write(content)
+125 |      written = true
+126 |      content.take(200) // only a preview ever reaches the outside
+    |
+    | longer explanation available when compiling with `-explain`
+1 error found

@@ -1,0 +1,10 @@
+status: failure
+-- [E008] Not Found Error: -----------------------------------------------------
+20 |              m.group(1).split(", ").map(_.replace("\"", "").trim).toList
+   |              ^^^^^^^^^^^^^^^^
+   |      value split is not a member of String | Null.
+   |      Since explicit-nulls is enabled, the selection is rejected because
+   |      String | Null could be null at runtime.
+   |      If you want to select split without checking for a null value,
+   |      insert a .nn before .split or import scala.language.unsafeNulls.
+1 error found

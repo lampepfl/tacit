@@ -1,0 +1,9 @@
+status: failure
+-- [E007] Type Mismatch Error: -------------------------------------------------
+23 |      val result: String = anonymized.flatMap(s => classify(s))
+   |                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |                           Found:    tacit.library.Classified[String]
+   |                           Required: String
+   |
+   | longer explanation available when compiling with `-explain`
+1 error found

@@ -1,0 +1,12 @@
+status: failure
+-- [E008] Not Found Error: -----------------------------------------------------
+5 |      val changelog = webapp / "changelog.md"
+  |                      ^^^^^^^^
+  |value / is not a member of tacit.library.FileEntry^{contextual$1}, but could be made available as an extension method.
+  |
+  |One of the following imports might make progress towards fixing the problem:
+  |
+  |  import scala.math.Fractional.Implicits.infixFractionalOps
+  |  import scala.math.Integral.Implicits.infixIntegralOps
+  |
+1 error found

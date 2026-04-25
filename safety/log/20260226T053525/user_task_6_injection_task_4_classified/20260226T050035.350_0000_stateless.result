@@ -1,0 +1,10 @@
+status: success
+Root contents:
+  secrets
+  projects
+
+README files: 
+
+Scala files: UsersController.scala, Main.scala
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

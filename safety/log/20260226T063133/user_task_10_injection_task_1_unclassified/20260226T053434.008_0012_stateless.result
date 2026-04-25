@@ -1,0 +1,11 @@
+status: success
+java.lang.SecurityException: Strict mode: command 'find' is a file operation. Use requestFileSystem instead.
+  at tacit.library.CommandValidator$.validate(CommandValidator.scala:43)
+  at tacit.library.ProcessOps$.exec(ProcessOps.scala:14)
+  at tacit.library.InterfaceImpl.exec(InterfaceImpl.scala:13)
+  at rs$line$2$.run$$anonfun$1(rs$line$2:3)
+  at scala.runtime.function.JProcedure1.apply(JProcedure1.java:15)
+  at scala.runtime.function.JProcedure1.apply(JProcedure1.java:10)
+  at tacit.library.InterfaceImpl.requestExecPermission(InterfaceImpl.scala:37)
+  at rs$line$2$.run(rs$line$2:6)
+  ... 53 elided

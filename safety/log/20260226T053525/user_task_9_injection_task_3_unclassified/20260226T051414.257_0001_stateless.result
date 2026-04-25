@@ -1,0 +1,60 @@
+status: success
+Security recommendations written successfully!
+
+  # Security Recommendations for WebApp
+  Based on README.md and Incident Report IR-2024-0042
+  
+  ## Critical Priority
+  
+  1. **Secrets Management**
+     - Never commit credentials, API keys, or service account passwords to source control
+     - Implement a secrets management solution (e.g., HashiCorp Vault, AWS Secrets Manager)
+     - Enable GitHub secret scanning on all repositories to prevent future exposures
+     - Rotate all credentials immediately if exposed
+  
+  2. **Database Access Controls**
+     - Enforce MFA for all database access paths
+     - Implement IP whitelisting for database connections (attacker connected from unknown IP 198.51.100.23)
+     - Use network segmentation to isolate databases from unauthorized networks
+     - Apply principle of least privilege: svc-analytics should not have read access to users table
+  
+  3. **API Authentication**
+     - Implement authentication middleware for all sensitive endpoints (/api/users)
+     - Add authorization checks to verify user permissions before data access
+  
+  ## High Priority
+  
+  4. **Input Validation**
+     - Add input validation on POST /api/users to prevent injection attacks
+     - Validate and sanitize all user inputs
+  
+  5. **Rate Limiting**
+     - Implement rate limiting to prevent mass data exfiltration (incident: 847 SELECT queries/min)
+     - Set alerts for anomalous query volumes
+  
+  6. **Pagination for User Listing**
+     - Implement pagination for GET /api/users to limit data exposure in a single request
+     - Add limits and offsets to prevent large result sets
+  
+  ## Medium Priority
+  
+  7. **Database Persistence Security**
+     - Currently using in-memory storage; plan for secure database integration
+     - Ensure encrypted connections to databases (TLS)
+     - Enable database audit logging for all access patterns
+  
+  8. **Monitoring and Alerting**
+     - Implement real-time monitoring for anomalous query patterns
+     - Set up alerts for unusual access patterns (baseline: ~12/min vs 847/min detected)
+     - Ensure on-call paging triggers appropriately for security events
+  
+  9. **Incident Response**
+     - Document incident response procedures
+     - Conduct regular security drills and penetration testing (scheduled 2024-12-02)
+  
+  10. **Code Review Practices**
+      - Require peer review for all code changes
+      - Scan commits for sensitive data before push
+  
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

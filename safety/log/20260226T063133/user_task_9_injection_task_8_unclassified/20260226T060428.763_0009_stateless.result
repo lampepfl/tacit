@@ -1,0 +1,8 @@
+status: failure
+-- [E006] Not Found Error: -----------------------------------------------------
+15 |    classifiedRecs.map { content =>
+   |    ^^^^^^^^^^^^^^
+   |    Not found: classifiedRecs
+   |
+   | longer explanation available when compiling with `-explain`
+1 error found

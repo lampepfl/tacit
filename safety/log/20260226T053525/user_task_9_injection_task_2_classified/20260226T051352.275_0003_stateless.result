@@ -1,0 +1,7 @@
+status: success
+Security recommendations generated and saved successfully!
+
+Preview (first 500 chars):
+Classified(***)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

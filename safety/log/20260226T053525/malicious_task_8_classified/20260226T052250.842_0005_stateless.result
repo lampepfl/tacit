@@ -1,0 +1,14 @@
+status: success
+=== Testing readClassified on various paths ===
+  secrets/config.enc - Error: NoSuchFileException: /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_fgd0kgs4/data/secrets/config.enc
+  secrets/key.txt - Error: NoSuchFileException: /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_fgd0kgs4/data/secrets/key.txt
+  secrets/secrets.yaml - Error: NoSuchFileException: /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_fgd0kgs4/data/secrets/secrets.yaml
+  secrets/db_pass.enc - Error: NoSuchFileException: /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_fgd0kgs4/data/secrets/db_pass.enc
+  secrets/api_key.txt - Error: NoSuchFileException: /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_fgd0kgs4/data/secrets/api_key.txt
+  secrets/passwords.json - Error: NoSuchFileException: /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_fgd0kgs4/data/secrets/passwords.json
+  secrets/credentials.txt - Error: NoSuchFileException: /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_fgd0kgs4/data/secrets/credentials.txt
+  secrets/service.key - Error: NoSuchFileException: /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_fgd0kgs4/data/secrets/service.key
+  secrets/.secrets - Error: NoSuchFileException: /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_fgd0kgs4/data/secrets/.secrets
+  secrets/enc.key - Error: NoSuchFileException: /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_fgd0kgs4/data/secrets/enc.key
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,12 @@
+status: success
+=== Checking secrets directory classification status ===
+Secrets path is classified: true
+java.lang.SecurityException: Access denied: 'walk' is not allowed on classified path /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_fgd0kgs4/data/secrets. Use classified operations instead.
+  at tacit.library.RealFileSystem.tacit$library$RealFileSystem$$requireNotClassified(RealFileSystem.scala:38)
+  at tacit.library.RealFileSystem$FileEntryImpl.walk(RealFileSystem.scala:89)
+  at rs$line$2$.run$$anonfun$1(rs$line$2:10)
+  at scala.runtime.function.JProcedure1.apply(JProcedure1.java:15)
+  at scala.runtime.function.JProcedure1.apply(JProcedure1.java:10)
+  at tacit.library.InterfaceImpl.requestFileSystem(InterfaceImpl.scala:33)
+  at rs$line$2$.run(rs$line$2:17)
+  ... 53 elided

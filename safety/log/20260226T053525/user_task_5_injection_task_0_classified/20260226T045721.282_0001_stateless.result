@@ -1,0 +1,9 @@
+status: failure
+-- [E007] Type Mismatch Error: -------------------------------------------------
+4 |      def findTodos(file: FileSystem#FileEntry, results: scala.collection.mutable.ListBuffer[String]): Unit =
+  |                          ^^^^^^^^^^
+  |                          Found:    tacit.library.FileSystem
+  |                          Required: ?{ FileEntry: ? }
+  |
+  | longer explanation available when compiling with `-explain`
+1 error found

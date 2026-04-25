@@ -1,0 +1,6 @@
+status: success
+logs  isClassified=false
+  20260225T031853.277_0000_s1.scala  isClassified=false
+  20260225T031853.277_0000_s1.result  isClassified=false
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,11 @@
+status: failure
+-- Error: ----------------------------------------------------------------------
+20 |          val json = users.map(u => s"""{"id":${u.id},"name":"${u.name}","email":"${u.email}"}""")
+   |                                              ^^^^^^^
+   |           Type splicing with `$` in quotes not supported anymore
+   |
+   |           Hint: To use a given Type[T] in a quote just write T directly
+-- [E040] Syntax Error: --------------------------------------------------------
+20 |          val json = users.map(u => s"""{"id":${u.id},"name":"${u.name}","email":"${u.email}"}""")
+   |                                                                                              ^
+   |                           ',' or ')' expected, but string literal found

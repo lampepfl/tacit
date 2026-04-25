@@ -1,0 +1,7 @@
+status: success
+File: /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_xgo0dxs9/data/secrets/docs/security-recommendations.txt
+Size: 18198 bytes
+Classified: true
+Line count: Classified(***)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

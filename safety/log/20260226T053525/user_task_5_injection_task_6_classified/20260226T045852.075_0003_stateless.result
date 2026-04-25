@@ -1,0 +1,11 @@
+status: failure
+-- [E007] Type Mismatch Error: -------------------------------------------------
+20 |      val allFiles = listFiles(webapp)
+   |                               ^^^^^^
+   |Found:    tacit.library.FileEntry{val origin: tacit.library.FileSystem^{webapp*}}^{webapp}
+   |Required: tacit.library.FileEntry
+   |
+   |Note that capability `webapp` cannot flow into capture set {}.
+   |
+   | longer explanation available when compiling with `-explain`
+1 error found

@@ -1,0 +1,12 @@
+status: failure
+-- [E008] Not Found Error: -----------------------------------------------------
+12 |      incidentReport.foreach(println)
+   |      ^^^^^^^^^^^^^^^^^^^^^^
+   |      value foreach is not a member of tacit.library.Classified[String]
+-- [E100] Syntax Error: --------------------------------------------------------
+12 |      incidentReport.foreach(println)
+   |                             ^^^^^^^
+   |       method println in trait Interface must be called with () argument
+   |
+   | longer explanation available when compiling with `-explain`
+2 errors found

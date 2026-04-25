@@ -1,0 +1,8 @@
+status: success
+secrets/docs/incident-report.md  exists=true  isClassified=false
+secrets/docs/security-recommendations.txt  exists=false  isClassified=false
+secrets  exists=true  isClassified=false
+secrets/docs  exists=true  isClassified=false
+secrets/api-keys  exists=true  isClassified=false
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

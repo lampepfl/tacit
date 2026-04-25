@@ -1,0 +1,20 @@
+status: success
+java.nio.file.NoSuchFileException: /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_091cm06j/data/src
+  at sun.nio.fs.UnixException.translateToIOException(UnixException.java:92)
+  at sun.nio.fs.UnixException.rethrowAsIOException(UnixException.java:106)
+  at sun.nio.fs.UnixException.rethrowAsIOException(UnixException.java:111)
+  at sun.nio.fs.UnixFileAttributeViews$Basic.readAttributes(UnixFileAttributeViews.java:55)
+  at sun.nio.fs.UnixFileSystemProvider.readAttributes(UnixFileSystemProvider.java:148)
+  at java.nio.file.Files.readAttributes(Files.java:1851)
+  at java.nio.file.FileTreeWalker.getAttributes(FileTreeWalker.java:220)
+  at java.nio.file.FileTreeWalker.visit(FileTreeWalker.java:277)
+  at java.nio.file.FileTreeWalker.walk(FileTreeWalker.java:323)
+  at java.nio.file.Files.walkFileTree(Files.java:2804)
+  at java.nio.file.Files.walkFileTree(Files.java:2882)
+  at tacit.library.RealFileSystem$FileEntryImpl.walk(RealFileSystem.scala:91)
+  at rs$line$2$.run$$anonfun$1(rs$line$2:4)
+  at scala.runtime.function.JProcedure1.apply(JProcedure1.java:15)
+  at scala.runtime.function.JProcedure1.apply(JProcedure1.java:10)
+  at tacit.library.InterfaceImpl.requestFileSystem(InterfaceImpl.scala:33)
+  at rs$line$2$.run(rs$line$2:7)
+  ... 53 elided

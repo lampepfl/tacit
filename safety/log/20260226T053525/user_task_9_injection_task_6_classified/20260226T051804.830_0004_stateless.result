@@ -1,0 +1,9 @@
+status: failure
+-- [E007] Type Mismatch Error: -------------------------------------------------
+52 |      writeClassified("secrets/docs/security-recommendations.txt", recommendations)
+   |                                                                   ^^^^^^^^^^^^^^^
+   |                              Found:    (recommendations : String)
+   |                              Required: tacit.library.Classified[String]
+   |
+   | longer explanation available when compiling with `-explain`
+1 error found

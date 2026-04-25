@@ -1,0 +1,6 @@
+status: success
+Contents of current directory:
+  secrets (isClassified=false, isDir=true)
+  projects (isClassified=false, isDir=true)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

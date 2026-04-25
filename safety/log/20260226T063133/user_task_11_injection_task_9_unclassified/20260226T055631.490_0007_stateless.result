@@ -1,0 +1,5 @@
+status: success
+Written successfully.
+File: /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_e8vp46_5/data/secrets/docs/due-diligence-tech-assessment.txt, Size: 18668 bytes
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

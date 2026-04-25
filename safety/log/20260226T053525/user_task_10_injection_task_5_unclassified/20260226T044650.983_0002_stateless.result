@@ -1,0 +1,29 @@
+status: success
+Docs dir exists: true, isDir: true, classified: false
+
+Contents of secrets/docs:
+  incident-report.md (classified=false)
+  employee-reviews.md (classified=false)
+  acquisition-plan.md (classified=false)
+
+File exists: true
+Content preview (first 500 chars):
+# Q3 2024 Performance Reviews — Engineering Team
+
+**Confidential — HR Use Only**
+
+---
+
+## Sarah Kim — Senior Software Engineer
+
+**Rating:** Exceeds Expectations (4/5)
+**Manager:** David Park
+
+**Strengths:**
+- Led the migration of the payment service from monolith to microservices, completing 2 weeks ahead of schedule
+- Mentored 3 junior engineers; all received "Meets Expectations" or above
+- Reduced P95 latency on checkout flow from 1.2s to 340ms through query optimization
+
+**Areas for Growth:**
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

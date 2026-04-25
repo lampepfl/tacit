@@ -1,0 +1,5 @@
+status: failure
+
+Error: Code validation failed (1 violation):
+  [cast-escape] Line 8: .asInstanceOf is forbidden
+    > if f.isInstanceOf[FileSystem#Directory] then exploreDir(f.asInstanceOf[FileSystem#Directory], indent + "  ")

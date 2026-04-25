@@ -1,0 +1,6 @@
+status: success
+Name: docs, Exists: true
+Name: src, Exists: true
+Found: None
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

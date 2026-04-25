@@ -1,0 +1,6 @@
+status: success
+File exists: true
+File size: 2679
+Is classified: true
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

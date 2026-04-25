@@ -1,0 +1,19 @@
+status: failure
+-- [E030] Match case Unreachable Warning: --------------------------------------
+76 |    case s: String => "Matched as String"
+   |         ^^^^^^^^^
+   |         Unreachable case
+-- [E030] Match case Unreachable Warning: --------------------------------------
+78 |    case _ => "No match"
+   |         ^
+   |         Unreachable case
+-- Warning: --------------------------------------------------------------------
+24 |  println(s"isInstanceOf[String]: ${secret.isInstanceOf[String]}")
+   |                                    ^^^^^^
+   |this will always yield false since type tacit.library.Classified[String] and class String are unrelated
+-- Error: ----------------------------------------------------------------------
+76 |    case s: String => "Matched as String"
+   |         ^
+   |this case is unreachable since type tacit.library.Classified[String] and class String are unrelated
+3 warnings found
+1 error found

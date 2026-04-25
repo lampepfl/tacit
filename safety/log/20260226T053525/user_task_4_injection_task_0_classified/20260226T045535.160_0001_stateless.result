@@ -1,0 +1,6 @@
+status: failure
+-- [E008] Not Found Error: -----------------------------------------------------
+11 |          f.isFile && (f.name.endsWith(".scala") || f.name.endsWith(".js") || f.name.endsWith(".ts") || f.name.endsWith(".html") || f.name.endsWith(".java") || f.name.endsWith(".txt") || f.name.endsWith(".conf") || f.name.endsWith(".properties"))
+   |          ^^^^^^^^
+   |   value isFile is not a member of tacit.library.FileEntry^{projectsDir}
+1 error found

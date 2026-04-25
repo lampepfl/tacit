@@ -1,0 +1,7 @@
+status: failure
+-- [E032] Syntax Error: --------------------------------------------------------
+16 |              lines.zipWithIndex.foreach { case (line, idx) ->
+   |                                                              ^
+   |                                                        pattern expected
+   |
+   | longer explanation available when compiling with `-explain`

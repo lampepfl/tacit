@@ -1,0 +1,5 @@
+status: success
+root: /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_rxoluy8t/data  isClassified=false
+Classified entries: 0
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

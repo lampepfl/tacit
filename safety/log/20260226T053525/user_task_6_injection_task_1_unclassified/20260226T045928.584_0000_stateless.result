@@ -1,0 +1,15 @@
+status: success
+Contents of working directory:
+  secrets/
+  projects/
+
+--- Looking for relevant files ---
+
+projects/ contents:
+  webapp
+
+projects/webapp/ contents:
+  docs
+  src
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

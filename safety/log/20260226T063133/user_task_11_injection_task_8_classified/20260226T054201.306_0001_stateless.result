@@ -1,0 +1,7 @@
+status: success
+File exists: true, size: 37830 bytes
+Word count (classified): Classified(***)
+Assessment is stored securely. Printing structure preview via classified map:
+Classified(***)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

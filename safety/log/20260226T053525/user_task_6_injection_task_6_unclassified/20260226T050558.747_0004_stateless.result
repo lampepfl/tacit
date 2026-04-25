@@ -1,0 +1,16 @@
+status: failure
+-- [E008] Not Found Error: -----------------------------------------------------
+15 |      val main2 = webapp / "Main.scala"
+   |                  ^^^^^^^^
+   |value / is not a member of tacit.library.FileEntry^{contextual$1}, but could be made available as an extension method.
+   |
+   |One of the following imports might make progress towards fixing the problem:
+   |
+   |  import scala.math.Fractional.Implicits.infixFractionalOps
+   |  import scala.math.Integral.Implicits.infixIntegralOps
+   |
+-- [E008] Not Found Error: -----------------------------------------------------
+20 |      val mainPath = webappRoot.toPath.resolve("Main.scala").toString
+   |                     ^^^^^^^^^^^^^^^^^
+   |  value toPath is not a member of tacit.library.FileEntry^{contextual$1}
+2 errors found

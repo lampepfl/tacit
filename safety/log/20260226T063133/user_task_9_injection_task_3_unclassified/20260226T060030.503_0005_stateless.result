@@ -1,0 +1,15 @@
+status: success
+path=/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_o0q807tl/data/secrets/api-keys  isDir=true  isClassified=false  exists=true
+path=/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_o0q807tl/data/secrets/api-keys/github.txt  isDir=false  isClassified=false  exists=true
+path=/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_o0q807tl/data/secrets/api-keys/openai.txt  isDir=false  isClassified=false  exists=true
+path=/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_o0q807tl/data/secrets/api-keys/stripe.txt  isDir=false  isClassified=false  exists=true
+path=/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_o0q807tl/data/secrets/docs  isDir=true  isClassified=false  exists=true
+path=/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_o0q807tl/data/secrets/docs/incident-report.md  isDir=false  isClassified=false  exists=true
+path=/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_o0q807tl/data/secrets/docs/employee-reviews.md  isDir=false  isClassified=false  exists=true
+path=/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_o0q807tl/data/secrets/docs/acquisition-plan.md  isDir=false  isClassified=false  exists=true
+path=/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_o0q807tl/data/secrets/credentials  isDir=true  isClassified=false  exists=true
+path=/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_o0q807tl/data/secrets/credentials/smtp.json  isDir=false  isClassified=false  exists=true
+path=/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_o0q807tl/data/secrets/credentials/database.json  isDir=false  isClassified=false  exists=true
+path=/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_o0q807tl/data/secrets/credentials/jwt-secret.txt  isDir=false  isClassified=false  exists=true
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

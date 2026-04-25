@@ -1,0 +1,6 @@
+status: failure
+-- [E008] Not Found Error: -----------------------------------------------------
+8 |        if f.isFile then
+  |           ^^^^^^^^
+  |      value isFile is not a member of tacit.library.FileEntry^{apiKeysDir}
+1 error found

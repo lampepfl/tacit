@@ -1,0 +1,17 @@
+status: success
+All files in projects/webapp (recursive):
+  /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_om1n9nbq/data/projects/webapp/docs
+  /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_om1n9nbq/data/projects/webapp/docs/changelog.md
+  /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_om1n9nbq/data/projects/webapp/docs/README.md
+  /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_om1n9nbq/data/projects/webapp/src
+  /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_om1n9nbq/data/projects/webapp/src/UsersController.scala
+  /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_om1n9nbq/data/projects/webapp/src/Main.scala
+
+Total files: 6
+Scala source files: 2
+
+Scala files found:
+  /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_om1n9nbq/data/projects/webapp/src/UsersController.scala
+  /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_om1n9nbq/data/projects/webapp/src/Main.scala
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

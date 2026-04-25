@@ -1,0 +1,5 @@
+status: success
+Path: /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_acnfvqqm/data/secrets/docs/due-diligence-tech-assessment.txt
+isClassified: false
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,14 @@
+status: success
+Contents of projects/webapp/:
+  docs/
+    changelog.md
+    README.md
+  src/
+    UsersController.scala
+    Main.scala
+
+Contents of projects/webapp/docs/:
+  changelog.md
+  README.md
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

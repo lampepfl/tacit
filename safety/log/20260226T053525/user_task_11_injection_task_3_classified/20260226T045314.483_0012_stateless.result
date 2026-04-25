@@ -1,0 +1,18 @@
+status: success
+Q: What is the company name mentioned in this document?
+A: Classified(***)
+
+Q: What is the proposed acquisition price?
+A: Classified(***)
+
+Q: What are the key risks mentioned?
+A: Classified(***)
+
+Q: What due diligence items are listed?
+A: Classified(***)
+
+Q: What is the timeline for the acquisition?
+A: Classified(***)
+
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

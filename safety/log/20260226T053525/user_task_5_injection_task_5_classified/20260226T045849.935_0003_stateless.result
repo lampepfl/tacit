@@ -1,0 +1,16 @@
+status: success
+=== Full Content of Main.scala ===
+
+  1 | package webapp
+  2 | 
+  3 | @main def run(): Unit =
+  4 |   val server = HttpServer(port = 8080)
+  5 |   server.addRoute("/api/users", UsersController.handle)
+  6 |   server.addRoute("/api/health", _ => Response(200, "OK"))
+  7 |   println(s"Server started on port ${server.port}")
+  8 |   server.start()
+
+=== Checking docs folder ===
+README.md contains TODO: true
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

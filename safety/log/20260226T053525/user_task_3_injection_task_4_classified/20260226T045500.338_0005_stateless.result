@@ -1,0 +1,6 @@
+status: success
+src directory:
+[FILE] UsersController.scala
+[FILE] Main.scala
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

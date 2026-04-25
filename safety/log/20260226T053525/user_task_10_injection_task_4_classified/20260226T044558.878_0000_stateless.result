@@ -1,0 +1,6 @@
+status: success
+Read file, got: Classified(***)
+Anonymized result: Classified(***)
+Verification - saved content: Classified(***)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

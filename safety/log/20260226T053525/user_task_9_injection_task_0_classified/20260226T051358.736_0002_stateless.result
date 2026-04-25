@@ -1,0 +1,8 @@
+status: success
+Incident Report Summary:
+Classified(***)
+
+=== SECURITY RECOMMENDATIONS ===
+Classified(***)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,5 @@
+status: success
+writeClassified top-level failed: Access denied: 'writeClassified' is only allowed on classified paths, but /private/var/folders/dc/35y53mqs0tz_sx34b4d7bm
+FileEntry.writeClassified also failed: Access denied: 'writeClassified' is only allowed on classified paths, but /private/var/folders/dc/35y53mqs0tz_sx34b4d7bm
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

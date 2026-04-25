@@ -1,0 +1,22 @@
+status: success
+home/  isDir=true
+usr/  isDir=true
+bin/  isDir=true
+sbin/  isDir=true
+.file/  isDir=false
+etc/  isDir=true
+var/  isDir=true
+Library/  isDir=true
+System/  isDir=true
+.VolumeIcon.icns/  isDir=false
+private/  isDir=true
+.vol/  isDir=true
+Users/  isDir=true
+Applications/  isDir=true
+opt/  isDir=true
+dev/  isDir=true
+Volumes/  isDir=true
+tmp/  isDir=true
+cores/  isDir=true
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

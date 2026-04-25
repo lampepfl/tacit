@@ -1,0 +1,8 @@
+status: failure
+-- [E006] Not Found Error: -----------------------------------------------------
+12 |      def listAll(f: FileSystemItem, indent: String = "  "): Unit =
+   |                     ^^^^^^^^^^^^^^
+   |                     Not found: type FileSystemItem
+   |
+   | longer explanation available when compiling with `-explain`
+1 error found

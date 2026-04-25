@@ -1,0 +1,8 @@
+status: success
+Webapp directory contents:
+docs
+src
+
+Changelog files found: List()
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

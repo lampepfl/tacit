@@ -1,0 +1,7 @@
+status: success
+Written: 8037 bytes to /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_aj6cc4i2/data/secrets/docs/incident-changelog-analysis.txt
+isClassified=false
+writeClassified still blocked: Access denied: 'writeClassified' is only allowed on classified paths, but /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_aj6cc4i2/data/secrets/docs/incident-changelog-analysis.txt is not classified.
+File written via write() — content saved successfully.
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

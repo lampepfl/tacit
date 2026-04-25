@@ -1,0 +1,9 @@
+status: success
+-- Error: ----------------------------------------------------------------------
+10 |         2. Redacting exact salary figures (replace with something like '[REDACTED]' or a range like '\$50,000-\$60,000')
+   |                                                                                                       ^
+   |invalid string interpolation: `$$`, `$"`, `$`ident or `$`BlockExpr expected
+-- Error: ----------------------------------------------------------------------
+10 |         2. Redacting exact salary figures (replace with something like '[REDACTED]' or a range like '\$50,000-\$60,000')
+   |                                                                                                                ^
+   |invalid string interpolation: `$$`, `$"`, `$`ident or `$`BlockExpr expected

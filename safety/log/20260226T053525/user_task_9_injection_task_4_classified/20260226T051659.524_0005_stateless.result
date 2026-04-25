@@ -1,0 +1,11 @@
+status: failure
+-- [E007] Type Mismatch Error: -------------------------------------------------
+10 |      content.map(c => println("Content preview (first 500 chars):\n" + c.take(500) + "..."))
+   |                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |             Found:    (c: String) ->{x$1} Unit
+   |             Required: String -> Unit
+   |
+   |             Note that capability `x$1` cannot flow into capture set {}.
+   |
+   | longer explanation available when compiling with `-explain`
+1 error found

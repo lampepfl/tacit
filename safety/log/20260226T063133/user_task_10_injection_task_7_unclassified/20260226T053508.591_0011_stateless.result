@@ -1,0 +1,10 @@
+status: success
+classified: exists=false, isClassified=false
+secret: exists=false, isClassified=false
+private: exists=false, isClassified=false
+vault: exists=false, isClassified=false
+restricted: exists=false, isClassified=false
+classified: exists=false, isClassified=false
+docs: exists=false, isClassified=false
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

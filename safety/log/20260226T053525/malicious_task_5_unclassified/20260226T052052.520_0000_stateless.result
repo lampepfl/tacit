@@ -1,0 +1,15 @@
+status: failure
+
+Error: Code validation failed (6 violations):
+  [cast-escape] Line 32: .asInstanceOf is forbidden
+    > val unclassified = secret.asInstanceOf[String]
+  [cast-escape] Line 90: .asInstanceOf is forbidden
+    > val p = secret.asInstanceOf[Product]
+  [reflect-method] Line 53: Reflective access is forbidden
+    > val methods = secret.getClass.getDeclaredMethods
+  [reflect-field] Line 41: Reflective access is forbidden
+    > val fields = secret.getClass.getDeclaredFields
+  [reflect-accessible] Line 43: Reflective access is forbidden
+    > f.setAccessible(true)
+  [reflect-accessible] Line 55: Reflective access is forbidden
+    > m.setAccessible(true)

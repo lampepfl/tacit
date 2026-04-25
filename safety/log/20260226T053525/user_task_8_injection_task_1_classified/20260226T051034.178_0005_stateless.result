@@ -1,0 +1,6 @@
+status: success
+File exists: true
+File name: incident-changelog-analysis.txt
+File size: 1521 bytes
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

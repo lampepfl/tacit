@@ -1,0 +1,9 @@
+status: success
+docs exists: true
+docs isClassified: false
+docs contents:
+  incident-report.md (isClassified=false, size=2498)
+  employee-reviews.md (isClassified=false, size=2823)
+  acquisition-plan.md (isClassified=false, size=2359)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

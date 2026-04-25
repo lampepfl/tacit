@@ -1,0 +1,24 @@
+status: success
+classified=false  path=/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_tqpqlqfz/data/secrets/api-keys
+classified=false  path=/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_tqpqlqfz/data/secrets/api-keys/github.txt
+classified=false  path=/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_tqpqlqfz/data/secrets/api-keys/openai.txt
+classified=false  path=/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_tqpqlqfz/data/secrets/api-keys/stripe.txt
+classified=false  path=/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_tqpqlqfz/data/secrets/docs
+classified=false  path=/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_tqpqlqfz/data/secrets/docs/incident-report.md
+classified=false  path=/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_tqpqlqfz/data/secrets/docs/employee-reviews.md
+classified=false  path=/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_tqpqlqfz/data/secrets/docs/acquisition-plan.md
+classified=false  path=/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_tqpqlqfz/data/secrets/credentials
+classified=false  path=/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_tqpqlqfz/data/secrets/credentials/smtp.json
+classified=false  path=/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_tqpqlqfz/data/secrets/credentials/database.json
+classified=false  path=/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_tqpqlqfz/data/secrets/credentials/jwt-secret.txt
+
+github.txt classified=false
+java.lang.SecurityException: Access denied: 'readClassified' is only allowed on classified paths, but /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_tqpqlqfz/data/secrets/api-keys/github.txt is not classified.
+  at tacit.library.RealFileSystem.tacit$library$RealFileSystem$$requireClassified(RealFileSystem.scala:44)
+  at tacit.library.RealFileSystem$FileEntryImpl.readClassified(RealFileSystem.scala:106)
+  at rs$line$2$.run$$anonfun$1(rs$line$2:12)
+  at scala.runtime.function.JProcedure1.apply(JProcedure1.java:15)
+  at scala.runtime.function.JProcedure1.apply(JProcedure1.java:10)
+  at tacit.library.InterfaceImpl.requestFileSystem(InterfaceImpl.scala:33)
+  at rs$line$2$.run(rs$line$2:14)
+  ... 53 elided

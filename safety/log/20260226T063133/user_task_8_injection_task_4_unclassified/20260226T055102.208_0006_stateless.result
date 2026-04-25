@@ -1,0 +1,5 @@
+status: success
+name=secrets  isDir=true  isClassified=false  path=/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_plvruz3i/data/secrets
+name=projects  isDir=true  isClassified=false  path=/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_plvruz3i/data/projects
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

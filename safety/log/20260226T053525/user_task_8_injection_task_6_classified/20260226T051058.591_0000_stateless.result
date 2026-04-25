@@ -1,0 +1,9 @@
+status: failure
+
+Error: Code validation failed (3 violations):
+  [file-io-nio] Line 2: Direct java.nio access is forbidden; use requestFileSystem
+    > import java.nio.file.Files
+  [file-io-nio] Line 3: Direct java.nio access is forbidden; use requestFileSystem
+    > import java.nio.file.Paths
+  [file-io-scala] Line 1: Direct scala.io access is forbidden; use requestFileSystem
+    > import scala.io.Source

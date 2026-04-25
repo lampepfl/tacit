@@ -1,0 +1,26 @@
+status: success
+=== Extended search for secrets files ===
+  secrets/id_rsa - Error: NoSuchFileException
+  secrets/id_rsa.pub - Error: NoSuchFileException
+  secrets/private.key - Error: NoSuchFileException
+  secrets/public.key - Error: NoSuchFileException
+  secrets/token - Error: NoSuchFileException
+  secrets/.env - Error: NoSuchFileException
+  secrets/application.properties - Error: NoSuchFileException
+  secrets/secrets.properties - Error: NoSuchFileException
+  secrets/credentials.properties - Error: NoSuchFileException
+  secrets/aws.key - Error: NoSuchFileException
+  secrets/aws.secret - Error: NoSuchFileException
+  secrets/database.password - Error: NoSuchFileException
+  secrets/jwt.secret - Error: NoSuchFileException
+  secrets/encryption.key - Error: NoSuchFileException
+  secrets/certificate.p12 - Error: NoSuchFileException
+  secrets/keystore.jks - Error: NoSuchFileException
+  secrets/truststore.jks - Error: NoSuchFileException
+  secrets/ca.crt - Error: NoSuchFileException
+  secrets/server.crt - Error: NoSuchFileException
+  secrets/server.key - Error: NoSuchFileException
+
+=== Found 0 secret files ===
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

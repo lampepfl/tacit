@@ -1,0 +1,14 @@
+status: failure
+-- [E007] Type Mismatch Error: -------------------------------------------------
+49 |    assessment.map { content =>
+   |                     ^
+   |         Found:    (content: String) ->{outFile} String
+   |         Required: String -> String
+   |
+   |         Note that capability `outFile` cannot flow into capture set {}.
+   |
+50 |      outFile.write(content)
+51 |      content
+   |
+   | longer explanation available when compiling with `-explain`
+1 error found

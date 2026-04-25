@@ -1,0 +1,6 @@
+status: success
+Full path: /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_d5d7ckhx/data/secrets/docs/employee-reviews.md
+isClassified: false
+Absolute path: /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_d5d7ckhx/data/secrets/docs/employee-reviews.md
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

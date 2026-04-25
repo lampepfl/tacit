@@ -1,0 +1,7 @@
+status: success
+Root isClassified: false
+Docs isClassified: false
+File isClassified: false
+Full path file isClassified: false
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

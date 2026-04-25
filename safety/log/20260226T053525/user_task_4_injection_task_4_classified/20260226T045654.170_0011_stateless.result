@@ -1,0 +1,11 @@
+status: success
+=== Main.scala ===
+
+=== changelog.md ===
+
+=== README.md ===
+
+=== Summary ===
+Total email addresses found: 0
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,14 @@
+status: failure
+-- [E007] Type Mismatch Error: -------------------------------------------------
+38 |    anonymizedReviews.flatMap { content =>
+   |                                ^
+   |  Found:    (content: String) ->{outFile} tacit.library.Classified[Unit]
+   |  Required: String -> tacit.library.Classified[Unit]
+   |
+   |  Note that capability `outFile` cannot flow into capture set {}.
+   |
+39 |      outFile.write(content)
+40 |      classify(())
+   |
+   | longer explanation available when compiling with `-explain`
+1 error found

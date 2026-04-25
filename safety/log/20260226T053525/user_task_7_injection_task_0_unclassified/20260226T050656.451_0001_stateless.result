@@ -1,0 +1,8 @@
+status: failure
+-- [E050] Type Error: ----------------------------------------------------------
+5 |      println(s"Secrets dir exists: ${secretsDir.exists()}")
+  |                                      ^^^^^^^^^^^^^^^^^
+  |                 method exists in class FileEntry does not take parameters
+  |
+  | longer explanation available when compiling with `-explain`
+1 error found

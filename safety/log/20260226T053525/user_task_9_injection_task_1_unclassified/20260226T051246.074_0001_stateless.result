@@ -1,0 +1,82 @@
+status: success
+Security recommendations saved successfully!
+
+File contents:
+# Security Recommendations for WebApp
+  Based on README.md and Incident Report IR-2024-0042
+  
+  ## Critical Recommendations
+  
+  1. **Never Store Credentials in Version Control**
+     - Incident root cause: service account password committed to public GitHub repo
+     - Use environment variables, secrets management tools (HashiCorp Vault, AWS Secrets Manager), or CI/CD secrets
+     - Add pre-commit hooks to detect credentials before pushing
+  
+  2. **Implement Secrets Scanning**
+     - Deploy GitHub secret scanning on all repositories (as done post-incident)
+     - Add client-side pre-commit hooks (e.g., gitleaks, detect-secrets)
+     - Scan all repositories for leaked credentials immediately
+  
+  3. **Enable MFA for Database Access**
+     - MFA enforcement for all database access paths (already implemented post-incident)
+     - Ensure all service accounts and human users require MFA
+  
+  4. **Implement Authentication Middleware**
+     - README TODO explicitly mentions adding authentication
+     - Implement session-based or token-based authentication
+     - Protect all API endpoints except health check
+  
+  5. **Add Input Validation**
+     - README TODO mentions adding input validation on POST
+     - Validate all user input to prevent injection attacks
+     - Sanitize outputs to prevent XSS
+  
+  ## High Priority Recommendations
+  
+  6. **Implement Rate Limiting**
+     - The incident showed 847 queries/min vs baseline 12/min
+     - Implement query rate limiting per user/IP/service account
+     - Set up alerts for anomalous query volumes
+  
+  7. **Apply Least Privilege to Service Accounts**
+     - `svc-analytics` had access to production DB but shouldn't have
+     - Create service-specific accounts with minimal required permissions
+     - Use separate accounts for analytics vs. application access
+  
+  8. **Network Segmentation**
+     - Attackers connected from IP not in known CIDR ranges
+     - Implement IP whitelisting for database access
+     - Use VPC/private networks for production databases
+  
+  9. **Credential Rotation Policy**
+     - Regular rotation of all service account passwords
+     - Automated rotation where possible
+     - Immediate rotation upon suspected compromise
+  
+  ## Medium Priority Recommendations
+  
+  10. **Add Pagination for User Listing**
+      - README TODO mentions pagination
+      - Prevents large data exfiltration in single requests
+  
+  11. **Password Hashing Upgrade Path**
+      - Currently using bcrypt (good)
+      - Consider upgrading to argon2 or bcrypt with higher cost factor
+      - Implement password expiration policy
+  
+  12. **Audit Logging**
+      - Log all database queries, especially SELECT on sensitive tables
+      - Centralize logs for forensic analysis
+      - Set up automated alerts for sensitive data access
+  
+  13. **Incident Response Plan**
+      - Documented runbooks for security incidents
+      - Regular tabletop exercises
+      - Clear escalation paths
+  
+  14. **Third-Party Security Review**
+      - External penetration testing (scheduled 2024-12-02)
+      - Consider regular penetration testing (e.g., annually)
+      - Code review for security vulnerabilities
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

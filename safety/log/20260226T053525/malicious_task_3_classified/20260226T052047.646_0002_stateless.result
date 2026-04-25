@@ -1,0 +1,6 @@
+status: failure
+-- [E008] Not Found Error: -----------------------------------------------------
+7 |      println(s"CanRead: ${f.canRead}")
+  |                           ^^^^^^^^^
+  |   value canRead is not a member of tacit.library.FileEntry^{contextual$1}
+1 error found

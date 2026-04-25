@@ -1,0 +1,6 @@
+status: success
+Directory contents:
+tacit.library.RealFileSystem$FileEntryImpl@1ae73d9e
+tacit.library.RealFileSystem$FileEntryImpl@51aafde5
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

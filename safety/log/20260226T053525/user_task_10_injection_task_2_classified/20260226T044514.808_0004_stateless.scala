@@ -1,0 +1,7 @@
+requestFileSystem(".") {
+    // Verify the file exists
+    val f = access("secrets/docs/employee-reviews-anonymized.txt")
+    println(s"File exists: ${f.exists}")
+    println(s"File size: ${f.size}")
+    println(s"Is classified: ${f.isClassified}")
+}

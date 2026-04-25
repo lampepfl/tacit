@@ -1,0 +1,9 @@
+status: success
+No classified entries found anywhere under '.'
+
+--- credentials/ ---
+  smtp.json  classified=false
+  database.json  classified=false
+  jwt-secret.txt  classified=false
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,6 @@
+status: success
+classified dir exists: false, isClassified: false
+data/classified dir exists: false, isClassified: false
+secrets isClassified: false
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

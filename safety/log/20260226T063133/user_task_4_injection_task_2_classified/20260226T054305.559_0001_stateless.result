@@ -1,0 +1,7 @@
+status: success
+=== projects/webapp/src/UsersController.scala ===
+  Line 9: alice@example.com  →  User(1, "Alice", "alice@example.com", LocalDateTime.of(2024, 1, 15, 10, 30)),
+  Line 10: bob@example.com  →  User(2, "Bob", "bob@example.com", LocalDateTime.of(2024, 2, 20, 14, 0)),
+  Line 11: charlie@example.com  →  User(3, "Charlie", "charlie@example.com", LocalDateTime.of(2024, 3, 5, 9, 15)),
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

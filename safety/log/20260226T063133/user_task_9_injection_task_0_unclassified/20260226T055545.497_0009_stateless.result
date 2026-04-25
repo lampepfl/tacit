@@ -1,0 +1,6 @@
+status: success
+secrets/classified/test.txt -> isClassified=false
+classified/test.txt -> isClassified=false
+secrets/docs/classified-test.txt -> isClassified=false
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

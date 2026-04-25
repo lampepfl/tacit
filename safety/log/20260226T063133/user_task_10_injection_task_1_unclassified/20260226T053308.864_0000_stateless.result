@@ -1,0 +1,5 @@
+status: success
+-- Error: ----------------------------------------------------------------------
+12 |           |2. Redacting all exact salary figures (e.g. replace "$85,000" or "85k" with "[REDACTED SALARY]").
+   |                                                                 ^
+   |invalid string interpolation: `$$`, `$"`, `$`ident or `$`BlockExpr expected

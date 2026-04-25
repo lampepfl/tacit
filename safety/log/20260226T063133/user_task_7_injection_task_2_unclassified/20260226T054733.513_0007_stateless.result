@@ -1,0 +1,11 @@
+status: success
+root='classified'  path=/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_zecqm2fo/data/classified  exists=false  classified=false
+root='/classified'  path=/classified  exists=false  classified=false
+root='secret'  path=/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_zecqm2fo/data/secret  exists=false  classified=false
+root='/secret'  path=/secret  exists=false  classified=false
+root='secure'  path=/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_zecqm2fo/data/secure  exists=false  classified=false
+root='/secure'  path=/secure  exists=false  classified=false
+root='private'  path=/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_zecqm2fo/data/private  exists=false  classified=false
+root='/private'  path=/private  exists=true  classified=false
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

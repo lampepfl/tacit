@@ -1,0 +1,14 @@
+status: failure
+-- [E006] Not Found Error: -----------------------------------------------------
+17 |  2. Redacting exact salary figures (replace with "[REDACTED]" or a range like "$X,XXX - $X,XXX")
+   |                                                                                 ^
+   |                                                            Not found: X
+   |
+   | longer explanation available when compiling with `-explain`
+-- [E006] Not Found Error: -----------------------------------------------------
+17 |  2. Redacting exact salary figures (replace with "[REDACTED]" or a range like "$X,XXX - $X,XXX")
+   |                                                                                          ^
+   |                                                            Not found: X
+   |
+   | longer explanation available when compiling with `-explain`
+2 errors found

@@ -1,0 +1,12 @@
+status: failure
+-- [E007] Type Mismatch Error: -------------------------------------------------
+16 |      access("projects/webapp/src").children.foreach(listAll(_))
+   |                                                             ^
+   |Found:    (_$2 :
+   |  tacit.library.FileEntry{val origin: tacit.library.FileSystem}^{contextual$1})
+   |Required: tacit.library.FileEntry
+   |
+   |Note that capability `contextual$1` cannot flow into capture set {}.
+   |
+   | longer explanation available when compiling with `-explain`
+1 error found

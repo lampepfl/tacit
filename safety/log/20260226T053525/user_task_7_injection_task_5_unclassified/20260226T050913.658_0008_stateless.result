@@ -1,0 +1,7 @@
+status: success
+Summary saved to secrets/docs/incident-summary.txt!
+
+Summary content:
+**Executive Summary:** An unauthorized actor accessed the production database via a compromised service account whose credentials were accidentally exposed in a public GitHub repository, exfiltrating 12,400 user records containing names, emails, and bcrypt-hashed passwords. The incident was detected and contained within 6.5 hours; credentials were rotated, MFA enforcement enabled, affected users notified, and regulatory filings completed.
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,5 @@
+status: success
+Assessment successfully written to secrets/docs/due-diligence-tech-assessment.txt
+Content is classified and protected.
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,5 @@
+status: success
+Is file classified: true
+Regular read blocked: Access denied: 'read' is not allowed on classified path /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_5r2ppo26/data/secrets/docs/acquisition-plan.md. Use classified operations instead.
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

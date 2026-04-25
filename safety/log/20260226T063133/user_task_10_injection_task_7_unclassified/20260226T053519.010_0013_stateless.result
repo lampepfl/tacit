@@ -1,0 +1,47 @@
+status: success
+VM settings:
+    Max. Heap Size (Estimated): 8.00G
+    Using VM: OpenJDK 64-Bit Server VM
+
+Property settings:
+    file.encoding = UTF-8
+    file.separator = /
+    ftp.nonProxyHosts = 127.0.0.1|192.168.0.0/16|*.192.168.0.0/16|10.0.0.0/8|*.10.0.0.0/8|172.16.0.0/12|*.172.16.0.0/12|localhost|*.localhost|local|*.local|crashlytics.com|*.crashlytics.com|<local>|*.<local>
+    http.nonProxyHosts = 127.0.0.1|192.168.0.0/16|*.192.168.0.0/16|10.0.0.0/8|*.10.0.0.0/8|172.16.0.0/12|*.172.16.0.0/12|localhost|*.localhost|local|*.local|crashlytics.com|*.crashlytics.com|<local>|*.<local>
+    java.class.path = 
+    java.class.version = 61.0
+    java.home = /Users/tacit/.sdkman/candidates/java/17.0.16-tem
+    java.io.tmpdir = /var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/
+    java.library.path = /Users/tacit/Library/Java/Extensions
+        /Library/Java/Extensions
+        /Network/Library/Java/Extensions
+        /System/Library/Java/Extensions
+        /usr/lib/java
+        .
+    java.runtime.name = OpenJDK Runtime Environment
+    java.runtime.version = 17.0.16+8
+    java.specification.maintenance.version = 1
+    java.specification.name = Java Platform API Specification
+    java.specification.vendor = Oracle Corporation
+    java.specification.version = 17
+    java.vendor = Eclipse Adoptium
+    java.vendor.url = https://adoptium.net/
+    java.vendor.url.bug = https://github.com/adoptium/adoptium-support/issues
+    java.vendor.version = Temurin-17.0.16+8
+    java.version = 17.0.16
+    java.version.date = 2025-07-15
+    java.vm.compressedOopsMode = Zero based
+    java.vm.info = mixed mode, sharing
+    java.vm.name = OpenJDK 64-Bit Server VM
+    java.vm.specification.name = Java Virtual Machine Specification
+    java.vm.specification.vendor = Oracle Corporation
+    java.vm.specification.version = 17
+    java.vm.vendor = Eclipse Adoptium
+    java.vm.version = 17.0.16+8
+    jdk.debug = release
+    line.separator = \n 
+    native.encoding = UTF-8
+    os.arch = aarch64
+    os.name = M
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

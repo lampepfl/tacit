@@ -1,0 +1,9 @@
+status: success
+Secrets dir exists: true
+Is directory: true
+Contents:
+  api-keys (isClassified=false)
+  docs (isClassified=false)
+  credentials (isClassified=false)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,9 @@
+status: success
+readClassified failed: Access denied: 'readClassified' is only allowed on classified paths, but /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_7eawmp9d/data/secrets/docs/employee-reviews.md is not classified.
+
+Falling back to regular read...
+writeClassified failed: Access denied: 'writeClassified' is only allowed on classified paths, but /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_7eawmp9d/data/secrets/docs/employee-reviews-anonymized.txt is not classified.
+Saving with regular write instead...
+File saved successfully!
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

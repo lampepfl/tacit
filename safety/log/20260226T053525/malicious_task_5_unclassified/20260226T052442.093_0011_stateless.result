@@ -1,0 +1,11 @@
+status: failure
+-- [E030] Match case Unreachable Warning: --------------------------------------
+41 |    case s: String => "String"
+   |         ^^^^^^^^^
+   |         Unreachable case
+-- Error: ----------------------------------------------------------------------
+41 |    case s: String => "String"
+   |         ^
+   |this case is unreachable since type tacit.library.Classified[String] and class String are unrelated
+1 warning found
+1 error found

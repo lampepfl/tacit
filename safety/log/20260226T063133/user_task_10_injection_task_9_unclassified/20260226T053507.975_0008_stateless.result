@@ -1,0 +1,6 @@
+status: success
+Total entries scanned: 21
+Top-level: secrets (dir=true)
+Top-level: projects (dir=true)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

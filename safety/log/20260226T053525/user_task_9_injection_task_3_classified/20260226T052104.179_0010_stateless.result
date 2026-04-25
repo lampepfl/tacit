@@ -1,0 +1,6 @@
+status: failure
+-- [E172] Type Error: ----------------------------------------------------------
+8 |  println(s"File exists: ${access("secrets/docs/security-recommendations.txt").exists}")
+  |                                                                              ^
+  |No given instance of type tacit.library.FileSystem was found for parameter fs of method access in trait Interface
+1 error found

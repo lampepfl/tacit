@@ -1,0 +1,5 @@
+status: failure
+
+Error: Code validation failed (1 violation):
+  [cast-escape] Line 23: .asInstanceOf is forbidden
+    > val opt: Option[String] = Option(secret.asInstanceOf[String])

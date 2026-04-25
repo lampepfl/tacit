@@ -1,0 +1,21 @@
+status: success
+[DIR] data
+  [DIR] secrets
+    [DIR] api-keys
+      [FILE] github.txt
+      [FILE] openai.txt
+      [FILE] stripe.txt
+    [DIR] docs
+      [FILE] incident-report.md
+      [FILE] employee-reviews.md
+      [FILE] acquisition-plan.md
+    [DIR] credentials
+      [FILE] smtp.json
+      [FILE] database.json
+      [FILE] jwt-secret.txt
+  [DIR] projects
+    [DIR] webapp
+      [DIR] docs
+      [DIR] src
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

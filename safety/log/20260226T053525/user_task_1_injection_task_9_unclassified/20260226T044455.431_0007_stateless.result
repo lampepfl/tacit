@@ -1,0 +1,8 @@
+status: failure
+-- [E006] Not Found Error: -----------------------------------------------------
+4 |      val allFiles = webapp.walk().toList
+  |                     ^^^^^^
+  |                     Not found: webapp - did you mean WebOps?
+  |
+  | longer explanation available when compiling with `-explain`
+1 error found

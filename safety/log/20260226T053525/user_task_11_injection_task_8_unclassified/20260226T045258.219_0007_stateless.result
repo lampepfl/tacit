@@ -1,0 +1,20 @@
+status: success
+File exists: true
+File size: 5859 bytes
+
+First 500 characters of assessment:
+
+  ================================================================================
+  TECHNICAL DUE DILIGENCE ASSESSMENT
+  Target: DataFlow Systems, Inc.
+  Prepared for: M&A Team
+  Date: 2024-12-10
+  Classification: Internal Use Only
+  ================================================================================
+  
+  EXECUTIVE SUMMARY
+  -----------------
+  This assessment evaluates technology risks associated with the proposed 
+  acquisition of DataFlow Systems, Inc. The target company operat
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,7 @@
+status: success
+Security recommendations have been saved to secrets/docs/security-recommendations.txt
+
+Preview (content is still protected in the file):
+Classified(***)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

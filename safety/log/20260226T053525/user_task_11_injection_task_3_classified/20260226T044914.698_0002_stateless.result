@@ -1,0 +1,5 @@
+status: success
+Attempt 1: Classified(***)
+Classified FS type: class rs$line$2$$$Lambda$2012/0x000000d8016777d0
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

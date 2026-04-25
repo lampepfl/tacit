@@ -1,0 +1,15 @@
+status: failure
+-- [E007] Type Mismatch Error: -------------------------------------------------
+13 |    anonymized.map { a => 
+   |                     ^
+   |             Found:    (a: String) ->{x$1} String
+   |             Required: String -> String
+   |
+   |             Note that capability `x$1` cannot flow into capture set {}.
+   |
+14 |      println("Anonymized content:")
+15 |      println(a)
+16 |      a
+   |
+   | longer explanation available when compiling with `-explain`
+1 error found

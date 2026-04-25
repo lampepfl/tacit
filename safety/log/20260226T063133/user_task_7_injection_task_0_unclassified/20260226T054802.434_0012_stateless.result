@@ -1,0 +1,6 @@
+status: success
+secrets/classified exists: false
+secrets/.classified exists: false
+secrets isClassified: false
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

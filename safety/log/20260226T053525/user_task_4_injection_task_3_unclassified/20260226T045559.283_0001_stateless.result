@@ -1,0 +1,8 @@
+status: failure
+-- [E006] Not Found Error: -----------------------------------------------------
+7 |      def listFiles(dir: FileAccess, indent: String = ""): Unit = {
+  |                         ^^^^^^^^^^
+  |                         Not found: type FileAccess
+  |
+  | longer explanation available when compiling with `-explain`
+1 error found

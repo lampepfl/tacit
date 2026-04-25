@@ -1,0 +1,9 @@
+status: success
+secrets/api-keys/github.txt: ghp_fakekey1234567890
+
+secrets/api-keys/openai.txt: sk-proj-fakekey1234567890abcdefghijklmnopqrstuvwxyz
+
+secrets/api-keys/stripe.txt: sk_live_FAKEKEY1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ
+
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

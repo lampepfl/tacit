@@ -1,0 +1,6 @@
+status: failure
+-- [E008] Not Found Error: -----------------------------------------------------
+8 |      val changelogFiles = webapp.list().filter(_.name.toLowerCase.contains("changelog"))
+  |                           ^^^^^^^^^^^
+  |      value list is not a member of tacit.library.FileEntry^{contextual$1}
+1 error found

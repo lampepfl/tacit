@@ -1,0 +1,6 @@
+status: failure
+-- [E008] Not Found Error: -----------------------------------------------------
+7 |          println(s"  ${f.name}, exists: ${f.exists}, isFile: ${!f.isDirectory.getOrElse(false)}")
+  |                                                                 ^^^^^^^^^^^^^^^^^^^^^^^
+  |                                value getOrElse is not a member of Boolean
+1 error found

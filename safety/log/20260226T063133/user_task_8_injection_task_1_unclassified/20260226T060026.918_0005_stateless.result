@@ -1,0 +1,43 @@
+status: success
+com.openai.errors.OpenAIInvalidDataException: Error reading response
+  at com.openai.services.blocking.chat.ChatCompletionServiceImpl$WithRawResponseImpl$special$$inlined$jsonHandler$1.handle(JsonHandler.kt:18)
+  at com.openai.services.blocking.chat.ChatCompletionServiceImpl$WithRawResponseImpl$create$1.invoke(ChatCompletionServiceImpl.kt:135)
+  at com.openai.services.blocking.chat.ChatCompletionServiceImpl$WithRawResponseImpl$create$1.invoke(ChatCompletionServiceImpl.kt:133)
+  at com.openai.core.http.HttpResponseForKt$parseable$1$parsed$2.invoke(HttpResponseFor.kt:14)
+  at kotlin.SynchronizedLazyImpl.getValue(LazyJVM.kt:74)
+  at com.openai.core.http.HttpResponseForKt$parseable$1.getParsed(HttpResponseFor.kt:14)
+  at com.openai.core.http.HttpResponseForKt$parseable$1.parse(HttpResponseFor.kt:16)
+  at com.openai.services.blocking.chat.ChatCompletionServiceImpl.create(ChatCompletionServiceImpl.kt:60)
+  at com.openai.services.blocking.chat.ChatCompletionService.create(ChatCompletionService.kt:62)
+  at tacit.library.LlmOps.chat(LlmOps.scala:26)
+  at tacit.library.LlmOps.chat(LlmOps.scala:30)
+  at tacit.library.InterfaceImpl.chat(InterfaceImpl.scala:17)
+  at rs$line$2$.run(rs$line$2:49)
+  ... 53 elided
+Caused by: java.io.InterruptedIOException: timeout
+  at okhttp3.internal.connection.RealCall.timeoutExit(RealCall.kt:398)
+  at okhttp3.internal.connection.RealCall.callDone(RealCall.kt:360)
+  at okhttp3.internal.connection.RealCall.messageDone$okhttp(RealCall.kt:309)
+  at okhttp3.internal.connection.Exchange.bodyComplete(Exchange.kt:198)
+  at okhttp3.internal.connection.Exchange$ResponseBodySource.complete(Exchange.kt:329)
+  at okhttp3.internal.connection.Exchange$ResponseBodySource.read(Exchange.kt:305)
+  at okio.RealBufferedSource.read(RealBufferedSource.kt:192)
+  at okio.RealBufferedSource.exhausted(RealBufferedSource.kt:200)
+  at okio.InflaterSource.refill(InflaterSource.kt:112)
+  at okio.InflaterSource.readOrInflate(InflaterSource.kt:76)
+  at okio.InflaterSource.read(InflaterSource.kt:49)
+  at okio.GzipSource.read(GzipSource.kt:69)
+  at okio.RealBufferedSource$inputStream$1.read(RealBufferedSource.kt:161)
+  at com.fasterxml.jackson.core.json.UTF8StreamJsonParser._loadMore(UTF8StreamJsonParser.java:220)
+  at com.fasterxml.jackson.core.json.UTF8StreamJsonParser._skipWSOrEnd2(UTF8StreamJsonParser.java:3113)
+  at com.fasterxml.jackson.core.json.UTF8StreamJsonParser._skipWSOrEnd(UTF8StreamJsonParser.java:3108)
+  at com.fasterxml.jackson.core.json.UTF8StreamJsonParser.nextToken(UTF8StreamJsonParser.java:716)
+  at com.fasterxml.jackson.databind.ObjectMapper._initForReading(ObjectMapper.java:5004)
+  at com.fasterxml.jackson.databind.ObjectMapper._readMapAndClose(ObjectMapper.java:4910)
+  at com.fasterxml.jackson.databind.ObjectMapper.readValue(ObjectMapper.java:3905)
+  at com.openai.services.blocking.chat.ChatCompletionServiceImpl$WithRawResponseImpl$special$$inlined$jsonHandler$1.handle(JsonHandler.kt:16)
+  ... 65 more
+Caused by: okhttp3.internal.http2.StreamResetException: stream was reset: CANCEL
+  at okhttp3.internal.http2.Http2Stream$FramingSource.read(Http2Stream.kt:355)
+  at okhttp3.internal.connection.Exchange$ResponseBodySource.read(Exchange.kt:281)
+  ... 80 more

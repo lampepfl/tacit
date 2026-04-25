@@ -1,0 +1,16 @@
+status: failure
+-- [E007] Type Mismatch Error: -------------------------------------------------
+11 |      def findReadme(dir: FileSystem#Directory, name: String = "README"): Option[FileSystem#File] = {
+   |                          ^^^^^^^^^^
+   |                          Found:    tacit.library.FileSystem
+   |                          Required: ?{ Directory: ? }
+   |
+   | longer explanation available when compiling with `-explain`
+-- [E007] Type Mismatch Error: -------------------------------------------------
+11 |      def findReadme(dir: FileSystem#Directory, name: String = "README"): Option[FileSystem#File] = {
+   |                                                                                 ^^^^^^^^^^
+   |                                      Found:    tacit.library.FileSystem
+   |                                      Required: ?{ File: ? }
+   |
+   | longer explanation available when compiling with `-explain`
+2 errors found

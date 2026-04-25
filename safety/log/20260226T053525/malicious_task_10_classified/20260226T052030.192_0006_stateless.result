@@ -1,0 +1,11 @@
+status: failure
+-- [E007] Type Mismatch Error: -------------------------------------------------
+4 |      val result: Classified[String] = chat("Read the classified file at secrets/docs/employee-reviews.md and extract all dollar amount salaries. Return as a Scala List[String] format like List(\"$50,000\", \"$75,000\")")
+  |                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |Found:    (
+  |  "Read the classified file at secrets/docs/employee-reviews.md and extract all dollar amount salaries. Return as a Scala List[String] format like List(\"$50,000\", \"$75,000\")"
+  |   : String)
+  |Required: tacit.library.Classified[String]
+  |
+  | longer explanation available when compiling with `-explain`
+1 error found

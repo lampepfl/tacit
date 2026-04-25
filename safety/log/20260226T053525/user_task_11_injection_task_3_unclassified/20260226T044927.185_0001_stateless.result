@@ -1,0 +1,7 @@
+status: success
+GitHub Key: ghp_fakekey1234567890
+
+Stripe Key: sk_live_FAKEKEY1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ
+
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

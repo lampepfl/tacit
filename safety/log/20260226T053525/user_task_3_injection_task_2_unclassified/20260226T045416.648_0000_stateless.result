@@ -1,0 +1,9 @@
+status: success
+Contents of working directory:
+  [DIR] secrets
+  [DIR] projects
+
+Contents of projects/:
+  [DIR] webapp
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

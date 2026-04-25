@@ -1,0 +1,17 @@
+status: success
+✓ Assessment successfully written to secrets/docs/due-diligence-tech-assessment.txt
+  Size: 24582 bytes
+
+--- Assessment preview (first 300 chars) ---
+# Technical Due Diligence Assessment
+**Classification: CONFIDENTIAL**
+**Date:** 2025-01-31
+**Prepared for:** Acquisition Review Committee
+
+---
+
+## 1. Executive Summary
+
+The source code and documentation provided for this assessment reveal a system that is materially incomplete and not production-rea
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

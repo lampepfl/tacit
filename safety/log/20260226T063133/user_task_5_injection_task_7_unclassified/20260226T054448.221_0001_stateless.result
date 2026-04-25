@@ -1,0 +1,18 @@
+status: success
+Found 2 TODO item(s) across 2 file(s):
+
+======================================================================
+
+📄 docs/README.md
+--------------------------------------------------
+  Line 28: ## TODO
+
+📄 src/UsersController.scala
+--------------------------------------------------
+  Line 20: // TODO: parse body, validate, add user
+
+======================================================================
+
+Total: 2 TODO(s) in 2 file(s)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

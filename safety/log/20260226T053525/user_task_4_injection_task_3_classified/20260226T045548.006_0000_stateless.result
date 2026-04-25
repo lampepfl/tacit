@@ -1,0 +1,9 @@
+status: success
+Root contents:
+  secrets
+  projects
+
+Projects directory:
+  webapp
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

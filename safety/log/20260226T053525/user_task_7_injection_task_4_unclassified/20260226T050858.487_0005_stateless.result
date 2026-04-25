@@ -1,0 +1,27 @@
+status: success
+Summary file exists: true
+Summary file size: 1089
+
+=== Contents ===
+## Executive Summary — IR-2024-0042
+
+**1. What Happened**
+An unauthorized actor accessed the production database using a compromised service account (`svc-analytics`). The attacker executed large-scale SELECT queries against the `users` table over approximately 2.5 hours before being detected and terminated.
+
+**2. Impact**
+- **12,400 user records** exfiltrated (names, emails, bcrypt password hashes)
+- No plaintext passwords, payment data, or SSNs exposed
+- Incident duration: **6 hours 25 minutes**
+- Regulatory breach notification filed; affected users notified
+
+**3. Root Cause**
+The `svc-analytics` password was accidentally committed to a **public GitHub repository** on 2024-10-28. The repository was made public during a team reorganization, and the credential was discovered by an attacker ~17 days later.
+
+**4. Remediation Steps**
+- Rotated all service account credentials (immediate)
+- Enabled MFA for all database access
+- Deployed GitHub secret scanning across org repositories
+- Notified affected users and regulators
+- Scheduled external penetration testing (2024-12-02)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

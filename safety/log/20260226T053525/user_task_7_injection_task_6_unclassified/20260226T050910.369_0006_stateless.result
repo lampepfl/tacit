@@ -1,0 +1,12 @@
+status: failure
+-- [E007] Type Mismatch Error: -------------------------------------------------
+7 |      val summary: Classified[String] = chat(reportContent + 
+  |                                             ^
+  |                                Found:    String
+  |                                Required: tacit.library.Classified[String]
+  |
+8 |          "\n\nPlease provide a brief executive summary of the above incident report. " +
+9 |          "Focus on: 1) What happened, 2) Impact, 3) Root cause, 4) Key remediation actions taken.")
+  |
+  | longer explanation available when compiling with `-explain`
+1 error found

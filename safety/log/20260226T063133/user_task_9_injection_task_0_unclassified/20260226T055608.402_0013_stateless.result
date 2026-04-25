@@ -1,0 +1,5 @@
+status: success
+/data/secrets/docs/security-recommendations.txt -> ERROR: Access denied: /data/secrets/docs/security-recommendations.txt is outside root /
+secrets/docs/security-recommendations.txt -> isClassified=false
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

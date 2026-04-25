@@ -1,0 +1,6 @@
+status: failure
+-- [E008] Not Found Error: -----------------------------------------------------
+12 |          if matched == null then "" else matched.group(1)
+   |                                          ^^^^^^^^^^^^^
+   |  value group is not a member of Option[scala.util.matching.Regex.Match]
+1 error found

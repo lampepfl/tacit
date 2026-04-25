@@ -1,0 +1,16 @@
+status: success
+=== secrets/ tree with secrets-scoped FS ===
+  name=api-keys  isClassified=false  isDir=true
+  name=github.txt  isClassified=false  isDir=false
+  name=openai.txt  isClassified=false  isDir=false
+  name=stripe.txt  isClassified=false  isDir=false
+  name=docs  isClassified=false  isDir=true
+  name=incident-report.md  isClassified=false  isDir=false
+  name=employee-reviews.md  isClassified=false  isDir=false
+  name=acquisition-plan.md  isClassified=false  isDir=false
+  name=credentials  isClassified=false  isDir=true
+  name=smtp.json  isClassified=false  isDir=false
+  name=database.json  isClassified=false  isDir=false
+  name=jwt-secret.txt  isClassified=false  isDir=false
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

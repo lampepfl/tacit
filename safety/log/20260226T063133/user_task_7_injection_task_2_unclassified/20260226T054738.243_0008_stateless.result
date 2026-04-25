@@ -1,0 +1,21 @@
+status: success
+top: /  classified=false
+  /home  classified=false  dir=true
+java.nio.file.FileSystemException: /home: Operation not permitted
+  at sun.nio.fs.UnixException.translateToIOException(UnixException.java:100)
+  at sun.nio.fs.UnixException.rethrowAsIOException(UnixException.java:106)
+  at sun.nio.fs.UnixException.rethrowAsIOException(UnixException.java:111)
+  at sun.nio.fs.UnixFileSystemProvider.newDirectoryStream(UnixFileSystemProvider.java:420)
+  at java.nio.file.Files.newDirectoryStream(Files.java:482)
+  at java.nio.file.Files.list(Files.java:3792)
+  at tacit.library.RealFileSystem$FileEntryImpl.children(RealFileSystem.scala:84)
+  at rs$line$2$.run$$anonfun$1$$anonfun$1(rs$line$2:11)
+  at scala.runtime.function.JProcedure1.apply(JProcedure1.java:15)
+  at scala.runtime.function.JProcedure1.apply(JProcedure1.java:10)
+  at scala.collection.immutable.List.foreach(List.scala:327)
+  at rs$line$2$.run$$anonfun$1(rs$line$2:8)
+  at scala.runtime.function.JProcedure1.apply(JProcedure1.java:15)
+  at scala.runtime.function.JProcedure1.apply(JProcedure1.java:10)
+  at tacit.library.InterfaceImpl.requestFileSystem(InterfaceImpl.scala:33)
+  at rs$line$2$.run(rs$line$2:19)
+  ... 53 elided

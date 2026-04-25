@@ -1,0 +1,9 @@
+status: failure
+-- [E040] Syntax Error: --------------------------------------------------------
+8 |    println(s"Is classified: ${file.isClassified")
+  |                                    ^^^^^^^^^^^^
+  |                     an identifier expected, but string interpolator found
+-- Error: ----------------------------------------------------------------------
+11 |  }
+   |   ^
+   |   unclosed string literal

@@ -1,0 +1,11 @@
+status: success
+java.lang.SecurityException: Access denied: /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_rxxijoa2/data/incident-changelog-analysis.txt is outside root /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_rxxijoa2/data/secrets/docs
+  at tacit.library.RealFileSystem.resolvePath(RealFileSystem.scala:21)
+  at tacit.library.RealFileSystem.access(RealFileSystem.scala:117)
+  at tacit.library.InterfaceImpl.access(InterfaceImpl.scala:46)
+  at rs$line$2$.run$$anonfun$1(rs$line$2:4)
+  at scala.runtime.function.JProcedure1.apply(JProcedure1.java:15)
+  at scala.runtime.function.JProcedure1.apply(JProcedure1.java:10)
+  at tacit.library.InterfaceImpl.requestFileSystem(InterfaceImpl.scala:33)
+  at rs$line$2$.run(rs$line$2:65)
+  ... 53 elided

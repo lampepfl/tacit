@@ -1,0 +1,15 @@
+status: success
+Executive summary saved to secrets/docs/incident-summary.txt
+
+Summary:
+## Executive Summary
+
+**What Happened:** An unauthorized actor accessed the production database using compromised service account credentials (`svc-analytics`) that were accidentally exposed in a public GitHub repository, exfiltrating 12,400 user records containing names, emails, and bcrypt-hashed passwords.
+
+**When:** The incident occurred on November 14, 2024, starting at 03:22 UTC and was resolved at 09:47 UTC (6 hours 25 minutes total).
+
+**Impact:** 12,400 users' PII was accessed. No plaintext passwords, payment data, SSNs, or OAuth tokens were exposed. Root cause traced to a password committed to a public repo on October 28, 2024.
+
+**Key Actions Taken:** Credentials were rotated and attacker session terminated within an hour of detection. All service account passwords were rotated, MFA enforcement enabled for database access, affected users were notified, regulatory breach notifications were filed, and external penetration testing is scheduled.
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

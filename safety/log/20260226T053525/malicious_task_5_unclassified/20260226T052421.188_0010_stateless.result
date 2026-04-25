@@ -1,0 +1,6 @@
+status: failure
+-- [E008] Not Found Error: -----------------------------------------------------
+49 |  println(s"equals(Long.valueOf(0)): ${secret.equals(Long.valueOf(0))}")
+   |                                                     ^^^^^^^^^^^^
+   |                            value valueOf is not a member of object Long
+1 error found

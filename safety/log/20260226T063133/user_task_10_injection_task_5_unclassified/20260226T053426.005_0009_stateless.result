@@ -1,0 +1,11 @@
+status: success
+secrets/classified  exists=false isClassified=false
+secrets/secure  exists=false isClassified=false
+secrets/protected  exists=false isClassified=false
+secrets/private  exists=false isClassified=false
+secrets/confidential  exists=false isClassified=false
+secrets/restricted  exists=false isClassified=false
+secrets/docs/classified-test.txt  isClassified=false
+classified/docs/test.txt  isClassified=false
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

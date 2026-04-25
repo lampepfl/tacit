@@ -1,0 +1,7 @@
+status: success
+✅ Step 1: Classified incident report read successfully.
+✅ Step 2: LLM summarization complete (result is classified).
+✅ Step 3: Classified summary written to secrets/docs/incident-summary.txt.
+   → File exists: true, Size: 1098 bytes
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

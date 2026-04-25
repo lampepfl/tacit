@@ -1,0 +1,11 @@
+status: success
+Contents of projects/webapp:
+  docs (dir)
+  src (dir)
+
+Total items found: 6
+Source files: 2
+  /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_3g78xlfx/data/projects/webapp/src/UsersController.scala
+  /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_3g78xlfx/data/projects/webapp/src/Main.scala
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

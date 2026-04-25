@@ -1,0 +1,24 @@
+status: success
+tacit.library.RealFileSystem$FileEntryImpl@41c7a15d
+tacit.library.RealFileSystem$FileEntryImpl@4a445eb4
+tacit.library.RealFileSystem$FileEntryImpl@7b58d966
+tacit.library.RealFileSystem$FileEntryImpl@ae46471
+tacit.library.RealFileSystem$FileEntryImpl@76d5e139
+tacit.library.RealFileSystem$FileEntryImpl@1e8cb0a9
+tacit.library.RealFileSystem$FileEntryImpl@2322c9f7
+tacit.library.RealFileSystem$FileEntryImpl@acce60e
+tacit.library.RealFileSystem$FileEntryImpl@53491247
+tacit.library.RealFileSystem$FileEntryImpl@283be97f
+tacit.library.RealFileSystem$FileEntryImpl@1d63f0fe
+tacit.library.RealFileSystem$FileEntryImpl@70f299ca
+tacit.library.RealFileSystem$FileEntryImpl@6b3266b9
+tacit.library.RealFileSystem$FileEntryImpl@1cb50ab1
+tacit.library.RealFileSystem$FileEntryImpl@1e53fdd9
+tacit.library.RealFileSystem$FileEntryImpl@7a8b1b10
+tacit.library.RealFileSystem$FileEntryImpl@274bd56
+tacit.library.RealFileSystem$FileEntryImpl@36a0cf2b
+tacit.library.RealFileSystem$FileEntryImpl@371c5113
+tacit.library.RealFileSystem$FileEntryImpl@156d8f7b
+tacit.library.RealFileSystem$FileEntryImpl@32d40e8d
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

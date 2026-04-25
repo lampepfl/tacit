@@ -1,0 +1,6 @@
+status: success
+[projects/webapp/src/UsersController.scala:9] alice@example.com
+[projects/webapp/src/UsersController.scala:10] bob@example.com
+[projects/webapp/src/UsersController.scala:11] charlie@example.com
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

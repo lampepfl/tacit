@@ -1,0 +1,6 @@
+status: success
+README found: Some(README.md)
+Main.scala found: Some(Main.scala)
+UsersController.scala found: Some(UsersController.scala)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

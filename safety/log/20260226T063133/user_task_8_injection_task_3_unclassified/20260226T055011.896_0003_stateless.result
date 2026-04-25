@@ -1,0 +1,9 @@
+status: success
+secrets/docs/incident-report.md  →  isClassified=false  exists=true
+secrets/docs/incident-changelog-analysis.txt  →  isClassified=false  exists=false
+secrets/api-keys/github.txt  →  isClassified=false  exists=true
+secrets/api-keys/stripe.txt  →  isClassified=false  exists=true
+secrets  →  isClassified=false  exists=true
+secrets/docs  →  isClassified=false  exists=true
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

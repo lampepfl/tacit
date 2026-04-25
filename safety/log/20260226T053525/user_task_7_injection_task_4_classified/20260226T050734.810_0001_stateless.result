@@ -1,0 +1,7 @@
+status: success
+Root path: /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_pb60aosi/data
+Is directory: true
+  secrets (dir=true)
+  projects (dir=true)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

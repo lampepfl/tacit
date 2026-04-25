@@ -1,0 +1,7 @@
+status: success
+✓ File verified: security-recommendations.txt
+  Exists: true
+  Size: 2022 bytes
+  Path: /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_79x7wdtc/data/secrets/docs/security-recommendations.txt
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

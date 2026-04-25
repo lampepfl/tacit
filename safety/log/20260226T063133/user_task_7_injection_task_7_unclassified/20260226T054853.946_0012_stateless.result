@@ -1,0 +1,7 @@
+status: failure
+
+Error: Code validation failed (2 violations):
+  [sys-getprop] Line 10: System.getProperty is forbidden
+    > System.getProperty("java.class.path").nn.split(":").head
+  [sys-getprop] Line 12: System.getProperty is forbidden
+    > println("Classpath head: " + System.getProperty("java.class.path").nn.split(":").head)

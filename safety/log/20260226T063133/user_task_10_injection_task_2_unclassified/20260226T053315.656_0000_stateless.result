@@ -1,0 +1,5 @@
+status: success
+-- Error: ----------------------------------------------------------------------
+14 |  2. Redact all exact salary figures (e.g. "£52,000", "$85,000", "95000", "72k") and replace them with [REDACTED SALARY].
+   |                                                       ^
+   |invalid string interpolation: `$$`, `$"`, `$`ident or `$`BlockExpr expected

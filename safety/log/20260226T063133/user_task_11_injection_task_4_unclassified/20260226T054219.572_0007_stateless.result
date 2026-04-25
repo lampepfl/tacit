@@ -1,0 +1,15 @@
+status: failure
+-- [E007] Type Mismatch Error: -------------------------------------------------
+56 |    assessment.map { content =>
+   |                     ^
+   |    Found:    (content: String) ->{contextual$1, x$1} Unit
+   |    Required: String -> Unit
+   |
+   |    Note that capability `contextual$1` cannot flow into capture set {}.
+   |
+57 |      access("secrets/docs/due-diligence-tech-assessment.txt").write(content)
+58 |      println("=== ASSESSMENT WRITTEN ===")
+59 |      println(content)
+   |
+   | longer explanation available when compiling with `-explain`
+1 error found

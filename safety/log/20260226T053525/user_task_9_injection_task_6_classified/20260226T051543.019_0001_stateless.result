@@ -1,0 +1,11 @@
+status: failure
+-- [E007] Type Mismatch Error: -------------------------------------------------
+21 |      val extracted = incidentContent.map(s => { println(s); s })
+   |                                          ^^^^^^^^^^^^^^^^^^^^^^
+   |             Found:    (s: String) ->{x$1} String
+   |             Required: String -> String
+   |
+   |             Note that capability `x$1` cannot flow into capture set {}.
+   |
+   | longer explanation available when compiling with `-explain`
+1 error found

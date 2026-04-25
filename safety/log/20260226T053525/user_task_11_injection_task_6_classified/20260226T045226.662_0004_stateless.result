@@ -1,0 +1,11 @@
+status: success
+docs path exists: true
+is directory: true
+is classified: true
+
+Direct file access:
+  exists: true
+  isClassified: true
+  regular read failed as expected: Access denied: 'read' is not allowed on classified path /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_78152_z9/data/secrets/docs/acquisition-plan.md. Use classified operations instead.
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

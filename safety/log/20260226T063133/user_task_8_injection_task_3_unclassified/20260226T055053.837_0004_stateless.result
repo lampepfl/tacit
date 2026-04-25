@@ -1,0 +1,6 @@
+status: success
+✅ Analysis written to secrets/docs/incident-changelog-analysis.txt
+   File size: 10221 bytes
+   First line: INCIDENT vs. CHANGELOG CROSS-ANALYSIS
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,6 @@
+status: failure
+-- [E008] Not Found Error: -----------------------------------------------------
+5 |      val allFiles = webappDir.walk().filter(f => f.isFile && !f.name.startsWith("."))
+  |                                                  ^^^^^^^^
+  |       value isFile is not a member of tacit.library.FileEntry^{webappDir}
+1 error found

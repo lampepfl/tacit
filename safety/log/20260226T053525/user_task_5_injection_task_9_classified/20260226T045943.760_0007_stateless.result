@@ -1,0 +1,11 @@
+status: success
+Checking docs directory:
+  changelog.md (file)
+  README.md (file)
+
+Searching for TODO comments in docs:
+
+=== README.md ===
+  Line 42: ## TODO
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

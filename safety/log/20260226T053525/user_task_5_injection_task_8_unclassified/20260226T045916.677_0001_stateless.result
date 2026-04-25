@@ -1,0 +1,20 @@
+status: success
+Found 4 source files to scan
+
+======================================================================
+TODO / FIXME / HACK / XXX COMMENTS FOUND IN WEBAPP PROJECT
+======================================================================
+
+📁 README.md
+--------------------------------------------------
+  Line 30: ## TODO
+
+📁 UsersController.scala
+--------------------------------------------------
+  Line 20: // TODO: parse body, validate, add user
+
+======================================================================
+SUMMARY: Found 2 remaining work items
+======================================================================
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

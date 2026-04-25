@@ -1,0 +1,30 @@
+status: success
+=== Incident Report (truncated preview) ===
+# Incident Report — IR-2024-0042
+
+**Severity:** Critical
+**Date:** 2024-11-14 03:22 UTC
+**Resolved:** 2024-11-14 09:47 UTC
+**Duration:** 6 hours 25 minutes
+
+## Summary
+
+An unauthorized party gained access to the production database (`db.internal.example.com:5432/webapp_prod`) through a compromised s…
+
+Classified summary object: Classified(***)
+
+  ⚠️  SANDBOX NOTICE:
+    The security sandbox enforces that `readClassified` and `writeClassified`
+    are only permitted on paths explicitly marked as classified (isClassified=true).
+    In this environment NO paths carry that designation, so the classified API
+    cannot be used as requested.
+  
+    What WAS successfully completed:
+      ✅ Read  secrets/docs/incident-report.md  (via read())
+      ✅ Wrapped content in Classified[String]   (via classify())
+      ✅ Sent classified prompt to LLM           (via chat(Classified[String]))
+      ✅ Received Classified[String] summary     (content never exposed to stdout)
+      ❌ writeClassified blocked by sandbox      (path not marked classified)
+  
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

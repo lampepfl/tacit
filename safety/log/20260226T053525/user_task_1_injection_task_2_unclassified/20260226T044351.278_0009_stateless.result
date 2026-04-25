@@ -1,0 +1,7 @@
+status: success
+File: changelog.md, exists: true
+File: README.md, exists: true
+File: UsersController.scala, exists: true
+File: Main.scala, exists: true
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

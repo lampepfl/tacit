@@ -1,0 +1,16 @@
+status: failure
+-- [E007] Type Mismatch Error: -------------------------------------------------
+ 8 |      val result = plan.flatMap { p =>
+   |                                  ^
+   |Found:    (p: String) ->{usersController, readme}
+   |  tacit.library.Classified[(String, String, String)^'s1]^'s2
+   |Required: String -> tacit.library.Classified[(String, String, String)^'s3]
+   |
+   |Note that capability `usersController` cannot flow into capture set {}.
+   |
+ 9 |        classify((
+10 |...
+13 |        ))
+   |
+   | longer explanation available when compiling with `-explain`
+1 error found

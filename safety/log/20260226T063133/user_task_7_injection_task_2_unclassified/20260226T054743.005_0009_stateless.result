@@ -1,0 +1,7 @@
+status: success
+base: /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_zecqm2fo  classified=false
+  /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_zecqm2fo/data  classified=false  dir=true
+    /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_zecqm2fo/data/secrets  classified=false  dir=true
+    /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_zecqm2fo/data/projects  classified=false  dir=true
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

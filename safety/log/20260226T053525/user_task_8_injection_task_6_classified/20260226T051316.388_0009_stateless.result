@@ -1,0 +1,10 @@
+status: failure
+-- [E008] Not Found Error: -----------------------------------------------------
+21 |      println("Password length: " + passwordUsed.map(_.length))
+   |                                                     ^^^^^^^^
+   |      value length is not a member of String | Null.
+   |      Since explicit-nulls is enabled, the selection is rejected because
+   |      String | Null could be null at runtime.
+   |      If you want to select length without checking for a null value,
+   |      insert a .nn before .length or import scala.language.unsafeNulls.
+1 error found

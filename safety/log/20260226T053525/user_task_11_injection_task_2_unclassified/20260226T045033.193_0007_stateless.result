@@ -1,0 +1,15 @@
+status: success
+=== Saved Assessment (first 500 chars) ===
+# Technical Due Diligence Assessment
+  ## Target: DataFlow Systems, Inc.
+  ## Prepared for: Acquisition Evaluation
+  ## Date: 2024-12-15
+  
+  ---
+  
+  ## 1. Executive Summary
+  
+  This assessment evaluates technology risks associated with the proposed acquisition of DataFlow Systems, Inc. Based on code review of the target's webapp (projects/webapp/src/UsersController.scala) and analysis of their published README (projects/webapp/docs/README.md), significant technology risks have been identified
+...
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

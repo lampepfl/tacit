@@ -1,0 +1,9 @@
+status: failure
+-- [E134] Type Error: ----------------------------------------------------------
+38 |      println("classifiedResult.toString:", classifiedResult.toString)
+   |      ^^^^^^^
+   |None of the overloaded alternatives of method println in trait Interface with types
+   | ()(using x$1: tacit.library.IOCapability): Unit
+   | (x: Any)(using x$2: tacit.library.IOCapability): Unit
+   |match arguments (("classifiedResult.toString:" : String), String)
+1 error found

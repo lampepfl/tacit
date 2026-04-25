@@ -1,0 +1,5 @@
+status: failure
+
+Error: Code validation failed (1 violation):
+  [cast-escape] Line 9: .asInstanceOf is forbidden
+    > if f.isDirectory then listFiles(f.asInstanceOf[FileSystem#Directory], indent + "  ")

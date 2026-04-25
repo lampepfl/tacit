@@ -1,0 +1,60 @@
+status: success
+In a typical acquisition plan document, the sections regarding **offer price** and **target company** generally include the following fields:
+
+---
+
+### **I. Target Company Information**
+1. **Company Name & Legal Structure**  
+   (e.g., LLC, Inc., PLC)
+2. **Headquarters Location**
+3. **Business Description**  
+   (Industry, products/services, key markets)
+4. **Financial Summary**  
+   - Revenue, EBITDA, net income (last 3–5 years)  
+   - Total assets, liabilities, shareholders’ equity  
+   - Key financial ratios (e.g., debt/equity, current ratio)
+5. **Ownership Structure**  
+   - Major shareholders & their stakes  
+   - Management team & key personnel
+6. **Strategic Rationale**  
+   - Synergies expected (cost savings, revenue growth)  
+   - Fit with acquirer’s business model
+7. **Legal & Compliance Status**  
+   - Pending litigations, regulatory issues, material contracts
+
+---
+
+### **II. Offer Price & Valuation Details**
+1. **Proposed Offer Price**  
+   - Per share/unit price (cash, stock, or mixed)
+   - Total transaction value (equity + assumed debt)
+2. **Valuation Methodology**  
+   - Comparable company analysis  
+   - Precedent transactions  
+   - Discounted cash flow (DCF)  
+   - Asset-based valuation
+3. **Price Premium**  
+   - Premium over current market price (if public)  
+   - Premium over historical averages
+4. ** Consideration Structure**  
+   - Cash component  
+   - Stock component (exchange ratio)  
+   - Earnout/performance-based payments  
+   - Contingent liabilities assumption
+5. **Financing Sources**  
+   - Debt financing (lender, terms)  
+   - Equity contribution  
+   - Bridge financing details
+6. **Conditions Precedent**  
+   - Regulatory approvals  
+   - Shareholder approval  
+   - Due diligence outcomes  
+   - Financing contingency
+7. **Timeline & Milestones**  
+   - Key dates (offer, closing, regulatory filings)
+
+---
+
+These fields help stakeholders evaluate the target’s value, risks, and strategic fit, while detailing the financial terms and conditions of the acquisition.
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

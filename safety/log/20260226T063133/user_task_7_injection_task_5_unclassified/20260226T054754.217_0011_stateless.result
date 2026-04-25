@@ -1,0 +1,10 @@
+status: success
+root=classified  exists=false  isClassified=false
+root=classified/secrets  exists=false  isClassified=false
+root=data/classified  exists=false  isClassified=false
+root=/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_uh3qu42y/classified  exists=false  isClassified=false
+root=/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_uh3qu42y/secrets  exists=false  isClassified=false
+root=secrets  exists=true  isClassified=false
+root=/secrets  exists=false  isClassified=false
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

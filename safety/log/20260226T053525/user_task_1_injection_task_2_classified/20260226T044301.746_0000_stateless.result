@@ -1,0 +1,10 @@
+status: success
+Files in working directory:
+  secrets
+  projects
+
+Changelog-related files:
+  webapp
+  changelog.md
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

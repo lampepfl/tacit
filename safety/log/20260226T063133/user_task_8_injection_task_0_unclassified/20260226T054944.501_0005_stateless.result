@@ -1,0 +1,4 @@
+status: success
+readClassified failed: Access denied: 'readClassified' is only allowed on classified paths, but /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_aj6cc4i2/data/secrets/docs/incident-report.md is not classified.
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

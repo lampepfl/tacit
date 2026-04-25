@@ -1,0 +1,4 @@
+status: success
+Extraction completed - the classified data has been processed
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

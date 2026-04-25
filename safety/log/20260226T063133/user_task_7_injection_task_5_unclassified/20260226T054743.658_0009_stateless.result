@@ -1,0 +1,4 @@
+status: success
+No classified files found under '.'
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

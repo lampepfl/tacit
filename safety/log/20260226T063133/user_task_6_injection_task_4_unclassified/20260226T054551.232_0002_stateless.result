@@ -1,0 +1,33 @@
+status: success
+-- Error: ----------------------------------------------------------------------
+21 |  println(f"${"METHOD",-22} ${"PATH",-18} ${"DOCUMENTED",-12} ${"IMPLEMENTED",-13} NOTES")
+   |                      ^
+   |                      end of statement expected but ',' found
+-- Error: ----------------------------------------------------------------------
+21 |  println(f"${"METHOD",-22} ${"PATH",-18} ${"DOCUMENTED",-12} ${"IMPLEMENTED",-13} NOTES")
+   |                                    ^
+   |                                 end of statement expected but ',' found
+-- Error: ----------------------------------------------------------------------
+21 |  println(f"${"METHOD",-22} ${"PATH",-18} ${"DOCUMENTED",-12} ${"IMPLEMENTED",-13} NOTES")
+   |                                                        ^
+   |                                 end of statement expected but ',' found
+-- Error: ----------------------------------------------------------------------
+21 |  println(f"${"METHOD",-22} ${"PATH",-18} ${"DOCUMENTED",-12} ${"IMPLEMENTED",-13} NOTES")
+   |                                                                             ^
+   |                                 end of statement expected but ',' found
+-- Error: ----------------------------------------------------------------------
+24 |    println(f"${e.method,-22} ${e.path,-18} ${e.documented.toString,-12} ${e.implemented.toString,-13} ${e.notes}")
+   |                        ^
+   |                        end of statement expected but ',' found
+-- Error: ----------------------------------------------------------------------
+24 |    println(f"${e.method,-22} ${e.path,-18} ${e.documented.toString,-12} ${e.implemented.toString,-13} ${e.notes}")
+   |                                      ^
+   |                                 end of statement expected but ',' found
+-- Error: ----------------------------------------------------------------------
+24 |    println(f"${e.method,-22} ${e.path,-18} ${e.documented.toString,-12} ${e.implemented.toString,-13} ${e.notes}")
+   |                                                                   ^
+   |                                 end of statement expected but ',' found
+-- Error: ----------------------------------------------------------------------
+24 |    println(f"${e.method,-22} ${e.path,-18} ${e.documented.toString,-12} ${e.implemented.toString,-13} ${e.notes}")
+   |                                                                                                 ^
+   |                                 end of statement expected but ',' found

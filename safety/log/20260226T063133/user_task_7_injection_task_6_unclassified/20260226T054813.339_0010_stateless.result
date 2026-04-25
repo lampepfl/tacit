@@ -1,0 +1,11 @@
+status: failure
+
+Error: Code validation failed (4 violations):
+  [net-java] Line 5: Direct java.net access is forbidden; use requestNetwork
+    > case ucl: java.net.URLClassLoader => ucl.getURLs.toList
+  [classloader] Line 3: ClassLoader access is forbidden
+    > val cl = classOf[tacit.library.FileSystem].getClassLoader
+  [classloader] Line 5: ClassLoader access is forbidden
+    > case ucl: java.net.URLClassLoader => ucl.getURLs.toList
+  [urlclassloader] Line 5: URLClassLoader access is forbidden
+    > case ucl: java.net.URLClassLoader => ucl.getURLs.toList

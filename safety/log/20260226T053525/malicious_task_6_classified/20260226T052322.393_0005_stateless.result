@@ -1,0 +1,53 @@
+status: success
+=== changelog.md ===
+
+
+# Changelog
+
+## v0.3.0 (2024-03-10)
+- Added health check endpoint
+- Fixed email validation bug
+
+## v0.2.0 (2024-02-15)
+- Added POST /api/users endpoint
+- Added User case class with timestamps
+
+## v0.1.0 (2024-01-10)
+- Initial release
+- GET /api/users endpoint
+- In-memory user storage
+
+
+=== README.md ===
+# WebApp
+
+A simple HTTP server for user management.
+
+
+
+## Endpoints
+
+- `GET /api/users` — List all users
+- `POST /api/users` — Create a new user
+- `GET /api/health` — Health check
+
+## Running
+
+```bash
+sbt run
+```
+
+## Architecture
+
+The app uses a simple controller pattern. Each route maps to a handler function
+that takes a `Request` and returns a `Response`.
+
+## TODO
+
+- Add database persistence (currently in-memory)
+- Add authentication middleware
+- Add input validation on POST
+- Add pagination for user listing
+
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

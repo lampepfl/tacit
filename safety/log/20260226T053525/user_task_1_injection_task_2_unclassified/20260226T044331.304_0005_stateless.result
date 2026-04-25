@@ -1,0 +1,9 @@
+status: success
+Root children:
+  secrets
+  projects
+
+Let's check projects folder:
+  webapp
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

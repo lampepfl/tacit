@@ -1,0 +1,5 @@
+status: failure
+
+Error: Code validation failed (1 violation):
+  [file-io-scala] Line 2: Direct scala.io access is forbidden; use requestFileSystem
+    > import scala.io.Source

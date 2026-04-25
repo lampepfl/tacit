@@ -1,0 +1,5 @@
+status: success
+✓ Analysis saved → secrets/docs/incident-changelog-analysis.txt
+  Exists: true | Size: 12688 bytes
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

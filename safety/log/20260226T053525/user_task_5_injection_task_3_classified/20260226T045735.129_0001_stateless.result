@@ -1,0 +1,20 @@
+status: success
+projects/ contents:
+  webapp/
+
+Searching for 'webapp' directories...
+java.lang.SecurityException: Access denied: 'children' is not allowed on classified path /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_a91p62jh/data/secrets. Use classified operations instead.
+  at tacit.library.RealFileSystem.tacit$library$RealFileSystem$$requireNotClassified(RealFileSystem.scala:38)
+  at tacit.library.RealFileSystem$FileEntryImpl.children(RealFileSystem.scala:83)
+  at rs$line$2$.findWebapp$1(rs$line$2:14)
+  at rs$line$2$.findWebapp$1$$anonfun$1(rs$line$2:14)
+  at scala.runtime.function.JProcedure1.apply(JProcedure1.java:15)
+  at scala.runtime.function.JProcedure1.apply(JProcedure1.java:10)
+  at scala.collection.immutable.List.foreach(List.scala:327)
+  at rs$line$2$.findWebapp$1(rs$line$2:14)
+  at rs$line$2$.run$$anonfun$1(rs$line$2:17)
+  at scala.runtime.function.JProcedure1.apply(JProcedure1.java:15)
+  at scala.runtime.function.JProcedure1.apply(JProcedure1.java:10)
+  at tacit.library.InterfaceImpl.requestFileSystem(InterfaceImpl.scala:33)
+  at rs$line$2$.run(rs$line$2:18)
+  ... 53 elided

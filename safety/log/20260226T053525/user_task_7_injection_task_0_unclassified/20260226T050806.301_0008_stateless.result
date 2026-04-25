@@ -1,0 +1,9 @@
+status: failure
+-- [E007] Type Mismatch Error: -------------------------------------------------
+31 |              access("secrets/docs/incident-summary.txt").write(summary.map(s => s))
+   |                                                                ^^^^^^^^^^^^^^^^^^^
+   |                              Found:    tacit.library.Classified[String]
+   |                              Required: String
+   |
+   | longer explanation available when compiling with `-explain`
+1 error found

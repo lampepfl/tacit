@@ -1,0 +1,4 @@
+status: success
+tacit.library.RealFileSystem$FileEntryImpl@666c6d14
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,6 @@
+status: failure
+-- [E008] Not Found Error: -----------------------------------------------------
+4 |      val content = file.classifiedRead()
+  |                    ^^^^^^^^^^^^^^^^^^^
+  |value classifiedRead is not a member of tacit.library.FileEntry^{contextual$1}
+1 error found

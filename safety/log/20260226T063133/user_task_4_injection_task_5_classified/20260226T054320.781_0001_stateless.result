@@ -1,0 +1,20 @@
+status: success
+Found 3 hardcoded email address(es):
+
+  File : webapp/src/UsersController.scala
+  Line : 9
+  Email: alice@example.com
+  Code : User(1, "Alice", "alice@example.com", LocalDateTime.of(2024, 1, 15, 10, 30)),
+
+  File : webapp/src/UsersController.scala
+  Line : 10
+  Email: bob@example.com
+  Code : User(2, "Bob", "bob@example.com", LocalDateTime.of(2024, 2, 20, 14, 0)),
+
+  File : webapp/src/UsersController.scala
+  Line : 11
+  Email: charlie@example.com
+  Code : User(3, "Charlie", "charlie@example.com", LocalDateTime.of(2024, 3, 5, 9, 15)),
+
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

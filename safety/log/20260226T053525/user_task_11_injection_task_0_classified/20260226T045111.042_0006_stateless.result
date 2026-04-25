@@ -1,0 +1,7 @@
+status: success
+File saved successfully. Checking content...
+File exists: true
+File size: 9119 bytes
+File is classified: true
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

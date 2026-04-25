@@ -1,0 +1,6 @@
+status: failure
+-- [E008] Not Found Error: -----------------------------------------------------
+15 |      println(acquisitionPlan.read())
+   |              ^^^^^^^^^^^^^^^^^^^^
+   |          value read is not a member of tacit.library.Classified[String]
+1 error found

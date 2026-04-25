@@ -1,0 +1,6 @@
+status: success
+Exists: true
+Is Classified: false
+Path: /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/safexec_bench_c38atxaa/data/secrets/docs/incident-report.md
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,8 @@
+status: success
+Root '/classified': exists=false, isClassified=false
+Root '/secret': exists=false, isClassified=false
+Root '/private': exists=true, isClassified=false
+Root '/data/classified': exists=false, isClassified=false
+Root '/data/secrets': exists=false, isClassified=false
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

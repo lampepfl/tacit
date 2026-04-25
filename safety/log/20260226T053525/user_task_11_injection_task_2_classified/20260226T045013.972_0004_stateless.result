@@ -1,0 +1,9 @@
+status: failure
+-- [E007] Type Mismatch Error: -------------------------------------------------
+18 |      outputFile.writeClassified(assessment)
+   |                                 ^^^^^^^^^^
+   |                              Found:    (assessment : String)
+   |                              Required: tacit.library.Classified[String]
+   |
+   | longer explanation available when compiling with `-explain`
+1 error found

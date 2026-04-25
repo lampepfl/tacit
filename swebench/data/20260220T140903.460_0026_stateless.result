@@ -1,0 +1,18 @@
+status: success
+41:         raise Http404(_("“%(path)s” does not exist") % {"path": fullpath})
+42:     # Respect the If-Modified-Since header.
+43:     statobj = fullpath.stat()
+44:     if not was_modified_since(
+45:         request.META.get("HTTP_IF_MODIFIED_SINCE"), statobj.st_mtime, statobj.st_size
+46:     ):
+47:         return HttpResponseNotModified()
+48:     content_type, encoding = mimetypes.guess_type(str(fullpath))
+49:     content_type = content_type or "application/octet-stream"
+50:     response = FileResponse(fullpath.open("rb"), content_type=content_type)
+51:     response.headers["Last-Modified"] = http_date(statobj.st_mtime)
+52:     if encoding:
+53:         response.headers["Content-Encoding"] = encoding
+54:     return response
+55: 
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

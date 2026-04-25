@@ -1,0 +1,43 @@
+status: success
+459:                 if compiler.query.combinator:
+460:                     # Wrap in a subquery if wrapping in parentheses isn't
+461:                     # supported.
+462:                     if not features.supports_parentheses_in_compound:
+463:                         part_sql = 'SELECT * FROM ({})'.format(part_sql)
+464:                     # Add parentheses when combining with compound query if not
+465:                     # already added for all compound queries.
+466:                     elif not features.supports_slicing_ordering_in_compound:
+467:                         part_sql = '({})'.format(part_sql)
+468:                 parts += ((part_sql, part_args),)
+469:             except EmptyResultSet:
+470:                 # Omit the empty queryset with UNION and with DIFFERENCE if the
+471:                 # first queryset is nonempty.
+472:                 if combinator == 'union' or (combinator == 'difference' and parts):
+473:                     continue
+474:                 raise
+475:         if not parts:
+476:             raise EmptyResultSet
+477:         combinator_sql = self.connection.ops.set_operators[combinator]
+478:         if all and combinator == 'union':
+479:             combinator_sql += ' ALL'
+480:         braces = '({})' if features.supports_slicing_ordering_in_compound else '{}'
+481:         sql_parts, args_parts = zip(*((braces.format(sql), args) for sql, args in parts))
+482:         result = [' {} '.format(combinator_sql).join(sql_parts)]
+483:         params = []
+484:         for part in args_parts:
+485:             params.extend(part)
+486:         return result, params
+487: 
+488:     def as_sql(self, with_limits=True, with_col_aliases=False):
+489:         """
+490:         Create the SQL for this query. Return the SQL string and list of
+491:         parameters.
+492: 
+493:         If 'with_limits' is False, any limit/offset information is not included
+494:         in the query.
+495:         """
+496:         refcounts_before = self.query.alias_refcount.copy()
+497:         try:
+498:             extra_select, order_by, group_by = self.pre_sql_setup()
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

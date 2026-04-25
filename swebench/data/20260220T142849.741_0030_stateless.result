@@ -1,0 +1,8 @@
+status: success
+def _get_FIELD_display(self, field):
+        value = getattr(self, field.attname)
+        choices_dict = dict(make_hashable(field.flatchoices))
+        # force_str() to coerce lazy strings.
+        re
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

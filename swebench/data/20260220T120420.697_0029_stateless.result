@@ -1,0 +1,4 @@
+status: success
+Updated static.py with fallback case handling
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

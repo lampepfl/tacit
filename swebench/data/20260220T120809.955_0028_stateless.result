@@ -1,0 +1,9 @@
+status: success
+413:     def test_non_grouped_annotation_not_in_group_by(self):
+424:     def test_grouped_annotation_in_group_by(self):
+1142:     @skipUnlessDBFeature('supports_subqueries_in_group_by')
+1143:     def test_group_by_subquery_annotation(self):
+1159:     @skipUnlessDBFeature('supports_subqueries_in_group_by')
+1160:     def test_group_by_exists_annotation(self):
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

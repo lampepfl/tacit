@@ -1,0 +1,31 @@
+status: failure
+-- Error: ----------------------------------------------------------------------
+14 |      Deal with storing migration records in the database.
+   |           ^^^^
+   |           end of statement expected but 'with' found
+-- Error: ----------------------------------------------------------------------
+17 |      creation, it's the one thing we can't do normally via migrations.
+   |              ^
+   |              end of statement expected but ',' found
+-- Error: ----------------------------------------------------------------------
+19 |      and then have a floating model to do queries with.
+   |          ^^^^
+   |          end of statement expected but 'then' found
+-- [E040] Syntax Error: --------------------------------------------------------
+23 |      """
+   |      ^
+   |      an identifier expected, but string literal found
+-- Error: ----------------------------------------------------------------------
+29 |          Lazy load to avoid AppRegistryNotReady if installed apps import
+   |                                                 ^^
+   |                                end of statement expected but 'if' found
+-- [E018] Syntax Error: --------------------------------------------------------
+80 |          Return a dict mapping (app_name, migration_name) to Migration instances
+   |                                                                                 ^
+   |                                       expression expected but [31mfor[0m found
+   |
+   | longer explanation available when compiling with `-explain`
+-- [E040] Syntax Error: --------------------------------------------------------
+99 |          """Record that a migration was unapplied."""
+   |                                                   ^
+   |                        an identifier expected, but string literal found

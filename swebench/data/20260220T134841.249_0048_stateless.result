@@ -1,0 +1,23 @@
+status: success
+1649:         if self.remote_field.symmetrical and (
+1650:             self.remote_field.model == RECURSIVE_RELATIONSHIP_CONSTANT or
+1651:             self.remote_field.model == cls._meta.object_name
+1652:         ):
+1653:             self.remote_field.related_name = "%s_rel_+" % name
+1654:         elif self.remote_field.is_hidden():
+1655:             # If the backwards relation is disabled, replace the original
+1656:             # related_name with one generated from the m2m field name. Django
+1657:             # still uses backwards relations internally and we need to avoid
+1658:             # clashes between multiple m2m fields with related_name == '+'.
+1659:             self.remote_field.related_name = '_%s_%s_%s_+' % (
+1660:                 cls._meta.app_label,
+1661:                 cls.__name__.lower(),
+1662:                 name,
+1663:             )
+1664: 
+1665:         super().contribute_to_class(cls, name, **kwargs)
+1666: 
+1667:         # The intermediate m2m model is not auto created if:
+1668:         #  1) There is a manually specified intermediate, or
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

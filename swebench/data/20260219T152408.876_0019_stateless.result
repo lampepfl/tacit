@@ -1,0 +1,9 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = ProcessResult(
+  exitCode = 1,
+  stdout = "",
+  stderr = """  File "/tmp/test_fix.py", line 2
+    from astropy.modeling.separable import separability_matrix
+IndentationError: unexpected indent"""
+)

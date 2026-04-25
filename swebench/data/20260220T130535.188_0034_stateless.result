@@ -1,0 +1,8 @@
+status: failure
+-- [E170] Type Error: ----------------------------------------------------------
+7 |  val m = classOf[Interface].getMethod("requestFileSystem", classOf[String], classOf[Function1])
+  |                                                                                     ^^^^^^^^^
+  |                                   [T1, R] =>> T1 -> R is not a class type
+  |
+  | longer explanation available when compiling with `-explain`
+1 error found

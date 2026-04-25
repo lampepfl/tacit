@@ -1,0 +1,5 @@
+status: success
+print(f"Is subclass of RawDescriptionHelpFormatter: {issubclass(DjangoHelpFormatter, RawDescriptionHelpFormatter)}")
+
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

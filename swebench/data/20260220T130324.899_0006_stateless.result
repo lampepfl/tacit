@@ -1,0 +1,8 @@
+status: failure
+-- [E086] Syntax Error: --------------------------------------------------------
+5 |    compiler.readLines().drop(55).take(80).foreach((line, i) => println(s"${i+56}: $line"))
+  |                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |                                   Wrong number of parameters, expected: 1
+  |
+  | longer explanation available when compiling with `-explain`
+1 error found

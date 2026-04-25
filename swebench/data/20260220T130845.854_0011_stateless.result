@@ -1,0 +1,31 @@
+status: success
+1243:     def test_cleanse_setting_recurses_in_dictionary(self):
+1244:         reporter_filter = SafeExceptionReporterFilter()
+1245:         initial = {'login': 'cooper', 'password': 'secret'}
+1246:         self.assertEqual(
+1247:             reporter_filter.cleanse_setting('SETTING_NAME', initial),
+1248:             {'login': 'cooper', 'password': reporter_filter.cleansed_substitute},
+1249:         )
+1250: 
+1251:     def test_request_meta_filtering(self):
+1252:         request = self.rf.get('/', HTTP_SECRET_HEADER='super_secret')
+1253:         reporter_filter = SafeExceptionReporterFilter()
+1254:         self.assertEqual(
+1255:             reporter_filter.get_safe_request_meta(request)['HTTP_SECRET_HEADER'],
+1256:             reporter_filter.cleansed_substitute,
+1257:         )
+1258: 
+1259:     def test_exception_report_uses_meta_filtering(self):
+1260:         response = self.client.get('/raises500/', HTTP_SECRET_HEADER='super_secret')
+1261:         self.assertNotIn(b'super_secret', response.content)
+1262:         response = self.client.get(
+1263:             '/raises500/',
+1264:             HTTP_SECRET_HEADER='super_secret',
+1265:             HTTP_ACCEPT='application/json',
+1266:         )
+1267:         self.assertNotIn(b'super_secret', response.content)
+1268: 
+1269: 
+1270: class CustomExceptionReporterFilter(SafeExceptionReporterFilter):
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

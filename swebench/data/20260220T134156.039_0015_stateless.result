@@ -1,0 +1,16 @@
+status: success
+267:     def id_for_label(self, id_):
+268:         """
+269:         Return the HTML ID attribute of this Widget for use by a <label>,
+270:         given the ID of the field. Return None if no ID is available.
+271: 
+272:         This hook is necessary because some widgets have multiple HTML
+273:         elements and, thus, multiple IDs. In that case, this method should
+274:         return an ID value that corresponds to the first ID in the widget's
+275:         tags.
+276:         """
+277:         return id_
+278: 
+279:     def use_required_attribute(self, initial):
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

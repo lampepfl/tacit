@@ -1,0 +1,41 @@
+status: success
+844: 
+845: class Col(Expression):
+846: 
+847:     contains_column_references = True
+848:     possibly_multivalued = False
+849: 
+850:     def __init__(self, alias, target, output_field=None):
+851:         if output_field is None:
+852:             output_field = target
+853:         super().__init__(output_field=output_field)
+854:         self.alias, self.target = alias, target
+855: 
+856:     def __repr__(self):
+857:         alias, target = self.alias, self.target
+858:         identifiers = (alias, str(target)) if alias else (str(target),)
+859:         return '{}({})'.format(self.__class__.__name__, ', '.join(identifiers))
+860: 
+861:     def as_sql(self, compiler, connection):
+862:         alias, column = self.alias, self.target.column
+863:         identifiers = (alias, column) if alias else (column,)
+864:         sql = '.'.join(map(compiler.quote_name_unless_alias, identifiers))
+865:         return sql, []
+866: 
+867:     def relabeled_clone(self, relabels):
+868:         if self.alias is None:
+869:             return self
+870:         return self.__class__(relabels.get(self.alias, self.alias), self.target, self.output_field)
+871: 
+872:     def get_group_by_cols(self, alias=None):
+873:         return [self]
+874: 
+875:     def get_db_converters(self, connection):
+876:         if self.target == self.output_field:
+877:             return self.output_field.get_db_converters(connection)
+878:         return (self.output_field.get_db_converters(connection) +
+879:                 self.target.get_db_converters(connection))
+880: 
+881: 
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

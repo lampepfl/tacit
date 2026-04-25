@@ -1,0 +1,40 @@
+status: success
+839:         with self.assertRaisesMessage(NotImplementedError, msg):
+840:             frame.window_frame_start_end(None, None, None)
+841: 
+842:     def test_invalid_filter(self):
+843:         msg = 'Window is disallowed in the filter clause'
+844:         qs = Employee.objects.annotate(dense_rank=Window(expression=DenseRank()))
+845:         with self.assertRaisesMessage(NotSupportedError, msg):
+846:             qs.filter(dense_rank__gte=1)
+847:         with self.assertRaisesMessage(NotSupportedError, msg):
+848:             qs.annotate(inc_rank=F('dense_rank') + Value(1)).filter(inc_rank__gte=1)
+849:         with self.assertRaisesMessage(NotSupportedError, msg):
+850:             qs.filter(id=F('dense_rank'))
+851:         with self.assertRaisesMessage(NotSupportedError, msg):
+852:             qs.filter(id=Func('dense_rank', 2, function='div'))
+853:         with self.assertRaisesMessage(NotSupportedError, msg):
+854:             qs.annotate(total=Sum('dense_rank', filter=Q(name='Jones'))).filter(total=1)
+855: 
+856:     def test_conditional_annotation(self):
+857:         qs = Employee.objects.annotate(
+858:             dense_rank=Window(expression=DenseRank()),
+859:         ).annotate(
+860:             equal=Case(
+861:                 When(id=F('dense_rank'), then=Value(True)),
+862:                 default=Value(False),
+863:                 output_field=BooleanField(),
+864:             ),
+865:         )
+866:         # The SQL standard disallows referencing window functions in the WHERE
+867:         # clause.
+868:         msg = 'Window is disallowed in the filter clause'
+869:         with self.assertRaisesMessage(NotSupportedError, msg):
+870:             qs.filter(equal=True)
+871: 
+872:     def test_invalid_order_by(self):
+873:         msg = 'order_by must be either an Expression or a sequence of expressions'
+874:         with self.assertRaisesMessage(ValueError, msg):
+875:             Window(expression=Sum('power'), order_by='-horse')
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

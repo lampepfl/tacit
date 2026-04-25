@@ -1,0 +1,61 @@
+status: success
+Obtaining file:///Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/astropy__astropy-12907/repo
+  Checking if build backend supports build_editable: started
+  Checking if build backend supports build_editable: finished with status 'done'
+  Preparing editable metadata (pyproject.toml): started
+  Preparing editable metadata (pyproject.toml): finished with status 'error'
+STDERR:
+  error: subprocess-exited-with-error
+  
+  × Preparing editable metadata (pyproject.toml) did not run successfully.
+  │ exit code: 1
+  ╰─> [36 lines of output]
+      Traceback (most recent call last):
+        File "/Users/tacit/Work/SafeExecMCP/bench/.venv/lib/python3.14/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py", line 389, in <module>
+          main()
+          ~~~~^^
+        File "/Users/tacit/Work/SafeExecMCP/bench/.venv/lib/python3.14/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py", line 373, in main
+          json_out["return_val"] = hook(**hook_input["kwargs"])
+                                   ~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+        File "/Users/tacit/Work/SafeExecMCP/bench/.venv/lib/python3.14/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py", line 209, in prepare_metadata_for_build_editable
+          return hook(metadata_directory, config_settings)
+        File "/Users/tacit/Work/SafeExecMCP/bench/.venv/lib/python3.14/site-packages/setuptools/build_meta.py", line 486, in prepare_metadata_for_build_editable
+          return self.prepare_metadata_for_build_wheel(
+                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+              metadata_directory, config_settings
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+          )
+          ^
+        File "/Users/tacit/Work/SafeExecMCP/bench/.venv/lib/python3.14/site-packages/setuptools/build_meta.py", line 380, in prepare_metadata_for_build_wheel
+          self.run_setup()
+          ~~~~~~~~~~~~~~^^
+        File "/Users/tacit/Work/SafeExecMCP/bench/.venv/lib/python3.14/site-packages/setuptools/build_meta.py", line 317, in run_setup
+          exec(code, locals())
+          ~~~~^^^^^^^^^^^^^^^^
+        File "<string>", line 68, in <module>
+        File "/Users/tacit/Work/SafeExecMCP/bench/.venv/lib/python3.14/site-packages/extension_helpers/_setup_helpers.py", line 68, in get_extensions
+          for setuppkg in iter_setup_packages(srcdir, packages):
+                          ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+        File "/Users/tacit/Work/SafeExecMCP/bench/.venv/lib/python3.14/site-packages/extension_helpers/_setup_helpers.py", line 179, in iter_setup_packages
+          module = import_file(setup_package, name=packagename + ".setup_package")
+        File "/Users/tacit/Work/SafeExecMCP/bench/.venv/lib/python3.14/site-packages/extension_helpers/_utils.py", line 147, in import_file
+          loader.exec_module(mod)
+          ~~~~~~~~~~~~~~~~~~^^^^^
+        File "<frozen importlib._bootstrap_external>", line 759, in exec_module
+        File "<frozen importlib._bootstrap>", line 491, in _call_with_frames_removed
+        File "astropy/wcs/setup_package.py", line 12, in <module>
+          from setuptools.dep_util import newer_group
+      ModuleNotFoundError: No module named 'setuptools.dep_util'
+      [end of output]
+  
+  note: This error originates from a subprocess, and is likely not a problem with pip.
+error: metadata-generation-failed
+
+× Encountered error while generating package metadata.
+╰─> from file:///Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/astropy__astropy-12907/repo
+
+note: This is an issue with the package mentioned above, not pip.
+hint: See above for details.
+Exit code: 1
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

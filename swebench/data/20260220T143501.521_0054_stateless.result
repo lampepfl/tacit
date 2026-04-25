@@ -1,0 +1,5 @@
+status: success
+Pack file: pack-b044683e26b2f772448d8b312896124008df453d.pack
+Size: 283434715
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

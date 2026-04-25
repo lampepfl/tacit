@@ -1,0 +1,9 @@
+status: failure
+-- [E007] Type Mismatch Error: -------------------------------------------------
+4 |  requestFileSystem[String](".")( (fs: FileSystem) => fs.access(".").children.map(x => x.name).mkString(", ") )
+  |                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |                                  Found:    library.FileSystem -> String
+  |                                  Required: String
+  |
+  | longer explanation available when compiling with `-explain`
+1 error found

@@ -1,0 +1,10 @@
+status: success
+1284:                 value = getattr(value, key)
+1285:             value = self.queryset.get(**{key: value})
+1286:         except (ValueError, TypeError, self.queryset.model.DoesNotExist):
+1287:             raise ValidationError(self.error_messages['invalid_choice'], code='invalid_choice')
+1288:         return value
+1289: 
+1290:     def validate(self, value):
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

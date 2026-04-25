@@ -1,0 +1,12 @@
+status: success
+Exit code: 1
+Stderr (first 500):   error: subprocess-exited-with-error
+  
+  × Preparing editable metadata (pyproject.toml) did not run successfully.
+  │ exit code: 1
+  ╰─> [18 lines of output]
+      Extension astropy.io.fits._tiled_compression._compression contains source files (astropy/io/fits/_tiled_compression/src/compression.c, astropy/io/fits/_tiled_compression/src/unquantize.c) that are specified using an absolute path, which will not be supported in future.
+      running dist_info
+      creating /private/var/folders/dc/3
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

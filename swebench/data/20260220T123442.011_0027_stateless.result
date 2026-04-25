@@ -1,0 +1,7 @@
+status: success
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12470/repo/tests/admin_changelist/tests.py:937:         UnorderedObjectAdmin.ordering = ['bool', '-pk']
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12470/repo/tests/admin_changelist/tests.py:981:         OrderedObjectAdmin.ordering = ['bool', '-pk']
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12470/repo/tests/admin_changelist/tests.py:1055:             (non_total_ordering, non_total_ordering + ['-pk']),
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12470/repo/tests/ordering/models.py:23:         ordering = ('-pk',)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

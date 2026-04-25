@@ -1,0 +1,33 @@
+status: success
+0:             return [Warning(
+1:                 "Your URL pattern {} uses include with a route ending with a '$'. "
+2:                 "Remove the dollar from the route to avoid problems including "
+3:                 "URLs.".format(self.describe()),
+4:                 id='urls.W001',
+5:             )]
+6:         else:
+7:             return []
+8: 
+9:     def _compile(self, regex):
+10:         """Compile and return the given regular expression."""
+11:         try:
+12:             return re.compile(regex)
+13:         except re.error as e:
+14:             raise ImproperlyConfigured(
+15:                 '"%s" is not a valid regular expression: %s' % (regex, e)
+16:             )
+17: 
+18:     def __str__(self):
+19:         return str(self._regex)
+20: 
+21: 
+22: _PATH_PARAMETER_COMPONENT_RE = re.compile(
+23:     r'<(?:(?P<converter>[^>:]+):)?(?P<parameter>\w+)>'
+24: )
+25: 
+26: 
+27: def _route_to_regex(route, is_endpoint=False):
+28:     """
+29:     Convert a path pattern into a regular expression. Return the regular
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

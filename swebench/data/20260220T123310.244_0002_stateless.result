@@ -1,0 +1,20 @@
+status: success
+java.nio.charset.MalformedInputException: Input length = 1
+  at java.nio.charset.CoderResult.throwException(CoderResult.java:274)
+  at sun.nio.cs.StreamDecoder.implRead(StreamDecoder.java:343)
+  at sun.nio.cs.StreamDecoder.read(StreamDecoder.java:190)
+  at java.io.InputStreamReader.read(InputStreamReader.java:177)
+  at java.io.BufferedReader.fill(BufferedReader.java:162)
+  at java.io.BufferedReader.readLine(BufferedReader.java:329)
+  at java.io.BufferedReader.readLine(BufferedReader.java:396)
+  at java.nio.file.Files.readAllLines(Files.java:3415)
+  at java.nio.file.Files.readAllLines(Files.java:3453)
+  at library.RealFileSystem$FileEntryImpl.readLines(RealFileSystem.scala:72)
+  at library.FileOps$.grepRecursive$$anonfun$1(FileOps.scala:25)
+  at scala.collection.immutable.List.flatMap(List.scala:287)
+  at library.FileOps$.grepRecursive(FileOps.scala:20)
+  at library.InterfaceImpl.grepRecursive(InterfaceImpl.scala:12)
+  at rs$line$2$.run$$anonfun$1(rs$line$2:4)
+  at library.InterfaceImpl.requestFileSystem(InterfaceImpl.scala:33)
+  at rs$line$2$.run(rs$line$2:5)
+  ... 53 elided

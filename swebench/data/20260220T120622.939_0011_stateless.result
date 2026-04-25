@@ -1,0 +1,47 @@
+status: success
+807:     def values(self, *fields, **expressions):
+808:         fields += tuple(expressions)
+809:         clone = self._values(*fields, **expressions)
+810:         clone._iterable_class = ValuesIterable
+811:         return clone
+812: 
+813:     def values_list(self, *fields, flat=False, named=False):
+814:         if flat and named:
+815:             raise TypeError("'flat' and 'named' can't be used together.")
+816:         if flat and len(fields) > 1:
+817:             raise TypeError("'flat' is not valid when values_list is called with more than one field.")
+818: 
+819:         field_names = {f for f in fields if not hasattr(f, 'resolve_expression')}
+820:         _fields = []
+821:         expressions = {}
+822:         counter = 1
+823:         for field in fields:
+824:             if hasattr(field, 'resolve_expression'):
+825:                 field_id_prefix = getattr(field, 'default_alias', field.__class__.__name__.lower())
+826:                 while True:
+827:                     field_id = field_id_prefix + str(counter)
+828:                     counter += 1
+829:                     if field_id not in field_names:
+830:                         break
+831:                 expressions[field_id] = field
+832:                 _fields.append(field_id)
+833:             else:
+834:                 _fields.append(field)
+835: 
+836:         clone = self._values(*_fields, **expressions)
+837:         clone._iterable_class = (
+838:             NamedValuesListIterable if named
+839:             else FlatValuesListIterable if flat
+840:             else ValuesListIterable
+841:         )
+842:         return clone
+843: 
+844:     def dates(self, field_name, kind, order='ASC'):
+845:         """
+846:         Return a list of date objects representing all available dates for
+847:         the given field_name, scoped to 'kind'.
+848:         """
+849:         assert kind in ('year', 'month', 'week', 'day'), \
+850:             "'kind' must be one of 'year', 'month', 'week', or 'day'."
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

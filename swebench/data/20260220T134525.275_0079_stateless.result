@@ -1,0 +1,29 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = ProcessResult(
+  exitCode = 0,
+  stdout = """Total lines: 698
+Lines 45-65:
+45:         self.namespaces = [x for x in namespaces if x] if namespaces else []
+46:         self.namespace = ':'.join(self.namespaces)
+47: 
+48:         # Unwrap functools.partial objects.
+49:         while isinstance(func, functools.partial):
+50:             func = func.func
+51: 
+52:         if not hasattr(func, '__name__'):
+53:             # A class-based view
+54:             self._func_path = func.__class__.__module__ + '.' + func.__class__.__name__
+55:         else:
+56:             # A function-based view
+57:             self._func_path = func.__module__ + '.' + func.__name__
+58: 
+59:         view_path = url_name or self._func_path
+60:         self.view_name = ':'.join(self.namespaces + [view_path])
+61: 
+62:     def __getitem__(self, index):
+63:         return (self.func, self.args, self.kwargs)[index]
+64: 
+65:     def __repr__(self):""",
+  stderr = ""
+)

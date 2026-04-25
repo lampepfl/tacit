@@ -1,0 +1,6 @@
+status: success
+Total lines: 327
+Line 279 (index 278): '                    count = sql.DeleteQuery(model).delete_batch([instance.pk], self.using)'
+Line 280 (index 279): '                return count, {model._meta.label: count}'
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

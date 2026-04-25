@@ -1,0 +1,5 @@
+status: success
+0000000000000000000000000000000000000000 4139cb8d35cfcb2beba6a8c629c20016ae84cf18 noti0na1 <noti0na1@users.noreply.github.com> 1771588503 +0100	clone: from https://github.com/django/django.git
+4139cb8d35cfcb2beba6a8c629c20016ae84cf18 df46b329e0900e9e4dc1d60816c1dce6dfc1094e noti0na1 <noti0na1@users.noreply.github.com> 1771588504 +0100	checkout: moving from main to df46b329e0900e9e4dc1d60816c1dce6dfc1094e
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

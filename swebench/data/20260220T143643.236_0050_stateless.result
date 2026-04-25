@@ -1,0 +1,10 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = List(
+  "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15388/repo/django/template/backends/django.py",
+  "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15388/repo/django/template/backends/jinja2.py",
+  "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15388/repo/django/template/backends/__init__.py",
+  "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15388/repo/django/template/backends/utils.py",
+  "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15388/repo/django/template/backends/dummy.py",
+  "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15388/repo/django/template/backends/base.py"
+)

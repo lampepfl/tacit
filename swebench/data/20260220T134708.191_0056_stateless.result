@@ -1,0 +1,31 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = ProcessResult(
+  exitCode = 0,
+  stdout = """==================================================
+Test case from bug report:
+==================================================
+\n1. Company.objects.only('name').defer('name')
+Expected: only 'id' should be loaded (all other fields deferred)
+\nOriginal (buggy):
+  After only('name'): ({'name'}, False)
+  After defer('name'): (set(), False)
+\nFixed:
+  After only('name'): ({'name'}, False)
+  After defer('name'): (set(), True)
+\n2. Company.objects.only('name').defer('name').defer('country')
+Expected: only 'id' should be loaded
+\nOriginal (buggy):
+  Result: (set(), False)
+\nFixed:
+  Result: ({'country'}, True)
+\n3. Company.objects.only('name', 'country').defer('name') - should already work
+Expected: 'id' and 'country' loaded
+\nOriginal:
+  After only: ({'country', 'name'}, False)
+  After defer: ({'country'}, False)
+\nFixed:
+  After only: ({'country', 'name'}, False)
+  After defer: ({'country'}, True)""",
+  stderr = ""
+)

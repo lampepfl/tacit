@@ -1,0 +1,6 @@
+status: failure
+-- [E172] Type Error: ----------------------------------------------------------
+3 |    val result = exec("ls", List("/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15061/repo"))
+  |                                                                                                                                              ^
+  |No given instance of type library.ProcessPermission was found for parameter pp of method exec in trait Interface
+1 error found

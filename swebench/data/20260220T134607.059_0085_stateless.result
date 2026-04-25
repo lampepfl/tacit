@@ -1,0 +1,11 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = ProcessResult(
+  exitCode = 1,
+  stdout = "",
+  stderr = """Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+    print(f'{i+1}: {lines[i]}')
+                    ~~~~~^^^
+IndexError: list index out of range"""
+)

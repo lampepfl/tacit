@@ -1,0 +1,49 @@
+status: success
+Modified merge method:
+116:     @staticmethod
+117:     def merge(list_1, list_2):
+118:         """
+119:         Merge two lists while trying to keep the relative order of the elements.
+120:         Warn if the lists have the same two elements in a different relative
+121:         order.
+122: 
+123:         For static assets it can be important to have them included in the DOM
+124:         in a certain order. In JavaScript you may not be able to reference a
+125:         global or in CSS you might want to override a style.
+126:         """
+127:         # Start with a copy of list_1.
+128:         combined_list = list(list_1)
+129:         last_insert_index = len(list_1)
+130:         # Walk list_2 in reverse, inserting each element into combined_list if
+131:         # it doesn't already exist.
+132:         for path in reversed(list_2):
+133:             try:
+134:                 # Does path already exist in the list?
+135:                 index = combined_list.index(path)
+136:             except ValueError:
+137:                 # Add path to combined_list since it doesn't exist.
+138:                 combined_list.insert(last_insert_index, path)
+139:             else:
+140:                 if index > last_insert_index:
+141:                     # Find the element from list_1 that's at the highest position <= index
+142:                     list_1_elem = None
+143:                     for elem in reversed(list_1):
+144:                         if elem in combined_list:
+145:                             elem_index = combined_list.index(elem)
+146:                             if elem_index <= index:
+147:                                 list_1_elem = elem
+148:                                 break
+149:                     warnings.warn(
+150:                         'Detected duplicate Media files in an opposite order:\n'
+151:                         '%s\n%s' % (list_1_elem, combined_list[index]),
+152:                         MediaOrderConflictWarning,
+153:                     )
+154:                 # path already exists in the list. Update last_insert_index so
+155:                 # that the following elements are inserted in front of this one.
+156:                 last_insert_index = index
+157:         return combined_list
+158: 
+159:     def __add__(self, other):
+160:         combined = Media()
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

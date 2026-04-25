@@ -1,0 +1,12 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = """        """Return the value of this field in the given model instance."""
+        return getattr(obj, self.attname)
+
+
+class BooleanField(Field):
+    empty_strings_allowed = False
+    default_error_messages = {
+        'invalid': _('“%(value)s” value must be either True or False.'),
+        'invalid_nullable': _('“%(value)s” value must be either True, False, or None.'),
+    }"""

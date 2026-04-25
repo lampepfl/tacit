@@ -1,0 +1,19 @@
+status: success
+Files in nddata:
+  compat.py
+  mixins
+  tests
+  __init__.py
+  ccddata.py
+  nduncertainty.py
+  nddata.py
+  flag_collection.py
+  utils.py
+  bitmask.py
+  _testing.py
+  blocks.py
+  nddata_withmixins.py
+  nddata_base.py
+  decorators.py
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

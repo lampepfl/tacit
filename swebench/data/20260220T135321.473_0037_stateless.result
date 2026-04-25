@@ -1,0 +1,24 @@
+status: success
+1: import logging
+2: from datetime import datetime
+3: 
+4: from django.db.backends.ddl_references import (
+5:     Columns, Expressions, ForeignKeyName, IndexName, Statement, Table,
+6: )
+7: from django.db.backends.utils import names_digest, split_identifier
+8: from django.db.models import Deferrable, Index
+9: from django.db.models.sql import Query
+10: from django.db.transaction import TransactionManagementError, atomic
+11: from django.utils import timezone
+12: 
+13: logger = logging.getLogger('django.db.backends.schema')
+14: 
+15: 
+16: def _is_relevant_relation(relation, altered_field):
+17:     """
+18:     When altering the given field, must constraints on its model from the given
+19:     relation be temporarily dropped?
+20:     """
+21:     field = relation.field
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,32 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = List(
+  ".editorconfig",
+  ".eslintignore",
+  ".eslintrc",
+  ".git",
+  ".gitattributes",
+  ".github",
+  ".gitignore",
+  ".hgignore",
+  ".tx",
+  "AUTHORS",
+  "CONTRIBUTING.rst",
+  "Gruntfile.js",
+  "INSTALL",
+  "LICENSE",
+  "LICENSE.python",
+  "MANIFEST.in",
+  "README.rst",
+  "django",
+  "docs",
+  "extras",
+  "js_tests",
+  "opencode.json",
+  "package.json",
+  "scripts",
+  "setup.cfg",
+  "setup.py",
+  "tests",
+  "tox.ini"
+)

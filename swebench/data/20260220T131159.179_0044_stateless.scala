@@ -1,0 +1,1 @@
+chat("In django/db/migrations/serializer.py, what class handles serializing model fields (instances of django.db.models.Field)? Show me the serialize method and how it gets the path to the field class")

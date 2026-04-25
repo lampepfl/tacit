@@ -1,0 +1,24 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = """import copy
+import itertools
+import operator
+import warnings
+from functools import total_ordering, wraps
+
+
+class cached_property:
+    """
+    Decorator that converts a method with a single self argument into a
+    property cached on the instance.
+
+    A cached property can be made out of an existing method:
+    (e.g. ``url = cached_property(get_absolute_url)``).
+    """
+
+    name = None
+
+    @staticmethod
+    def func(instance):
+        raise TypeError(
+            "Cannot use cached_property in"""

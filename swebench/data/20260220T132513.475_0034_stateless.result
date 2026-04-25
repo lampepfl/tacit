@@ -1,0 +1,4 @@
+status: success
+Output: ['', '/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python314.zip', '/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14', '/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/lib-dynload', '/Users/tacit/Work/SafeExecMCP/bench/.venv/lib/python3.14/site-packages']
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

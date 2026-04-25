@@ -1,0 +1,8 @@
+status: success
+528:     def as_sql(self, with_limits=True, with_col_aliases=False):
+1380:     def as_sql(self):
+1505:     def as_sql(self):
+1530:     def as_sql(self):
+1658:     def as_sql(self):
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

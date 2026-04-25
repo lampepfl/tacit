@@ -1,0 +1,5 @@
+status: success
+1279:                 *cls._check_unique_together(),
+1562:     def _check_unique_together(cls):
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

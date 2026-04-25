@@ -1,0 +1,8 @@
+status: failure
+-- [E006] Not Found Error: -----------------------------------------------------
+9 |    val idx = content.indexOf(line177)
+  |                              ^^^^^^^
+  |                              Not found: line177 - did you mean line176?
+  |
+  | longer explanation available when compiling with `-explain`
+1 error found

@@ -1,0 +1,18 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = ProcessResult(
+  exitCode = 0,
+  stdout = """    try:
+        resolver_match = resolve(request.path)
+    except Http404:
+        pass
+    else:
+        obj = resolver_match.func
+
+        if hasattr(obj, '__name__'):
+            caller = obj.__name__
+        elif hasattr(obj, '__class__') and hasattr(obj.__class__, '__name__'):
+            caller = obj.__class__.__name__
+""",
+  stderr = ""
+)

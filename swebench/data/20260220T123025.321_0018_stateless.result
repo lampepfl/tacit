@@ -1,0 +1,11 @@
+status: success
+54:   @register(Tags.translation)
+55:   def check_language_settings_consistent(app_configs, **kwargs):
+56:       \"\"\"Error if language settings are not consistent with each other.\"\"\"
+57:       available_tags = {i for i, _ in settings.LANGUAGES} | {'en-us'}
+58:       if settings.LANGUAGE_CODE not in available_tags:
+59:           if settings.LANGUAGE_CODE.split('-')[0] not in available_tags:
+60:               return [E004]
+61:       return []
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

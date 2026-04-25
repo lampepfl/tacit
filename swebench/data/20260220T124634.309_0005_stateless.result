@@ -1,0 +1,4 @@
+status: success
+Directories: js_tests, tests, docs, scripts, django, extras
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

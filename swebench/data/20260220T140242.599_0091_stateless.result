@@ -1,0 +1,15 @@
+status: success
+java.lang.SecurityException: Access denied: command 'PYTHONPATH=/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14997/repo python /Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14997/repo/tests/runtests.py schema.tests.SchemaTests.test_unique -v 2' is not in allowed commands Set(python)
+  at library.CommandValidator$.validate(CommandValidator.scala:39)
+  at library.ProcessOps$.exec(ProcessOps.scala:14)
+  at library.InterfaceImpl.exec(InterfaceImpl.scala:13)
+  at rs$line$2$.run$$anonfun$1$$anonfun$1(rs$line$2:5)
+  at scala.runtime.function.JProcedure1.apply(JProcedure1.java:15)
+  at scala.runtime.function.JProcedure1.apply(JProcedure1.java:10)
+  at library.InterfaceImpl.requestExecPermission(InterfaceImpl.scala:37)
+  at rs$line$2$.run$$anonfun$1(rs$line$2:9)
+  at scala.runtime.function.JProcedure1.apply(JProcedure1.java:15)
+  at scala.runtime.function.JProcedure1.apply(JProcedure1.java:10)
+  at library.InterfaceImpl.requestFileSystem(InterfaceImpl.scala:33)
+  at rs$line$2$.run(rs$line$2:10)
+  ... 53 elided

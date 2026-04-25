@@ -1,0 +1,51 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = """This issue is in Django's migration serialization logic. The relevant code is located in:
+
+## Primary Location
+
+**`django/db/migrations/serializer.py`** - This file handles the serialization of model fields, including inner class references.
+
+Specifically, look at:
+- `ModelFieldSerializer` class
+- `FieldDeconstructSerializer` class
+- The `serialize()` function and its recursive calls
+
+## Key Functions
+
+1. **`serialize()` function** in `django/db/migrations/serializer.py`:
+   ```python
+   def serialize(obj):
+       # This is the main entry point for serialization
+       # It dispatches to appropriate serializer classes
+   ```
+
+2. **`FieldDeconstructSerializer.serialize()`**:
+   ```python
+   class FieldDeconstructSerializer(BaseSerializer):
+       def serialize(self):
+           # Handles deconstructing model fields
+           # This is where inner class field references get serialized
+   ```
+
+## The Problem
+
+When Django serializes a field defined as an inner class:
+```python
+class Outer:
+    class Inner(models.CharField):
+        pass
+```
+
+The serialization logic needs to reconstruct the import path. The issue occurs because:
+
+1. The field's `__module__` attribute points to the outer module
+2. The field's `__qualname__` should be `'Outer.Inner'` (Python 3.3+)
+3. But the serialization logic might be using `__name__` instead of `__qualname__`
+
+## Related Files
+
+- **`django/db/migrations/writer.py`** - Handles writing migration files
+- **`django/db/models/fields/__init__.py`** - Field base classes
+- **`django/utils/module_loading.py`** - Module loading utilities
+...

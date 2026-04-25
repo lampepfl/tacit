@@ -1,0 +1,60 @@
+status: success
+244:     def _check_choices(self):
+245:         if not self.choices:
+246:             return []
+247: 
+248:         def is_value(value, accept_promise=True):
+249:             return isinstance(value, (str, Promise) if accept_promise else str) or not is_iterable(value)
+250: 
+251:         if is_value(self.choices, accept_promise=False):
+252:             return [
+253:                 checks.Error(
+254:                     "'choices' must be an iterable (e.g., a list or tuple).",
+255:                     obj=self,
+256:                     id='fields.E004',
+257:                 )
+258:             ]
+259: 
+260:         # Expect [group_name, [value, display]]
+261:         for choices_group in self.choices:
+262:             try:
+263:                 group_name, group_choices = choices_group
+264:             except (TypeError, ValueError):
+265:                 # Containing non-pairs
+266:                 break
+267:             try:
+268:                 if not all(
+269:                     is_value(value) and is_value(human_name)
+270:                     for value, human_name in group_choices
+271:                 ):
+272:                     break
+273:             except (TypeError, ValueError):
+274:                 # No groups, choices in the form [value, display]
+275:                 value, human_name = group_name, group_choices
+276:                 if not is_value(value) or not is_value(human_name):
+277:                     break
+278: 
+279:             # Special case: choices=['ab']
+280:             if isinstance(choices_group, str):
+281:                 break
+282:         else:
+283:             return []
+284: 
+285:         return [
+286:             checks.Error(
+287:                 "'choices' must be an iterable containing "
+288:                 "(actual value, human readable name) tuples.",
+289:                 obj=self,
+290:                 id='fields.E005',
+291:             )
+292:         ]
+293: 
+294:     def _check_db_index(self):
+295:         if self.db_index not in (None, True, False):
+296:             return [
+297:                 checks.Error(
+298:                     "'db_index' must be None, True or False.",
+299:                     obj=self,
+300:                     id='fields.E006',
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

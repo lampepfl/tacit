@@ -1,0 +1,8 @@
+status: success
+Found 4 matches
+215:         The annotations is a dictionary of {'attname': column position} values.
+683:             if field.model in only_load and field.attname not in only_load[field.model]:
+730:         if field.is_relation and opts.ordering and getattr(field, 'attname', None) != pieces[-1] and pieces[-1] != 'pk':
+1290:             return getattr(obj, field.attname)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

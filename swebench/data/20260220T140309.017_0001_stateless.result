@@ -1,0 +1,10 @@
+status: success
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15498/repo/tests/view_tests/tests/test_static.py:83:         """Handle bogus If-Modified-Since values gracefully
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15498/repo/tests/view_tests/tests/test_static.py:99:         """Handle even more bogus If-Modified-Since values gracefully
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15498/repo/django/middleware/http.py:9:     Last-Modified header and the request has If-None-Match or If-Modified-Since,
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15498/repo/django/utils/cache.py:199:     # Step 4: Test the If-Modified-Since precondition.
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15498/repo/django/utils/cache.py:263:     Test the If-Modified-Since comparison as defined in section 3.3 of RFC 7232.
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15498/repo/django/views/static.py:42:     # Respect the If-Modified-Since header.
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15498/repo/django/views/static.py:119:       This is the value of the If-Modified-Since header.  If this is None,
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

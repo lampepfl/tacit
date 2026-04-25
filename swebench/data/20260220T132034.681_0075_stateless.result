@@ -1,0 +1,51 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = ProcessResult(
+  exitCode = 0,
+  stdout = """diff --git a/django/db/migrations/autodetector.py b/django/db/migrations/autodetector.py
+index 89e2dceeaf..18a587339c 100644
+--- a/django/db/migrations/autodetector.py
++++ b/django/db/migrations/autodetector.py
+@@ -421,6 +421,14 @@ class MigrationAutodetector:
+                 operation.name_lower == dependency[1].lower() and
+                 (operation.order_with_respect_to or "").lower() != dependency[2].lower()
+             )
++        # order_with_respect_to being set for a field
++        elif dependency[2] is not None and dependency[3] == "order_wrt_set":
++            return (
++                isinstance(operation, operations.AlterOrderWithRespectTo) and
++                operation.name_lower == dependency[1].lower() and
++                operation.order_with_respect_to is not None and
++                operation.order_with_respect_to.lower() == dependency[2].lower()
++            )
+         # Field is removed and part of an index/unique_together
+         elif dependency[2] is not None and dependency[3] == "foo_together_change":
+             return (
+@@ -1015,12 +1023,26 @@ class MigrationAutodetector:
+     def generate_added_indexes(self):
+         for (app_label, model_name), alt_indexes in self.altered_indexes.items():
+             for index in alt_indexes['added_indexes']:
++                dependencies = []
++                if '_order' in index.fields:
++                    # The _order field is created by AlterOrderWithRespectTo.
++                    # Make sure the index is created after that operation.
++                    new_model_state = self.to_state.models[app_label, model_name]
++                    order_with_respect_to = new_model_state.options.get('order_with_respect_to')
++                    if order_with_respect_to:
++                        dependencies.append((
++                            app_label,
++                            model_name,
++                            order_with_respect_to,
++                            'order_wrt_set',
++                        ))
+                 self.add_operation(
+                     app_label,
+                     operations.AddIndex(
+                         model_name=model_name,
+                         index=index,
+-                    )
++                    ),
++                    dependencies=dependencies,
+                 )
+ 
+...

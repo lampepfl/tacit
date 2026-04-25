@@ -1,0 +1,52 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = """
+class NonCapture(list):
+    """Represent a non-capturing group in the pattern string."""
+
+
+def normalize(pattern):
+    r"""
+    Given a reg-exp pattern, normalize it to an iterable of forms that
+    suffice for reverse matching. This does the following:
+
+    (1) For any repeating sections, keeps the minimum number of occurrences
+        permitted (this means zero for optional groups).
+    (2) If an optional group includes parameters, include one occurrence of
+        that group (along with the zero occurrence case from step (1)).
+    (3) Select the first (essentially an arbitrary) element from any character
+        class. Select an arbitrary character for any unordered class (e.g. '.'
+        or '\w') in the pattern.
+    (4) Ignore look-ahead and look-behind assertions.
+    (5) Raise an error on any disjunctive ('|') constructs.
+
+    Django's URLs for forward resolving are either all positional arguments or
+    all keyword arguments. That is assumed here, as well. Although reverse
+    resolving can be done using positional args when keyword args are
+    specified, the two cannot be mixed in the same reverse() call.
+    """
+    # Do a linear scan to work out the special features of this pattern. The
+    # idea is that we scan once here and collect all the information we need to
+    # make future decisions.
+    result = []
+    non_capturing_groups = []
+    consume_next = True
+    pattern_iter = next_char(iter(pattern))
+    num_args = 0
+
+    # A "while" loop is used here because later on we need to be able to peek
+    # at the next character and possibly go around without consuming another
+    # one at the top of the loop.
+    try:
+        ch, escaped = next(pattern_iter)
+    except StopIteration:
+        return [('', [])]
+
+    try:
+        while True:
+            if escaped:
+                result.append(ch)
+            elif ch == '.':
+                # Replace "any character" with an arbitrary representative.
+                result.append(".")
+...

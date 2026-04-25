@@ -1,0 +1,5 @@
+status: failure
+
+Error: Code validation failed (1 violation):
+  [sys-getprop] Line 6: System.getProperty is forbidden
+    > java.lang.System.getProperty("user.dir")

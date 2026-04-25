@@ -1,0 +1,23 @@
+status: success
+BaseReloader starts at: 6747
+watch_dir starts at: 7473
+Content between them:
+class BaseReloader:
+    def __init__(self):
+          self.extra_files = set()
+          self.directory_globs = defaultdict(set)
+          self._stop_condition = threading.Event()
+          # Add the main script file (e.g., manage.py) to extra files to watch.
+          # This ensures changes to the main script are detected when running
+          # with `python manage.py runserver` (as opposed to `python -m django`).
+          if sys.argv[0]:
+              script_path = pathlib.Path(sys.argv[0])
+              if script_path.exists():
+                  self.extra_files.add(script_path)
+        self.extra_files = set()
+        self.directory_globs = defaultdict(set)
+        self._stop_condition = threading.Event()
+
+    
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

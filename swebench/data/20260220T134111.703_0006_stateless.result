@@ -1,0 +1,43 @@
+status: success
+125: 
+126:     def __rmul__(self, other):
+127:         return self._combine(other, self.MUL, True)
+128: 
+129:     def __rtruediv__(self, other):
+130:         return self._combine(other, self.DIV, True)
+131: 
+132:     def __rmod__(self, other):
+133:         return self._combine(other, self.MOD, True)
+134: 
+135:     def __rpow__(self, other):
+136:         return self._combine(other, self.POW, True)
+137: 
+138:     def __rand__(self, other):
+139:         raise NotImplementedError(
+140:             "Use .bitand() and .bitor() for bitwise logical operations."
+141:         )
+142: 
+143:     def __ror__(self, other):
+144:         raise NotImplementedError(
+145:             "Use .bitand() and .bitor() for bitwise logical operations."
+146:         )
+147: 
+148: 
+149: @deconstructible
+150: class BaseExpression:
+151:     """Base class for all query expressions."""
+152: 
+153:     # aggregate specific fields
+154:     is_summary = False
+155:     _output_field_resolved_to_none = False
+156:     # Can the expression be used in a WHERE clause?
+157:     filterable = True
+158:     # Can the expression can be used as a source expression in Window?
+159:     window_compatible = False
+160: 
+161:     def __init__(self, output_field=None):
+162:         if output_field is not None:
+163:             self.output_field = output_field
+164: 
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,53 @@
+status: success
+1130:                 MigrationRecorder, 'has_table',
+1131:                 autospec=True, side_effect=patched_has_table) as has_table:
+1132:             with self.temporary_migration_module() as migration_dir:
+1133:                 call_command("makemigrations", "migrations", verbosity=0)
+1134:                 initial_file = os.path.join(migration_dir, "0001_initial.py")
+1135:                 self.assertTrue(os.path.exists(initial_file))
+1136:                 self.assertEqual(has_table.call_count, 1)  # 'default' is checked
+1137: 
+1138:                 # Router says not to migrate 'other' so consistency shouldn't
+1139:                 # be checked.
+1140:                 with self.settings(DATABASE_ROUTERS=['migrations.routers.TestRouter']):
+1141:                     call_command('makemigrations', 'migrations', verbosity=0)
+1142:                 self.assertEqual(has_table.call_count, 2)  # 'default' again
+1143: 
+1144:                 # With a router that doesn't prohibit migrating 'other',
+1145:                 # consistency is checked.
+1146:                 with self.settings(DATABASE_ROUTERS=['migrations.routers.DefaultOtherRouter']):
+1147:                     with self.assertRaisesMessage(Exception, 'Other connection'):
+1148:                         call_command('makemigrations', 'migrations', verbosity=0)
+1149:                 self.assertEqual(has_table.call_count, 4)  # 'default' and 'other'
+1150: 
+1151:                 # With a router that doesn't allow migrating on any database,
+1152:                 # no consistency checks are made.
+1153:                 with self.settings(DATABASE_ROUTERS=['migrations.routers.TestRouter']):
+1154:                     with mock.patch.object(TestRouter, 'allow_migrate', return_value=False) as allow_migrate:
+1155:                         call_command('makemigrations', 'migrations', verbosity=0)
+1156:                 allow_migrate.assert_any_call('other', 'migrations', model_name='UnicodeModel')
+1157:                 # allow_migrate() is called with the correct arguments.
+1158:                 self.assertGreater(len(allow_migrate.mock_calls), 0)
+1159:                 called_aliases = set()
+1160:                 for mock_call in allow_migrate.mock_calls:
+1161:                     _, call_args, call_kwargs = mock_call
+1162:                     connection_alias, app_name = call_args
+1163:                     called_aliases.add(connection_alias)
+1164:                     # Raises an error if invalid app_name/model_name occurs.
+1165:                     apps.get_app_config(app_name).get_model(call_kwargs['model_name'])
+1166:                 self.assertEqual(called_aliases, set(connections))
+1167:                 self.assertEqual(has_table.call_count, 4)
+1168: 
+1169:     def test_failing_migration(self):
+1170:         # If a migration fails to serialize, it shouldn't generate an empty file. #21280
+1171:         apps.register_model('migrations', UnserializableModel)
+1172: 
+1173:         with self.temporary_migration_module() as migration_dir:
+1174:             with self.assertRaisesMessage(ValueError, 'Cannot serialize'):
+1175:                 call_command("makemigrations", "migrations", verbosity=0)
+1176: 
+1177:             initial_file = os.path.join(migration_dir, "0001_initial.py")
+1178:             self.assertFalse(os.path.exists(initial_file))
+1179: 
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

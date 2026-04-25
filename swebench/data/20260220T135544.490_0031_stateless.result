@@ -1,0 +1,8 @@
+status: success
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15213/repo/django/db/models/expressions.py:383:     def select_format(self, compiler, sql, params):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15213/repo/django/db/models/expressions.py:1219:     def select_format(self, compiler, sql, params):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15213/repo/django/db/models/lookups.py:167:     def select_format(self, compiler, sql, params):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15213/repo/django/db/models/fields/__init__.py:409:     def select_format(self, compiler, sql, params):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15213/repo/django/db/models/sql/where.py:213:     def select_format(self, compiler, sql, params):
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

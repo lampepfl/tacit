@@ -1,0 +1,39 @@
+status: success
+165:     def can_fast_delete(self, objs, from_field=None):
+166:         """
+167:         Determine if the objects in the given queryset-like or single object
+168:         can be fast-deleted. This can be done if there are no cascades, no
+169:         parents and no signal listeners for the object class.
+170: 
+171:         The 'from_field' tells where we are coming from - we need this to
+172:         determine if the objects are in fact to be deleted. Allow also
+173:         skipping parent -> child -> parent chain preventing fast delete of
+174:         the child.
+175:         """
+176:         if from_field and from_field.remote_field.on_delete is not CASCADE:
+177:             return False
+178:         if hasattr(objs, '_meta'):
+179:             model = objs._meta.model
+180:         elif hasattr(objs, 'model') and hasattr(objs, '_raw_delete'):
+181:             model = objs.model
+182:         else:
+183:             return False
+184:         if self._has_signal_listeners(model):
+185:             return False
+186:         # The use of from_field comes from the need to avoid cascade back to
+187:         # parent when parent delete is cascading to child.
+188:         opts = model._meta
+189:         return (
+190:             all(link == from_field for link in opts.concrete_model._meta.parents.values()) and
+191:             # Foreign keys pointing to this model.
+192:             all(
+193:                 related.field.remote_field.on_delete is DO_NOTHING
+194:                 for related in get_candidate_relations_to_delete(opts)
+195:             ) and (
+196:                 # Something like generic foreign key.
+197:                 not any(hasattr(field, 'bulk_related_objects') for field in opts.private_fields)
+198:             )
+199:         )
+200: 
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

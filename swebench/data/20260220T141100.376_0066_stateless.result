@@ -1,0 +1,26 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = List(
+  "        # In practice this shouldn't occur, however, it's possible that a",
+  "        # directory that doesn't exist yet is being watched. If it's outside of",
+  "        # sys.path then this will end up a new root. How to handle this isn't",
+  "        # clear: Not adding the root will likely break when subscribing to the",
+  "        # changes, however, as this is currently an internal API,  no files",
+  "        # will be being watched outside of sys.path. Fixing this by checking",
+  "        # inside watch_glob() and watch_dir() is expensive, instead this could",
+  "        # could fall back to the StatReloader if this case is detected? For",
+  "        # now, watching its parent, if possible, is sufficient.",
+  "        if not root.exists():",
+  "            if not root.parent.exists():",
+  "                logger.warning('Unable to watch root dir %s as neither it or its parent exist.', root)",
+  "                return",
+  "            root = root.parent",
+  "        result = self.client.query('watch-project', str(root.absolute()))",
+  "        if 'warning' in result:",
+  "            logger.warning('Watchman warning: %s', result['warning'])",
+  "        logger.debug('Watchman watch-project result: %s', result)",
+  "        return result['watch'], result.get('relative_path')",
+  "",
+  "    @functools.lru_cache",
+  "    def _get_clock(self, root):"
+)

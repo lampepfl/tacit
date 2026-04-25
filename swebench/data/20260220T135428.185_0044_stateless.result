@@ -1,0 +1,34 @@
+status: success
+161: 
+162:     @property
+163:     def contains_expressions(self):
+164:         return bool(self.expressions)
+165: 
+166:     def _get_condition_sql(self, model, schema_editor):
+167:         if self.condition is None:
+168:             return None
+169:         query = Query(model=model, alias_cols=False)
+170:         where = query.build_where(self.condition)
+171:         compiler = query.get_compiler(connection=schema_editor.connection)
+172:         sql, params = where.as_sql(compiler, schema_editor.connection)
+173:         return sql % tuple(schema_editor.quote_value(p) for p in params)
+174: 
+175:     def _get_index_expressions(self, model, schema_editor):
+176:         if not self.expressions:
+177:             return None
+178:         index_expressions = []
+179:         for expression in self.expressions:
+180:             index_expression = IndexExpression(expression)
+181:             index_expression.set_wrapper_classes(schema_editor.connection)
+182:             index_expressions.append(index_expression)
+183:         return ExpressionList(*index_expressions).resolve_expression(
+184:             Query(model, alias_cols=False),
+185:         )
+186: 
+187:     def constraint_sql(self, model, schema_editor):
+188:         fields = [model._meta.get_field(field_name) for field_name in self.fields]
+189:         include = [model._meta.get_field(field_name).column for field_name in self.include]
+190:         condition = self._get_condition_sql(model, schema_editor)
+191:         expressions = self._get_index_expressions(model, schema_editor)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

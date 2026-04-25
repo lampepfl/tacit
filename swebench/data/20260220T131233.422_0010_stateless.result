@@ -1,0 +1,42 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = List(
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13265/repo/django/db/migrations/autodetector.py",
+    lineNumber = 190,
+    line = "        self.generate_altered_order_with_respect_to()"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13265/repo/django/db/migrations/autodetector.py",
+    lineNumber = 417,
+    line = "        # order_with_respect_to being unset for a field"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13265/repo/django/db/migrations/autodetector.py",
+    lineNumber = 422,
+    line = "                (operation.order_with_respect_to or \"\").lower() != dependency[2].lower()"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13265/repo/django/db/migrations/autodetector.py",
+    lineNumber = 554,
+    line = "            order_with_respect_to = model_state.options.pop('order_with_respect_to', None)"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13265/repo/django/db/migrations/autodetector.py",
+    lineNumber = 657,
+    line = "            if order_with_respect_to:"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13265/repo/django/db/migrations/autodetector.py",
+    lineNumber = 662,
+    line = "                        order_with_respect_to=order_with_respect_to,"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13265/repo/django/db/migrations/autodetector.py",
+    lineNumber = 665,
+    line = "                        (app_label, model_name, order_with_respect_to, True),"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13265/repo/django/db/migrations/autodetector.py",
+    lineNumber = 906,
+...

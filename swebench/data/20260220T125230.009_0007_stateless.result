@@ -1,0 +1,9 @@
+status: failure
+
+Error: Code validation failed (3 violations):
+  [file-io-java] Line 4: Direct java.io access is forbidden; use requestFileSystem
+    > import java.io._
+  [file-io-nio] Line 3: Direct java.nio access is forbidden; use requestFileSystem
+    > import java.nio.file._
+  [file-io-nio] Line 7: Direct java.nio access is forbidden; use requestFileSystem
+    > val p = java.nio.file.Files.list(Paths.get("/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12908/repo"))

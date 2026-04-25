@@ -1,0 +1,11 @@
+status: success
+stdout: other: (AND: ('x__in', dict_keys([])))
+other.children: [('x__in', dict_keys([]))]
+obj: (AND: ('x__in', dict_keys([])))
+obj.children: [('x__in', dict_keys([]))]
+other.children after mod: [('x__in', dict_keys([]))]
+obj.children: [('x__in', dict_keys([])), 'test']
+stderr: 
+exitCode: 0
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

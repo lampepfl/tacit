@@ -1,0 +1,71 @@
+status: success
+# Licensed under a 3-clause BSD style license - see LICENSE.rst
+# This module implements the Arithmetic mixin to the NDData class.
+
+import warnings
+from copy import deepcopy
+
+import numpy as np
+
+from astropy.nddata.nduncertainty import NDUncertainty
+from astropy.units import dimensionless_unscaled
+from astropy.utils import format_doc, sharedmethod
+from astropy.utils.exceptions import AstropyUserWarning
+from astropy.utils.masked import Masked
+
+__all__ = ["NDArithmeticMixin"]
+
+# Global so it doesn't pollute the class dict unnecessarily:
+
+# Docstring templates for add, subtract, multiply, divide methods.
+_arit_doc = """
+    Performs {name} by evaluating ``self`` {op} ``operand``.
+
+    Parameters
+    ----------
+    operand, operand2 : `NDData`-like instance
+        If ``operand2`` is ``None`` or not given it will perform the operation
+        ``self`` {op} ``operand``.
+        If ``operand2`` is given it will perform ``operand`` {op} ``operand2``.
+        If the method was called on a class rather than on the instance
+        ``operand2`` must be given.
+
+    propagate_uncertainties : `bool` or ``None``, optional
+        If ``None`` the result will have no uncertainty. If ``False`` the
+        result will have a copied version of the first operand that has an
+        uncertainty. If ``True`` the result will have a correctly propagated
+        uncertainty from the uncertainties of the operands but this assumes
+        that the uncertainties are `NDUncertainty`-like. Default is ``True``.
+
+        .. versionchanged:: 1.2
+            This parameter must be given as keyword-parameter. Using it as
+            positional parameter is deprecated.
+            ``None`` was added as valid parameter value.
+
+    handle_mask : callable, ``'first_found'`` or ``None``, optional
+        If ``None`` the result will have no mask. If ``'first_found'`` the
+        result will have a copied version of the first operand that has a
+        mask). If it is a callable then the specified callable must
+        create the results ``mask`` and if necessary provide a copy.
+        Default is `numpy.logical_or`.
+
+        .. versionadded:: 1.2
+
+    handle_meta : callable, ``'first_found'`` or ``None``, optional
+        If ``None`` the result will have no meta. If ``'first_found'`` the
+        result will have a copied version of the first operand that has a
+        (not empty) meta. If it is a callable then the specified callable must
+        create the results ``meta`` and if necessary provide a copy.
+        Default is ``None``.
+
+        .. versionadded:: 1.2
+
+    compare_wcs : callable, ``'first_found'`` or ``None``, optional
+        If ``None`` the result will have no wcs and no comparison between
+        the wcs of the operands is made. If ``'first_found'`` the
+        result will have a copied version of the first operand that has a
+        wcs. If it is a callable then the specified callable must
+        compare the ``wcs``. The resulting ``wcs`` will be like if ``False``
+    
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

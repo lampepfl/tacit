@@ -1,0 +1,48 @@
+status: success
+151:             "Vary",
+152:         ):
+153:             if header in response:
+154:                 new_response.headers[header] = response.headers[header]
+155: 
+156:         # Preserve cookies as per the cookie specification: "If a proxy server
+157:         # receives a response which contains a Set-cookie header, it should
+158:         # propagate the Set-cookie header to the client, regardless of whether
+159:         # the response was 304 (Not Modified) or 200 (OK).
+160:         # https://curl.haxx.se/rfc/cookie_spec.html
+161:         new_response.cookies = response.cookies
+162:     return new_response
+163: 
+164: 
+165: def get_conditional_response(request, etag=None, last_modified=None, response=None):
+166:     # Only return conditional responses on successful requests.
+167:     if response and not (200 <= response.status_code < 300):
+168:         return response
+169: 
+170:     # Get HTTP request headers.
+171:     if_match_etags = parse_etags(request.META.get("HTTP_IF_MATCH", ""))
+172:     if_unmodified_since = request.META.get("HTTP_IF_UNMODIFIED_SINCE")
+173:     if_unmodified_since = if_unmodified_since and parse_http_date_safe(
+174:         if_unmodified_since
+175:     )
+176:     if_none_match_etags = parse_etags(request.META.get("HTTP_IF_NONE_MATCH", ""))
+177:     if_modified_since = request.META.get("HTTP_IF_MODIFIED_SINCE")
+178:     if_modified_since = if_modified_since and parse_http_date_safe(if_modified_since)
+179: 
+180:     # Step 1 of section 6 of RFC 7232: Test the If-Match precondition.
+181:     if if_match_etags and not _if_match_passes(etag, if_match_etags):
+182:         return _precondition_failed(request)
+183: 
+184:     # Step 2: Test the If-Unmodified-Since precondition.
+185:     if (
+186:         not if_match_etags
+187:         and if_unmodified_since
+188:         and not _if_unmodified_since_passes(last_modified, if_unmodified_since)
+189:     ):
+190:         return _precondition_failed(request)
+191: 
+192:     # Step 3: Test the If-None-Match precondition.
+193:     if if_none_match_etags and not _if_none_match_passes(etag, if_none_match_etags):
+194:         if request.method in ("GET", "HEAD"):
+195:             return _not_modified(request, response)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

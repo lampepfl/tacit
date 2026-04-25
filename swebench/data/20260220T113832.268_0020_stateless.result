@@ -1,0 +1,22 @@
+status: success
+513:         """
+514:         # If only one mask is present we need not bother about any type checks
+515:         if (
+516:             self.mask is None and operand is not None and operand.mask is None
+517:         ) or handle_mask is None:
+518:             return None
+519:         elif self.mask is None and operand is not None:
+520:             # Make a copy so there is no reference in the result.
+521:         elif self.mask is not None and operand is not None and operand.mask is None:
+522:             # Make a copy so there is no reference in the result.
+523:             return deepcopy(self.mask)
+524:             return deepcopy(operand.mask)
+525:         elif operand is None:
+526:             return deepcopy(self.mask)
+527:         else:
+528:             # Now lets calculate the resulting mask (operation enforces copy)
+529:             return handle_mask(self.mask, operand.mask, **kwds)
+530: 
+531:     def _arithmetic_wcs(self, operation, operand, compare_wcs, **kwds):
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

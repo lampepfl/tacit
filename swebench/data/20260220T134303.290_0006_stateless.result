@@ -1,0 +1,10 @@
+status: success
+78:         self._non_form_errors = None
+296:         if self._non_form_errors is None:
+298:         return self._non_form_errors
+333:         self._non_form_errors.
+336:         self._non_form_errors = self.error_class()
+353:             self._non_form_errors.append(error)
+383:             self._non_form_errors = self.error_class(e.error_list)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,24 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = List(
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15388/repo/django/template/autoreload.py",
+    lineNumber = 12,
+    line = "def get_template_directories():"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15388/repo/django/template/autoreload.py",
+    lineNumber = 45,
+    line = "    for directory in get_template_directories():"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15388/repo/django/template/autoreload.py",
+    lineNumber = 51,
+    line = "    for template_dir in get_template_directories():"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15388/repo/django/template/autoreload.py",
+    lineNumber = 52,
+    line = "        if template_dir in file_path.parents:"
+  )
+)

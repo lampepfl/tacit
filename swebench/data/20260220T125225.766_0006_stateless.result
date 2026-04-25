@@ -1,0 +1,10 @@
+status: failure
+-- [E081] Type Error: ----------------------------------------------------------
+2 |  requestFileSystem("/tmp") { root =>
+  |                              ^^^^
+  |                          Missing parameter type
+  |
+  |                          I could not infer the type of the parameter root
+  |                          Expected type for the whole anonymous function:
+  |                            Any
+1 error found

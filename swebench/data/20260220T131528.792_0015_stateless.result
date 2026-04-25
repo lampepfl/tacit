@@ -1,0 +1,73 @@
+status: success
+1691:             if reuse is not None:
+1692:                 reuse.update(join_list)
+1693:             return self._get_col(targets[0], join_info.targets[0], join_list[-1])
+1694: 
+1695:     def split_exclude(self, filter_expr, can_reuse, names_with_path):
+1696:         """
+1697:         When doing an exclude against any kind of N-to-many relation, we need
+1698:         to use a subquery. This method constructs the nested query, given the
+1699:         original exclude filter (filter_expr) and the portion up to the first
+1700:         N-to-many relation field.
+1701: 
+1702:         For example, if the origin filter is ~Q(child__name='foo'), filter_expr
+1703:         is ('child__name', 'foo') and can_reuse is a set of joins usable for
+1704:         filters in the original query.
+1705: 
+1706:         We will turn this into equivalent of:
+1707:             WHERE NOT (pk IN (SELECT parent_id FROM thetable
+1708:                               WHERE name = 'foo' AND parent_id IS NOT NULL))
+1709: 
+1710:         It might be worth it to consider using WHERE NOT EXISTS as that has
+1711:         saner null handling, and is easier for the backend's optimizer to
+1712:         handle.
+1713:         """
+1714:         filter_lhs, filter_rhs = filter_expr
+1715:         if isinstance(filter_rhs, OuterRef):
+1716:             filter_expr = (filter_lhs, OuterRef(filter_rhs))
+1717:         elif isinstance(filter_rhs, F):
+1718:             filter_expr = (filter_lhs, OuterRef(filter_rhs.name))
+1719:         # Generate the inner query.
+1720:         query = Query(self.model)
+1721:         query._filtered_relations = self._filtered_relations
+1722:         query.add_filter(filter_expr)
+1723:         query.clear_ordering(True)
+1724:         # Try to have as simple as possible subquery -> trim leading joins from
+1725:         # the subquery.
+1726:         trimmed_prefix, contains_louter = query.trim_start(names_with_path)
+1727: 
+1728:         # Add extra check to make sure the selected field will not be null
+1729:         # since we are adding an IN <subquery> clause. This prevents the
+1730:         # database from tripping over IN (...,NULL,...) selects and returning
+1731:         # nothing
+1732:         col = query.select[0]
+1733:         select_field = col.target
+1734:         alias = col.alias
+1735:         if self.is_nullable(select_field):
+1736:             lookup_class = select_field.get_lookup('isnull')
+1737:             lookup = lookup_class(select_field.get_col(alias), False)
+1738:             query.where.add(lookup, AND)
+1739:         if alias in can_reuse:
+1740:             pk = select_field.model._meta.pk
+1741:             # Need to add a restriction so that outer query's filters are in effect for
+1742:             # the subquery, too.
+1743:             query.bump_prefix(self)
+1744:             lookup_class = select_field.get_lookup('exact')
+1745:             # Note that the query.select[0].alias is different from alias
+1746:             # due to bump_prefix above.
+1747:             lookup = lookup_class(pk.get_col(query.select[0].alias),
+1748:                                   pk.get_col(alias))
+1749:             query.where.add(lookup, AND)
+1750:             query.external_aliases[alias] = True
+1751: 
+1752:         condition, needed_inner = self.build_filter(
+1753:             ('%s__in' % trimmed_prefix, query),
+1754:             current_negated=True, branch_negated=True, can_reuse=can_reuse)
+1755:         if contains_louter:
+1756:             or_null_condition, _ = self.build_filter(
+1757:                 ('%s__isnull' % trimmed_prefix, True),
+1758:                 current_negated=True, branch_negated=True, can_reuse=can_reuse)
+1759:             condition.add(or_null_condition, OR)
+1760:             # Note that the end result will be:
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

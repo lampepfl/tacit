@@ -1,0 +1,24 @@
+status: success
+Exit code: 1
+Stdout: 
+Stderr: Traceback (most recent call last):
+  File "<string>", line 6, in <module>
+    import astropy.nddata.mixins.ndarithmetic as ndarithmetic
+  File "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/astropy__astropy-14995/repo/astropy/__init__.py", line 176, in <module>
+    _initialize_astropy()
+    ~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/astropy__astropy-14995/repo/astropy/__init__.py", line 150, in _initialize_astropy
+    raise ImportError(
+    ...<7 lines>...
+    ) from None
+ImportError: You appear to be trying to import astropy from within a source checkout or from an editable installation without building the extension modules first. Either run:
+
+  pip install -e .
+
+or
+
+  python setup.py build_ext --inplace
+
+to make sure the extension modules are built 
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

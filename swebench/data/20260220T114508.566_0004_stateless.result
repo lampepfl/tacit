@@ -1,0 +1,7 @@
+status: success
+test_ndarithmetic.py
+  test_ndio.py
+  __init__.py
+  test_ndslicing.py
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

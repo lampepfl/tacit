@@ -1,0 +1,28 @@
+status: success
+1749:         # instantiated. This proves clean() checks the database during clean() rather
+1750:         # than caching it at time of instantiation.
+1751:         Category.objects.get(url='6th').delete()
+1752:         with self.assertRaises(ValidationError):
+1753:             f.clean([c6.id])
+1754: 
+1755:     def test_model_multiple_choice_required_false(self):
+1756:         f = forms.ModelMultipleChoiceField(Category.objects.all(), required=False)
+1757:         self.assertIsInstance(f.clean([]), EmptyQuerySet)
+1758:         self.assertIsInstance(f.clean(()), EmptyQuerySet)
+1759:         with self.assertRaises(ValidationError):
+1760:             f.clean(['0'])
+1761:         with self.assertRaises(ValidationError):
+1762:             f.clean([str(self.c3.id), '0'])
+1763:         with self.assertRaises(ValidationError):
+1764:             f.clean([str(self.c1.id), '0'])
+1765: 
+1766:         # queryset can be changed after the field is created.
+1767:         f.queryset = Category.objects.exclude(name='Third')
+1768:         self.assertEqual(list(f.choices), [
+1769:             (self.c1.pk, 'Entertainment'),
+1770:             (self.c2.pk, "It's a test")])
+1771:         self.assertQuerysetEqual(f.clean([self.c2.id]), ["It's a test"])
+1772:         with self.assertRaises(ValidationError):
+1773:             f.clean([self.c3.id])
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,29 @@
+status: success
+866:         return str(self.value_from_object(obj))
+867: 
+868:     def _get_flatchoices(self):
+869:         """Flattened version of choices tuple."""
+870:         if self.choices is None:
+871:             return []
+872:         flat = []
+873:         for choice, value in self.choices:
+874:             if isinstance(value, (list, tuple)):
+875:                 flat.extend(value)
+876:             else:
+877:                 flat.append((choice, value))
+878:         return flat
+879:     flatchoices = property(_get_flatchoices)
+880: 
+881:     def save_form_data(self, instance, data):
+882:         setattr(instance, self.name, data)
+883: 
+884:     def formfield(self, form_class=None, choices_form_class=None, **kwargs):
+885:         """Return a django.forms.Field instance for this field."""
+886:         defaults = {
+887:             'required': not self.blank,
+888:             'label': capfirst(self.verbose_name),
+889:             'help_text': self.help_text,
+890:         }
+891:         if self.has_default():
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

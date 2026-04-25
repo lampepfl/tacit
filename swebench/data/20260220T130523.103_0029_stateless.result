@@ -1,0 +1,9 @@
+status: success
+1 warning found
+def run()(using x$1: IOCapability): Any
+-- Warning: --------------------------------------------------------------------
+3 |  val req = requestFileSystem _
+  |            ^^^^^^^^^^^^^^^^^^^
+  |The trailing ` _` for eta-expansion is unnecessary;
+  |the compiler performs eta-expansion automatically, so you can write the function value directly instead.
+val res0: Any = Lambda$3329/0x00000005018d8900@44f9345c

@@ -1,0 +1,73 @@
+status: success
+531:             self._populate()
+532:         return name in self._callback_strs
+533: 
+534:     def resolve(self, path):
+535:         path = str(path)  # path may be a reverse_lazy object
+536:         tried = []
+537:         match = self.pattern.match(path)
+538:         if match:
+539:             new_path, args, kwargs = match
+540:             for pattern in self.url_patterns:
+541:                 try:
+542:                     sub_match = pattern.resolve(new_path)
+543:                 except Resolver404 as e:
+544:                     sub_tried = e.args[0].get('tried')
+545:                     if sub_tried is not None:
+546:                         tried.extend([pattern] + t for t in sub_tried)
+547:                     else:
+548:                         tried.append([pattern])
+549:                 else:
+550:                     if sub_match:
+551:                         # Merge captured arguments in match with submatch
+552:                         sub_match_dict = {**kwargs, **self.default_kwargs}
+553:                         # Update the sub_match_dict with the kwargs from the sub_match.
+554:                         sub_match_dict.update(sub_match.kwargs)
+555:                         # If there are *any* named groups, ignore all non-named groups.
+556:                         # Otherwise, pass all non-named arguments as positional arguments.
+557:                         sub_match_args = sub_match.args
+558:                         if not sub_match_dict:
+559:                             sub_match_args = args + sub_match.args
+560:                         current_route = '' if isinstance(pattern, URLPattern) else str(pattern.pattern)
+561:                         return ResolverMatch(
+562:                             sub_match.func,
+563:                             sub_match_args,
+564:                             sub_match_dict,
+565:                             sub_match.url_name,
+566:                             [self.app_name] + sub_match.app_names,
+567:                             [self.namespace] + sub_match.namespaces,
+568:                             self._join_route(current_route, sub_match.route),
+569:                         )
+570:                     tried.append([pattern])
+571:             raise Resolver404({'tried': tried, 'path': new_path})
+572:         raise Resolver404({'path': path})
+573: 
+574:     @cached_property
+575:     def urlconf_module(self):
+576:         if isinstance(self.urlconf_name, str):
+577:             return import_module(self.urlconf_name)
+578:         else:
+579:             return self.urlconf_name
+580: 
+581:     @cached_property
+582:     def url_patterns(self):
+583:         # urlconf_module might be a valid set of patterns, so we default to it
+584:         patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+585:         try:
+586:             iter(patterns)
+587:         except TypeError:
+588:             msg = (
+589:                 "The included URLconf '{name}' does not appear to have any "
+590:                 "patterns in it. If you see valid patterns in the file then "
+591:                 "the issue is probably caused by a circular import."
+592:             )
+593:             raise ImproperlyConfigured(msg.format(name=self.urlconf_name))
+594:         return patterns
+595: 
+596:     def resolve_error_handler(self, view_type):
+597:         callback = getattr(self.urlconf_module, 'handler%s' % view_type, None)
+598:         if not callback:
+599:             # No handler specified in file; use lazy import, since
+600:             # django.conf.urls imports this file.
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

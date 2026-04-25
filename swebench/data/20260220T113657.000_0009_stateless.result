@@ -1,0 +1,13 @@
+status: success
+241:     if isinstance(right, Model):
+242:         cright = _coord_matrix(right, 'right', noutp)
+243:     else:
+244:         cright = np.zeros((noutp, right.shape[1]))
+245:         cright[-right.shape[0]:, -right.shape[1]:] = right
+246: 
+247:     return np.hstack([cleft, cright])
+248: 
+249: 
+250: def _cdot(left, right):
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

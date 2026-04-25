@@ -1,0 +1,52 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = """    """Base class for all field types"""
+
+    # Designates whether empty strings fundamentally are allowed at the
+    # database level.
+    empty_strings_allowed = True
+    empty_values = list(validators.EMPTY_VALUES)
+
+    # These track each time a Field instance is created. Used to retain order.
+    # The auto_creation_counter is used for fields that Django implicitly
+    # creates, creation_counter is used for all user-specified fields.
+    creation_counter = 0
+    auto_creation_counter = -1
+    default_validators = []  # Default set of validators
+    default_error_messages = {
+        'invalid_choice': _('Value %(value)r is not a valid choice.'),
+        'null': _('This field cannot be null.'),
+        'blank': _('This field cannot be blank.'),
+        'unique': _('%(model_name)s with this %(field_label)s '
+                    'already exists.'),
+        # Translators: The 'lookup_type' is one of 'date', 'year' or 'month'.
+        # Eg: "Title must be unique for pub_date year"
+        'unique_for_date': _("%(field_label)s must be unique for "
+                             "%(date_field_label)s %(lookup_type)s."),
+    }
+    system_check_deprecated_details = None
+    system_check_removed_details = None
+
+    # Field flags
+    hidden = False
+
+    many_to_many = None
+    many_to_one = None
+    one_to_many = None
+    one_to_one = None
+    related_model = None
+
+    descriptor_class = DeferredAttribute
+
+    # Generic field type description, usually overridden by subclasses
+    def _description(self):
+        return _('Field of type: %(field_type)s') % {
+            'field_type': self.__class__.__name__
+        }
+    description = property(_description)
+
+    def __init__(self, verbose_name=None, name=None, primary_key=False,
+                 max_length=None, unique=False, blank=False, null=False,
+                 db_index=False, rel=None, default=NOT_PROVIDED, editable=True,
+                 serialize=True, unique_for_date=None, unique_for_month=None,
+...

@@ -1,0 +1,9 @@
+status: failure
+-- [E007] Type Mismatch Error: -------------------------------------------------
+9 |  result.apply(())
+  |               ^^
+  |               Found:    Unit
+  |               Required: library.FileSystem
+  |
+  | longer explanation available when compiling with `-explain`
+1 error found

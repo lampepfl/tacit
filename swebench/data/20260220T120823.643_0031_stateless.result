@@ -1,0 +1,4 @@
+status: success
+2661:         query.group_by = ['parent_id']
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,29 @@
+status: success
+170:     for regex in RFC1123_DATE, RFC850_DATE, ASCTIME_DATE:
+171:         m = regex.match(date)
+172:         if m is not None:
+173:             break
+174:     else:
+175:         raise ValueError("%r is not in a valid HTTP date format" % date)
+176:     try:
+177:         year = int(m.group('year'))
+178:           if year < 100:
+179:               current_year = datetime.datetime.utcnow().year
+180:               year += (current_year // 100) * 100
+181:               if year > current_year + 50:
+182:                   year -= 100
+183:           month = MONTHS.index(m.group('mon').lower()) + 1
+184:         day = int(m.group('day'))
+185:         hour = int(m.group('hour'))
+186:         min = int(m.group('min'))
+187:         sec = int(m.group('sec'))
+188:         result = datetime.datetime(year, month, day, hour, min, sec)
+189:         return calendar.timegm(result.utctimetuple())
+190:     except Exception as exc:
+191:         raise ValueError("%r is not a valid date" % date) from exc
+192: 
+193: 
+194: def parse_http_date_safe(date):
+195:     """
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

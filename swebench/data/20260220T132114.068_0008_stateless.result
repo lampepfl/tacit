@@ -1,0 +1,21 @@
+status: success
+184: class ManagementUtility:
+185:     """
+186:     Encapsulate the logic of the django-admin and manage.py utilities.
+187:     """
+188:     def __init__(self, argv=None):
+189:         self.argv = argv or sys.argv[:]
+190:         self.prog_name = os.path.basename(self.argv[0])
+191:         if self.prog_name == '__main__.py':
+192:             self.prog_name = 'python -m django'
+193:         self.settings_exception = None
+194: 
+195:     def main_help_text(self, commands_only=False):
+196:         """Return the script's main help text, as a string."""
+197:         if commands_only:
+198:             usage = sorted(get_commands())
+199:         else:
+200:             usage = [
+201:                 "",
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

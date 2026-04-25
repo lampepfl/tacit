@@ -1,0 +1,42 @@
+status: success
+1142:     def _constraint_names(self, model, column_names=None, unique=None,
+1143:                           primary_key=None, index=None, foreign_key=None,
+1144:                           check=None, type_=None, exclude=None):
+1145:         """Return all constraint names matching the columns and conditions."""
+1146:         if column_names is not None:
+1147:             column_names = [
+1148:                 self.connection.introspection.identifier_converter(name)
+1149:                 for name in column_names
+1150:             ]
+1151:         with self.connection.cursor() as cursor:
+1152:             constraints = self.connection.introspection.get_constraints(cursor, model._meta.db_table)
+1153:         result = []
+1154:         for name, infodict in constraints.items():
+1155:             if column_names is None or column_names == infodict['columns']:
+1156:                 if unique is not None and infodict['unique'] != unique:
+1157:                     continue
+1158:                 if primary_key is not None and infodict['primary_key'] != primary_key:
+1159:                     continue
+1160:                 if index is not None and infodict['index'] != index:
+1161:                     continue
+1162:                 if check is not None and infodict['check'] != check:
+1163:                     continue
+1164:                 if foreign_key is not None and not infodict['foreign_key']:
+1165:                     continue
+1166:                 if type_ is not None and infodict['type'] != type_:
+1167:                     continue
+1168:                 if not exclude or name not in exclude:
+1169:                     result.append(name)
+1170:         return result
+1171: 
+1172:     def _delete_primary_key(self, model, strict=False):
+1173:         constraint_names = self._constraint_names(model, primary_key=True)
+1174:         if strict and len(constraint_names) != 1:
+1175:             raise ValueError('Found wrong number (%s) of PK constraints for %s' % (
+1176:                 len(constraint_names),
+1177:                 model._meta.db_table,
+1178:             ))
+1179:         for constraint_name in constraint_names:
+1180:             self.execute(self._delete_primary_key_sql(model, constraint_name))
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

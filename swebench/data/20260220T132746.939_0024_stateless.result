@@ -1,0 +1,21 @@
+status: success
+=== Current error messages (lines 1189-1195) ===
+1189:     # actually use any of ChoiceField's implementation.
+1190:     default_error_messages = {
+1191:         'invalid_choice': _('Select a valid choice. That choice is not one of'
+1192:         'invalid_choice': _('Select a valid choice. %(value)s is not one of the'
+1193:     iterator = ModelChoiceIterator
+1194: 
+1195:     def __init__(self, queryset, *, empty_label="---------",
+
+=== ModelMultipleChoiceField error messages ===
+1305:         'invalid_list': _('Enter a list of values.'),
+1306:         'invalid_choice': _('Select a valid choice. %(value)s is not one of the'
+1307:                             ' available choices.'),
+1308:         'invalid_pk_value': _('“%(pk)s” is not a valid value.')
+1309:     }
+1310: 
+1311:     def __init__(self, queryset, **kwargs):
+1312:         super().__init__(queryset, empty_label=None, **kwargs)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

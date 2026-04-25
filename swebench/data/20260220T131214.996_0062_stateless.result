@@ -1,0 +1,6 @@
+status: success
+Ref.get_group_by_cols:
+def get_group_by_cols(self, alias=None):
+        return self.source.get_group_by_cols(alias=self.ref
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

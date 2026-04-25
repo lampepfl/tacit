@@ -1,0 +1,31 @@
+status: success
+Exit code: 0
+Output: Obtaining file:///Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13710/repo
+  Installing build dependencies: started
+  Installing build dependencies: finished with status 'done'
+  Checking if build backend supports build_editable: started
+  Checking if build backend supports build_editable: finished with status 'done'
+  Getting requirements to build editable: started
+  Getting requirements to build editable: finished with status 'done'
+  Preparing editable metadata (pyproject.toml): started
+  Preparing editable metadata (pyproject.toml): finished with status 'done'
+Collecting asgiref>=3.3.2 (from Django==4.0.dev20210908093206)
+  Using cached asgiref-3.11.1-py3-none-any.whl.metadata (9.3 kB)
+Collecting pytz (from Django==4.0.dev20210908093206)
+  Using cached pytz-2025.2-py2.py3-none-any.whl.metadata (22 kB)
+Collecting sqlparse>=0.2.2 (from Django==4.0.dev20210908093206)
+  Using cached sqlparse-0.5.5-py3-none-any.whl.metadata (4.7 kB)
+Using cached asgiref-3.11.1-py3-none-any.whl (24 kB)
+Using cached sqlparse-0.5.5-py3-none-any.whl (46 kB)
+Using cached pytz-2025.2-py2.py3-none-any.whl (509 kB)
+Building wheels for collected packages: Django
+  Building editable for Django (pyproject.toml): started
+  Building editable for Django (pyproject.toml): finished with status 'done'
+  Created wheel for Django: filename=django-4.0.dev20210908093206-0.editable-py3-none-any.whl size=26778 sha256=d0f72377c1cfd126ca7eb036a0bc47c66503092a370bc3beea3598a7c28b4768
+  Stored in directory: /private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/pip-ephem-wheel-cache-s9rt1iig/wheels/4e/31/e1/d870685c1a9a977496fc7b1c02859057ee1b079dc50db12421
+Successfully built Django
+Installing collected packages: pytz, sqlparse, asgiref, Django
+
+Successfully installed Django-4.0.dev20210908093206 asgiref-3.11.1 pytz-2025.2 sqlparse-0.5.5
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

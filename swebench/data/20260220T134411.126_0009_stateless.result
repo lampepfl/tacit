@@ -1,0 +1,13 @@
+status: success
+309:     @property
+310:     def identity(self):
+311:         return super().identity + (
+312:             self.through,
+313:             make_hashable(self.through_fields),
+314:             self.db_constraint,
+315:         )
+316: 
+317:     def get_related_field(self):
+318:         """
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

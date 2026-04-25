@@ -1,0 +1,94 @@
+status: success
+710:             qs = self._chain()
+711:         return {getattr(obj, field_name): obj for obj in qs}
+712: 
+713:     def delete(self):
+714:         """Delete the records in the current QuerySet."""
+715:         self._not_support_combined_queries('delete')
+716:         assert not self.query.is_sliced, \
+717:             "Cannot use 'limit' or 'offset' with delete."
+718: 
+719:         if self._fields is not None:
+720:             raise TypeError("Cannot call delete() after .values() or .values_list()")
+721: 
+722:         del_query = self._chain()
+723: 
+724:         # The delete is actually 2 queries - one to find related objects,
+725:         # and one to delete. Make sure that the discovery of related
+726:         # objects is performed on the same database as the deletion.
+727:         del_query._for_write = True
+728: 
+729:         # Disable non-supported fields.
+730:         del_query.query.select_for_update = False
+731:         del_query.query.select_related = False
+732:         del_query.query.clear_ordering(force_empty=True)
+733: 
+734:         collector = Collector(using=del_query.db)
+735:         collector.collect(del_query)
+736:         deleted, _rows_count = collector.delete()
+737: 
+738:         # Clear the result cache, in case this QuerySet gets reused.
+739:         self._result_cache = None
+740:         return deleted, _rows_count
+741: 
+742:     delete.alters_data = True
+743:     delete.queryset_only = True
+744: 
+745:     def _raw_delete(self, using):
+746:         """
+747:         Delete objects found from the given queryset in single direct SQL
+748:         query. No signals are sent and there is no protection for cascades.
+749:         """
+750:         query = self.query.clone()
+751:         query.__class__ = sql.DeleteQuery
+752:         cursor = query.get_compiler(using).execute_sql(CURSOR)
+753:         if cursor:
+754:             with cursor:
+755:                 return cursor.rowcount
+756:         return 0
+757:     _raw_delete.alters_data = True
+758: 
+759:     def update(self, **kwargs):
+760:         """
+761:         Update all elements in the current QuerySet, setting all the given
+762:         fields to the appropriate values.
+763:         """
+764:         self._not_support_combined_queries('update')
+765:         assert not self.query.is_sliced, \
+766:             "Cannot update a query once a slice has been taken."
+767:         self._for_write = True
+768:         query = self.query.chain(sql.UpdateQuery)
+769:         query.add_update_values(kwargs)
+770:         # Clear any annotations so that they won't be present in subqueries.
+771:         query.annotations = {}
+772:         with transaction.mark_for_rollback_on_error(using=self.db):
+773:             rows = query.get_compiler(self.db).execute_sql(CURSOR)
+774:         self._result_cache = None
+775:         return rows
+776:     update.alters_data = True
+777: 
+778:     def _update(self, values):
+779:         """
+780:         A version of update() that accepts field objects instead of field names.
+781:         Used primarily for model saving and not intended for use by general
+782:         code (it requires too much poking around at model internals to be
+783:         useful at that level).
+784:         """
+785:         assert not self.query.is_sliced, \
+786:             "Cannot update a query once a slice has been taken."
+787:         query = self.query.chain(sql.UpdateQuery)
+788:         query.add_update_fields(values)
+789:         # Clear any annotations so that they won't be present in subqueries.
+790:         query.annotations = {}
+791:         self._result_cache = None
+792:         return query.get_compiler(self.db).execute_sql(CURSOR)
+793:     _update.alters_data = True
+794:     _update.queryset_only = False
+795: 
+796:     def exists(self):
+797:         if self._result_cache is None:
+798:             return self.query.has_results(using=self.db)
+799:         return bool(self._result_cache)
+800: 
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

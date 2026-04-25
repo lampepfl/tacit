@@ -1,0 +1,56 @@
+status: success
+748:     def contribute_to_class(self, cls, name, private_only=False):
+749:         """
+750:         Register the field with the model class it belongs to.
+751: 
+752:         If private_only is True, create a separate instance of this field
+753:         for every subclass of cls, even if cls is not an abstract model.
+754:         """
+755:         self.set_attributes_from_name(name)
+756:         self.model = cls
+757:         cls._meta.add_field(self, private=private_only)
+758:         if self.column:
+759:             # Don't override classmethods with the descriptor. This means that
+760:             # if you have a classmethod and a field with the same name, then
+761:             # such fields can't be deferred (we don't have a check for this).
+762:             if not getattr(cls, self.attname, None):
+763:                 setattr(cls, self.attname, self.descriptor_class(self))
+764:         if self.choices is not None:
+765:             setattr(cls, 'get_%s_display' % self.name,
+766:                     partialmethod(cls._get_FIELD_display, field=self))
+767: 
+768:     def get_filter_kwargs_for_object(self, obj):
+769:         """
+770:         Return a dict that when passed as kwargs to self.model.filter(), would
+771:         yield all instances having the same value for this field as obj has.
+772:         """
+773:         return {self.name: getattr(obj, self.attname)}
+774: 
+775:     def get_attname(self):
+776:         return self.name
+777: 
+778:     def get_attname_column(self):
+779:         attname = self.get_attname()
+780:         column = self.db_column or attname
+781:         return attname, column
+782: 
+783:     def get_internal_type(self):
+784:         return self.__class__.__name__
+785: 
+786:     def pre_save(self, model_instance, add):
+787:         """Return field's value just before saving."""
+788:         return getattr(model_instance, self.attname)
+789: 
+790:     def get_prep_value(self, value):
+791:         """Perform preliminary non-db specific value checks and conversions."""
+792:         if isinstance(value, Promise):
+793:             value = value._proxy____cast()
+794:         return value
+795: 
+796:     def get_db_prep_value(self, value, connection, prepared=False):
+797:         """
+798:         Return field's value prepared for interacting with the database backend.
+799: 
+800:         Used by the default implementations of get_db_prep_save().
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

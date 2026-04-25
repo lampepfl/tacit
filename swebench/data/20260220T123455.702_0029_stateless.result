@@ -1,0 +1,7 @@
+status: failure
+-- [E018] Syntax Error: --------------------------------------------------------
+3 |   /django__django val matches = grepRecursive("/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12470/repo/tests/ordering", "ChildArticle", "*.py")
+  |                   ^^^
+  |                   expression expected but [31mval[0m found
+  |
+  | longer explanation available when compiling with `-explain`

@@ -1,0 +1,19 @@
+status: success
+Found generate_added_indexes at line 1015
+1015:     def generate_added_indexes(self):
+1016:         for (app_label, model_name), alt_indexes in self.altered_indexes.items():
+1017:             for index in alt_indexes['added_indexes']:
+1018:                 self.add_operation(
+1019:                     app_label,
+1020:                     operations.AddIndex(
+1021:                         model_name=model_name,
+1022:                         index=index,
+1023:                     )
+1024:                 )
+1025: 
+1026:     def generate_removed_indexes(self):
+1027:         for (app_label, model_name), alt_indexes in self.altered_indexes.items():
+1028:             for index in alt_indexes['removed_indexes']:
+1029:                 self.add_operation(
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

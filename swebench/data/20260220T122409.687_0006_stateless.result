@@ -1,0 +1,42 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = List(
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12184/repo/django/urls/resolvers.py",
+    lineNumber = 33,
+    line = "    def __init__(self, func, args, kwargs, url_name=None, app_names=None, namespaces=None, route=None):"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12184/repo/django/urls/resolvers.py",
+    lineNumber = 36,
+    line = "        self.kwargs = kwargs"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12184/repo/django/urls/resolvers.py",
+    lineNumber = 58,
+    line = "        return (self.func, self.args, self.kwargs)[index]"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12184/repo/django/urls/resolvers.py",
+    lineNumber = 61,
+    line = "        return \"ResolverMatch(func=%s, args=%s, kwargs=%s, url_name=%s, app_names=%s, namespaces=%s, route=%s)\" % ("
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12184/repo/django/urls/resolvers.py",
+    lineNumber = 62,
+    line = "            self._func_path, self.args, self.kwargs, self.url_name,"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12184/repo/django/urls/resolvers.py",
+    lineNumber = 158,
+    line = "            # If there are any named groups, use those as kwargs, ignoring"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12184/repo/django/urls/resolvers.py",
+    lineNumber = 161,
+    line = "            kwargs = {k: v for k, v in match.groupdict().items() if v is not None}"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12184/repo/django/urls/resolvers.py",
+    lineNumber = 162,
+...

@@ -1,0 +1,7 @@
+requestFileSystem("/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12284/repo") { 
+  val f = access("/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12284/repo/django/db/models/fields/__init__.py")
+  val content = f.read()
+  val start = content.indexOf("def contribute_to_class")
+  val sub = content.substring(start, start + 2000)
+  println(sub.substring(0, 1000))
+}

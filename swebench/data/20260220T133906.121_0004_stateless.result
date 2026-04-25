@@ -1,0 +1,6 @@
+status: success
+Exists class at: List(GrepMatch(/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14017/repo/django/db/models/expressions.py,1150,class Exists(Subquery):))
+__rand__ matches: List(GrepMatch(/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14017/repo/django/db/models/expressions.py,139,    def __rand__(self, other):))
+__ror__ matches: List(GrepMatch(/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14017/repo/django/db/models/expressions.py,144,    def __ror__(self, other):))
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

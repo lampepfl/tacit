@@ -1,0 +1,63 @@
+status: success
+1: 
+2: 
+3: class Article(models.Model):
+4:     CHOICES = (
+5:         (1, 'first'),
+6:         (2, 'second'),
+7:     )
+8:     headline = models.CharField(max_length=100, default='Default headline')
+9:     pub_date = models.DateTimeField()
+10:     status = models.IntegerField(blank=True, null=True, choices=CHOICES)
+11:     misc_data = models.CharField(max_length=100, blank=True)
+12:     article_text = models.TextField()
+13: 
+14:     class Meta:
+15:         ordering = ('pub_date', 'headline')
+16:         # A utf-8 verbose name (Ångström's Articles) to test they are valid.
+17:         verbose_name = "\xc3\x85ngstr\xc3\xb6m's Articles"
+18: 
+19:     def __str__(self):
+20:         return self.headline
+21: 
+22: 
+23: class Movie(models.Model):
+24:     # Test models with non-default primary keys / AutoFields #5218
+25:     movie_id = models.AutoField(primary_key=True)
+26:     name = models.CharField(max_length=60)
+27: 
+28: 
+29: class Party(models.Model):
+30:     when = models.DateField(null=True)
+31: 
+32: 
+33: class Event(models.Model):
+34:     when = models.DateTimeField()
+35: 
+36: 
+37: class Department(models.Model):
+38:     id = models.PositiveIntegerField(primary_key=True)
+39:     name = models.CharField(max_length=200)
+40: 
+41:     def __str__(self):
+42:         return self.name
+43: 
+44: 
+45: class Worker(models.Model):
+46:     department = models.ForeignKey(Department, models.CASCADE)
+47:     name = models.CharField(max_length=200)
+48: 
+49:     def __str__(self):
+50:         return self.name
+51: 
+52: 
+53: class NonAutoPK(models.Model):
+54:     name = models.CharField(max_length=10, primary_key=True)
+55: 
+56: 
+57: # Chained foreign keys with to_field produce incorrect query #18432
+58: class Model1(models.Model):
+59:     pkey = models.IntegerField(unique=True, db_index=True)
+60: 
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,39 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = """1289:                 *cls._check_unique_together(),
+1290:                 *cls._check_indexes(databases),
+1291:                 *cls._check_ordering(),
+1292:                 *cls._check_constraints(databases),
+1293:                 *cls._check_default_pk(),
+1294:             ]
+1295: 
+1296:         return errors
+1297: 
+1298:     @classmethod
+1299:     def _check_default_pk(cls):
+1300:         if (
+1301:             cls._meta.pk.auto_created and
+1302:             not settings.is_overridden('DEFAULT_AUTO_FIELD') and
+1303:             not cls._meta.app_config._is_default_auto_field_overridden and
+1304:             not getattr(cls._meta.pk.remote_field, 'parent_link', False)
+1305:         ):
+1306:             return [
+1307:                 checks.Warning(
+1308:                     f"Auto-created primary key used when not defining a "
+1309:                     f"primary key type, by default "
+1310:                     f"'{settings.DEFAULT_AUTO_FIELD}'.",
+1311:                     hint=(
+1312:                         f"Configure the DEFAULT_AUTO_FIELD setting or the "
+1313:                         f"{cls._meta.app_config.__class__.__qualname__}."
+1314:                         f"default_auto_field attribute to point to a subclass "
+1315:                         f"of AutoField, e.g. 'django.db.models.BigAutoField'."
+1316:                     ),
+1317:                     obj=cls,
+1318:                     id='models.W042',
+1319:                 ),
+1320:             ]
+1321:         return []
+1322: 
+1323:     @classmethod
+1324:     def _check_swappable(cls):
+1325:         """Check if the swapped model exists.""""""

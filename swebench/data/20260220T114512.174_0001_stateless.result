@@ -1,0 +1,27 @@
+status: success
+ASCII IO contents:
+  ipac.py
+  qdp.py
+  misc.py
+  ecsv.py
+  connect.py
+  ui.py
+  fastbasic.py
+  html.py
+  tests
+  __init__.py
+  docs.py
+  core.py
+  cparser.pyx
+  cds.py
+  basic.py
+  mrt.py
+  sextractor.py
+  fixedwidth.py
+  latex.py
+  rst.py
+  setup_package.py
+  daophot.py
+  src
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,8 @@
+status: success
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12708/repo/django/db/backends/postgresql/introspection.py:137:     def get_constraints(self, cursor, table_name):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12708/repo/django/db/backends/oracle/introspection.py:194:     def get_constraints(self, cursor, table_name):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12708/repo/django/db/backends/sqlite3/introspection.py:342:     def get_constraints(self, cursor, table_name):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12708/repo/django/db/backends/mysql/introspection.py:167:     def get_constraints(self, cursor, table_name):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12708/repo/django/db/backends/base/introspection.py:171:     def get_constraints(self, cursor, table_name):
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

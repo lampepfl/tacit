@@ -1,0 +1,24 @@
+status: success
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11905/repo/django/contrib/admin/views/main.py:113:         lookup_params = params.copy()  # a dictionary of the query string
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11905/repo/django/contrib/admin/views/main.py:117:             if ignored in lookup_params:
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11905/repo/django/contrib/admin/views/main.py:118:                 del lookup_params[ignored]
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11905/repo/django/contrib/admin/views/main.py:119:         return lookup_params
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11905/repo/django/contrib/admin/views/main.py:122:         lookup_params = self.get_filters_params()
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11905/repo/django/contrib/admin/views/main.py:125:         for key, value in lookup_params.items():
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11905/repo/django/contrib/admin/views/main.py:133:                 spec = list_filter(request, lookup_params, self.model, self.model_admin)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11905/repo/django/contrib/admin/views/main.py:148:                 lookup_params_count = len(lookup_params)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11905/repo/django/contrib/admin/views/main.py:150:                     field, request, lookup_params,
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11905/repo/django/contrib/admin/views/main.py:153:                 # field_list_filter_class removes any lookup_params it
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11905/repo/django/contrib/admin/views/main.py:156:                 if lookup_params_count > len(lookup_params):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11905/repo/django/contrib/admin/views/main.py:164:             year = lookup_params.pop('%s__year' % self.date_hierarchy, None)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11905/repo/django/contrib/admin/views/main.py:166:                 month = lookup_params.pop('%s__month' % self.date_hierarchy, None)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11905/repo/django/contrib/admin/views/main.py:167:                 day = lookup_params.pop('%s__day' % self.date_hierarchy, None)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11905/repo/django/contrib/admin/views/main.py:186:                 lookup_params.update({
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11905/repo/django/contrib/admin/views/main.py:192:         # have been removed from lookup_params, which now only contains other
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11905/repo/django/contrib/admin/views/main.py:198:             for key, value in lookup_params.items():
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11905/repo/django/contrib/admin/views/main.py:199:                 lookup_params[key] = prepare_lookup_value(key, value)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11905/repo/django/contrib/admin/views/main.py:201:             return filter_specs, bool(filter_specs), lookup_params, use_distinct
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11905/repo/django/contrib/admin/views/main.py:422:         (self.filter_specs, self.has_filters, remaining_lookup_params,
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11905/repo/django/contrib/admin/views/main.py:436:             qs = qs.filter(**remaining_lookup_params)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

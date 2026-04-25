@@ -1,0 +1,7 @@
+status: success
+stdout: Test 1 - other empty: (AND: ('x__in', dict_keys([])))
+Test 2 - self empty: (AND: ('x__in', dict_keys([])))
+stderr: 
+exitCode: 0
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

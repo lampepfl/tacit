@@ -1,0 +1,22 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = ProcessResult(
+  exitCode = 0,
+  stdout = """diff --git a/django/urls/resolvers.py b/django/urls/resolvers.py
+index 9b00e24509..0e54444e42 100644
+--- a/django/urls/resolvers.py
++++ b/django/urls/resolvers.py
+@@ -45,6 +45,10 @@ class ResolverMatch:
+         self.namespaces = [x for x in namespaces if x] if namespaces else []
+         self.namespace = ':'.join(self.namespaces)
+ 
++        # Unwrap functools.partial objects.
++        while isinstance(func, functools.partial):
++            func = func.func
++
+         if not hasattr(func, '__name__'):
+             # A class-based view
+             self._func_path = func.__class__.__module__ + '.' + func.__class__.__name__
+""",
+  stderr = ""
+)

@@ -1,0 +1,83 @@
+status: success
+1865:     @classmethod
+1866:     def _check_constraints(cls, databases):
+1867:         errors = []
+1868:         for db in databases:
+1869:             if not router.allow_migrate_model(db, cls):
+1870:                 continue
+1871:             connection = connections[db]
+1872:             if not (
+1873:                 connection.features.supports_table_check_constraints or
+1874:                 'supports_table_check_constraints' in cls._meta.required_db_features
+1875:             ) and any(
+1876:                 isinstance(constraint, CheckConstraint)
+1877:                 for constraint in cls._meta.constraints
+1878:             ):
+1879:                 errors.append(
+1880:                     checks.Warning(
+1881:                         '%s does not support check constraints.' % connection.display_name,
+1882:                         hint=(
+1883:                             "A constraint won't be created. Silence this "
+1884:                             "warning if you don't care about it."
+1885:                         ),
+1886:                         obj=cls,
+1887:                         id='models.W027',
+1888:                     )
+1889:                 )
+1890:             if not (
+1891:                 connection.features.supports_partial_indexes or
+1892:                 'supports_partial_indexes' in cls._meta.required_db_features
+1893:             ) and any(
+1894:                 isinstance(constraint, UniqueConstraint) and constraint.condition is not None
+1895:                 for constraint in cls._meta.constraints
+1896:             ):
+1897:                 errors.append(
+1898:                     checks.Warning(
+1899:                         '%s does not support unique constraints with '
+1900:                         'conditions.' % connection.display_name,
+1901:                         hint=(
+1902:                             "A constraint won't be created. Silence this "
+1903:                             "warning if you don't care about it."
+1904:                         ),
+1905:                         obj=cls,
+1906:                         id='models.W036',
+1907:                     )
+1908:                 )
+1909:             if not (
+1910:                 connection.features.supports_deferrable_unique_constraints or
+1911:                 'supports_deferrable_unique_constraints' in cls._meta.required_db_features
+1912:             ) and any(
+1913:                 isinstance(constraint, UniqueConstraint) and constraint.deferrable is not None
+1914:                 for constraint in cls._meta.constraints
+1915:             ):
+1916:                 errors.append(
+1917:                     checks.Warning(
+1918:                         '%s does not support deferrable unique constraints.'
+1919:                         % connection.display_name,
+1920:                         hint=(
+1921:                             "A constraint won't be created. Silence this "
+1922:                             "warning if you don't care about it."
+1923:                         ),
+1924:                         obj=cls,
+1925:                         id='models.W038',
+1926:                     )
+1927:                 )
+1928:         return errors
+1929: 
+1930: 
+1931: ############################################
+1932: # HELPER FUNCTIONS (CURRIED MODEL METHODS) #
+1933: ############################################
+1934: 
+1935: # ORDERING METHODS #########################
+1936: 
+1937: def method_set_order(self, ordered_obj, id_list, using=None):
+1938:     if using is None:
+1939:         using = DEFAULT_DB_ALIAS
+1940:     order_wrt = ordered_obj._meta.order_with_respect_to
+1941:     filter_args = order_wrt.get_forward_related_filter(self)
+1942:     ordered_obj.objects.db_manager(using).filter(**filter_args).bulk_update([
+1943:         ordered_obj(pk=pk, _order=order) for order, pk in enumerate(id_list)
+1944:     ], ['_order'])
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

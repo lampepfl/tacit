@@ -1,0 +1,12 @@
+status: success
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15738/repo/django/db/models/fields/__init__.py:28: from django.utils.functional import Promise, cached_property
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15738/repo/django/db/models/fields/__init__.py:480:     @cached_property
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15738/repo/django/db/models/fields/__init__.py:656:             # The _get_default cached_property can't be pickled due to lambda
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15738/repo/django/db/models/fields/__init__.py:685:     @cached_property
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15738/repo/django/db/models/fields/__init__.py:693:     @cached_property
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15738/repo/django/db/models/fields/__init__.py:935:     @cached_property
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15738/repo/django/db/models/fields/__init__.py:1682:     @cached_property
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15738/repo/django/db/models/fields/__init__.py:1688:     @cached_property
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15738/repo/django/db/models/fields/__init__.py:1978:     @cached_property
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,92 @@
+status: success
+Line 1424-1510:
+1423:     def names_to_path(self, names, opts, allow_many=True, fail_on_missing=False):
+1424:         """
+1425:         Walk the list of names and turns them into PathInfo tuples. A single
+1426:         name in 'names' can generate multiple PathInfos (m2m, for example).
+1427: 
+1428:         'names' is the path of names to travel, 'opts' is the model Options we
+1429:         start the name resolving from, 'allow_many' is as for setup_joins().
+1430:         If fail_on_missing is set to True, then a name that can't be resolved
+1431:         will generate a FieldError.
+1432: 
+1433:         Return a list of PathInfo tuples. In addition return the final field
+1434:         (the last used join field) and target (which is a field guaranteed to
+1435:         contain the same value as the final field). Finally, return those names
+1436:         that weren't found (which are likely transforms and the final lookup).
+1437:         """
+1438:         path, names_with_path = [], []
+1439:         for pos, name in enumerate(names):
+1440:             cur_names_with_path = (name, [])
+1441:             if name == 'pk':
+1442:                 name = opts.pk.name
+1443: 
+1444:             field = None
+1445:             filtered_relation = None
+1446:             try:
+1447:                 field = opts.get_field(name)
+1448:             except FieldDoesNotExist:
+1449:                 if name in self.annotation_select:
+1450:                     field = self.annotation_select[name].output_field
+1451:                 elif name in self._filtered_relations and pos == 0:
+1452:                     filtered_relation = self._filtered_relations[name]
+1453:                     field = opts.get_field(filtered_relation.relation_name)
+1454:             if field is not None:
+1455:                 # Fields that contain one-to-many relations with a generic
+1456:                 # model (like a GenericForeignKey) cannot generate reverse
+1457:                 # relations and therefore cannot be used for reverse querying.
+1458:                 if field.is_relation and not field.related_model:
+1459:                     raise FieldError(
+1460:                         "Field %r does not generate an automatic reverse "
+1461:                         "relation and therefore cannot be used for reverse "
+1462:                         "querying. If it is a GenericForeignKey, consider "
+1463:                         "adding a GenericRelation." % name
+1464:                     )
+1465:                 try:
+1466:                     model = field.model._meta.concrete_model
+1467:                 except AttributeError:
+1468:                     # QuerySet.annotate() may introduce fields that aren't
+1469:                     # attached to a model.
+1470:                     model = None
+1471:             else:
+1472:                 # We didn't find the current field, so move position back
+1473:                 # one step.
+1474:                 pos -= 1
+1475:                 if pos == -1 or fail_on_missing:
+1476:                     available = sorted([
+1477:                         *get_field_names_from_opts(opts),
+1478:                         *self.annotation_select,
+1479:                         *self._filtered_relations,
+1480:                     ])
+1481:                     raise FieldError("Cannot resolve keyword '%s' into field. "
+1482:                                      "Choices are: %s" % (name, ", ".join(available)))
+1483:                 break
+1484:             # Check if we need any joins for concrete inheritance cases (the
+1485:             # field lives in parent, but we are currently in one of its
+1486:             # children)
+1487:             if model is not opts.model:
+1488:                 path_to_parent = opts.get_path_to_parent(model)
+1489:                 if path_to_parent:
+1490:                     path.extend(path_to_parent)
+1491:                     cur_names_with_path[1].extend(path_to_parent)
+1492:                     opts = path_to_parent[-1].to_opts
+1493:             if hasattr(field, 'get_path_info'):
+1494:                 pathinfos = field.get_path_info(filtered_relation)
+1495:                 if not allow_many:
+1496:                     for inner_pos, p in enumerate(pathinfos):
+1497:                         if p.m2m:
+1498:                             cur_names_with_path[1].extend(pathinfos[0:inner_pos + 1])
+1499:                             names_with_path.append(cur_names_with_path)
+1500:                             raise MultiJoin(pos + 1, names_with_path)
+1501:                 last = pathinfos[-1]
+1502:                 path.extend(pathinfos)
+1503:                 final_field = last.join_field
+1504:                 opts = last.to_opts
+1505:                 targets = last.target_fields
+1506:                 cur_names_with_path[1].extend(pathinfos)
+1507:                 names_with_path.append(cur_names_with_path)
+1508:             else:
+1509:                 # Local non-relational field.
+1510:                 final_field = field
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

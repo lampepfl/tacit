@@ -1,0 +1,6 @@
+status: success
+837:         dummy = np.char.replace(dummy, encode_ascii('D'), encode_ascii('E'))
+1262:         # Replace exponent separator in floating point numbers
+1264:             output_field.replace(encode_ascii('E'), encode_ascii('D'))
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

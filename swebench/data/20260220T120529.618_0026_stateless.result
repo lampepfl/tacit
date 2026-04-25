@@ -1,0 +1,12 @@
+status: success
+Line 1: 'import inspect'
+Line 2: 'import types'
+Line 3: 'from collections import defaultdict'
+Line 4: 'from itertools import chain'
+Line 5: ''
+Line 6: 'from django.apps import apps'
+Line 7: 'from django.core.checks import Error, Tags, register'
+Line 8: 'from django.db import router'
+Line 9: ''
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

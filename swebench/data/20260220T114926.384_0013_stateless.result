@@ -1,0 +1,19 @@
+status: failure
+-- [E007] Type Mismatch Error: -------------------------------------------------
+3 |    requestFileSystem("/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11019/repo") { (fs: FileSystem) =>
+  |                                                                                                                                   ^
+  |Capability `contextual$1` outlives its scope: it leaks into outer capture set 's1 which is owned by method test.
+  |The leakage occurred when trying to match the following types:
+  |
+  |Found:    (contextual$1: library.FileSystem^) ?->{io}
+  |  library.FileSystem^'s2 ->{contextual$1, io} Unit
+  |Required: (library.FileSystem^) ?=> library.FileSystem^ ->'s1 Unit
+  |
+  |where:    ?=> refers to a root capability created in method test when checking argument to parameter op of method requestFileSystem
+  |          ^   refers to the root capability caps.any
+  |
+4 |      find("/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11019/repo", "*.py").foreach(println)
+5 |    }
+  |
+  | longer explanation available when compiling with `-explain`
+1 error found

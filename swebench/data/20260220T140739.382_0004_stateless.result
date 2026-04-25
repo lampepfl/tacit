@@ -1,0 +1,16 @@
+status: success
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15789/repo/tests/template_tests/filter_tests/test_json_script.py:7:     @setup({"json-tag01": '{{ value|json_script:"test_id" }}'})
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15789/repo/tests/template_tests/filter_tests/test_json_script.py:20:     @setup({"json-tag02": "{{ value|json_script }}"})
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15789/repo/tests/utils_tests/test_html.py:12:     json_script,
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15789/repo/tests/utils_tests/test_html.py:180:     def test_json_script(self):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15789/repo/tests/utils_tests/test_html.py:212:                 self.assertEqual(json_script(arg, "test_id"), expected)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15789/repo/tests/utils_tests/test_html.py:214:     def test_json_script_without_id(self):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15789/repo/tests/utils_tests/test_html.py:216:             json_script({"key": "value"}),
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15789/repo/django/template/defaultfilters.py:16: from django.utils.html import json_script as _json_script
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15789/repo/django/template/defaultfilters.py:85: def json_script(value, element_id=None):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15789/repo/django/template/defaultfilters.py:90:     return _json_script(value, element_id)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15789/repo/django/utils/html.py:55: _json_script_escapes = {
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15789/repo/django/utils/html.py:62: def json_script(value, element_id=None):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15789/repo/django/utils/html.py:70:     json_str = json.dumps(value, cls=DjangoJSONEncoder).translate(_json_script_escapes)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

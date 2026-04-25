@@ -1,0 +1,16 @@
+status: failure
+2 warnings found
+def run()(using x$1: IOCapability): Any
+-- [E190] Potential Issue Warning: ---------------------------------------------
+14 |  exec("python3", List("-c", "open('./django/db/models/sql/query.py', 'w').write(" + newContent.map(c => if (c == '\n') "\\n" else if (c == '\'')"\\\\''").mkString("\"", "", "\"") + ")"))
+   |                                                                                                                        ^^^^^
+   |Discarded non-Unit value of type String. Add `: Unit` to discard silently.
+   |
+   | longer explanation available when compiling with `-explain`
+-- [E190] Potential Issue Warning: ---------------------------------------------
+14 |  exec("python3", List("-c", "open('./django/db/models/sql/query.py', 'w').write(" + newContent.map(c => if (c == '\n') "\\n" else if (c == '\'')"\\\\''").mkString("\"", "", "\"") + ")"))
+   |                                                                                                                                                 ^^^^^^^^
+   |Discarded non-Unit value of type String. Add `: Unit` to discard silently.
+   |
+   | longer explanation available when compiling with `-explain`
+val res0: Any = ProcessResult(exitCode = 0, stdout = "", stderr = "")

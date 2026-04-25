@@ -1,0 +1,51 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = ProcessResult(
+  exitCode = 0,
+  stdout = """class ResolverMatchTests(SimpleTestCase):
+
+    def test_urlpattern_resolve(self):
+        for path_, url_name, app_name, namespace, view_name, func, args, kwargs in resolve_test_data:
+            with self.subTest(path=path_):
+                # Legacy support for extracting "function, args, kwargs".
+                match_func, match_args, match_kwargs = resolve(path_)
+                self.assertEqual(match_func, func)
+                self.assertEqual(match_args, args)
+                self.assertEqual(match_kwargs, kwargs)
+                # ResolverMatch capabilities.
+                match = resolve(path_)
+                self.assertEqual(match.__class__, ResolverMatch)
+                self.assertEqual(match.url_name, url_name)
+                self.assertEqual(match.app_name, app_name)
+                self.assertEqual(match.namespace, namespace)
+                self.assertEqual(match.view_name, view_name)
+                self.assertEqual(match.func, func)
+                self.assertEqual(match.args, args)
+                self.assertEqual(match.kwargs, kwargs)
+                # and for legacy purposes:
+                self.assertEqual(match[0], func)
+                self.assertEqual(match[1], args)
+                self.assertEqual(match[2], kwargs)
+
+    def test_resolver_match_on_request(self):
+        response = self.client.get('/resolver_match/')
+        resolver_match = response.resolver_match
+        self.assertEqual(resolver_match.url_name, 'test-resolver-match')
+
+    def test_resolver_match_on_request_before_resolution(self):
+        request = HttpRequest()
+        self.assertIsNone(request.resolver_match)
+
+    def test_repr(self):
+        self.assertEqual(
+            repr(resolve('/no_kwargs/42/37/')),
+            "ResolverMatch(func=urlpatterns_reverse.views.empty_view, "
+            "args=('42', '37'), kwargs={}, url_name=no-kwargs, app_names=[], "
+            "namespaces=[], route=^no_kwargs/([0-9]+)/([0-9]+)/$)",
+        )
+
+
+@override_settings(ROOT_URLCONF='urlpatterns_reverse.erroneous_urls')
+""",
+  stderr = ""
+)

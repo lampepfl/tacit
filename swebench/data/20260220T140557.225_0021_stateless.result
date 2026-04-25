@@ -1,0 +1,18 @@
+status: success
+878: 
+879: class RenameIndex(IndexOperation):
+880:     """Rename an index."""
+881: 
+882:     def __init__(self, model_name, new_name, old_name=None, old_fields=None):
+883:         if not old_name and not old_fields:
+884:             raise ValueError(
+885:                 "RenameIndex requires one of old_name and old_fields arguments to be "
+886:                 "set."
+887:             )
+888:         if old_name and old_fields:
+889:             raise ValueError(
+890:                 "RenameIndex.old_name and old_fields are mutually exclusive."
+891:             )
+892:         self.model_name = model_name
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

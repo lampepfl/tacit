@@ -1,0 +1,12 @@
+status: failure
+-- [E008] Not Found Error: -----------------------------------------------------
+2 |  import scala.language.experimental.clusters
+  |                                     ^^^^^^^^
+  |            value clusters is not a member of object language.experimental
+-- [E050] Type Error: ----------------------------------------------------------
+4 |  given io: IOCapability = IOCapability()
+  |                           ^^^^^^^^^^^^
+  |           object IOCapability in package library does not take parameters
+  |
+  | longer explanation available when compiling with `-explain`
+2 errors found

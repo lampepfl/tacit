@@ -1,0 +1,7 @@
+status: success
+Exit: 0
+stdout:  django/db/models/fields/__init__.py | 44 ++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 43 insertions(+), 1 deletion(-)
+stderr: 
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

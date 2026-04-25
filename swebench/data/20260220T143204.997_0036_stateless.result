@@ -1,0 +1,12 @@
+status: success
+Line 726-732 (after fix):
+725: 
+726:         # If we get to this point and the field is a relation to another model,
+727:         # append the default ordering for that model unless it is the pk
+728:         # shortcut or the attribute name of the field that is specified.
+729:         if field.is_relation and opts.ordering and getattr(field, 'attname', None) != pieces[-1] and pieces[-1] != 'pk':
+730:             # Firstly, avoid infinite loops.
+731:             already_seen = already_seen or set()
+732:             join_tuple = tuple(getattr(self.query.alias_map[j], 'join_cols', None) for j in joins)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,4 @@
+status: success
+Done: rs$line$2$$$Lambda$2890/0x0000000501ff4590@6fb0af27
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

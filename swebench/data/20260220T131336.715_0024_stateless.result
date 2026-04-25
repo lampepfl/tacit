@@ -1,0 +1,69 @@
+status: success
+1015:     def generate_added_indexes(self):
+1016:         for (app_label, model_name), alt_indexes in self.altered_indexes.items():
+1017:             for index in alt_indexes['added_indexes']:
+1018:                 self.add_operation(
+1019:                     app_label,
+1020:                     operations.AddIndex(
+1021:                         model_name=model_name,
+1022:                         index=index,
+1023:                     )
+1024:                 )
+1025: 
+1026:     def generate_removed_indexes(self):
+1027:         for (app_label, model_name), alt_indexes in self.altered_indexes.items():
+1028:             for index in alt_indexes['removed_indexes']:
+1029:                 self.add_operation(
+1030:                     app_label,
+1031:                     operations.RemoveIndex(
+1032:                         model_name=model_name,
+1033:                         name=index.name,
+1034:                     )
+1035:                 )
+1036: 
+1037:     def create_altered_constraints(self):
+1038:         option_name = operations.AddConstraint.option_name
+1039:         for app_label, model_name in sorted(self.kept_model_keys):
+1040:             old_model_name = self.renamed_models.get((app_label, model_name), model_name)
+1041:             old_model_state = self.from_state.models[app_label, old_model_name]
+1042:             new_model_state = self.to_state.models[app_label, model_name]
+1043: 
+1044:             old_constraints = old_model_state.options[option_name]
+1045:             new_constraints = new_model_state.options[option_name]
+1046:             add_constraints = [c for c in new_constraints if c not in old_constraints]
+1047:             rem_constraints = [c for c in old_constraints if c not in new_constraints]
+1048: 
+1049:             self.altered_constraints.update({
+1050:                 (app_label, model_name): {
+1051:                     'added_constraints': add_constraints, 'removed_constraints': rem_constraints,
+1052:                 }
+1053:             })
+1054: 
+1055:     def generate_added_constraints(self):
+1056:         for (app_label, model_name), alt_constraints in self.altered_constraints.items():
+1057:             for constraint in alt_constraints['added_constraints']:
+1058:                 self.add_operation(
+1059:                     app_label,
+1060:                     operations.AddConstraint(
+1061:                         model_name=model_name,
+1062:                         constraint=constraint,
+1063:                     )
+1064:                 )
+1065: 
+1066:     def generate_removed_constraints(self):
+1067:         for (app_label, model_name), alt_constraints in self.altered_constraints.items():
+1068:             for constraint in alt_constraints['removed_constraints']:
+1069:                 self.add_operation(
+1070:                     app_label,
+1071:                     operations.RemoveConstraint(
+1072:                         model_name=model_name,
+1073:                         name=constraint.name,
+1074:                     )
+1075:                 )
+1076: 
+1077:     def _get_dependencies_for_foreign_key(self, field):
+1078:         # Account for FKs to swappable models
+1079:         swappable_setting = getattr(field, 'swappable_setting', None)
+1080:         if swappable_setting is not None:
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

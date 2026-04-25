@@ -1,0 +1,44 @@
+status: success
+0: import copy
+1: import datetime
+2: import functools
+3: import inspect
+4: from decimal import Decimal
+5: from uuid import UUID
+6: 
+7: from django.core.exceptions import EmptyResultSet, FieldError
+8: from django.db import NotSupportedError, connection
+9: from django.db.models import fields
+10: from django.db.models.constants import LOOKUP_SEP
+11: from django.db.models.query_utils import Q
+12: from django.utils.deconstruct import deconstructible
+13: from django.utils.functional import cached_property
+14: from django.utils.hashable import make_hashable
+15: 
+16: 
+17: class SQLiteNumericMixin:
+18:     """
+19:     Some expressions with output_field=DecimalField() must be cast to
+20:     numeric to be properly filtered.
+21:     """
+22:     def as_sqlite(self, compiler, connection, **extra_context):
+23:         sql, params = self.as_sql(compiler, connection, **extra_context)
+24:         try:
+25:             if self.output_field.get_internal_type() == 'DecimalField':
+26:                 sql = 'CAST(%s AS NUMERIC)' % sql
+27:         except FieldError:
+28:             pass
+29:         return sql, params
+30: 
+31: 
+32: class Combinable:
+33:     """
+34:     Provide the ability to combine one or two objects with
+35:     some connector. For example F('foo') + F('bar').
+36:     """
+37: 
+38:     # Arithmetic connectors
+39:     ADD = '+'
+40:     SUB = '-'
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

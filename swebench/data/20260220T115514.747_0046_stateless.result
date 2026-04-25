@@ -1,0 +1,6 @@
+status: failure
+-- [E172] Type Error: ----------------------------------------------------------
+4 |      exec("python", List("-m", "pytest", "tests/forms_tests/tests/test_media.py::MediaMergeTest::test_merge_warning", "-xvs"), workingDir = Option("/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11019/repo"))
+  |                                                                                                                                                                                                                                                                 ^
+  |No given instance of type library.ProcessPermission was found for parameter pp of method exec in trait Interface
+1 error found

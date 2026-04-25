@@ -1,0 +1,9 @@
+status: failure
+-- [E007] Type Mismatch Error: -------------------------------------------------
+4 |    exec("git", List("checkout", "astropy/wcs/wcs.py"), None, None)
+  |                                                              ^^^^
+  |                                                       Found:    None.type
+  |                                                       Required: Long
+  |
+  | longer explanation available when compiling with `-explain`
+1 error found

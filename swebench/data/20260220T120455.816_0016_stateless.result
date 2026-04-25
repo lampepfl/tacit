@@ -1,0 +1,21 @@
+status: success
+768:         return getattr(model_instance, self.attname)
+769: 
+770:     def get_prep_value(self, value):
+771:         """Perform preliminary non-db specific value checks and conversions."""
+772:         if isinstance(value, Promise):
+773:             value = value._proxy____cast()
+774:         return value
+775: 
+776:     def get_db_prep_value(self, value, connection, prepared=False):
+777:         """
+778:         Return field's value prepared for interacting with the database backend.
+779: 
+780:         Used by the default implementations of get_db_prep_save().
+781:         """
+782:         if not prepared:
+783:             value = self.get_prep_value(value)
+784:         return value
+785: 
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

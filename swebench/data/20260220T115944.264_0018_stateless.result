@@ -1,0 +1,33 @@
+status: success
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11564/repo/tests/staticfiles_tests/test_forms.py
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11564/repo/tests/staticfiles_tests/test_utils.py
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11564/repo/tests/staticfiles_tests/__init__.py
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11564/repo/tests/staticfiles_tests/test_management.py
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11564/repo/tests/staticfiles_tests/test_finders.py
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11564/repo/tests/staticfiles_tests/cases.py
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11564/repo/tests/staticfiles_tests/test_liveserver.py
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11564/repo/tests/staticfiles_tests/test_views.py
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11564/repo/tests/staticfiles_tests/project/site_media/static/testfile.txt
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11564/repo/tests/staticfiles_tests/project/site_media/media/media-file.txt
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11564/repo/tests/staticfiles_tests/project/prefixed/test.txt
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11564/repo/tests/staticfiles_tests/project/faulty/faulty.css
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11564/repo/tests/staticfiles_tests/project/documents/styles_root.css
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11564/repo/tests/staticfiles_tests/project/documents/test/file.txt
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11564/repo/tests/staticfiles_tests/project/documents/test/camelCase.txt
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11564/repo/tests/staticfiles_tests/project/documents/test/backup~
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11564/repo/tests/staticfiles_tests/project/documents/subdir/test.txt
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11564/repo/tests/staticfiles_tests/project/documents/cached/test.js
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11564/repo/tests/staticfiles_tests/project/documents/cached/styles.css
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11564/repo/tests/staticfiles_tests/project/documents/cached/css/fragments.css
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11564/repo/tests/staticfiles_tests/project/documents/cached/css/img/window.png
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11564/repo/tests/staticfiles_tests/project/documents/cached/css/window.css
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11564/repo/tests/staticfiles_tests/project/documents/cached/css/fonts/font.eot
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11564/repo/tests/staticfiles_tests/project/documents/cached/css/fonts/font.svg
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11564/repo/tests/staticfiles_tests/project/documents/cached/css/ignored.css
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11564/repo/tests/staticfiles_tests/project/documents/cached/import.css
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11564/repo/tests/staticfiles_tests/project/documents/cached/img/relative.png
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11564/repo/tests/staticfiles_tests/project/documents/cached/relative.css
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11564/repo/tests/staticfiles_tests/project/documents/cached/url.css
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11564/repo/tests/staticfiles_tests/project/documents/cached/other.css
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

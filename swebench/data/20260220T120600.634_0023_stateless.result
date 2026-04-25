@@ -1,0 +1,9 @@
+status: failure
+-- Error: ----------------------------------------------------------------------
+12 |      if line.startsWith("      def _check_max_length_choices") =>
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |         not a legal formal parameter for a function literal
+-- [E040] Syntax Error: --------------------------------------------------------
+14 |      else if line.startsWith("          ") && line.trim.nonEmpty =>
+   |      ^^^^
+   |      'then' expected, but 'else' found

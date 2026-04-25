@@ -1,0 +1,9 @@
+status: success
+27:     'verbose_name', 'verbose_name_plural', 'db_table', 'ordering',
+85:         self.ordering = []
+86:         self._ordering_clash = False
+193:             # order_with_respect_and ordering are mutually exclusive.
+194:             self._ordering_clash = bool(self.ordering and self.order_with_respect_to)
+233:             self.ordering = ('_order',)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

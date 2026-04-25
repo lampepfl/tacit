@@ -1,0 +1,11 @@
+status: success
+def __init__(self, queryset, output_field=None, **extra):
+        # Allow the usage of both QuerySet and sql.Query objects.
+        self.query = getattr(queryset, 'query', queryset)
+        self.query.subquery = True
+        self.extra = extra
+        super().__init__(output_field)
+
+    def get_sour
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

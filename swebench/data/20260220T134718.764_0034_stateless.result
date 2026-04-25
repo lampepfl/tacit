@@ -1,0 +1,15 @@
+status: success
+1221:         if self.unique:
+1222:             return [
+1223:                 checks.Error(
+1224:                     'ManyToManyFields cannot be unique.',
+1225:                     obj=self,
+1226:                     id='fields.E330',
+1227:                 )
+1228:             ]
+1229:         return []
+1230: 
+1231:     def _check_ignored_options(self, from_model=None, **kwargs):
+1232:         warnings = []
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

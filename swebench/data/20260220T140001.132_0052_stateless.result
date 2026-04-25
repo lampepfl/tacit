@@ -1,0 +1,13 @@
+status: success
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15213/repo/tests/constraints/models.py:29:                 check=models.expressions.ExpressionWrapper(
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15213/repo/tests/lookup/tests.py:10:     BooleanField, Case, Exists, ExpressionWrapper, F, Max, OuterRef, Q,
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15213/repo/tests/lookup/tests.py:958:             wrapped=ExpressionWrapper(Q(alias='a1'), output_field=BooleanField()),
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15213/repo/tests/lookup/tests.py:1060:             Stock.objects.filter(short=ExpressionWrapper(
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15213/repo/tests/lookup/tests.py:1161:         qs = Season.objects.annotate(before_20=ExpressionWrapper(
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15213/repo/tests/annotations/tests.py:7:     ExpressionWrapper, F, FloatField, Func, IntegerField, Max, OuterRef, Q,
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15213/repo/tests/annotations/tests.py:188:             expires=ExpressionWrapper(F('active_at') + F('duration'), output_field=DateTimeField())
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15213/repo/tests/annotations/tests.py:195:             combined=ExpressionWrapper(F('pages') + F('rating'), output_field=IntegerField())
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15213/repo/tests/annotations/tests.py:202:             selected=ExpressionWrapper(Q(pk__in=[]), output_field=BooleanField())
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15213/repo/tests/annotations/tests.py:208:             selected=ExpressionWrapper(Q(pk__in=Book.objects.none()), output_field=BooleanField())
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,21 @@
+status: success
+82: |    def cleanse_setting(self, key, value):|
+83: |        """|
+84: |        Cleanse an individual setting key/value of sensitive content. If the|
+85: |        value is a dictionary, recursively cleanse the keys in that dictionary.|
+86: |        """|
+87: |        try:|
+88: |            if self.hidden_settings.search(key):|
+89: |                cleansed = self.cleansed_substitute|
+90: |            elif isinstance(value, dict):|
+91: |                cleansed = {k: self.cleanse_setting(k, v) for k, v in value.items()}|
+92: |            else:|
+93: |                cleansed = value|
+94: |        except TypeError:|
+95: |            # If the key isn't regex-able, just return as-is.|
+96: |            cleansed = value|
+97: ||
+98: |        if callable(cleansed):|
+99: |            cleansed = CallableSettingWrapper(cleansed)|
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

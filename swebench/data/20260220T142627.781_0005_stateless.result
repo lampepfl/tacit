@@ -1,0 +1,34 @@
+status: success
+Found 89 matches
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13033/repo/django/db/models/query.py:420:             clone = clone.order_by()
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13033/repo/django/db/models/query.py:651:             order_by = fields
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13033/repo/django/db/models/query.py:653:             order_by = getattr(self.model._meta, 'get_latest_by')
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13033/repo/django/db/models/query.py:654:             if order_by and not isinstance(order_by, (tuple, list)):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13033/repo/django/db/models/query.py:655:                 order_by = (order_by,)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13033/repo/django/db/models/query.py:656:         if order_by is None:
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13033/repo/django/db/models/query.py:667:         obj.query.add_ordering(*order_by)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13033/repo/django/db/models/query.py:678:         for obj in (self if self.ordered else self.order_by('pk'))[:1]:
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13033/repo/django/db/models/query.py:683:         for obj in (self.reverse() if self.ordered else self.order_by('-pk'))[:1]:
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13033/repo/django/db/models/query.py:717:                     qs += tuple(self.filter(**{filter_key: batch}).order_by())
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13033/repo/django/db/models/query.py:719:                 qs = self.filter(**{filter_key: id_list}).order_by()
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13033/repo/django/db/models/query.py:890:         ).distinct().filter(plain_field__isnull=False).order_by(('-' if order == 'DESC' else '') + 'datefield')
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13033/repo/django/db/models/query.py:917:         ).distinct().filter(plain_field__isnull=False).order_by(('-' if order == 'DESC' else '') + 'datetimefield')
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13033/repo/django/db/models/query.py:1129:     def order_by(self, *field_names):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13033/repo/django/db/models/query.py:1150:               order_by=None, select_params=None):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13033/repo/django/db/models/query.py:1156:         clone.query.add_extra(select, select_params, where, params, tables, order_by)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13033/repo/django/db/models/query.py:1218:         Return True if the QuerySet is ordered -- i.e. has an order_by()
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13033/repo/django/db/models/query.py:1223:         if self.query.extra_order_by or self.query.order_by:
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13033/repo/django/db/models/expressions.py:1090:         queryset = queryset.order_by()
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13033/repo/django/db/models/expressions.py:1140:         if connection.features.supports_order_by_nulls_modifier:
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13033/repo/django/db/models/expressions.py:1147:                 self.descending and connection.features.order_by_nulls_first
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13033/repo/django/db/models/expressions.py:1151:                 not self.descending and connection.features.order_by_nulls_first
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13033/repo/django/db/models/expressions.py:1207:     def __init__(self, expression, partition_by=None, order_by=None, frame=None, output_field=None):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13033/repo/django/db/models/expressions.py:1209:         self.order_by = order_by
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13033/repo/django/db/models/expressions.py:1223:         if self.order_by is not None:
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13033/repo/django/db/models/expressions.py:1224:             if isinstance(self.order_by, (list, tuple)):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13033/repo/django/db/models/expressions.py:1225:                 self.order_by = ExpressionList(*self.order_by)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13033/repo/django/db/models/expressions.py:1226:             elif not isinstance(self.order_by, BaseExpression):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13033/repo/django/db/models/expressions.py:1228:                     'order_by must be either an Expression or a sequence of '
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13033/repo/django/db/models/expressions.py:1238:         return [self.source_expression, self.partition_by, self.order_by, self.frame]
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

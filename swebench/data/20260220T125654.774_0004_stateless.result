@@ -1,0 +1,13 @@
+status: success
+401:     if allow_unicode:
+402:         value = unicodedata.normalize('NFKC', value)
+403:     else:
+404:         value = unicodedata.normalize('NFKD', value).encode('ascii', 'ignore').decode('ascii')
+405:     value = re.sub(r'[^\w\s-]', '', value.lower()).strip()
+406: value = re.sub(r'[^\w\s-]', '', value.lower()).strip()
+407: return re.sub(r'[-\s_]+', '-', value).strip('-')
+408: 
+409: def camel_case_to_spaces(value):
+410:     """
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

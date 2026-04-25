@@ -1,0 +1,11 @@
+status: success
+Index: 7889
+java.lang.StringIndexOutOfBoundsException: begin 7889, end 8089, length 8052
+  at java.lang.String.checkBoundsBeginEnd(String.java:4606)
+  at java.lang.String.substring(String.java:2709)
+  at rs$line$2$.run$$anonfun$1(rs$line$2:8)
+  at scala.runtime.function.JProcedure1.apply(JProcedure1.java:15)
+  at scala.runtime.function.JProcedure1.apply(JProcedure1.java:10)
+  at library.InterfaceImpl.requestFileSystem(InterfaceImpl.scala:33)
+  at rs$line$2$.run(rs$line$2:9)
+  ... 53 elided

@@ -1,0 +1,8 @@
+status: success
+Gruntfile.js
+.git-blame-ignore-revs
+.tx
+js_tests
+INSTALL
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

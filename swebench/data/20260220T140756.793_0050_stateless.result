@@ -1,0 +1,6 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = List(
+  (286, "    def test_common_roots(self):"),
+  (293, "        results = autoreload.common_roots(paths)")
+)

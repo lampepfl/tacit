@@ -1,0 +1,18 @@
+status: success
+758:         cls._meta.add_field(self, private=private_only)
+759:         if self.column:
+760:             # Don't override classmethods with the descriptor. This means that
+761:             # if you have a classmethod and a field with the same name, then
+762:             # such fields can't be deferred (we don't have a check for this).
+763:             if not getattr(cls, self.attname, None):
+764:                 setattr(cls, self.attname, self.descriptor_class(self))
+765:         if self.choices is not None:
+766:             setattr(cls, 'get_%s_display' % self.name,
+767:                     partialmethod(cls._get_FIELD_display, field=self))
+768: 
+769:     def get_filter_kwargs_for_object(self, obj):
+770:         """
+771:         Return a dict that when passed as kwargs to self.model.filter(), would
+772:         yield all instances having the same value for this field as obj has.
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,5 @@
+status: success
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13158/repo/django/db/models/query.py:994:         clone.query.combined_queries = (self.query,) + tuple(qs.query for qs in other_qs)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13158/repo/django/db/models/sql/query.py:210:         self.combined_queries = ()
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,33 @@
+status: success
+1: import operator
+2: from collections import Counter, defaultdict
+3: from functools import partial, reduce
+4: from itertools import chain
+5: from operator import attrgetter
+6: 
+7: from django.db import IntegrityError, connections, transaction
+8: from django.db.models import query_utils, signals, sql
+9: 
+10: 
+11: class ProtectedError(IntegrityError):
+12:     def __init__(self, msg, protected_objects):
+13:         self.protected_objects = protected_objects
+14:         super().__init__(msg, protected_objects)
+15: 
+16: 
+17: class RestrictedError(IntegrityError):
+18:     def __init__(self, msg, restricted_objects):
+19:         self.restricted_objects = restricted_objects
+20:         super().__init__(msg, restricted_objects)
+21: 
+22: 
+23: def CASCADE(collector, field, sub_objs, using):
+24:     collector.collect(
+25:         sub_objs, source=field.remote_field.model, source_attr=field.name,
+26:         nullable=field.null, fail_on_restricted=False,
+27:     )
+28:     if field.null and not connections[using].features.can_defer_constraint_checks:
+29:         collector.add_field_update(field, None, sub_objs)
+30: 
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

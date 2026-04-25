@@ -1,0 +1,8 @@
+status: failure
+-- [E006] Not Found Error: -----------------------------------------------------
+12 |    println(repr(content.substring(before, start + 100)))
+   |            ^^^^
+   |            Not found: repr - did you mean grep? or perhaps res0?
+   |
+   | longer explanation available when compiling with `-explain`
+1 error found

@@ -1,0 +1,29 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = ProcessResult(
+  exitCode = 1,
+  stdout = "",
+  stderr = """Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+    import django.db.models.fields; print('Import successful')
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-10924/repo/django/db/models/__init__.py", line 3, in <module>
+    from django.db.models.aggregates import *  # NOQA
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-10924/repo/django/db/models/aggregates.py", line 5, in <module>
+    from django.db.models.expressions import Case, Func, Star, When
+  File "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-10924/repo/django/db/models/expressions.py", line 8, in <module>
+    from django.db.models import fields
+  File "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-10924/repo/django/db/models/fields/__init__.py", line 11, in <module>
+    from django import forms
+  File "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-10924/repo/django/forms/__init__.py", line 6, in <module>
+    from django.forms.boundfield import *  # NOQA
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-10924/repo/django/forms/boundfield.py", line 3, in <module>
+    from django.forms.utils import flatatt, pretty_name
+  File "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-10924/repo/django/forms/utils.py", line 6, in <module>
+    from django.utils import timezone
+  File "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-10924/repo/django/utils/timezone.py", line 11, in <module>
+    import pytz
+ModuleNotFoundError: No module named 'pytz'"""
+)

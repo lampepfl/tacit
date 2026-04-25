@@ -1,0 +1,63 @@
+status: success
+46: 
+47: 
+48: class AbstractBaseUser(models.Model):
+49:     password = models.CharField(_('password'), max_length=128)
+50:     last_login = models.DateTimeField(_('last login'), blank=True, null=True)
+51: 
+52:     is_active = True
+53: 
+54:     REQUIRED_FIELDS = []
+55: 
+56:     # Stores the raw password if set_password() is called so that it can
+57:     # be passed to password_changed() after the model is saved.
+58:     _password = None
+59: 
+60:     class Meta:
+61:         abstract = True
+62: 
+63:     def __str__(self):
+64:         return self.get_username()
+65: 
+66:     def save(self, *args, **kwargs):
+67:         super().save(*args, **kwargs)
+68:         if self._password is not None:
+69:             password_validation.password_changed(self._password, self)
+70:             self._password = None
+71: 
+72:     def get_username(self):
+73:         """Return the username for this User."""
+74:         return getattr(self, self.USERNAME_FIELD)
+75: 
+76:     def clean(self):
+77:         setattr(self, self.USERNAME_FIELD, self.normalize_username(self.get_username()))
+78: 
+79:     def natural_key(self):
+80:         return (self.get_username(),)
+81: 
+82:     @property
+83:     def is_anonymous(self):
+84:         """
+85:         Always return False. This is a way of comparing User objects to
+86:         anonymous users.
+87:         """
+88:         return False
+89: 
+90:     @property
+91:     def is_authenticated(self):
+92:         """
+93:         Always return True. This is a way to tell if the user has been
+94:         authenticated in templates.
+95:         """
+96:         return True
+97: 
+98:     def set_password(self, raw_password):
+99:         self.password = make_password(raw_password)
+100:         self._password = raw_password
+101: 
+102:     def check_password(self, raw_password):
+103:         """
+104:         Return a boolean of whether the raw_password was correct. Handles
+105:         hashing formats behind the scenes.
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

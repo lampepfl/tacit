@@ -1,0 +1,73 @@
+status: success
+321: class AbstractUser(AbstractBaseUser, PermissionsMixin):
+322:     """
+323:     An abstract base class implementing a fully featured User model with
+324:     admin-compliant permissions.
+325: 
+326:     Username and password are required. Other fields are optional.
+327:     """
+328:     username_validator = UnicodeUsernameValidator()
+329: 
+330:     username = models.CharField(
+331:         _('username'),
+332:         max_length=150,
+333:         unique=True,
+334:         help_text=_('Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.'),
+335:         validators=[username_validator],
+336:         error_messages={
+337:             'unique': _("A user with that username already exists."),
+338:         },
+339:     )
+340:     first_name = models.CharField(_('first name'), max_length=150, blank=True)
+341:     last_name = models.CharField(_('last name'), max_length=150, blank=True)
+342:     email = models.EmailField(_('email address'), blank=True)
+343:     is_staff = models.BooleanField(
+344:         _('staff status'),
+345:         default=False,
+346:         help_text=_('Designates whether the user can log into this admin site.'),
+347:     )
+348:     is_active = models.BooleanField(
+349:         _('active'),
+350:         default=True,
+351:         help_text=_(
+352:             'Designates whether this user should be treated as active. '
+353:             'Unselect this instead of deleting accounts.'
+354:         ),
+355:     )
+356:     date_joined = models.DateTimeField(_('date joined'), default=timezone.now)
+357: 
+358:     objects = UserManager()
+359: 
+360:     EMAIL_FIELD = 'email'
+361:     USERNAME_FIELD = 'username'
+362:     REQUIRED_FIELDS = ['email']
+363: 
+364:     class Meta:
+365:         verbose_name = _('user')
+366:         verbose_name_plural = _('users')
+367:         abstract = True
+368: 
+369:     def clean(self):
+370:         super().clean()
+371:         self.email = self.__class__.objects.normalize_email(self.email)
+372: 
+373:     def get_full_name(self):
+374:         """
+375:         Return the first_name plus the last_name, with a space in between.
+376:         """
+377:         full_name = '%s %s' % (self.first_name, self.last_name)
+378:         return full_name.strip()
+379: 
+380:     def get_short_name(self):
+381:         """Return the short name for the user."""
+382:         return self.first_name
+383: 
+384:     def email_user(self, subject, message, from_email=None, **kwargs):
+385:         """Send an email to this user."""
+386:         send_mail(subject, message, from_email, [self.email], **kwargs)
+387: 
+388: 
+389: class User(AbstractUser):
+390:     """
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

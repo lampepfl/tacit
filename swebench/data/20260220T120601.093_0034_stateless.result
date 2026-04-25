@@ -1,0 +1,13 @@
+status: success
+import os
+from datetime import datetime
+from urllib.parse import urljoin
+
+from django.urls import get_script_prefix
+
+from django.conf import settings
+from django.core.exceptions import SuspiciousFileOperation
+from django.core.files import File, locks
+from django.core.files.move import file_move_safe
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

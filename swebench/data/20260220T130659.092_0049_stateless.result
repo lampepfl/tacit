@@ -1,0 +1,7 @@
+status: failure
+-- [E171] Type Error: ----------------------------------------------------------
+4 |  val x = requestFileSystem()
+  |          ^^^^^^^^^^^^^^^^^^^
+  |missing argument for parameter root of method requestFileSystem in trait Interface: (root: String)
+  |  (op: (library.FileSystem^) ?=> T)(using x$3: library.IOCapability): T
+1 error found

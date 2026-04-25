@@ -1,0 +1,25 @@
+status: success
+515:         # If only one mask is present we need not bother about any type checks
+516:         if (
+517:             self.mask is None and operand is not None and operand.mask is None
+518:         ) or handle_mask is None:
+519:             return None
+520:         elif self.mask is None and operand is not None:
+521:             # Make a copy so there is no reference in the result.
+522:             return deepcopy(operand.mask)
+523:         elif operand is None:
+524:             return deepcopy(self.mask)
+525:         else:
+526:             # Now lets calculate the resulting mask (operation enforces copy)
+527:             return handle_mask(self.mask, operand.mask, **kwds)
+528: 
+529:     def _arithmetic_wcs(self, operation, operand, compare_wcs, **kwds):
+530:         """
+531:         Calculate the resulting wcs.
+532: 
+533:         There is actually no calculation involved but it is a good place to
+534:         compare wcs information of both operands. This is currently not working
+535:         properly with `~astropy.wcs.WCS` (which is the suggested class for
+536:         storing as wcs property) but it will not break it neither.
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

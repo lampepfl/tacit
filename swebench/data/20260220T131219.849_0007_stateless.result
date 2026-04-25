@@ -1,0 +1,63 @@
+status: success
+572: class AlterOrderWithRespectTo(ModelOptionOperation):
+573:     """Represent a change with the order_with_respect_to option."""
+574: 
+575:     option_name = 'order_with_respect_to'
+576: 
+577:     def __init__(self, name, order_with_respect_to):
+578:         self.order_with_respect_to = order_with_respect_to
+579:         super().__init__(name)
+580: 
+581:     def deconstruct(self):
+582:         kwargs = {
+583:             'name': self.name,
+584:             'order_with_respect_to': self.order_with_respect_to,
+585:         }
+586:         return (
+587:             self.__class__.__qualname__,
+588:             [],
+589:             kwargs
+590:         )
+591: 
+592:     def state_forwards(self, app_label, state):
+593:         model_state = state.models[app_label, self.name_lower]
+594:         model_state.options['order_with_respect_to'] = self.order_with_respect_to
+595:         state.reload_model(app_label, self.name_lower, delay=True)
+596: 
+597:     def database_forwards(self, app_label, schema_editor, from_state, to_state):
+598:         to_model = to_state.apps.get_model(app_label, self.name)
+599:         if self.allow_migrate_model(schema_editor.connection.alias, to_model):
+600:             from_model = from_state.apps.get_model(app_label, self.name)
+601:             # Remove a field if we need to
+602:             if from_model._meta.order_with_respect_to and not to_model._meta.order_with_respect_to:
+603:                 schema_editor.remove_field(from_model, from_model._meta.get_field("_order"))
+604:             # Add a field if we need to (altering the column is untouched as
+605:             # it's likely a rename)
+606:             elif to_model._meta.order_with_respect_to and not from_model._meta.order_with_respect_to:
+607:                 field = to_model._meta.get_field("_order")
+608:                 if not field.has_default():
+609:                     field.default = 0
+610:                 schema_editor.add_field(
+611:                     from_model,
+612:                     field,
+613:                 )
+614: 
+615:     def database_backwards(self, app_label, schema_editor, from_state, to_state):
+616:         self.database_forwards(app_label, schema_editor, from_state, to_state)
+617: 
+618:     def references_field(self, model_name, name, app_label):
+619:         return (
+620:             self.references_model(model_name, app_label) and
+621:             (
+622:                 self.order_with_respect_to is None or
+623:                 name == self.order_with_respect_to
+624:             )
+625:         )
+626: 
+627:     def describe(self):
+628:         return "Set order_with_respect_to on %s to %s" % (self.name, self.order_with_respect_to)
+629: 
+630:     @property
+631:     def migration_name_fragment(self):
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

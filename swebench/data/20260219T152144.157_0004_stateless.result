@@ -1,0 +1,27 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = List(
+  "spline.py",
+  "convolution.py",
+  "models.py",
+  "tabular.py",
+  "powerlaws.py",
+  "tests",
+  "__init__.py",
+  "core.py",
+  "rotations.py",
+  "separable.py",
+  "optimizers.py",
+  "bounding_box.py",
+  "utils.py",
+  "math_functions.py",
+  "parameters.py",
+  "functional_models.py",
+  "fitting.py",
+  "physical_models.py",
+  "projections.py",
+  "polynomial.py",
+  "statistic.py",
+  "mappings.py",
+  "setup_package.py"
+)

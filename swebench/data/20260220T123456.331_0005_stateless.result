@@ -1,0 +1,5 @@
+status: failure
+-- [E040] Syntax Error: --------------------------------------------------------
+4 |    def listDir(path:] = {
+  |                     ^
+  |                     an identifier expected, but ']' found

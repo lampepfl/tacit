@@ -1,0 +1,4 @@
+status: success
+Old line:                 if getattr(obj, field.target_field.attname) != getattr(self, field.attname):
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

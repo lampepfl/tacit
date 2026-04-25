@@ -1,0 +1,54 @@
+status: success
+181:                     else:
+182:                         continue
+183:                 if base is None:
+184:                     base = parent
+185:                 elif parent._meta.concrete_model is not base._meta.concrete_model:
+186:                     raise TypeError("Proxy model '%s' has more than one non-abstract model base class." % name)
+187:             if base is None:
+188:                 raise TypeError("Proxy model '%s' has no non-abstract model base class." % name)
+189:             new_class._meta.setup_proxy(base)
+190:             new_class._meta.concrete_model = base._meta.concrete_model
+191:         else:
+192:             new_class._meta.concrete_model = new_class
+193: 
+194:         # Collect the parent links for multi-table inheritance.
+195:         parent_links = {}
+196:         for base in reversed([new_class] + parents):
+197:             # Conceptually equivalent to `if base is Model`.
+198:             if not hasattr(base, '_meta'):
+199:                 continue
+200:             # Skip concrete parent classes.
+201:             if base != new_class and not base._meta.abstract:
+202:                 continue
+203:             # Locate OneToOneField instances.
+204:             for field in base._meta.local_fields:
+205:                 if isinstance(field, OneToOneField):
+206:                     related = resolve_relation(new_class, field.remote_field.model)
+207:                     parent_links[make_model_tuple(related)] = field
+208: 
+209:         # Track fields inherited from base models.
+210:         inherited_attributes = set()
+211:         # Do the appropriate setup for any model parents.
+212:         for base in new_class.mro():
+213:             if base not in parents or not hasattr(base, '_meta'):
+214:                 # Things without _meta aren't functional models, so they're
+215:                 # uninteresting parents.
+216:                 inherited_attributes.update(base.__dict__)
+217:                 continue
+218: 
+219:             parent_fields = base._meta.local_fields + base._meta.local_many_to_many
+220:             if not base._meta.abstract:
+221:                 # Check for clashes between locally declared fields and those
+222:                 # on the base classes.
+223:                 for field in parent_fields:
+224:                     if field.name in field_names:
+225:                         raise FieldError(
+226:                             'Local field %r in class %r clashes with field of '
+227:                             'the same name from base class %r.' % (
+228:                                 field.name,
+229:                                 name,
+230:                                 base.__name__,
+231:                             )
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

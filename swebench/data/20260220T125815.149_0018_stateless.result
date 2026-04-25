@@ -1,0 +1,53 @@
+status: success
+488:     def as_sql(self, with_limits=True, with_col_aliases=False):
+489:         """
+490:         Create the SQL for this query. Return the SQL string and list of
+491:         parameters.
+492: 
+493:         If 'with_limits' is False, any limit/offset information is not included
+494:         in the query.
+495:         """
+496:         refcounts_before = self.query.alias_refcount.copy()
+497:         try:
+498:             extra_select, order_by, group_by = self.pre_sql_setup()
+499:             for_update_part = None
+500:             # Is a LIMIT/OFFSET clause needed?
+501:             with_limit_offset = with_limits and (self.query.high_mark is not None or self.query.low_mark)
+502:             combinator = self.query.combinator
+503:             features = self.connection.features
+504:             if combinator:
+505:                 if not getattr(features, 'supports_select_{}'.format(combinator)):
+506:                     raise NotSupportedError('{} is not supported on this database backend.'.format(combinator))
+507:                 result, params = self.get_combinator_sql(combinator, self.query.combinator_all)
+508:             else:
+509:                 distinct_fields, distinct_params = self.get_distinct()
+510:                 # This must come after 'select', 'ordering', and 'distinct'
+511:                 # (see docstring of get_from_clause() for details).
+512:                 from_, f_params = self.get_from_clause()
+513:                 where, w_params = self.compile(self.where) if self.where is not None else ("", [])
+514:                 having, h_params = self.compile(self.having) if self.having is not None else ("", [])
+515:                 result = ['SELECT']
+516:                 params = []
+517: 
+518:                 if self.query.distinct:
+519:                     distinct_result, distinct_params = self.connection.ops.distinct_sql(
+520:                         distinct_fields,
+521:                         distinct_params,
+522:                     )
+523:                     result += distinct_result
+524:                     params += distinct_params
+525: 
+526:                 out_cols = []
+527:                 col_idx = 1
+528:                 for _, (s_sql, s_params), alias in self.select + extra_select:
+529:                     if alias:
+530:                         s_sql = '%s AS %s' % (s_sql, self.connection.ops.quote_name(alias))
+531:                     elif with_col_aliases:
+532:                         s_sql = '%s AS %s' % (s_sql, 'Col%d' % col_idx)
+533:                         col_idx += 1
+534:                     params.extend(s_params)
+535:                     out_cols.append(s_sql)
+536: 
+537:                 result += [', '.join(out_cols), 'FROM', *from_]
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

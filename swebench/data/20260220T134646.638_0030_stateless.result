@@ -1,0 +1,6 @@
+status: success
+_check_ignored_options found at line 1230
+return warnings found at line 1261
+File modified successfully
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

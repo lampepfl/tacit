@@ -1,0 +1,52 @@
+status: success
+Line 554-600:
+553:     def get_field(self, field_name):
+554:         """
+555:         Return a field instance given the name of a forward or reverse field.
+556:         """
+557:         try:
+558:             # In order to avoid premature loading of the relation tree
+559:             # (expensive) we prefer checking if the field is a forward field.
+560:             return self._forward_fields_map[field_name]
+561:         except KeyError:
+562:             # If the app registry is not ready, reverse fields are
+563:             # unavailable, therefore we throw a FieldDoesNotExist exception.
+564:             if not self.apps.models_ready:
+565:                 raise FieldDoesNotExist(
+566:                     "%s has no field named '%s'. The app cache isn't ready yet, "
+567:                     "so if this is an auto-created related field, it won't "
+568:                     "be available yet." % (self.object_name, field_name)
+569:                 )
+570: 
+571:         try:
+572:             # Retrieve field instance by name from cached or just-computed
+573:             # field map.
+574:             return self.fields_map[field_name]
+575:         except KeyError:
+576:             raise FieldDoesNotExist("%s has no field named '%s'" % (self.object_name, field_name))
+577: 
+578:     def get_base_chain(self, model):
+579:         """
+580:         Return a list of parent classes leading to `model` (ordered from
+581:         closest to most distant ancestor). This has to handle the case where
+582:         `model` is a grandparent or even more distant relation.
+583:         """
+584:         if not self.parents:
+585:             return []
+586:         if model in self.parents:
+587:             return [model]
+588:         for parent in self.parents:
+589:             res = parent._meta.get_base_chain(model)
+590:             if res:
+591:                 res.insert(0, parent)
+592:                 return res
+593:         return []
+594: 
+595:     def get_parent_list(self):
+596:         """
+597:         Return all the ancestors of this model as a list ordered by MRO.
+598:         Useful for determining if something is an ancestor, regardless of lineage.
+599:         """
+600:         result = OrderedSet(self.parents)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

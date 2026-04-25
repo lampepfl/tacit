@@ -1,0 +1,103 @@
+status: success
+201:     return args
+202: 
+203: 
+204: def trigger_reload(filename):
+205:     logger.info('%s changed, reloading.', filename)
+206:     sys.exit(3)
+207: 
+208: 
+209: def restart_with_reloader():
+210:     new_environ = {**os.environ, DJANGO_AUTORELOAD_ENV: 'true'}
+211:     args = get_child_arguments()
+212:     while True:
+213:         exit_code = subprocess.call(args, env=new_environ, close_fds=False)
+214:         if exit_code != 3:
+215:             return exit_code
+216: 
+217: 
+218: class BaseReloader:
+219:     def __init__(self):
+220:         self.extra_files = set()
+221:         self.directory_globs = defaultdict(set)
+222:         self._stop_condition = threading.Event()
+223: 
+224:     def watch_dir(self, path, glob):
+225:         path = Path(path)
+226:         if not path.is_absolute():
+227:             raise ValueError('%s must be absolute.' % path)
+228:         logger.debug('Watching dir %s with glob %s.', path, glob)
+229:         self.directory_globs[path].add(glob)
+230: 
+231:     def watch_file(self, path):
+232:         path = Path(path)
+233:         if not path.is_absolute():
+234:             raise ValueError('%s must be absolute.' % path)
+235:         logger.debug('Watching file %s.', path)
+236:         self.extra_files.add(path)
+237: 
+238:     def watched_files(self, include_globs=True):
+239:         """
+240:         Yield all files that need to be watched, including module files and
+241:         files within globs.
+242:         """
+243:         yield from iter_all_python_module_files()
+244:         yield from self.extra_files
+245:         if include_globs:
+246:             for directory, patterns in self.directory_globs.items():
+247:                 for pattern in patterns:
+248:                     yield from directory.glob(pattern)
+249: 
+250:     def wait_for_apps_ready(self, app_reg, django_main_thread):
+251:         """
+252:         Wait until Django reports that the apps have been loaded. If the given
+253:         thread has terminated before the apps are ready, then a SyntaxError or
+254:         other non-recoverable error has been raised. In that case, stop waiting
+255:         for the apps_ready event and continue processing.
+256: 
+257:         Return True if the thread is alive and the ready event has been
+258:         triggered, or False if the thread is terminated while waiting for the
+259:         event.
+260:         """
+261:         while django_main_thread.is_alive():
+262:             if app_reg.ready_event.wait(timeout=0.1):
+263:                 return True
+264:         else:
+265:             logger.debug('Main Django thread has terminated before apps are ready.')
+266:             return False
+267: 
+268:     def run(self, django_main_thread):
+269:         logger.debug('Waiting for apps ready_event.')
+270:         self.wait_for_apps_ready(apps, django_main_thread)
+271:         from django.urls import get_resolver
+272:         # Prevent a race condition where URL modules aren't loaded when the
+273:         # reloader starts by accessing the urlconf_module property.
+274:         try:
+275:             get_resolver().urlconf_module
+276:         except Exception:
+277:             # Loading the urlconf can result in errors during development.
+278:             # If this occurs then swallow the error and continue.
+279:             pass
+280:         logger.debug('Apps ready_event triggered. Sending autoreload_started signal.')
+281:         autoreload_started.send(sender=self)
+282:         self.run_loop()
+283: 
+284:     def run_loop(self):
+285:         ticker = self.tick()
+286:         while not self.should_stop:
+287:             try:
+288:                 next(ticker)
+289:             except StopIteration:
+290:                 break
+291:         self.stop()
+292: 
+293:     def tick(self):
+294:         """
+295:         This generator is called in a loop from run_loop. It's important that
+296:         the method takes care of pausing or otherwise waiting for a period of
+297:         time. This split between run_loop() and tick() is to improve the
+298:         testability of the reloader implementations by decoupling the work they
+299:         do from the loop.
+300:         """
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

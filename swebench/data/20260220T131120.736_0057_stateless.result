@@ -1,0 +1,15 @@
+status: success
+Ref.get_group_by_cols fix (delegation): 25915
+Subquery.get_group_by_cols - first 'if alias:': 37585
+Subquery.get_group_by_cols - last 'if alias:': 37585
+
+Subquery.get_group_by_cols:
+def get_group_by_cols(self, alias=None):
+        cols = []
+        for source in self.get_source_expressions():
+            cols.extend(source.get_group_by_cols())
+        return cols
+
+    def reverse
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

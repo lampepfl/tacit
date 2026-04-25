@@ -1,0 +1,8 @@
+status: failure
+-- [E086] Syntax Error: --------------------------------------------------------
+5 |    lines.drop(1640).take(80).foreach((line, i) => println(s"${1640 + i}: $line"))
+  |                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |                                   Wrong number of parameters, expected: 1
+  |
+  | longer explanation available when compiling with `-explain`
+1 error found

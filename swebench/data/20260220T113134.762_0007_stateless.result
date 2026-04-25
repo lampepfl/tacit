@@ -1,0 +1,16 @@
+status: success
+44:     handle_mask : callable, ``'first_found'`` or ``None``, optional
+171:         handle_mask=np.logical_or,
+199:         handle_mask : callable, ``'first_found'`` or ``None``, optional
+323:         if handle_mask is None:
+329:         elif handle_mask in ["ff", "first_found"]:
+336:                 operation, operand, handle_mask, axis=axis, **kwds2["mask"]
+485:     def _arithmetic_mask(self, operation, operand, handle_mask, axis=None, **kwds):
+502:         handle_mask : callable
+506:             Additional parameters given to ``handle_mask``.
+513:             ``handle_mask`` must create (and copy) the returned mask.
+518:         ) or handle_mask is None:
+527:             return handle_mask(self.mask, operand.mask, **kwds)
+742:             # for collapse operations, use astropy.utils.masked rather than handle_mask
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,25 @@
+status: success
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14752/repo/tests/admin_views/test_autocomplete_view.py:6: from django.contrib.admin.views.autocomplete import AutocompleteJsonView
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14752/repo/tests/admin_views/test_autocomplete_view.py:21: PAGINATOR_SIZE = AutocompleteJsonView.paginate_by
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14752/repo/tests/admin_views/test_autocomplete_view.py:64: class AutocompleteJsonViewTests(AdminViewBasicTestCase):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14752/repo/tests/admin_views/test_autocomplete_view.py:86:         response = AutocompleteJsonView.as_view(**self.as_view_args)(request)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14752/repo/tests/admin_views/test_autocomplete_view.py:98:         response = AutocompleteJsonView.as_view(**self.as_view_args)(request)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14752/repo/tests/admin_views/test_autocomplete_view.py:111:             AutocompleteJsonView.as_view(**self.as_view_args)(request)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14752/repo/tests/admin_views/test_autocomplete_view.py:122:         response = AutocompleteJsonView.as_view(**self.as_view_args)(request)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14752/repo/tests/admin_views/test_autocomplete_view.py:149:                 response = AutocompleteJsonView.as_view(**self.as_view_args)(request)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14752/repo/tests/admin_views/test_autocomplete_view.py:167:         response = AutocompleteJsonView.as_view(**self.as_view_args)(request)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14752/repo/tests/admin_views/test_autocomplete_view.py:179:             AutocompleteJsonView.as_view(**self.as_view_args)(request)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14752/repo/tests/admin_views/test_autocomplete_view.py:185:             AutocompleteJsonView.as_view(**self.as_view_args)(request)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14752/repo/tests/admin_views/test_autocomplete_view.py:191:             AutocompleteJsonView.as_view(**self.as_view_args)(request)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14752/repo/tests/admin_views/test_autocomplete_view.py:200:         response = AutocompleteJsonView.as_view(**self.as_view_args)(request)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14752/repo/tests/admin_views/test_autocomplete_view.py:223:             AutocompleteJsonView.as_view(**self.as_view_args)(request)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14752/repo/tests/admin_views/test_autocomplete_view.py:233:                 response = AutocompleteJsonView.as_view(**self.as_view_args)(request)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14752/repo/tests/admin_views/test_autocomplete_view.py:253:             response = AutocompleteJsonView.as_view(**self.as_view_args)(request)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14752/repo/tests/admin_views/test_autocomplete_view.py:277:             response = AutocompleteJsonView.as_view(**self.as_view_args)(request)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14752/repo/tests/admin_views/test_autocomplete_view.py:288:             response = AutocompleteJsonView.as_view(**self.as_view_args)(request)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14752/repo/django/contrib/admin/widgets.py:378:     Select widget mixin that loads options from AutocompleteJsonView via AJAX.
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14752/repo/django/contrib/admin/sites.py:8: from django.contrib.admin.views.autocomplete import AutocompleteJsonView
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14752/repo/django/contrib/admin/sites.py:420:         return AutocompleteJsonView.as_view(admin_site=self)(request)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14752/repo/django/contrib/admin/views/autocomplete.py:7: class AutocompleteJsonView(BaseListView):
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

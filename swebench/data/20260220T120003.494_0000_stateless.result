@@ -1,0 +1,9 @@
+status: success
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11630/repo/tests/check_framework/test_model_checks.py:27:                 id='models.E028',
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11630/repo/tests/check_framework/test_model_checks.py:49:                 id='models.E028',
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11630/repo/tests/modeladmin/test_checks.py:446:             'admin.E028'
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11630/repo/tests/modeladmin/test_checks.py:463:             'admin.E028'
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11630/repo/django/core/checks/model_checks.py:45:                     id='models.E028',
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11630/repo/django/contrib/admin/checks.py:503:                         id='admin.E028',
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

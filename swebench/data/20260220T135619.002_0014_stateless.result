@@ -1,0 +1,11 @@
+status: success
+1
+1 warning found
+def run()(using x$1: IOCapability): Any
+-- Warning: --------------------------------------------------------------------
+3 |  testImplicit(1)
+  |               ^
+  |Implicit parameters should be provided with a `using` clause.
+  |To disable the warning, please use the following option:
+  |  "-Wconf:msg=Implicit parameters should be provided with a `using` clause:s"
+val res0: Any = ()

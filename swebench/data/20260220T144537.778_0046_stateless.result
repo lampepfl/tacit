@@ -1,0 +1,35 @@
+status: success
+Found at line: 1318
+1318: class ManyToManyField(RelatedField):
+1319:     """
+1320:     Provide a many-to-many relation by using an intermediary model that
+1321:     holds two ForeignKey fields pointed at the two sides of the relation.
+1322: 
+1323:     Unless a ``through`` model was provided, ManyToManyField will use the
+1324:     create_many_to_many_intermediary_model factory to automatically generate
+1325:     the intermediary model.
+1326:     """
+1327: 
+1328:     # Field flags
+1329:     many_to_many = True
+1330:     many_to_one = False
+1331:     one_to_many = False
+1332:     one_to_one = False
+1333: 
+1334:     rel_class = ManyToManyRel
+1335: 
+1336:     description = _("Many-to-many relationship")
+1337: 
+1338:     def __init__(
+1339:         self,
+1340:         to,
+1341:         related_name=None,
+1342:         related_query_name=None,
+1343:         limit_choices_to=None,
+1344:         symmetrical=None,
+1345:         through=None,
+1346:         through_fields=None,
+1347:         db_constraint=True,
+1348:         db_table=None,
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

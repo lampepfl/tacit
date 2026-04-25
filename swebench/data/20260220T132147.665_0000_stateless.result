@@ -1,0 +1,13 @@
+status: success
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13768/repo/tests/dispatch/tests.py:146:     def test_send_robust_success(self):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13768/repo/tests/dispatch/tests.py:148:         result = a_signal.send_robust(sender=self, val='test')
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13768/repo/tests/dispatch/tests.py:153:     def test_send_robust_no_receivers(self):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13768/repo/tests/dispatch/tests.py:154:         result = a_signal.send_robust(sender=self, val='test')
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13768/repo/tests/dispatch/tests.py:157:     def test_send_robust_ignored_sender(self):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13768/repo/tests/dispatch/tests.py:159:         result = a_signal.send_robust(sender=self, val='test')
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13768/repo/tests/dispatch/tests.py:164:     def test_send_robust_fail(self):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13768/repo/tests/dispatch/tests.py:168:         result = a_signal.send_robust(sender=self, val="test")
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13768/repo/django/test/utils.py:438:             responses_for_setting = setting_changed.send_robust(
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13768/repo/django/dispatch/dispatcher.py:182:     def send_robust(self, sender, **named):
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

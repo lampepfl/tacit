@@ -1,0 +1,78 @@
+status: success
+845:                 ('id', models.AutoField(primary_key=True)),
+846:                 ('foo', models.ForeignKey('app.Foo', models.CASCADE, to_field='field')),
+847:             ]),
+848:         ]
+849:         after = [
+850:             ModelState('app', 'Foo', [
+851:                 ('id', models.AutoField(primary_key=True)),
+852:                 ('renamed_field', models.IntegerField(unique=True)),
+853:             ]),
+854:             ModelState('app', 'Bar', [
+855:                 ('id', models.AutoField(primary_key=True)),
+856:                 ('foo', models.ForeignKey('app.Foo', models.CASCADE, to_field='renamed_field')),
+857:             ]),
+858:         ]
+859:         changes = self.get_changes(before, after, MigrationQuestioner({'ask_rename': True}))
+860:         # Right number/type of migrations?
+861:         self.assertNumberMigrations(changes, 'app', 1)
+862:         self.assertOperationTypes(changes, 'app', 0, ['RenameField'])
+863:         self.assertOperationAttributes(changes, 'app', 0, 0, old_name='field', new_name='renamed_field')
+864: 
+865:     def test_rename_foreign_object_fields(self):
+866:         fields = ('first', 'second')
+867:         renamed_fields = ('first_renamed', 'second_renamed')
+868:         before = [
+869:             ModelState('app', 'Foo', [
+870:                 ('id', models.AutoField(primary_key=True)),
+871:                 ('first', models.IntegerField()),
+872:                 ('second', models.IntegerField()),
+873:             ], options={'unique_together': {fields}}),
+874:             ModelState('app', 'Bar', [
+875:                 ('id', models.AutoField(primary_key=True)),
+876:                 ('first', models.IntegerField()),
+877:                 ('second', models.IntegerField()),
+878:                 ('foo', models.ForeignObject(
+879:                     'app.Foo', models.CASCADE, from_fields=fields, to_fields=fields,
+880:                 )),
+881:             ]),
+882:         ]
+883:         # Case 1: to_fields renames.
+884:         after = [
+885:             ModelState('app', 'Foo', [
+886:                 ('id', models.AutoField(primary_key=True)),
+887:                 ('first_renamed', models.IntegerField()),
+888:                 ('second_renamed', models.IntegerField()),
+889:             ], options={'unique_together': {renamed_fields}}),
+890:             ModelState('app', 'Bar', [
+891:                 ('id', models.AutoField(primary_key=True)),
+892:                 ('first', models.IntegerField()),
+893:                 ('second', models.IntegerField()),
+894:                 ('foo', models.ForeignObject(
+895:                     'app.Foo', models.CASCADE, from_fields=fields, to_fields=renamed_fields,
+896:                 )),
+897:             ]),
+898:         ]
+899:         changes = self.get_changes(before, after, MigrationQuestioner({'ask_rename': True}))
+900:         self.assertNumberMigrations(changes, 'app', 1)
+901:         self.assertOperationTypes(changes, 'app', 0, ['RenameField', 'RenameField', 'AlterUniqueTogether'])
+902:         self.assertOperationAttributes(
+903:             changes, 'app', 0, 0, model_name='foo', old_name='first', new_name='first_renamed',
+904:         )
+905:         self.assertOperationAttributes(
+906:             changes, 'app', 0, 1, model_name='foo', old_name='second', new_name='second_renamed',
+907:         )
+908:         # Case 2: from_fields renames.
+909:         after = [
+910:             ModelState('app', 'Foo', [
+911:                 ('id', models.AutoField(primary_key=True)),
+912:                 ('first', models.IntegerField()),
+913:                 ('second', models.IntegerField()),
+914:             ], options={'unique_together': {fields}}),
+915:             ModelState('app', 'Bar', [
+916:                 ('id', models.AutoField(primary_key=True)),
+917:                 ('first_renamed', models.IntegerField()),
+918:                 ('second_renamed', models.IntegerField()),
+919:                 ('foo', models.ForeignObject(
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

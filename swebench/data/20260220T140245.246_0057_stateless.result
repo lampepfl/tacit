@@ -1,0 +1,20 @@
+status: success
+369:                     old_m2m_model._meta.get_field(old_model._meta.model_name),
+370:                     new_m2m_model._meta.get_field(new_model._meta.model_name),
+371:                 )
+372: 
+373:     def database_backwards(self, app_label, schema_editor, from_state, to_state):
+374:         self.new_name_lower, self.old_name_lower = self.old_name_lower, self.new_name_lower
+375:         self.new_name, self.old_name = self.old_name, self.new_name
+376: 
+377:         self.database_forwards(app_label, schema_editor, from_state, to_state)
+378: 
+379:         self.new_name_lower, self.old_name_lower = self.old_name_lower, self.new_name_lower
+380:         self.new_name, self.old_name = self.old_name, self.new_name
+381: 
+382:     def references_model(self, name, app_label):
+383:         return (
+384:             name.lower() == self.old_name_lower or
+385:             name.lower() == self.new_name_lower
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

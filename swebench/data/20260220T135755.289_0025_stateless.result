@@ -1,0 +1,8 @@
+status: failure
+-- [E050] Type Error: ----------------------------------------------------------
+13 |    step1(op)(using io)
+   |    ^^^^^^^^^
+   |    method apply in trait Function1 does not take more parameters
+   |
+   | longer explanation available when compiling with `-explain`
+1 error found

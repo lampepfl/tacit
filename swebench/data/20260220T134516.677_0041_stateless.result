@@ -1,0 +1,8 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = """./tests/defer/models.py:Tests for defer() and only().
+./tests/defer/tests.py:        # Using 'pk' with only() should result in 3 deferred fields, namely all
+./tests/defer/tests.py:    def test_defer_only_chaining(self):
+./tests/defer/tests.py:        self.assert_delayed(qs.only("name", "value").defer("name")[0], 2)
+./tests/defer/tests.py:        self.assert_delayed(qs.defer("name").only("value", "name")[0], 2)
+./tests/defer/tests.py:        self.assert_delayed(qs.defer("name").only("value")[0], """

@@ -1,0 +1,7 @@
+status: failure
+-- [E040] Syntax Error: --------------------------------------------------------
+3 |    val matches = grepRecursive(".", "class HttpResponse", "*.py")
+  |    ^^^
+  |    an identifier expected, but 'val' found
+  |
+  | longer explanation available when compiling with `-explain`

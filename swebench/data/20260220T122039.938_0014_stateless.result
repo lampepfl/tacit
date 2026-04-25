@@ -1,0 +1,19 @@
+status: success
+Line 765:         if self.choices is not None:
+Line 766:             setattr(cls, 'get_%s_display' % self.name,
+Line 767:                     partialmethod(cls._get_FIELD_display, field=self))
+3 warnings found
+def run()(using x$1: IOCapability): Any
+-- Deprecation Warning: --------------------------------------------------------
+7 |    println(s"Line 765: ${lines(764).repr}")
+  |                          ^^^^^^^^^^^^^^^
+  |method repr in trait IterableOps is deprecated since 2.13.0: Use coll instead of repr in a collection implementation, use the collection value itself from the outside
+-- Deprecation Warning: --------------------------------------------------------
+8 |    println(s"Line 766: ${lines(765).repr}")
+  |                          ^^^^^^^^^^^^^^^
+  |method repr in trait IterableOps is deprecated since 2.13.0: Use coll instead of repr in a collection implementation, use the collection value itself from the outside
+-- Deprecation Warning: --------------------------------------------------------
+9 |    println(s"Line 767: ${lines(766).repr}")
+  |                          ^^^^^^^^^^^^^^^
+  |method repr in trait IterableOps is deprecated since 2.13.0: Use coll instead of repr in a collection implementation, use the collection value itself from the outside
+val res0: Any = ()

@@ -1,0 +1,8 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = ProcessResult(
+  exitCode = 0,
+  stdout = """Syntax OK
+functools imported: True""",
+  stderr = ""
+)

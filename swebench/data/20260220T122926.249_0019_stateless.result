@@ -1,0 +1,3 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = List("exception.py", "asgi.py", "__init__.py", "base.py", "wsgi.py")

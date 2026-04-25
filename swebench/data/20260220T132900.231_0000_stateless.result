@@ -1,0 +1,7 @@
+status: failure
+-- [E040] Syntax Error: --------------------------------------------------------
+2 |  requestFileSystem("/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14016/repo") { given fs: FileSystem^ => 
+  |                                                                                                                                                         ^^
+  |                                    an identifier expected, but '=>' found
+  |
+  | longer explanation available when compiling with `-explain`

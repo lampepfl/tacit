@@ -1,0 +1,83 @@
+status: success
+1136:         if not self.cases:
+1137:             return self.default.get_group_by_cols(alias)
+1138:         return super().get_group_by_cols(alias)
+1139: 
+1140: 
+1141: class Subquery(BaseExpression, Combinable):
+1142:     """
+1143:     An explicit subquery. It may contain OuterRef() references to the outer
+1144:     query which will be resolved when it is applied to that query.
+1145:     """
+1146:     template = '(%(subquery)s)'
+1147:     contains_aggregate = False
+1148:     empty_result_set_value = None
+1149: 
+1150:     def __init__(self, queryset, output_field=None, **extra):
+1151:         # Allow the usage of both QuerySet and sql.Query objects.
+1152:         self.query = getattr(queryset, 'query', queryset)
+1153:         self.extra = extra
+1154:         super().__init__(output_field)
+1155: 
+1156:     def get_source_expressions(self):
+1157:         return [self.query]
+1158: 
+1159:     def set_source_expressions(self, exprs):
+1160:         self.query = exprs[0]
+1161: 
+1162:     def _resolve_output_field(self):
+1163:         return self.query.output_field
+1164: 
+1165:     def copy(self):
+1166:         clone = super().copy()
+1167:         clone.query = clone.query.clone()
+1168:         return clone
+1169: 
+1170:     @property
+1171:     def external_aliases(self):
+1172:         return self.query.external_aliases
+1173: 
+1174:     def get_external_cols(self):
+1175:         return self.query.get_external_cols()
+1176: 
+1177:     def as_sql(self, compiler, connection, template=None, query=None, **extra_context):
+1178:         connection.ops.check_expression_support(self)
+1179:         template_params = {**self.extra, **extra_context}
+1180:         query = query or self.query
+1181:         subquery_sql, sql_params = query.as_sql(compiler, connection)
+1182:         template_params['subquery'] = subquery_sql[1:-1]
+1183: 
+1184:         template = template or template_params.get('template', self.template)
+1185:         sql = template % template_params
+1186:         return sql, sql_params
+1187: 
+1188:     def get_group_by_cols(self, alias=None):
+1189:         # If this expression is referenced by an alias for an explicit GROUP BY
+1190:         # through values() a reference to this expression and not the
+1191:         # underlying .query must be returned to ensure external column
+1192:         # references are not grouped against as well.
+1193:         if alias:
+1194:             return [Ref(alias, self)]
+1195:         return self.query.get_group_by_cols()
+1196: 
+1197: 
+1198: class Exists(Subquery):
+1199:     template = 'EXISTS(%(subquery)s)'
+1200:     output_field = fields.BooleanField()
+1201: 
+1202:     def __init__(self, queryset, negated=False, **kwargs):
+1203:         self.negated = negated
+1204:         super().__init__(queryset, **kwargs)
+1205: 
+1206:     def __invert__(self):
+1207:         clone = self.copy()
+1208:         clone.negated = not self.negated
+1209:         return clone
+1210: 
+1211:     def as_sql(self, compiler, connection, template=None, **extra_context):
+1212:         query = self.query.exists(using=connection.alias)
+1213:         sql, params = super().as_sql(
+1214:             compiler,
+1215:             connection,
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

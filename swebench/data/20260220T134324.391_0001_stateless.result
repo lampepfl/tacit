@@ -1,0 +1,4 @@
+status: success
+Found: List(/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14672/repo/django/db/models/fields/reverse_related.py)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

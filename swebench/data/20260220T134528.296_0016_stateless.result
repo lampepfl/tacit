@@ -1,0 +1,4 @@
+status: success
+1263:     def _check_relationship_model(self, from_model=None, **kwargs):
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

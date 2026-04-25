@@ -1,0 +1,5 @@
+status: success
+-- Error: ----------------------------------------------------------------------
+3 |  requestFileSystem(root)(using implicitly[FileSystem^] => 
+  |                                ^^^^^^^^^^^^^^^^^^^^^^^
+  |                       not a legal formal parameter for a function literal

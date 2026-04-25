@@ -1,0 +1,23 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = ProcessResult(
+  exitCode = 1,
+  stdout = "",
+  stderr = """Traceback (most recent call last):
+  File "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/astropy__astropy-14182/repo/setup.py", line 69, in <module>
+    setup(ext_modules=get_extensions())
+                      ~~~~~~~~~~~~~~^^
+  File "/Users/tacit/Work/SafeExecMCP/bench/.venv/lib/python3.14/site-packages/extension_helpers/_setup_helpers.py", line 68, in get_extensions
+    for setuppkg in iter_setup_packages(srcdir, packages):
+                    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "/Users/tacit/Work/SafeExecMCP/bench/.venv/lib/python3.14/site-packages/extension_helpers/_setup_helpers.py", line 179, in iter_setup_packages
+    module = import_file(setup_package, name=packagename + ".setup_package")
+  File "/Users/tacit/Work/SafeExecMCP/bench/.venv/lib/python3.14/site-packages/extension_helpers/_utils.py", line 147, in import_file
+    loader.exec_module(mod)
+    ~~~~~~~~~~~~~~~~~~^^^^^
+  File "<frozen importlib._bootstrap_external>", line 759, in exec_module
+  File "<frozen importlib._bootstrap>", line 491, in _call_with_frames_removed
+  File "astropy/wcs/setup_package.py", line 13, in <module>
+    from setuptools.dep_util import newer_group
+ModuleNotFoundError: No module named 'setuptools.dep_util'"""
+)

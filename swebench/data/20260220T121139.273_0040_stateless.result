@@ -1,0 +1,9 @@
+status: success
+149: class RelatedLessThanOrEqual(RelatedLookupMixin, LessThanOrEqual):
+150:     pass
+151: 
+152: 
+153: class RelatedIsNull(RelatedLookupMixin, IsNull):
+154:     pass
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

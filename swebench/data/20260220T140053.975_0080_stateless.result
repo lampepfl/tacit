@@ -1,0 +1,9 @@
+status: failure
+-- [E007] Type Mismatch Error: -------------------------------------------------
+5 |      exec("python", List("-c", "import django; print(django.__version__)"), None, Some(30000))
+  |                                                                                   ^^^^^^^^^^^
+  |                                                       Found:    Some[Int]
+  |                                                       Required: Long
+  |
+  | longer explanation available when compiling with `-explain`
+1 error found

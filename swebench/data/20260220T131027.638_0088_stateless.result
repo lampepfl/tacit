@@ -1,0 +1,12 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = """GrepMatch(/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11964/repo/django/db/models/query.py,1461,            converters = compiler.get_converters([)
+GrepMatch(/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11964/repo/django/db/models/query.py,1464,            if converters:)
+GrepMatch(/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11964/repo/django/db/models/query.py,1465,                query = compiler.apply_converters(query, converters))
+GrepMatch(/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11964/repo/django/db/models/expressions.py,168,    def get_db_converters(self, connection):)
+GrepMatch(/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11964/repo/django/db/models/expressions.py,173,        ) + self.output_field.get_db_converters(connection))
+GrepMatch(/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11964/repo/django/db/models/expressions.py,315,        Expressions provide their own converters because users have the option)
+GrepMatch(/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11964/repo/django/db/models/expressions.py,770,    def get_db_converters(self, connection):)
+GrepMatch(/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11964/repo/django/db/models/expressions.py,772,            return self.output_field.get_db_converters(connection))
+GrepMatch(/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11964/repo/django/db/models/expressions.py,773,        return (self.output_field.get_db_converters(connection) +)
+GrepMatch(/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11964/repo/django/db/models/expressions.py,774,                self.target.get_db_converters(connection)))"""

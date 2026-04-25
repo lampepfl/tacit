@@ -1,0 +1,5 @@
+status: failure
+
+Error: Code validation failed (1 violation):
+  [cast-escape] Line 12: .asInstanceOf is forbidden
+    > requestExecPermission(Set("ls", "find", "grep"))(g)(using ???.asInstanceOf[IOCapability])

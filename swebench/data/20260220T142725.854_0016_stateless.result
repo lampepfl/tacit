@@ -1,0 +1,23 @@
+status: success
+276:         if using:
+277:             connection = connections[using]
+278:         return connection.ops.compiler(self.compiler)(self, connection, using)
+279: 
+280:     def get_meta(self):
+281:         """
+282:         Return the Options instance (the model._meta) from which to start
+283:         processing. Normally, this is self.model._meta, but it can be changed
+284:         by subclasses.
+285:         """
+286:         return self.model._meta
+287: 
+288:     def clone(self):
+289:         """
+290:         Return a copy of the current Query. A lightweight alternative to
+291:         to deepcopy().
+292:         """
+293:         obj = Empty()
+294:         obj.__class__ = self.__class__
+295:         # Copy references to everything.
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

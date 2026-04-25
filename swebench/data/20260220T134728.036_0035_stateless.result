@@ -1,0 +1,27 @@
+status: success
+1221:         if self.unique:
+1222:             return [
+1223:                 checks.Error(
+1224:                     'ManyToManyFields cannot be unique.',
+1225:                     obj=self,
+1226:                     id='fields.E330',
+1227:                 )
+1228:             ]
+1229:         return []
+1230: 
+
+check method starts at line 110
+110:     def check(self, **kwargs):
+111:         return [
+112:             *super().check(**kwargs),
+113:             *self._check_related_name_is_valid(),
+114:             *self._check_related_query_name_is_valid(),
+115:             *self._check_relation_model_exists(),
+116:             *self._check_referencing_to_swapped_model(),
+117:             *self._check_clashes(),
+118:         ]
+119: 
+120:     def _check_related_name_is_valid(self):
+121:         import keyword
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

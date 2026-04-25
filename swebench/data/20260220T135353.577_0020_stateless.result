@@ -1,0 +1,7 @@
+status: success
+71:     def resolve_expression(self, query=None, allow_joins=True, reuse=None, summarize=False, for_save=False):
+307:     def resolve_expression(self, *args, **kwargs):
+310:         (with a resolve_expression() method).
+312:         raise NotImplementedError('FilteredRelation.resolve_expression() is unused.')
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

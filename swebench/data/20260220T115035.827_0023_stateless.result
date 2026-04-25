@@ -1,0 +1,68 @@
+status: success
+=== Lines 30-50 ===
+29:     'SplitHiddenDateTimeWidget', 'SelectDateWidget',
+30: )
+31: 
+32: MEDIA_TYPES = ('css', 'js')
+33: 
+34: 
+35: class MediaOrderConflictWarning(RuntimeWarning):
+36:     pass
+37: 
+38: 
+39: @html_safe
+40: class Media:
+41:     def __init__(self, media=None, css=None, js=None):
+42:         if media is not None:
+43:             css = getattr(media, 'css', {})
+44:             js = getattr(media, 'js', [])
+45:         else:
+46:             if css is None:
+47:                 css = {}
+48:             if js is None:
+49:                 js = []
+
+=== Lines 140-180 ===
+139:             else:
+140:                 if index > last_insert_index:
+141:                     warnings.warn(
+142:                         'Detected duplicate Media files in an opposite order:\n'
+143:                         '%s\n%s' % (combined_list[last_insert_index], combined_list[index]),
+144:                         MediaOrderConflictWarning,
+145:                     )
+146:                 # path already exists in the list. Update last_insert_index so
+147:                 # that the following elements are inserted in front of this one.
+148:                 last_insert_index = index
+149:         return combined_list
+150: 
+151:     def __add__(self, other):
+152:         combined = Media()
+153:         combined._css_lists = self._css_lists + other._css_lists
+154:         combined._js_lists = self._js_lists + other._js_lists
+155:         return combined
+156: 
+157: 
+158: def media_property(cls):
+159:     def _media(self):
+160:         # Get the media property of the superclass, if it exists
+161:         sup_cls = super(cls, self)
+162:         try:
+163:             base = sup_cls.media
+164:         except AttributeError:
+165:             base = Media()
+166: 
+167:         # Get the media definition for this class
+168:         definition = getattr(cls, 'Media', None)
+169:         if definition:
+170:             extend = getattr(definition, 'extend', True)
+171:             if extend:
+172:                 if extend is True:
+173:                     m = base
+174:                 else:
+175:                     m = Media()
+176:                     for medium in extend:
+177:                         m = m + base[medium]
+178:                 return m + Media(definition)
+179:             return Media(definition)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

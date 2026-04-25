@@ -1,0 +1,50 @@
+status: success
+485:     def _arithmetic_mask(self, operation, operand, handle_mask, axis=None, **kwds):
+486:         """
+487:         Calculate the resulting mask.
+488: 
+489:         This is implemented as the piecewise ``or`` operation if both have a
+490:         mask.
+491: 
+492:         Parameters
+493:         ----------
+494:         operation : callable
+495:             see :meth:`NDArithmeticMixin._arithmetic` parameter description.
+496:             By default, the ``operation`` will be ignored.
+497: 
+498:         operand : `NDData`-like instance
+499:             The second operand wrapped in an instance of the same class as
+500:             self.
+501: 
+502:         handle_mask : callable
+503:             see :meth:`NDArithmeticMixin.add`
+504: 
+505:         kwds :
+506:             Additional parameters given to ``handle_mask``.
+507: 
+508:         Returns
+509:         -------
+510:         result_mask : any type
+511:             If only one mask was present this mask is returned.
+512:             If neither had a mask ``None`` is returned. Otherwise
+513:             ``handle_mask`` must create (and copy) the returned mask.
+514:         """
+515:         # If only one mask is present we need not bother about any type checks
+516:         if (
+517:             self.mask is None and operand is not None and operand.mask is None
+518:         ) or handle_mask is None:
+519:             return None
+520:         elif self.mask is None and operand is not None:
+521:             # Make a copy so there is no reference in the result.
+522:             return deepcopy(operand.mask)
+523:         elif operand is None:
+524:             return deepcopy(self.mask)
+525:         else:
+526:             # Now lets calculate the resulting mask (operation enforces copy)
+527:             return handle_mask(self.mask, operand.mask, **kwds)
+528: 
+529:     def _arithmetic_wcs(self, operation, operand, compare_wcs, **kwds):
+530:         """
+531:         Calculate the resulting wcs.
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

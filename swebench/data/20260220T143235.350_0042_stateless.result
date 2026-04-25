@@ -1,0 +1,12 @@
+status: success
+Found 8 matches
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13033/repo/tests/generic_relations_regress/tests.py:107:         places = list(Place.objects.order_by('links__id'))
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13033/repo/tests/queries/tests.py:2162:                 ).order_by('id').distinct().values('double_id')[0:2],
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13033/repo/tests/queries/tests.py:2689:             LoopX.objects.all().order_by('y__x__y__x__id'),
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13033/repo/tests/custom_managers/tests.py:334:             FunPerson._base_manager.order_by('first_name').filter(favorite_thing_id=self.b1.pk), [
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13033/repo/tests/custom_managers/tests.py:344:             FunPerson._base_manager.order_by('first_name').filter(favorite_thing_id=self.b1.pk), [
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13033/repo/tests/custom_managers/tests.py:355:             FunPerson._base_manager.order_by('first_name').filter(favorite_thing_id=self.b1.pk), [
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13033/repo/tests/ordering/tests.py:337:             Article.objects.order_by('author_id'), [
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13033/repo/tests/gis_tests/relatedapp/tests.py:206:         ids_qs = City.objects.order_by('id').values('id', 'location__id')
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,19 @@
+status: success
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15498/repo/tests/middleware/tests.py:579:     def test_if_modified_since_and_no_last_modified(self):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15498/repo/tests/middleware/tests.py:584:     def test_no_if_modified_since_and_last_modified(self):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15498/repo/tests/middleware/tests.py:589:     def test_if_modified_since_and_same_last_modified(self):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15498/repo/tests/middleware/tests.py:595:     def test_if_modified_since_and_last_modified_in_the_past(self):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15498/repo/tests/middleware/tests.py:601:     def test_if_modified_since_and_last_modified_in_the_future(self):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15498/repo/tests/middleware/tests.py:607:     def test_if_modified_since_and_redirect(self):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15498/repo/tests/middleware/tests.py:619:     def test_if_modified_since_and_client_error(self):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15498/repo/tests/conditional_processing/tests.py:38:     def test_if_modified_since(self):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15498/repo/tests/view_tests/tests/test_static.py:82:     def test_invalid_if_modified_since(self):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15498/repo/tests/view_tests/tests/test_static.py:98:     def test_invalid_if_modified_since2(self):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15498/repo/django/utils/cache.py:177:     if_modified_since = request.META.get("HTTP_IF_MODIFIED_SINCE")
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15498/repo/django/utils/cache.py:178:     if_modified_since = if_modified_since and parse_http_date_safe(if_modified_since)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15498/repo/django/utils/cache.py:202:         and if_modified_since
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15498/repo/django/utils/cache.py:203:         and not _if_modified_since_passes(last_modified, if_modified_since)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15498/repo/django/utils/cache.py:261: def _if_modified_since_passes(last_modified, if_modified_since):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15498/repo/django/utils/cache.py:265:     return not last_modified or last_modified > if_modified_since
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

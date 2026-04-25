@@ -1,0 +1,19 @@
+status: success
+Exit code: 1
+Stdout (first 1000): running build_ext
+building 'astropy.wcs._wcs' extension
+creating build
+creating build/temp.macosx-14.0-arm64-cpython-314
+creating build/temp.macosx-14.0-arm64-cpython-314/astropy
+creating build/temp.macosx-14.0-arm64-cpython-314/astropy/wcs
+creating build/temp.macosx-14.0-arm64-cpython-314/astropy/wcs/src
+creating build/temp.macosx-14.0-arm64-cpython-314/cextern
+creating build/temp.macosx-14.0-arm64-cpython-314/cextern/wcslib
+creating build/temp.macosx-14.0-arm64-cpython-314/cextern/wcslib/C
+creating build/temp.macosx-14.0-arm64-cpython-314/cextern/wcslib/C/flexed
+clang -fno-strict-overflow -Wsign-compare -Wunreachable-code -fno-common -dynamic -DNDEBUG -g -O3 -Wall -DECHO -DWCSTRIG_MACRO -DASTROPY_WCS_BUILD -D_GNU_SOURCE -DNDEBUG -UDEBUG -I/Users/tacit/Work/SafeExecMCP/bench/.venv/lib/python3.14/site-packages/numpy/_core/include -Icextern/wcslib/C -Iastropy/wcs/include -I/Users/tacit/Work/SafeExecMCP/bench/.venv/include -I/opt/homebrew/opt/python@3.14/Frameworks/Python.framewo
+Stderr (first 500): Extension astropy.io.fits._tiled_compression._compression contains source files (astropy/io/fits/_tiled_compression/src/compression.c, astropy/io/fits/_tiled_compression/src/unquantize.c) that are specified using an absolute path, which will not be supported in future.
+astropy/wcs/src/wcslib_celprm_wrap.c:167:15: warning: incompatible pointer types initializing 'PyCelprm *' with an expression of type 'PyObject *' (aka 'struct _object *') [-Wincompatible-pointer-types]
+    PyCelprm* copy = PyCelp
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

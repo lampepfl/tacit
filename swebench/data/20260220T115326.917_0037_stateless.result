@@ -1,0 +1,19 @@
+status: success
+New approach: When warning, find the element from list_1 that's before index
+
+Test case [1,2] + [2,1]:
+- index=2, we need to find element from list_1 that's before position 2
+- list_1 = [1, 2], combined_list = [1, 2]
+- Element at index 2 doesn't exist in combined_list yet, but index=2 > last_insert_index=0
+- We want: element from list_1 that's at or before last_insert_index
+- last_insert_index=0, combined_list[0]=1 -> correct!
+
+Bug case:
+- index=2, last_insert_index=0, combined_list = ['text-editor-extras.js', 'color-picker.js', 'text-editor.js']
+- We need element from list_1 that's at or before last_insert_index=0
+- But combined_list[0] = 'text-editor-extras.js' (newly inserted, not from list_1)
+- We should look for the element from list_1 that's closest to last_insert_index
+- In combined_list, 'color-picker.js' (from list_1) is at index 1
+- So we should compare 'text-editor.js' with 'color-picker.js'
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

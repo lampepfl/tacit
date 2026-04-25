@@ -1,0 +1,9 @@
+status: success
+Found at positions: 40473 to 40731
+Content:
+                # If the relationship's pk/to_field was changed, clear the
+                # cached relationship.
+                if getattr(obj, field.target_field.attname) != getattr(self, field.attname):
+                    field.delete_cached_value(self)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

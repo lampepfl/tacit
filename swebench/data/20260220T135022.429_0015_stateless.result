@@ -1,0 +1,41 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = List(
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14997/repo/django/db/backends/base/schema.py",
+    lineNumber = 18,
+    line = "    When altering the given field, must constraints on its model from the given"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14997/repo/django/db/backends/base/schema.py",
+    lineNumber = 171,
+    line = "            # Check constraints can go on the column SQL here."
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14997/repo/django/db/backends/base/schema.py",
+    lineNumber = 202,
+    line = "        constraints = [constraint.constraint_sql(model, self) for constraint in model._meta.constraints]"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14997/repo/django/db/backends/base/schema.py",
+    lineNumber = 205,
+    line = "            'definition': ', '.join(constraint for constraint in (*column_sqls, *constraints) if constraint),"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14997/repo/django/db/backends/base/schema.py",
+    lineNumber = 350,
+    line = "        Create a table and any accompanying indexes or unique constraints for"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14997/repo/django/db/backends/base/schema.py",
+    lineNumber = 453,
+    line = "        meta_constraint_names = {constraint.name for constraint in model._meta.constraints}"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14997/repo/django/db/backends/base/schema.py",
+    lineNumber = 461,
+    line = "            raise ValueError(\"Found wrong number (%s) of constraints for %s(%s)\" % ("
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14997/repo/django/db/backends/base/schema.py",
+...

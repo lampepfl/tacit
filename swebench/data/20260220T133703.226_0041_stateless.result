@@ -1,0 +1,12 @@
+status: success
+Fixed
+1 warning found
+def run()(using x$1: IOCapability): Any
+-- Warning: --------------------------------------------------------------------
+17 |      val blankLine :: rest = newLines2.drop(1194)
+   |                              ^^^^^^^^^^^^^^^^^^^^
+   |pattern's type ::[(String)?] is more specialized than the right hand side expression's type List[(String)?]
+   |
+   |If the narrowing is intentional, this can be communicated by adding `.runtimeChecked` after the expression,
+   |which may result in a MatchError at runtime.
+val res0: Any = ()

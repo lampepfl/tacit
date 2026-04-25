@@ -1,0 +1,14 @@
+status: success
+Lines 266-275:
+265:                 return string, set(imports)
+266:         if hasattr(self.value, "__module__"):
+267:             module = self.value.__module__
+268:             if module == builtins.__name__:
+269:                 return self.value.__name__, set()
+270:             else:
+271:                 return "%s.%s" % (module, self.value.__name__), {"import %s" % module}
+272: 
+273: 
+274: class UUIDSerializer(BaseSerializer):
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

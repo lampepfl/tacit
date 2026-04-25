@@ -1,0 +1,59 @@
+status: success
+266:     ],
+267: )
+268: def test_arithmetics_data_masks(mask1, mask2):
+269:     nd1 = NDDataArithmetic(1, mask=mask1)
+270:     nd2 = NDDataArithmetic(1, mask=mask2)
+271: 
+272:     if mask1 is None and mask2 is None:
+273:         ref_mask = None
+274:     elif mask1 is None:
+275:         ref_mask = mask2
+276:     elif mask2 is None:
+277:         ref_mask = mask1
+278:     else:
+279:         ref_mask = mask1 | mask2
+280: 
+281:     # Addition
+282:     nd3 = nd1.add(nd2)
+283:     assert_array_equal(ref_mask, nd3.mask)
+284:     # Subtraction
+285:     nd4 = nd1.subtract(nd2)
+286:     assert_array_equal(ref_mask, nd4.mask)
+287:     # Multiplication
+288:     nd5 = nd1.multiply(nd2)
+289:     assert_array_equal(ref_mask, nd5.mask)
+290:     # Division
+291:     nd6 = nd1.divide(nd2)
+292:     assert_array_equal(ref_mask, nd6.mask)
+293:     for nd in [nd3, nd4, nd5, nd6]:
+294:         # Check all other attributes are not set
+295:         assert nd.unit is None
+296:         assert nd.uncertainty is None
+297:         assert len(nd.meta) == 0
+298:         assert nd.wcs is None
+299: 
+300: 
+301: # One additional case which can not be easily incorporated in the test above
+302: # what happens if the masks are numpy ndarrays are not broadcastable
+303: def test_arithmetics_data_masks_invalid():
+304:     nd1 = NDDataArithmetic(1, mask=np.array([1, 0], dtype=np.bool_))
+305:     nd2 = NDDataArithmetic(1, mask=np.array([1, 0, 1], dtype=np.bool_))
+306: 
+307:     with pytest.raises(ValueError):
+308:         nd1.add(nd2)
+309:     with pytest.raises(ValueError):
+310:         nd1.multiply(nd2)
+311:     with pytest.raises(ValueError):
+312:         nd1.subtract(nd2)
+313:     with pytest.raises(ValueError):
+314:         nd1.divide(nd2)
+315: 
+316: 
+317: # Covering:
+318: # both have uncertainties (data and uncertainty without unit)
+319: # tested against manually determined resulting uncertainties to verify the
+320: # implemented formulas
+321: # this test only works as long as data1 and data2 do not contain any 0
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

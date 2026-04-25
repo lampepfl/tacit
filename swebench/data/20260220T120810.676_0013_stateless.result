@@ -1,0 +1,20 @@
+status: success
+459: 
+460: @Field.register_lookup
+461: class IsNull(BuiltinLookup):
+462:     lookup_name = 'isnull'
+463:     prepare_rhs = False
+464: 
+465:     def as_sql(self, compiler, connection):
+466:         sql, params = compiler.compile(self.lhs)
+467:         if self.rhs:
+468:             return "%s IS NULL" % sql, params
+469:         else:
+470:             return "%s IS NOT NULL" % sql, params
+471: 
+472: 
+473: @Field.register_lookup
+474: class Regex(BuiltinLookup):
+475:     lookup_name = 'regex'
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

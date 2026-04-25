@@ -1,0 +1,32 @@
+status: success
+2: import math
+3: from copy import copy
+4: 
+5: from django.core.exceptions import EmptyResultSet
+6: from django.db.models.expressions import Case, Exists, Func, Value, When
+7: from django.db.models.fields import (
+8:     BooleanField, CharField, DateTimeField, Field, IntegerField, UUIDField,
+9: )
+10: from django.db.models.query_utils import RegisterLookupMixin
+11: from django.utils.datastructures import OrderedSet
+12: from django.utils.functional import cached_property
+13: 
+14: 
+15: class Lookup:
+16:     lookup_name = None
+17:     prepare_rhs = True
+18:     can_use_none_as_rhs = False
+19: 
+20:     def __init__(self, lhs, rhs):
+21:         self.lhs, self.rhs = lhs, rhs
+22:         self.rhs = self.get_prep_lookup()
+23:         if hasattr(self.lhs, 'get_bilateral_transforms'):
+24:             bilateral_transforms = self.lhs.get_bilateral_transforms()
+25:         else:
+26:             bilateral_transforms = []
+27:         if bilateral_transforms:
+28:             # Warn the user as soon as possible if they are trying to apply
+29:             # a bilateral transformation on a nested QuerySet: that won't work.
+30:             from django.db.models.sql.query import Query  # avoid circular import
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,52 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = ProcessResult(
+  exitCode = 0,
+  stdout = """README.rst
+absolute_url_overrides
+admin_autodiscover
+admin_changelist
+admin_checks
+admin_custom_urls
+admin_default_site
+admin_docs
+admin_filters
+admin_inlines
+admin_ordering
+admin_registration
+admin_scripts
+admin_utils
+admin_views
+admin_widgets
+aggregation
+aggregation_regress
+annotations
+app_loading
+apps
+asgi
+async
+auth_tests
+backends
+base
+bash_completion
+basic
+builtin_server
+bulk_create
+cache
+check_framework
+conditional_processing
+constraints
+contenttypes_tests
+context_processors
+csrf_tests
+custom_columns
+custom_lookups
+custom_managers
+custom_methods
+custom_migration_operations
+custom_pk
+datatypes
+dates
+datetimes
+db_functions
+...

@@ -1,0 +1,43 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = List(
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12908/repo/django/db/models/query.py",
+    lineNumber = 418,
+    line = "        clone = self._chain() if self.query.combinator else self.filter(*args, **kwargs)"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12908/repo/django/db/models/query.py",
+    lineNumber = 988,
+    line = "    def _combinator_query(self, combinator, *other_qs, all=False):"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12908/repo/django/db/models/query.py",
+    lineNumber = 995,
+    line = "        clone.query.combinator = combinator"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12908/repo/django/db/models/query.py",
+    lineNumber = 996,
+    line = "        clone.query.combinator_all = all"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12908/repo/django/db/models/query.py",
+    lineNumber = 1003,
+    line = "            return qs[0]._combinator_query('union', *qs[1:], all=all) if qs else self"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12908/repo/django/db/models/query.py",
+    lineNumber = 1004,
+    line = "        return self._combinator_query('union', *other_qs, all=all)"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12908/repo/django/db/models/query.py",
+    lineNumber = 1013,
+    line = "        return self._combinator_query('intersection', *other_qs)"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12908/repo/django/db/models/query.py",
+    lineNumber = 1019,
+    line = "        return self._combinator_query('difference', *other_qs)"
+...

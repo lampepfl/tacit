@@ -1,0 +1,10 @@
+status: failure
+-- [E081] Type Error: ----------------------------------------------------------
+2 |  requestExecPermission(Set("ls", "find", "head", "cat"))(pp => 
+  |                                                          ^^
+  |                           Missing parameter type
+  |
+  |                           I could not infer the type of the parameter pp
+  |                           Expected type for the whole anonymous function:
+  |                             Any
+1 error found

@@ -1,0 +1,23 @@
+status: success
+if 'check_same_thread' in kwargs and kwargs['check_same_thread']:
+            warnings.warn(
+                'The `check_same_thread` option was provided and set to '
+                'True. It will be overridden with False. Use the '
+                '`DatabaseWrapper.allow_thread_sharing` property instead '
+                'for controlling thread shareability.',
+                RuntimeWarning
+            )
+        kwargs.update({'check_same_thread': False, 'uri': True})
+        if 'timeout' not in kwargs:
+            kwargs['timeout'] = 60
+        return kwargs
+
+    @async_unsafe
+    def get_new_connection(self, conn_params):
+        conn = Database.connect(**conn_params)
+        conn.create_function("django_date_extract", 2, _sqlite_datetime_extract)
+        conn.create_function("django_date_trunc", 2, _sqlite_date_trunc)
+        conn.create_function('django_datetime_cast_date', 3, _sqlite_datetime_cast_date)
+        conn.create_function('django_datetime_cast_time', 3, _sqlite_datetime_cast_time)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,13 @@
+status: success
+Method definition:
+433:     def build_app_dict(self, request, label=None):
+
+Model key:
+
+Internal calls:
+506:         app_dict = self.build_app_dict(request)
+537:         app_dict = self.build_app_dict(request, app_label)
+
+Old _build_app_dict references (should be empty):
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

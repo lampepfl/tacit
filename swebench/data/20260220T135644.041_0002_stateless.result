@@ -1,0 +1,33 @@
+status: success
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15320/repo/tests/aggregation/tests.py:29:     def as_sql(self, compiler, connection, **extra_context):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15320/repo/tests/aggregation/tests.py:1045:             def as_sql(self, compiler, connection):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15320/repo/tests/aggregation/tests.py:1056:             def as_sql(self, compiler, connection):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15320/repo/tests/foreign_object/models/article.py:23:     def as_sql(self, compiler, connection):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15320/repo/tests/custom_lookups/tests.py:17:     def as_sql(self, compiler, connection):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15320/repo/tests/custom_lookups/tests.py:33:     def as_sql(self, compiler, connection):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15320/repo/tests/custom_lookups/tests.py:50:     def as_sql(self, compiler, connection):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15320/repo/tests/custom_lookups/tests.py:58:     def as_sql(self, compiler, connection):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15320/repo/tests/custom_lookups/tests.py:67:     def as_sql(self, compiler, connection):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15320/repo/tests/custom_lookups/tests.py:76:     def as_sql(self, compiler, connection):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15320/repo/tests/custom_lookups/tests.py:89:     def as_sql(self, compiler, connection):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15320/repo/tests/custom_lookups/tests.py:110:     def as_sql(self, compiler, connection):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15320/repo/tests/custom_lookups/tests.py:135:     def as_sql(self, compiler, connection):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15320/repo/tests/custom_lookups/tests.py:195:     def as_sql(self, compiler, connection):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15320/repo/tests/custom_lookups/tests.py:213:     def as_sql(self, compiler, connection):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15320/repo/tests/custom_lookups/tests.py:499:     def as_sql(self, compiler, connection):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15320/repo/tests/queries/tests.py:3080:         def as_sql(self, compiler, connection):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15320/repo/tests/gis_tests/test_gis_tests_utils.py:17:                 def as_sql(self, *args, **kwargs):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15320/repo/tests/gis_tests/utils.py:35:         def as_sql_wrapper(original_as_sql):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15320/repo/django/contrib/postgres/aggregates/mixins.py:24:     def as_sql(self, compiler, connection):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15320/repo/django/contrib/postgres/search.py:20:     def as_sql(self, qn, connection):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15320/repo/django/contrib/postgres/search.py:58:     def as_sql(self, compiler, connection):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15320/repo/django/contrib/postgres/search.py:95:     def as_sql(self, compiler, connection, function=None, template=None):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15320/repo/django/contrib/postgres/search.py:182:     def as_sql(self, compiler, connection, function=None, template=None):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15320/repo/django/contrib/postgres/search.py:265:     def as_sql(self, compiler, connection, function=None, template=None):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15320/repo/django/contrib/postgres/fields/ranges.py:25:     def as_sql(self, compiler, connection):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15320/repo/django/contrib/postgres/fields/array.py:248:     def as_sql(self, compiler, connection):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15320/repo/django/contrib/postgres/fields/array.py:281:     def as_sql(self, compiler, connection):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15320/repo/django/contrib/postgres/fields/array.py:307:     def as_sql(self, compiler, connection):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15320/repo/django/contrib/postgres/fields/hstore.py:86:     def as_sql(self, compiler, connection):
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

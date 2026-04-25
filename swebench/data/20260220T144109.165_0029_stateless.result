@@ -1,0 +1,45 @@
+status: success
+Found at line: 1474
+1474:     def _generate_removed_altered_foo_together(self, operation):
+1475:         for (
+1476:             old_value,
+1477:             new_value,
+1478:             app_label,
+1479:             model_name,
+1480:             dependencies,
+1481:         ) in self._get_altered_foo_together_operations(operation.option_name):
+1482:             if operation == operations.AlterIndexTogether:
+1483:                 old_value = {
+1484:                     value
+1485:                     for value in old_value
+1486:                     if value
+1487:                     not in self.renamed_index_together_values[app_label, model_name]
+1488:                 }
+1489:             removal_value = new_value.intersection(old_value)
+1490:             if removal_value or old_value:
+1491:                 self.add_operation(
+1492:                     app_label,
+1493:                     operation(
+1494:                         name=model_name, **{operation.option_name: removal_value}
+1495:                     ),
+1496:                     dependencies=dependencies,
+1497:                 )
+1498: 
+1499:     def generate_removed_altered_unique_together(self):
+1500:         self._generate_removed_altered_foo_together(operations.AlterUniqueTogether)
+1501: 
+1502:     def generate_removed_altered_index_together(self):
+1503:         self._generate_removed_altered_foo_together(operations.AlterIndexTogether)
+1504: 
+1505:     def _generate_altered_foo_together(self, operation):
+1506:         for (
+1507:             old_value,
+1508:             new_value,
+1509:             app_label,
+1510:             model_name,
+1511:             dependencies,
+1512:         ) in self._get_altered_foo_together_operations(operation.option_name):
+1513:             removal_value = new_value.intersection(old_value)
+1514:             if new_value != removal_value:
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

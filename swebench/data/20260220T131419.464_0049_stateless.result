@@ -1,0 +1,6 @@
+status: failure
+-- [E172] Type Error: ----------------------------------------------------------
+4 |  grep("/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12125/repo/django/db/migrations/serializer.py", "__name__")
+  |                                                                                                                                                                  ^
+  |No given instance of type library.FileSystem was found for parameter x$3 of method grep in trait Interface
+1 error found

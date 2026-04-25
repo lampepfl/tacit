@@ -1,0 +1,21 @@
+status: success
+def test_fixed_width_header_rows():
+    tbl = [
+        "| int16 | float32 |      <U3 | int64 |",
+        "|     a |       b |        c |     d |",
+        "|     m |         |          | m / s |",
+        "|       |     .2f |          |       |",
+        "|       |         | C column |       |",
+        "|     1 |    1.00 |        c |     4 |",
+        "|     2 |    2.00 |        d |     5 |",
+        "|     3 |    3.00 |        e |     6 |",
+    ]
+    header_rows = ["dtype", "name", "unit", "format", "description"]
+    dat = ascii.read(tbl, format="fixed_width", delimiter="|", header_rows=header_rows)
+    out = StringIO()
+    ascii.write(dat, out, format="fixed_width", delimiter="|", header_rows=header_rows)
+    assert out.getvalue().splitlines() == tbl
+
+
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,20 @@
+status: success
+java.io.IOException: Is a directory
+  at sun.nio.ch.FileDispatcherImpl.read0(FileDispatcherImpl.java:-2)
+  at sun.nio.ch.FileDispatcherImpl.read(FileDispatcherImpl.java:48)
+  at sun.nio.ch.IOUtil.readIntoNativeBuffer(IOUtil.java:330)
+  at sun.nio.ch.IOUtil.read(IOUtil.java:296)
+  at sun.nio.ch.IOUtil.read(IOUtil.java:273)
+  at sun.nio.ch.FileChannelImpl.read(FileChannelImpl.java:232)
+  at sun.nio.ch.ChannelInputStream.read(ChannelInputStream.java:65)
+  at sun.nio.ch.ChannelInputStream.read(ChannelInputStream.java:107)
+  at sun.nio.ch.ChannelInputStream.read(ChannelInputStream.java:101)
+  at java.nio.file.Files.read(Files.java:3244)
+  at java.nio.file.Files.readAllBytes(Files.java:3295)
+  at library.RealFileSystem$FileEntryImpl.read(RealFileSystem.scala:52)
+  at rs$line$2$.run$$anonfun$1(rs$line$2:4)
+  at scala.runtime.function.JProcedure1.apply(JProcedure1.java:15)
+  at scala.runtime.function.JProcedure1.apply(JProcedure1.java:10)
+  at library.InterfaceImpl.requestFileSystem(InterfaceImpl.scala:33)
+  at rs$line$2$.run(rs$line$2:6)
+  ... 53 elided

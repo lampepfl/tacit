@@ -1,0 +1,5 @@
+status: success
+WARNING: No replacement made!
+Found at: 20405
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

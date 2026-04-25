@@ -1,0 +1,44 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = List(
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14997/repo/django/db/backends/base/schema.py",
+    lineNumber = 162,
+    line = "            self.deferred_sql.append(self._create_unique_sql(model, fields))"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14997/repo/django/db/backends/base/schema.py",
+    lineNumber = 429,
+    line = "            self.execute(self._create_unique_sql(model, fields))"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14997/repo/django/db/backends/base/schema.py",
+    lineNumber = 656,
+    line = "                self.execute(self._delete_unique_sql(model, constraint_name))"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14997/repo/django/db/backends/base/schema.py",
+    lineNumber = 810,
+    line = "            self.execute(self._create_unique_sql(model, [new_field]))"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14997/repo/django/db/backends/base/schema.py",
+    lineNumber = 1213,
+    line = "    def _unique_sql("
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14997/repo/django/db/backends/base/schema.py",
+    lineNumber = 1225,
+    line = "            sql = self._create_unique_sql("
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14997/repo/django/db/backends/base/schema.py",
+    lineNumber = 1246,
+    line = "    def _create_unique_sql("
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14997/repo/django/db/backends/base/schema.py",
+    lineNumber = 1289,
+    line = "    def _delete_unique_sql("
+  )
+)

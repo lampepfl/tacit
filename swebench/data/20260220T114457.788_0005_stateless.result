@@ -1,0 +1,6 @@
+status: failure
+-- [E172] Type Error: ----------------------------------------------------------
+2 |  find("/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/astropy__astropy-7746/repo", "*.py")
+  |                                                                                                                            ^
+  |No given instance of type library.FileSystem was found for parameter x$3 of method find in trait Interface
+1 error found

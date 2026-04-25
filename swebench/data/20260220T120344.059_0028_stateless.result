@@ -1,0 +1,23 @@
+status: success
+from urllib.parse import quote, urljoin
+
+from django import template
+from django.apps import apps
+from django.urls import get_script_prefix
+from django.utils.encoding import iri_to_uri
+from django.utils.html import conditional_escape
+
+register = template.Library()
+
+
+class PrefixNode(template.Node):
+
+    def __repr__(self):
+        return "<PrefixNode for %r>" % self.name
+
+    def __init__(self, varname=None, name=None):
+        if name is None:
+            raise template.TemplateSyntaxError(
+   
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

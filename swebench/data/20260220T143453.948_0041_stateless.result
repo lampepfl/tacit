@@ -1,0 +1,27 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = """        # reloader starts by accessing the urlconf_module property.
+        try:
+            get_resolver().urlconf_module
+        except Exception:
+            # Loading the urlconf can result in errors during development.
+            # If this occurs then swallow the error and continue.
+            pass
+        logger.debug('Apps ready_event triggered. Sending autoreload_started signal.')
+        autoreload_started.send(sender=self)
+        self.run_loop()
+
+    def run_loop(self):
+        ticker = self.tick()
+        while not self.should_stop:
+            try:
+                next(ticker)
+            except StopIteration:
+                break
+        self.stop()
+
+    def tick(self):
+        """
+        This generator is called in a loop from run_loop. It's important that
+        the method takes care of pausing or otherwise waiting for a period of
+        time. This split between run_loop() and tick() is to improve the"""

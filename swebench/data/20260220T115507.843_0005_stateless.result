@@ -1,0 +1,20 @@
+status: success
+Lines 270-285:
+270:         self.sort()
+271:         # number of objects deleted for each model label
+272:         deleted_counter = Counter()
+273: 
+274:         # Optimize for the case with a single obj and no dependencies
+275:         if len(self.data) == 1 and len(instances) == 1:
+276:             instance = list(instances)[0]
+277:             if self.can_fast_delete(instance):
+278:                 with transaction.mark_for_rollback_on_error():
+279:                     count = sql.DeleteQuery(model).delete_batch([instance.pk], self.using)
+280:                 return count, {model._meta.label: count}
+281: 
+282:         with transaction.atomic(using=self.using, savepoint=False):
+283:             # send pre_delete signals
+284:             for model, obj in self.instances_with_model():
+285:                 if not model._meta.auto_created:
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

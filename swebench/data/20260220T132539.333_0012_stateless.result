@@ -1,0 +1,23 @@
+status: success
+515: ''
+516: '    def __eq__(self, other):'
+517: '        # Needed for @total_ordering'
+518: '        if isinstance(other, Field):'
+519: '            return self.creation_counter == other.creation_counter'
+520: '        return NotImplemented'
+521: ''
+522: '    def __lt__(self, other):'
+523: '        # This is needed because bisect does not take a comparison function.'
+524: '        if isinstance(other, Field):'
+525: '            return self.creation_counter < other.creation_counter'
+526: '        return NotImplemented'
+527: ''
+528: '    def __hash__(self):'
+529: '        return hash(self.creation_counter)'
+530: ''
+531: '    def __deepcopy__(self, memodict):'
+532: '        # We don't have to deepcopy very much here, since most things are not'
+533: '        # intended to be altered after initial creation.'
+534: '        obj = copy.copy(self)'
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,83 @@
+status: success
+60: 
+61: 
+62: class Options:
+63:     FORWARD_PROPERTIES = {
+64:         'fields', 'many_to_many', 'concrete_fields', 'local_concrete_fields',
+65:         '_forward_fields_map', 'managers', 'managers_map', 'base_manager',
+66:         'default_manager',
+67:     }
+68:     REVERSE_PROPERTIES = {'related_objects', 'fields_map', '_relation_tree'}
+69: 
+70:     default_apps = apps
+71: 
+72:     def __init__(self, meta, app_label=None):
+73:         self._get_fields_cache = {}
+74:         self.local_fields = []
+75:         self.local_many_to_many = []
+76:         self.private_fields = []
+77:         self.local_managers = []
+78:         self.base_manager_name = None
+79:         self.default_manager_name = None
+80:         self.model_name = None
+81:         self.verbose_name = None
+82:         self.verbose_name_plural = None
+83:         self.db_table = ''
+84:         self.ordering = []
+85:         self._ordering_clash = False
+86:         self.indexes = []
+87:         self.constraints = []
+88:         self.unique_together = []
+89:         self.index_together = []
+90:         self.select_on_save = False
+91:         self.default_permissions = ('add', 'change', 'delete', 'view')
+92:         self.permissions = []
+93:         self.object_name = None
+94:         self.app_label = app_label
+95:         self.get_latest_by = None
+96:         self.order_with_respect_to = None
+97:         self.db_tablespace = settings.DEFAULT_TABLESPACE
+98:         self.required_db_features = []
+99:         self.required_db_vendor = None
+100:         self.meta = meta
+101:         self.pk = None
+102:         self.auto_field = None
+103:         self.abstract = False
+104:         self.managed = True
+105:         self.proxy = False
+106:         # For any class that is a proxy (including automatically created
+107:         # classes for deferred object loading), proxy_for_model tells us
+108:         # which class this model is proxying. Note that proxy_for_model
+109:         # can create a chain of proxy models. For non-proxy models, the
+110:         # variable is always None.
+111:         self.proxy_for_model = None
+112:         # For any non-abstract class, the concrete class is the model
+113:         # in the end of the proxy_for_model chain. In particular, for
+114:         # concrete models, the concrete_model is always the class itself.
+115:         self.concrete_model = None
+116:         self.swappable = None
+117:         self.parents = {}
+118:         self.auto_created = False
+119: 
+120:         # List of all lookups defined in ForeignKey 'limit_choices_to' options
+121:         # from *other* models. Needed for some admin checks. Internal use only.
+122:         self.related_fkey_lookups = []
+123: 
+124:         # A custom app registry to use, if you're making a separate model set.
+125:         self.apps = self.default_apps
+126: 
+127:         self.default_related_name = None
+128: 
+129:     @property
+130:     def label(self):
+131:         return '%s.%s' % (self.app_label, self.object_name)
+132: 
+133:     @property
+134:     def label_lower(self):
+135:         return '%s.%s' % (self.app_label, self.model_name)
+136: 
+137:     @property
+138:     def app_config(self):
+139:         # Don't go through get_app_config to avoid triggering imports.
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,43 @@
+status: success
+910:                 kind,
+911:                 output_field=DateTimeField(),
+912:                 tzinfo=tzinfo,
+913:                 is_dst=is_dst,
+914:             ),
+915:             plain_field=F(field_name)
+916:         ).values_list(
+917:             'datetimefield', flat=True
+918:         ).distinct().filter(plain_field__isnull=False).order_by(('-' if order == 'DESC' else '') + 'datetimefield')
+919: 
+920:     def none(self):
+921:         """Return an empty QuerySet."""
+922:         clone = self._chain()
+923:         clone.query.set_empty()
+924:         return clone
+925: 
+926:     ##################################################################
+927:     # PUBLIC METHODS THAT ALTER ATTRIBUTES AND RETURN A NEW QUERYSET #
+928:     ##################################################################
+929: 
+930:     def all(self):
+931:         """
+932:         Return a new QuerySet that is a copy of the current one. This allows a
+933:         QuerySet to proxy for a model manager in some cases.
+934:         """
+935:         return self._chain()
+936: 
+937:     def filter(self, *args, **kwargs):
+938:         """
+939:         Return a new QuerySet instance with the args ANDed to the existing
+940:         set.
+941:         """
+942:         self._not_support_combined_queries('filter')
+943:         return self._filter_or_exclude(False, *args, **kwargs)
+944: 
+945:     def exclude(self, *args, **kwargs):
+946:         """
+947:         Return a new QuerySet instance with NOT (args) ANDed to the existing
+948:         set.
+949:         """
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

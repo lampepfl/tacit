@@ -1,0 +1,6 @@
+status: success
+195:     if sys.argv[0] == django.__main__.__file__:
+198:         args += sys.argv[1:]
+200:         args += sys.argv
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

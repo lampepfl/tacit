@@ -1,0 +1,33 @@
+status: success
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11905/repo/tests/expressions_case/tests.py:1088:                     When(fk_rel__isnull=True, then=2),
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11905/repo/tests/expressions_case/tests.py:1125:                     When(fk_rel__isnull=True, then=2),
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11905/repo/tests/expressions_case/tests.py:1130:                     When(fk_rel__isnull=True, then=4),
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11905/repo/tests/aggregation/tests.py:601:         publishers = Publisher.objects.annotate(num_books=Count("book")).filter(num_books__isnull=True)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11905/repo/tests/filtered_relation/tests.py:111:             ).filter(book_alice__isnull=False),
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11905/repo/tests/filtered_relation/tests.py:119:             ).exclude(book_alice__isnull=False),
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11905/repo/tests/filtered_relation/tests.py:132:             ).filter(book_alice__isnull=False),
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11905/repo/tests/filtered_relation/tests.py:139:         ).filter(book_alice__isnull=False)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11905/repo/tests/filtered_relation/tests.py:152:             ).filter(book_editor_a__isnull=False),
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11905/repo/tests/filtered_relation/tests.py:160:             ).filter(book_title_alice__isnull=False).filter(book_title_alice__isnull=False).distinct(),
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11905/repo/tests/filtered_relation/tests.py:168:             ).filter(book_alice__isnull=False).distinct(),
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11905/repo/tests/filtered_relation/tests.py:177:         ).filter(favorite_books_written_by_jane__isnull=False)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11905/repo/tests/filtered_relation/tests.py:200:             ).filter(book_alice__isnull=False).values_list('book_alice__title', flat=True),
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11905/repo/tests/filtered_relation/tests.py:208:             ).filter(book_alice__isnull=False).values(),
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11905/repo/tests/filtered_relation/tests.py:216:             ).filter(book_alice__isnull=False).extra(where=['1 = 1']),
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11905/repo/tests/filtered_relation/tests.py:224:         ).filter(book_alice__isnull=False)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11905/repo/tests/filtered_relation/tests.py:227:         ).filter(book_jane__isnull=False)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11905/repo/tests/filtered_relation/tests.py:234:         ).filter(book_alice__isnull=False)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11905/repo/tests/filtered_relation/tests.py:237:         ).filter(book_jane__isnull=False)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11905/repo/tests/filtered_relation/tests.py:244:         ).filter(book_alice__isnull=False)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11905/repo/tests/filtered_relation/tests.py:247:         ).filter(book_jane__isnull=False)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11905/repo/tests/filtered_relation/tests.py:254:             ).filter(book_jane__isnull=False).select_for_update(),
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11905/repo/tests/filtered_relation/tests.py:264:                 ).filter(book_alice__isnull=False).select_related('book_alice').defer('book_alice__title'),
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11905/repo/tests/filtered_relation/tests.py:273:             ).filter(book_alice__isnull=False).select_related('book_alice').only('book_alice__state')
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11905/repo/tests/filtered_relation/tests.py:278:         ).filter(book_alice__isnull=False)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11905/repo/tests/filtered_relation/tests.py:322:             book_title_contains_b__isnull=False,
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11905/repo/tests/filtered_relation/tests.py:334:                     condition=Q(generic_author__isnull=False)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11905/repo/tests/filtered_relation/tests.py:336:             ).filter(generic_authored_book__isnull=False),
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11905/repo/tests/filtered_relation/tests.py:422:             (Q(active_reservations__isnull=False) | Q(active_rental_sessions__isnull=False)) |
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11905/repo/tests/foreign_object/tests.py:351:                                         active_translation__pk__isnull=False)),
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

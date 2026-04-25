@@ -1,0 +1,6 @@
+status: failure
+-- [E172] Type Error: ----------------------------------------------------------
+5 |    val f = access(repoPath)
+  |                            ^
+  |No given instance of type library.FileSystem was found for parameter fs of method access in trait Interface
+1 error found

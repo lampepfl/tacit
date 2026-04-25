@@ -1,0 +1,11 @@
+status: success
+delete method starts at line 392
+457:                 setattr(instance, model._meta.pk.attname, None)
+458:         # Ensure models that were originally collected are in the result
+459:         # This handles the case when deleting from an empty QuerySet
+460:         for model in self._collected_models:
+461:             if model._meta.label not in deleted_counter:
+462:                 deleted_counter[model._meta.label] = 0
+463:         return sum(deleted_counter.values()), dict(deleted_counter)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

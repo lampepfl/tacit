@@ -1,0 +1,25 @@
+status: success
+=== Lines 380-400 ===
+                else:
+                    yield expr
+
+    def select_format(self, compiler, sql, params):
+        """
+        Custom format for select clauses. For example, EXISTS expressions need
+        to be wrapped in CASE WHEN on Oracle.
+        """
+        if hasattr(self.output_field, 'select_format'):
+            return self.output_field.select_format(compiler, sql, params)
+        return sql, params
+
+
+@deconstructible
+class Expression(BaseExpression, Combinable):
+    """An expression that can be combined with other expressions."""
+
+    @cached_property
+    def identity(self):
+        constructor_signature = inspect.signature(self.__init__)
+        args, kwargs = self._constructor_args
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

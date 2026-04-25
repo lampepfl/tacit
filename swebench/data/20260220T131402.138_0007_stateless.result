@@ -1,0 +1,23 @@
+status: success
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13315/repo/django/forms/models.py:98: def apply_limit_choices_to_to_formfield(formfield):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13315/repo/django/forms/models.py:99: """Apply limit_choices_to to the formfield's queryset if needed."""
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13315/repo/django/forms/models.py:100: if hasattr(formfield, 'queryset') and hasattr(formfield, 'get_limit_choices_to'):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13315/repo/django/forms/models.py:101: limit_choices_to = formfield.get_limit_choices_to()
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13315/repo/django/forms/models.py:102: if limit_choices_to is not None:
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13315/repo/django/forms/models.py:103: formfield.queryset = formfield.queryset.complex_filter(limit_choices_to)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13315/repo/django/forms/models.py:109: field_classes=None, *, apply_limit_choices_to=True):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13315/repo/django/forms/models.py:137: ``apply_limit_choices_to`` is a boolean indicating if limit_choices_to
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13315/repo/django/forms/models.py:182: if apply_limit_choices_to:
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13315/repo/django/forms/models.py:183: apply_limit_choices_to_to_formfield(formfield)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13315/repo/django/forms/models.py:257: # limit_choices_to will be applied during ModelForm.__init__().
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13315/repo/django/forms/models.py:258: apply_limit_choices_to=False,
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13315/repo/django/forms/models.py:308: apply_limit_choices_to_to_formfield(formfield)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13315/repo/django/forms/models.py:1192: help_text='', to_field_name=None, limit_choices_to=None,
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13315/repo/django/forms/models.py:1208: self.limit_choices_to = limit_choices_to   # limit the queryset later.
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13315/repo/django/forms/models.py:1211: def get_limit_choices_to(self):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13315/repo/django/forms/models.py:1213: Return ``limit_choices_to`` for this form field.
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13315/repo/django/forms/models.py:1217: if callable(self.limit_choices_to):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13315/repo/django/forms/models.py:1218: return self.limit_choices_to()
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13315/repo/django/forms/models.py:1219: return self.limit_choices_to
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

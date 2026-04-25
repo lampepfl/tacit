@@ -1,0 +1,17 @@
+status: success
+Exit code: 1
+stdout: 
+stderr: Traceback (most recent call last):
+  File "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14730/repo/./tests/runtests.py", line 25, in <module>
+    from django.test import TestCase, TransactionTestCase
+  File "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13710/repo/django/test/__init__.py", line 3, in <module>
+    from django.test.client import (
+        AsyncClient, AsyncRequestFactory, Client, RequestFactory,
+    )
+  File "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13710/repo/django/test/client.py", line 15, in <module>
+    from django.core.handlers.asgi import ASGIRequest
+  File "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13710/repo/django/core/handlers/asgi.py", line 11, in <module>
+    from django.core.handlers import base
+  File "/Users/tacit/Work/SafeExecMCP/bench/swebench_run
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

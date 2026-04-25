@@ -1,0 +1,50 @@
+status: success
+40:         if verbosity >= 1:
+41:             action = 'Creating'
+42:             if keepdb:
+43:                 action = "Using existing"
+44: 
+45:             self.log('%s test database for alias %s...' % (
+46:                 action,
+47:                 self._get_database_display_str(verbosity, test_database_name),
+48:             ))
+49: 
+50:         # We could skip this call if keepdb is True, but we instead
+51:         # give it the keepdb param. This is to handle the case
+52:         # where the test DB doesn't exist, in which case we need to
+53:         # create it, then just not destroy it. If we instead skip
+54:         # this, we will get an exception.
+55:         self._create_test_db(verbosity, autoclobber, keepdb)
+56: 
+57:         self.connection.close()
+58:         settings.DATABASES[self.connection.alias]["NAME"] = test_database_name
+59:         self.connection.settings_dict["NAME"] = test_database_name
+60: 
+61:         if self.connection.settings_dict['TEST']['MIGRATE']:
+62:             # We report migrate messages at one level lower than that
+63:             # requested. This ensures we don't get flooded with messages during
+64:             # testing (unless you really ask to be flooded).
+65:             call_command(
+66:                 'migrate',
+67:                 verbosity=max(verbosity - 1, 0),
+68:                 interactive=False,
+69:                 database=self.connection.alias,
+70:                 run_syncdb=True,
+71:             )
+72: 
+73:         # We then serialize the current state of the database into a string
+74:         # and store it on the connection. This slightly horrific process is so people
+75:         # who are testing on databases without transactions or who are using
+76:         # a TransactionTestCase still get a clean database on every test run.
+77:         if serialize:
+78:             self.connection._test_serialized_contents = self.serialize_db_to_string()
+79: 
+80:         call_command('createcachetable', database=self.connection.alias)
+81: 
+82:         # Ensure a connection for the side effect of initializing the test database.
+83:         self.connection.ensure_connection()
+84: 
+85:         return test_database_name
+86: 
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

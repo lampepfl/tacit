@@ -1,0 +1,7 @@
+status: success
+Output: /Users/tacit/Work/SafeExecMCP/bench/.venv/bin/python
+/Users/tacit/Work/SafeExecMCP/bench/.venv/bin/python3
+/opt/homebrew/bin/python3.13
+not found
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

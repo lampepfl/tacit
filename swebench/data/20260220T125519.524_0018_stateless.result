@@ -1,0 +1,11 @@
+status: success
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12915/repo/tests/auth_tests/test_handlers.py
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12915/repo/tests/urlpatterns_reverse/urls_without_handlers.py
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12915/repo/tests/urlpatterns_reverse/urls_error_handlers.py
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12915/repo/tests/urlpatterns_reverse/urls_error_handlers_callables.py
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12915/repo/tests/check_framework/urls/good_error_handlers.py
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12915/repo/tests/check_framework/urls/bad_error_handlers_invalid_path.py
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12915/repo/tests/check_framework/urls/bad_error_handlers.py
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12915/repo/tests/handlers/tests_custom_error_handlers.py
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

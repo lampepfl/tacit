@@ -1,0 +1,28 @@
+status: success
+300: # Directory in which upload streamed files will be temporarily saved. A value of
+301: # `None` will make Django use the operating system's default temporary directory
+302: # (i.e. "/tmp" on *nix systems).
+303: FILE_UPLOAD_TEMP_DIR = None
+304: 
+305: # The numeric mode to set newly-uploaded files to. The value should be a mode
+306: # you'd pass directly to os.chmod; see https://docs.python.org/library/os.html#files-and-directories.
+307: FILE_UPLOAD_PERMISSIONS = None
+308: 
+309: # The numeric mode to assign to newly-created directories, when uploading files.
+310: # The value should be a mode as you'd pass to os.chmod;
+311: # see https://docs.python.org/library/os.html#files-and-directories.
+312: FILE_UPLOAD_DIRECTORY_PERMISSIONS = None
+313: 
+314: # Python module path where user will place custom format definition.
+315: # The directory where this setting is pointing should contain subdirectories
+316: # named as the locales, containing a formats.py file
+317: # (i.e. "myproject.locale" for myproject/locale/en/formats.py etc. use)
+318: FORMAT_MODULE_PATH = None
+319: 
+320: # Default formatting for date objects. See all available format strings here:
+321: # https://docs.djangoproject.com/en/dev/ref/templates/builtins/#date
+322: DATE_FORMAT = 'N j, Y'
+323: 
+324: # Default formatting for datetime objects. See all available format strings here:
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

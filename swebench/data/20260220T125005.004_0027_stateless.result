@@ -1,0 +1,13 @@
+status: success
+176:         if from_field and from_field.remote_field.on_delete is not CASCADE:
+177:             return False
+178:         if hasattr(objs, '_meta'):
+179:             model = objs._meta.model
+180:         elif hasattr(objs, 'model') and hasattr(objs, '_raw_delete'):
+181:             model = objs.model
+182:         else:
+183:             return False
+184:         if self._has_signal_listeners(model):
+185:             return False
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

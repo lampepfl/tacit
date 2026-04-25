@@ -1,0 +1,25 @@
+status: success
+1259:     def _create_index_name(self, table_name, column_names, suffix=""):
+1260:         """
+1261:         Generate a unique name for an index/unique constraint.
+1262: 
+1263:         The name is divided into 3 parts: the table name, the column names,
+1264:         and a unique digest and suffix.
+1265:         """
+1266:         _, table_name = split_identifier(table_name)
+1267:         hash_suffix_part = "%s%s" % (
+1268:             names_digest(table_name, *column_names, length=8),
+1269:             suffix,
+1270:         )
+1271:         max_length = self.connection.ops.max_name_length() or 200
+1272:         # If everything fits into max_length, use that name.
+1273:         index_name = "%s_%s_%s" % (table_name, "_".join(column_names), hash_suffix_part)
+1274:         if len(index_name) <= max_length:
+1275:             return index_name
+1276:         # Shorten a long suffix.
+1277:         if len(hash_suffix_part) > max_length / 3:
+1278:             hash_suffix_part = hash_suffix_part[: max_length // 3]
+1279:         other_length = (max_length - len(hash_suffix_part)) // 2 - 1
+1280:         index_name = "%s_%s_%s" % (
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

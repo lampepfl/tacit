@@ -1,0 +1,8 @@
+status: success
+268:     def id_for_label(self, id_):
+645:     def id_for_label(self, id_, index='0'):
+765:     def id_for_label(self, id_, index=None):
+851:     def id_for_label(self, id_):
+1061:     def id_for_label(self, id_):
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

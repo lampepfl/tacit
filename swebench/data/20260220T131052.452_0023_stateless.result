@@ -1,0 +1,16 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = List(
+  "1147:     def extra(self, select=None, where=None, params=None, tables=None,",
+  "1148:               order_by=None, select_params=None):",
+  "1149:         \"\"\"Add extra SQL fragments to the query.\"\"\"",
+  "1150:         self._not_support_combined_queries('extra')",
+  "1151:         assert not self.query.is_sliced, \\",
+  "1152:             \"Cannot change a query once a slice has been taken\"",
+  "1153:         clone = self._chain()",
+  "1154:         clone.query.add_extra(select, select_params, where, params, tables, order_by)",
+  "1155:         return clone",
+  "1156: ",
+  "1157:     def reverse(self):",
+  "1158:         \"\"\"Reverse the ordering of the QuerySet.\"\"\""
+)

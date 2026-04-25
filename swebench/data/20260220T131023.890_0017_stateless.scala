@@ -1,0 +1,6 @@
+requestFileSystem("/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12908/repo") {
+  val f = access("/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12908/repo/django/db/models/query.py")
+  val lines = f.readLines()
+  // Get lines 1135-1150 for context around distinct
+  lines.slice(1134, 1150).zipWithIndex.map { case (line, idx) => s"${idx + 1135}: $line" }
+}

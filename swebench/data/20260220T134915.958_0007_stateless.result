@@ -1,0 +1,39 @@
+status: success
+146:         This follows the correct procedure to perform non-rename or column
+147:         addition operations based on SQLite's documentation
+148: 
+149:         https://www.sqlite.org/lang_altertable.html#caution
+150: 
+151:         The essential steps are:
+152:           1. Create a table with the updated definition called "new__app_model"
+153:           2. Copy the data from the existing "app_model" table to the new table
+154:           3. Drop the "app_model" table
+155:           4. Rename the "new__app_model" table to "app_model"
+156:           5. Restore any index of the previous "app_model" table.
+157:         """
+158:         # Self-referential fields must be recreated rather than copied from
+159:         # the old model to ensure their remote_field.field_name doesn't refer
+160:         # to an altered field.
+161:         def is_self_referential(f):
+162:             return f.is_relation and f.remote_field.model is model
+163:         # Work out the new fields dict / mapping
+164:         body = {
+165:             f.name: f.clone() if is_self_referential(f) else f
+166:             for f in model._meta.local_concrete_fields
+167:         }
+168:         # Since mapping might mix column names and default values,
+169:         # its values must be already quoted.
+170:         mapping = {f.column: self.quote_name(f.column) for f in model._meta.local_concrete_fields}
+171:         # This maps field names (not columns) for things like unique_together
+172:         rename_mapping = {}
+173:         # If any of the new or altered fields is introducing a new PK,
+174:         # remove the old one
+175:         restore_pk_field = None
+176:         if getattr(create_field, 'primary_key', False) or (
+177:                 alter_field and getattr(alter_field[1], 'primary_key', False)):
+178:             for name, field in list(body.items()):
+179:                 if field.primary_key:
+180:                     field.primary_key = False
+181:                     restore_pk_field = field
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,49 @@
+status: success
+Exit code: 1
+Stdout: 
+Stderr:   error: subprocess-exited-with-error
+  
+  × Getting requirements to build editable did not run successfully.
+  │ exit code: 1
+  ╰─> [35 lines of output]
+      Traceback (most recent call last):
+        File "/Users/tacit/Work/SafeExecMCP/bench/.venv/lib/python3.14/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py", line 389, in <module>
+          main()
+          ~~~~^^
+        File "/Users/tacit/Work/SafeExecMCP/bench/.venv/lib/python3.14/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py", line 373, in main
+          json_out["return_val"] = hook(**hook_input["kwargs"])
+                                   ~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+        File "/Users/tacit/Work/SafeExecMCP/bench/.venv/lib/python3.14/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py", line 157, in get_requires_for_build_editable
+          return hook(config_settings)
+        File "/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/pip-build-env-xn63d4us/overlay/lib/python3.14/site-packages/setuptools/build_meta.py", line 481, in get_requires_for_build_editable
+          return self.get_requires_for_build_wheel(config_settings)
+                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+        File "/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/pip-build-env-xn63d4us/overlay/lib/python3.14/site-packages/setuptools/build_meta.py", line 333, in get_requires_for_build_wheel
+          return self._get_build_requires(config_settings, requirements=[])
+                 ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        File "/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/pip-build-env-xn63d4us/overlay/lib/python3.14/site-packages/setuptools/build_meta.py", line 301, in _get_build_requires
+          self.run_setup()
+          ~~~~~~~~~~~~~~^^
+        File "/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/pip-build-env-xn63d4us/overlay/lib/python3.14/site-packages/setuptools/build_meta.py", line 317, in run_setup
+          exec(code, locals())
+          ~~~~^^^^^^^^^^^^^^^^
+        File "<string>", line 69, in <module>
+        File "/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/pip-build-env-xn63d4us/overlay/lib/python3.14/site-packages/extension_helpers/_setup_helpers.py", line 68, in get_extensions
+          for setuppkg in iter_setup_packages(srcdir, packages):
+                          ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+        File "/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/pip-build-env-xn63d4us/overlay/lib/python3.14/site-packages/extension_helpers/_setup_helpers.py", line 179, in iter_setup_packages
+          module = import_file(setup_package, name=packagename + ".setup_package")
+        File "/private/var/folders/dc/35y53mqs0tz_sx34b4d7bmwc0000gn/T/pip-build-env-xn63d4us/overlay/lib/python3.14/site-packages/extension_helpers/_utils.py", line 147, in import_file
+          loader.exec_module(mod)
+          ~~~~~~~~~~~~~~~~~~^^^^^
+        File "<frozen importlib._bootstrap_external>", line 759, in exec_module
+        File "<frozen importlib._bootstrap>", line 491, in _call_with_frames_removed
+        File "astropy/wcs/setup_package.py", line 13, in <module>
+          from setuptools.dep_util import newer_group
+      ModuleNotFoundError: No module named 'setuptools.dep_util'
+      [end of output]
+  
+  note: This error originates from a subprocess, and is likely not a problem with pip.
+ERROR: Failed to build 'file:///Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/astropy__astropy-14995/repo' when getting requirements to build editable
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

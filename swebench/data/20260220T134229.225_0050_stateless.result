@@ -1,0 +1,10 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = ProcessResult(
+  exitCode = 0,
+  stdout = """50:             self._func_path = func.__class__.__module__ + '.' + func.__class__.__name__
+53:             self._func_path = func.__module__ + '.' + func.__name__
+55:         view_path = url_name or self._func_path
+63:             self._func_path, self.args, self.kwargs, self.url_name,""",
+  stderr = ""
+)

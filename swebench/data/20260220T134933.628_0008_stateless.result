@@ -1,0 +1,24 @@
+status: success
+136:             # the sqlite_master table.
+137:             with self.connection.cursor() as cursor:
+138:                 cursor.execute('VACUUM')
+139:         else:
+140:             super().alter_field(model, old_field, new_field, strict=strict)
+141: 
+142:     def _remake_table(self, model, create_field=None, delete_field=None, alter_field=None):
+143:         """
+144:         Shortcut to transform a model from old_model into new_model
+145: 
+146:         This follows the correct procedure to perform non-rename or column
+147:         addition operations based on SQLite's documentation
+148: 
+149:         https://www.sqlite.org/lang_altertable.html#caution
+150: 
+151:         The essential steps are:
+152:           1. Create a table with the updated definition called "new__app_model"
+153:           2. Copy the data from the existing "app_model" table to the new table
+154:           3. Drop the "app_model" table
+155:           4. Rename the "new__app_model" table to "app_model"
+156:           5. Restore any index of the previous "app_model" table.
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,19 @@
+status: success
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13710/repo/tests/admin_inlines/models.py:342: class VerboseNameProfile(Profile):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13710/repo/tests/admin_inlines/models.py:352: class BothVerboseNameProfile(Profile):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13710/repo/tests/admin_inlines/tests.py:11:     Author, BinaryTree, Book, BothVerboseNameProfile, Chapter, Child,
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13710/repo/tests/admin_inlines/tests.py:16:     Teacher, VerboseNamePluralProfile, VerboseNameProfile,
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13710/repo/tests/admin_inlines/tests.py:975:         class VerboseNameProfileInline(TabularInline):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13710/repo/tests/admin_inlines/tests.py:976:             model = VerboseNameProfile
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13710/repo/tests/admin_inlines/tests.py:983:         class BothVerboseNameProfileInline(TabularInline):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13710/repo/tests/admin_inlines/tests.py:984:             model = BothVerboseNameProfile
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13710/repo/tests/admin_inlines/tests.py:990:             VerboseNameProfileInline,
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13710/repo/tests/admin_inlines/tests.py:992:             BothVerboseNameProfileInline,
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13710/repo/tests/admin_inlines/tests.py:1022:         class VerboseNameProfileInline(TabularInline):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13710/repo/tests/admin_inlines/tests.py:1023:             model = VerboseNameProfile
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13710/repo/tests/admin_inlines/tests.py:1032:         class BothVerboseNameProfileInline(TabularInline):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13710/repo/tests/admin_inlines/tests.py:1033:             model = BothVerboseNameProfile
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13710/repo/tests/admin_inlines/tests.py:1040:             VerboseNameProfileInline,
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13710/repo/tests/admin_inlines/tests.py:1042:             BothVerboseNameProfileInline,
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

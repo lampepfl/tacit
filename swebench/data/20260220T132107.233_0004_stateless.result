@@ -1,0 +1,5 @@
+status: failure
+
+Error: Code validation failed (1 violation):
+  [cast-escape] Line 1: .asInstanceOf is forbidden
+    > given fs: FileSystem = null.asInstanceOf[FileSystem]

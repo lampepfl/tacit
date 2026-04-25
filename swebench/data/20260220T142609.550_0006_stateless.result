@@ -1,0 +1,16 @@
+status: success
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12284/repo/django/db/backends/postgresql/creation.py:71:                             self._get_database_display_str(verbosity, target_database_name),
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12284/repo/django/db/backends/sqlite3/creation.py:32:                     self._get_database_display_str(verbosity, test_database_name),
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12284/repo/django/db/backends/sqlite3/creation.py:71:                         self._get_database_display_str(verbosity, target_database_name),
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12284/repo/django/db/backends/mysql/creation.py:48:                             self._get_database_display_str(verbosity, target_database_name),
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12284/repo/django/db/backends/base/creation.py:50:                 self._get_database_display_str(verbosity, test_database_name),
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12284/repo/django/db/backends/base/creation.py:136:     def _get_database_display_str(self, verbosity, database_name):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12284/repo/django/db/backends/base/creation.py:187:                                 self._get_database_display_str(verbosity, test_database_name),
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12284/repo/django/db/backends/base/creation.py:212:                 self._get_database_display_str(verbosity, source_database_name),
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12284/repo/django/db/backends/base/creation.py:254:                 self._get_database_display_str(verbosity, test_database_name),
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12284/repo/django/db/models/fields/__init__.py:767:             if not hasattr(cls, 'get_%s_display' % self.name):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12284/repo/django/db/models/fields/__init__.py:770:                     'get_%s_display' % self.name,
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12284/repo/django/db/models/fields/__init__.py:771:                     partialmethod(cls._get_FIELD_display, field=self),
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12284/repo/django/db/models/base.py:946:     def _get_FIELD_display(self, field):
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

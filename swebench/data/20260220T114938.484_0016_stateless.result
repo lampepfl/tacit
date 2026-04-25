@@ -1,0 +1,16 @@
+status: failure
+-- [E007] Type Mismatch Error: -------------------------------------------------
+2 |  val result = requestFileSystem("/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11019/repo")((fs: FileSystem^) => { access("/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11019/repo").name })
+  |                                                                                                                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |Capability `contextual$1` outlives its scope: it leaks into outer capture set 's1 which is owned by value result.
+  |The leakage occurred when trying to match the following types:
+  |
+  |Found:    (contextual$1: library.FileSystem^) ?->'s2
+  |  library.FileSystem^'s3 ->{contextual$1} String
+  |Required: (library.FileSystem^) ?=> library.FileSystem^ ->'s1 String
+  |
+  |where:    ?=> refers to a root capability created in value result when checking argument to parameter op of method requestFileSystem
+  |          ^   refers to the root capability caps.any
+  |
+  | longer explanation available when compiling with `-explain`
+1 error found

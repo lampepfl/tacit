@@ -1,0 +1,63 @@
+status: success
+conn.execute('PRAGMA foreign_keys = ON')
+        return conn
+
+    def init_connection_state(self):
+        pass
+
+    def create_cursor(self, name=None):
+        return self.connection.cursor(factory=SQLiteCursorWrapper)
+
+    @async_unsafe
+    def close(self):
+        self.validate_thread_sharing()
+        # If database is in memory, closing the connection destroys the
+        # database. To prevent accidental data loss, ignore close requests on
+        # an in-memory db.
+        if not self.is_in_memory_db():
+            BaseDatabaseWrapper.close(self)
+
+    def _savepoint_allowed(self):
+        # When 'isolation_level' is not None, sqlite3 commits before each
+        # savepoint; it's a bug. When it is None, savepoints don't make sense
+        # because autocommit is enabled. The only exception is inside 'atomic'
+        # blocks. To work around that bug, on SQLite, 'atomic' starts a
+        # transaction explicitly rather than simply disable autocommit.
+        return self.in_atomic_block
+
+    def _set_autocommit(self, autocommit):
+        if autocommit:
+            level = None
+        else:
+            # sqlite3's internal default is ''. It's different from None.
+            # See Modules/_sqlite/connection.c.
+            level = ''
+        # 'isolation_level' is a misleading API.
+        # SQLite always runs at the SERIALIZABLE isolation level.
+        with self.wrap_database_errors:
+            self.connection.isolation_level = level
+
+    def disable_constraint_checking(self):
+        with self.cursor() as cursor:
+            cursor.execute('PRAGMA foreign_keys = OFF')
+            # Foreign key constraints cannot be turned off while in a multi-
+            # statement transaction. Fetch the current state of the pragma
+            # to determine if constraints are effectively disabled.
+            enabled = cursor.execute('PRAGMA foreign_keys').fetchone()[0]
+        return not bool(enabled)
+
+    def enable_constraint_checking(self):
+        self.cursor().execute('PRAGMA foreign_keys = ON')
+
+    def check_constraints(self, table_names=None):
+        """
+        Check each table name in `table_names` for rows with invalid foreign
+        key references. This method is intended to be used in conjunction with
+        `disable_constraint_checking()` and `enable_constraint_checking()`, to
+        determine if rows with invalid references were entered while constraint
+        checks were off.
+        """
+        if self.features.supports_pragma_foreign_key_check:
+            with self.cursor() as cursor:
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

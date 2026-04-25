@@ -1,0 +1,50 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = """The `requestFileSystem` function is typically used in browser environments (like JavaScript's FileSystem API). However, in a Scala REPL (like Ammonite or the standard Scala REPL), you're likely getting type inference errors because:
+
+1. Scala's type inference needs more help with SAM (Single Abstract Method) types
+2. You might be using the wrong context or API
+
+Here are some solutions depending on what you're trying to do:
+
+## Solution 1: Explicit Type Annotations
+When Scala can't infer lambda types, add explicit type annotations:
+
+```scala
+requestFileSystem[Type]({ (filesystem: FileSystem) => 
+  // Your code here
+})
+```
+
+## Solution 2: Using Java's FileSystem API
+If you're trying to work with file systems in Scala, you might want to use Java's NIO API instead:
+
+```scala
+import java.nio.file.{FileSystems, Files, Paths}
+
+// Standard Java FileSystem
+val fs = FileSystems.getDefault
+
+// Or for working with files
+val path = Paths.get("/path/to/file")
+val content = Files.readAllBytes(path)
+```
+
+## Solution 3: If you're actually using JavaScript/Web APIs
+If you're using Scala.js in a browser context:
+
+```scala
+import org.scalajs.dom
+
+dom.requestFileSystem(dom.PERSISTENT, 1024 * 1024, { (fs: dom.FileSystem) =>
+  // Handle filesystem
+})
+```
+
+## Solution 4: In Ammonite REPL with OS-Lib
+For file operations in Ammonite, use `os-lib`:
+
+```scala
+import $ivy.`com.lihaoyi::os-lib:0.9.1`
+import os._
+...

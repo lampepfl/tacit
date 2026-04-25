@@ -1,0 +1,28 @@
+status: success
+1: import os
+2: from datetime import datetime
+3: from urllib.parse import urljoin
+4: 
+5: from django.urls import get_script_prefix
+6: 
+7: from django.conf import settings
+8: from django.core.exceptions import SuspiciousFileOperation
+9: from django.core.files import File, locks
+10: from django.core.files.move import file_move_safe
+11: from django.core.signals import setting_changed
+12: from django.utils import timezone
+13: from django.utils._os import safe_join
+14: from django.utils.crypto import get_random_string
+15: from django.utils.deconstruct import deconstructible
+16: from django.utils.encoding import filepath_to_uri
+17: from django.utils.functional import LazyObject, cached_property
+18: from django.utils.module_loading import import_string
+19: from django.utils.text import get_valid_filename
+20: 
+21: __all__ = (
+22:     'Storage', 'FileSystemStorage', 'DefaultStorage', 'default_storage',
+23:     'get_storage_class',
+24: )
+25: 
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

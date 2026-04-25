@@ -1,0 +1,8 @@
+status: success
+Line 1: 'import inspect'
+Line 2: '  import types'
+Line 3: '  from collections import defaultdict'
+Line 4: '  from itertools import chain'
+Line 5: '  '
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

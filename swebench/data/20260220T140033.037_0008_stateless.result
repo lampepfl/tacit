@@ -1,0 +1,6 @@
+status: failure
+-- [E008] Not Found Error: -----------------------------------------------------
+6 |    content.lines.zipWithIndex.filter(_._1.contains("extra_tags")).foreach(println)
+  |    ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |  value zipWithIndex is not a member of (java.util.stream.Stream[String])?
+1 error found

@@ -1,0 +1,12 @@
+status: success
+Index of line 176: 5856
+Old code from file:
+        year = int(m.group('year'))
+        if year < 100:
+            if year < 70:
+                year += 2000
+            else:
+                year += 1900
+        month = MONTHS.index(m.group('mon').lower()) + 1
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

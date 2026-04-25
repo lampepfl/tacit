@@ -1,0 +1,4 @@
+status: success
+HEAD: df46b329e0900e9e4dc1d60816c1dce6dfc1094e
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

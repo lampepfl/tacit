@@ -1,0 +1,22 @@
+status: success
+java.nio.file.NoSuchFileException: /Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14730/repo/django/core/checks.py
+  at sun.nio.fs.UnixException.translateToIOException(UnixException.java:92)
+  at sun.nio.fs.UnixException.rethrowAsIOException(UnixException.java:106)
+  at sun.nio.fs.UnixException.rethrowAsIOException(UnixException.java:111)
+  at sun.nio.fs.UnixFileSystemProvider.newByteChannel(UnixFileSystemProvider.java:218)
+  at java.nio.file.Files.newByteChannel(Files.java:380)
+  at java.nio.file.Files.newByteChannel(Files.java:432)
+  at java.nio.file.spi.FileSystemProvider.newInputStream(FileSystemProvider.java:422)
+  at java.nio.file.Files.newInputStream(Files.java:160)
+  at java.nio.file.Files.newBufferedReader(Files.java:2922)
+  at java.nio.file.Files.readAllLines(Files.java:3412)
+  at java.nio.file.Files.readAllLines(Files.java:3453)
+  at library.RealFileSystem$FileEntryImpl.readLines(RealFileSystem.scala:72)
+  at library.FileOps$.grep(FileOps.scala:10)
+  at library.InterfaceImpl.grep(InterfaceImpl.scala:12)
+  at rs$line$2$.run$$anonfun$1(rs$line$2:3)
+  at scala.runtime.function.JProcedure1.apply(JProcedure1.java:15)
+  at scala.runtime.function.JProcedure1.apply(JProcedure1.java:10)
+  at library.InterfaceImpl.requestFileSystem(InterfaceImpl.scala:33)
+  at rs$line$2$.run(rs$line$2:5)
+  ... 53 elided

@@ -1,0 +1,20 @@
+status: failure
+-- [E007] Type Mismatch Error: -------------------------------------------------
+3 |  requestExecPermission(Set("ls", "find")) { (pp: ProcessPermission) =>
+  |                                           ^
+  |Capability `contextual$1` outlives its scope: it leaks into outer capture set 's1 which is owned by method run.
+  |The leakage occurred when trying to match the following types:
+  |
+  |Found:    (contextual$1: library.ProcessPermission^) ?->'s2
+  |  library.ProcessPermission^'s3 ->{contextual$1} library.ProcessResult^'s4
+  |Required: (library.ProcessPermission^) ?=>
+  |  library.ProcessPermission^'s5 ->'s1 library.ProcessResult^'s6
+  |
+  |where:    ?=> refers to a root capability created in method run when checking argument to parameter op of method requestExecPermission
+  |          ^   refers to the root capability caps.any
+  |
+4 |    exec("ls", List("/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12589/repo"))
+5 |  }
+  |
+  | longer explanation available when compiling with `-explain`
+1 error found

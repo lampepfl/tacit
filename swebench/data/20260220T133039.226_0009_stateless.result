@@ -1,0 +1,4 @@
+status: success
+124: def compile_json_path(key_transforms, include_root=True):
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

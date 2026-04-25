@@ -1,0 +1,28 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = ProcessResult(
+  exitCode = 1,
+  stdout = "",
+  stderr = """Traceback (most recent call last):
+  File "<string>", line 5, in <module>
+    from astropy.wcs import WCS
+  File "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/astropy__astropy-7746/repo/astropy/__init__.py", line 287, in <module>
+    log = _init_log()
+  File "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/astropy__astropy-7746/repo/astropy/logger.py", line 97, in _init_log
+    log._set_defaults()
+    ~~~~~~~~~~~~~~~~~^^
+  File "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/astropy__astropy-7746/repo/astropy/logger.py", line 473, in _set_defaults
+    self.setLevel(conf.log_level)
+                  ^^^^^^^^^^^^^^
+  File "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/astropy__astropy-7746/repo/astropy/config/configuration.py", line 273, in __get__
+    return self()
+  File "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/astropy__astropy-7746/repo/astropy/config/configuration.py", line 396, in __call__
+    sec = get_config(self.module)
+  File "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/astropy__astropy-7746/repo/astropy/config/configuration.py", line 546, in get_config
+    cobj[secname] = {}
+    ~~~~^^^^^^^^^
+  File "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/astropy__astropy-7746/repo/astropy/extern/configobj/configobj.py", line 597, in __setitem__
+    elif isinstance(value, collections.Mapping) and not unrepr:
+                           ^^^^^^^^^^^^^^^^^^^
+AttributeError: module 'collections' has no attribute 'Mapping'"""
+)

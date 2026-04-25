@@ -1,0 +1,20 @@
+status: success
+34: 
+35:     def _wrapper(self, *args, **kwargs):
+36:         # bound_method has the signature that 'decorator' expects i.e. no
+37:         # 'self' argument, but it's a closure over self so it can call
+38:         # 'func'. Also, wrap method.__get__() in a function because new
+39:         # attributes can't be set on bound method objects, only on functions.
+40:         bound_method = partial(method.__get__(self, type(self)))
+41:         update_wrapper(bound_method, method)
+42:         for dec in decorators:
+43:             bound_method = dec(bound_method)
+44:         return bound_method(*args, **kwargs)
+45: 
+46:     # Copy any attributes that a decorator adds to the function it decorates.
+47:     for dec in decorators:
+48:         _update_method_wrapper(_wrapper, dec)
+49:     # Preserve any existing attributes of 'method', including the name.
+50:     update_wrapper(_wrapper, method)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,13 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = ProcessResult(
+  exitCode = 0,
+  stdout = """ORIGINAL (buggy) behavior:
+only('name').defer('name'):
+  After only: ({'name'}, False)
+  After defer: (set(), False)
+  -> defer flag is False, meaning it's trying to immediately load empty set!
+\nonly('name').defer('name').defer('country'):
+  After defers: (set(), False)""",
+  stderr = ""
+)

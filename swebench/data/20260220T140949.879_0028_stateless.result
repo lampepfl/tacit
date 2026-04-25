@@ -1,0 +1,52 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = """"""
+This module contains helper functions for controlling caching. It does so by
+managing the "Vary" header of responses. It includes functions to patch the
+header of response objects directly and decorators that change functions to do
+that header-patching themselves.
+
+For information on the Vary header, see:
+
+    https://tools.ietf.org/html/rfc7231#section-7.1.4
+
+Essentially, the "Vary" HTTP header defines which headers a cache should take
+into account when building its cache key. Requests with the same path but
+different header content for headers named in "Vary" need to get different
+cache keys to prevent delivery of wrong content.
+
+An example: i18n middleware would need to distinguish caches by the
+"Accept-language" header.
+"""
+import time
+from collections import defaultdict
+
+from django.conf import settings
+from django.core.cache import caches
+from django.http import HttpResponse, HttpResponseNotModified
+from django.utils.crypto import md5
+from django.utils.http import http_date, parse_etags, parse_http_date_safe, quote_etag
+from django.utils.log import log_response
+from django.utils.regex_helper import _lazy_re_compile
+from django.utils.timezone import get_current_timezone_name
+from django.utils.translation import get_language
+
+cc_delim_re = _lazy_re_compile(r"\s*,\s*")
+
+
+def patch_cache_control(response, **kwargs):
+    """
+    Patch the Cache-Control header by adding all keyword arguments to it.
+    The transformation is as follows:
+
+    * All keyword parameter names are turned to lowercase, and underscores
+      are converted to hyphens.
+    * If the value of a parameter is True (exactly True, not just a
+      true value), only the parameter name is added to the header.
+    * All other parameters are added with their value, after applying
+      str() to it.
+    """
+
+    def dictitem(s):
+        t = s.split("=", 1)
+...

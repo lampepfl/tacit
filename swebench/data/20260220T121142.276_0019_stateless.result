@@ -1,0 +1,30 @@
+status: success
+955:                 if both_m2m or neither_m2m:
+956:                     # Either both fields are m2m or neither is
+957:                     preserve_default = True
+958:                     if (old_field.null and not new_field.null and not new_field.has_default() and
+959:                             not new_field.many_to_many):
+960:                         field = new_field.clone()
+961:                         new_default = self.questioner.ask_not_null_alteration(field_name, model_name)
+962:                         if new_default is not models.NOT_PROVIDED:
+963:                             field.default = new_default
+964:                             preserve_default = False
+965:                     else:
+966:                         field = new_field
+967:                     self.add_operation(
+968:                         app_label,
+969:                         operations.AlterField(
+970:                             model_name=model_name,
+971:                             name=field_name,
+972:                             field=field,
+973:                             preserve_default=preserve_default,
+974:                         ),
+975:                         dependencies=dependencies,
+976:                     )
+977:                 else:
+978:                     # We cannot alter between m2m and concrete fields
+979:                     self._generate_removed_field(app_label, model_name, field_name)
+980:                     self._generate_added_field(app_label, model_name, field_name)
+981: 
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

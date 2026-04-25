@@ -1,0 +1,38 @@
+status: success
+c.for_save = for_save
+        return c
+
+    def get_group_by_cols(self, alias=None):
+        return []
+
+
+class DurationValue(Value):
+    def as_sql(self, compiler, connection):
+        connection.ops.check_expression_support(self)
+        if connection.features.has_native_duration_field:
+            return super().as_sql(compiler, connection)
+        return connection.ops.date_interval_sql(self.value), []
+
+
+class RawSQL(Expression):
+    def __init__(self, sql, params, output_field=None):
+        if output_field is None:
+            output_field = fields.Field()
+        self.sql, self.params = sql, params
+        super().__init__(output_field=output_field)
+
+    def __repr__(self):
+        return "{}({}, {})".format(self.__class__.__name__, self.sql, self.params)
+
+    def as_sql(self, compiler, connection):
+        return '(%s)' % self.sql, self.params
+
+    def get_group_by_cols(self, alias=None):
+        return [self]
+
+    def resolve_expression(self, query=None, allow_joins=True, reuse=None, summarize=False, for_save=False):
+        # Resolve parents fields used in raw SQL.
+        for parent in query.model._meta.get_parent_list():
+            for parent_field in parent._meta.local_fields:
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

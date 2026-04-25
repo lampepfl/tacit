@@ -1,0 +1,6 @@
+status: success
+-- Error: ----------------------------------------------------------------------
+2 |  @main def main: Unit = 
+  |  ^^^^^
+  |method main cannot be a main method since it cannot be accessed statically
+1 error found

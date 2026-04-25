@@ -1,0 +1,11 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = List(
+  "color.py",
+  "__init__.py",
+  "templates.py",
+  "utils.py",
+  "commands",
+  "sql.py",
+  "base.py"
+)

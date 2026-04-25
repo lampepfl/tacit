@@ -1,0 +1,29 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = List(
+  "CITATION",
+  "visualization",
+  "conftest.py",
+  "_erfa",
+  "coordinates",
+  "config",
+  "constants",
+  "wcs",
+  "io",
+  "tests",
+  "__init__.py",
+  "utils",
+  "logger.py",
+  "nddata",
+  "modeling",
+  "time",
+  "units",
+  "table",
+  "cosmology",
+  "astropy.cfg",
+  "extern",
+  "convolution",
+  "stats",
+  "samp",
+  "setup_package.py"
+)

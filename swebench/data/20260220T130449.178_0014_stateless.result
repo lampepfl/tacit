@@ -1,0 +1,73 @@
+status: success
+350:     def resolve(self, path):
+351:         match = self.pattern.match(path)
+352:         if match:
+353:             new_path, args, kwargs = match
+354:             # Pass any extra_kwargs as **kwargs.
+355:             kwargs.update(self.default_args)
+356:             return ResolverMatch(self.callback, args, kwargs, self.pattern.name, route=str(self.pattern))
+357: 
+358:     @cached_property
+359:     def lookup_str(self):
+360:         """
+361:         A string that identifies the view (e.g. 'path.to.view_function' or
+362:         'path.to.ClassBasedView').
+363:         """
+364:         callback = self.callback
+365:         if isinstance(callback, functools.partial):
+366:             callback = callback.func
+367:         if not hasattr(callback, '__name__'):
+368:             return callback.__module__ + "." + callback.__class__.__name__
+369:         return callback.__module__ + "." + callback.__qualname__
+370: 
+371: 
+372: class URLResolver:
+373:     def __init__(self, pattern, urlconf_name, default_kwargs=None, app_name=None, namespace=None):
+374:         self.pattern = pattern
+375:         # urlconf_name is the dotted Python path to the module defining
+376:         # urlpatterns. It may also be an object with an urlpatterns attribute
+377:         # or urlpatterns itself.
+378:         self.urlconf_name = urlconf_name
+379:         self.callback = None
+380:         self.default_kwargs = default_kwargs or {}
+381:         self.namespace = namespace
+382:         self.app_name = app_name
+383:         self._reverse_dict = {}
+384:         self._namespace_dict = {}
+385:         self._app_dict = {}
+386:         # set of dotted paths to all functions and classes that are used in
+387:         # urlpatterns
+388:         self._callback_strs = set()
+389:         self._populated = False
+390:         self._local = Local()
+391: 
+392:     def __repr__(self):
+393:         if isinstance(self.urlconf_name, list) and self.urlconf_name:
+394:             # Don't bother to output the whole list, it can be huge
+395:             urlconf_repr = '<%s list>' % self.urlconf_name[0].__class__.__name__
+396:         else:
+397:             urlconf_repr = repr(self.urlconf_name)
+398:         return '<%s %s (%s:%s) %s>' % (
+399:             self.__class__.__name__, urlconf_repr, self.app_name,
+400:             self.namespace, self.pattern.describe(),
+401:         )
+402: 
+403:     def check(self):
+404:         messages = []
+405:         for pattern in self.url_patterns:
+406:             messages.extend(check_resolver(pattern))
+407:         messages.extend(self._check_custom_error_handlers())
+408:         return messages or self.pattern.check()
+409: 
+410:     def _check_custom_error_handlers(self):
+411:         messages = []
+412:         # All handlers take (request, exception) arguments except handler500
+413:         # which takes (request).
+414:         for status_code, num_parameters in [(400, 2), (403, 2), (404, 2), (500, 1)]:
+415:             try:
+416:                 handler, param_dict = self.resolve_error_handler(status_code)
+417:             except (ImportError, ViewDoesNotExist) as e:
+418:                 path = getattr(self.urlconf_module, 'handler%s' % status_code)
+419:                 msg = (
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

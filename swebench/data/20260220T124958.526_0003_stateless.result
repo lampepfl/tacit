@@ -1,0 +1,83 @@
+status: success
+1640:         from django.db import models
+1641: 
+1642:         # In order to avoid hitting the relation tree prematurely, we use our
+1643:         # own fields_map instead of using get_field()
+1644:         forward_fields_map = {}
+1645:         for field in cls._meta._get_fields(reverse=False):
+1646:             forward_fields_map[field.name] = field
+1647:             if hasattr(field, 'attname'):
+1648:                 forward_fields_map[field.attname] = field
+1649: 
+1650:         errors = []
+1651:         for field_name in fields:
+1652:             try:
+1653:                 field = forward_fields_map[field_name]
+1654:             except KeyError:
+1655:                 errors.append(
+1656:                     checks.Error(
+1657:                         "'%s' refers to the nonexistent field '%s'." % (
+1658:                             option, field_name,
+1659:                         ),
+1660:                         obj=cls,
+1661:                         id='models.E012',
+1662:                     )
+1663:                 )
+1664:             else:
+1665:                 if isinstance(field.remote_field, models.ManyToManyRel):
+1666:                     errors.append(
+1667:                         checks.Error(
+1668:                             "'%s' refers to a ManyToManyField '%s', but "
+1669:                             "ManyToManyFields are not permitted in '%s'." % (
+1670:                                 option, field_name, option,
+1671:                             ),
+1672:                             obj=cls,
+1673:                             id='models.E013',
+1674:                         )
+1675:                     )
+1676:                 elif field not in cls._meta.local_fields:
+1677:                     errors.append(
+1678:                         checks.Error(
+1679:                             "'%s' refers to field '%s' which is not local to model '%s'."
+1680:                             % (option, field_name, cls._meta.object_name),
+1681:                             hint="This issue may be caused by multi-table inheritance.",
+1682:                             obj=cls,
+1683:                             id='models.E016',
+1684:                         )
+1685:                     )
+1686:         return errors
+1687: 
+1688:     @classmethod
+1689:     def _check_ordering(cls):
+1690:         """
+1691:         Check "ordering" option -- is it a list of strings and do all fields
+1692:         exist?
+1693:         """
+1694:         if cls._meta._ordering_clash:
+1695:             return [
+1696:                 checks.Error(
+1697:                     "'ordering' and 'order_with_respect_to' cannot be used together.",
+1698:                     obj=cls,
+1699:                     id='models.E021',
+1700:                 ),
+1701:             ]
+1702: 
+1703:         if cls._meta.order_with_respect_to or not cls._meta.ordering:
+1704:             return []
+1705: 
+1706:         if not isinstance(cls._meta.ordering, (list, tuple)):
+1707:             return [
+1708:                 checks.Error(
+1709:                     "'ordering' must be a tuple or list (even if you want to order by only one field).",
+1710:                     obj=cls,
+1711:                     id='models.E014',
+1712:                 )
+1713:             ]
+1714: 
+1715:         errors = []
+1716:         fields = cls._meta.ordering
+1717: 
+1718:         # Skip expressions and '?' fields.
+1719:         fields = (f for f in fields if isinstance(f, str) and f != '?')
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

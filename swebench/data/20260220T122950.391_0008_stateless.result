@@ -1,0 +1,60 @@
+status: success
+Found ModelBase at line 72
+72: class ModelBase(type):
+73:     """Metaclass for all models."""
+74:     def __new__(cls, name, bases, attrs, **kwargs):
+75:         super_new = super().__new__
+76: 
+77:         # Also ensure initialization is only performed for subclasses of Model
+78:         # (excluding Model class itself).
+79:         parents = [b for b in bases if isinstance(b, ModelBase)]
+80:         if not parents:
+81:             return super_new(cls, name, bases, attrs)
+82: 
+83:         # Create the class.
+84:         module = attrs.pop('__module__')
+85:         new_attrs = {'__module__': module}
+86:         classcell = attrs.pop('__classcell__', None)
+87:         if classcell is not None:
+88:             new_attrs['__classcell__'] = classcell
+89:         attr_meta = attrs.pop('Meta', None)
+90:         # Pass all attrs without a (Django-specific) contribute_to_class()
+91:         # method to type.__new__() so that they're properly initialized
+92:         # (i.e. __set_name__()).
+93:         contributable_attrs = {}
+94:         for obj_name, obj in list(attrs.items()):
+95:             if _has_contribute_to_class(obj):
+96:                 contributable_attrs[obj_name] = obj
+97:             else:
+98:                 new_attrs[obj_name] = obj
+99:         new_class = super_new(cls, name, bases, new_attrs, **kwargs)
+100: 
+101:         abstract = getattr(attr_meta, 'abstract', False)
+102:         meta = attr_meta or getattr(new_class, 'Meta', None)
+103:         base_meta = getattr(new_class, '_meta', None)
+104: 
+105:         app_label = None
+106: 
+107:         # Look for an application configuration to attach the model to.
+108:         app_config = apps.get_containing_app_config(module)
+109: 
+110:         if getattr(meta, 'app_label', None) is None:
+111:             if app_config is None:
+112:                 if not abstract:
+113:                     raise RuntimeError(
+114:                         "Model class %s.%s doesn't declare an explicit "
+115:                         "app_label and isn't in an application in "
+116:                         "INSTALLED_APPS." % (module, name)
+117:                     )
+118: 
+119:             else:
+120:                 app_label = app_config.label
+121: 
+122:         new_class.add_to_class('_meta', Options(meta, app_label))
+1 warning found
+def run()(using x$1: IOCapability): Any
+-- Warning: --------------------------------------------------------------------
+14 |        return ()
+   |        ^^^^^^^^^
+   |Non local returns are no longer supported; use `boundary` and `boundary.break` in `scala.util` instead
+val res0: Any = ()

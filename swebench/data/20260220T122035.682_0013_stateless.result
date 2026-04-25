@@ -1,0 +1,7 @@
+status: success
+Looking for: 	if self.choices is not None:
+	            setattr(cls, 'get_%s_display' % self.name,
+	                    partialmethod(cls._get_FIELD_display, field=self))
+No replacement made - trying different approach
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

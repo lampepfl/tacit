@@ -1,0 +1,54 @@
+status: success
+181:         # and generate_added_indexes().
+182:         self.create_altered_indexes()
+183:         self.create_altered_constraints()
+184:         # Generate index removal operations before field is removed
+185:         self.generate_removed_constraints()
+186:         self.generate_removed_indexes()
+187:         # Generate field renaming operations.
+188:         self.generate_renamed_fields()
+189:         self.generate_renamed_indexes()
+190:         # Generate removal of foo together.
+191:         self.generate_removed_altered_unique_together()
+192:         self.generate_removed_altered_index_together()
+193:         # Generate field operations.
+194:         self.generate_removed_fields()
+195:         self.generate_added_fields()
+196:         self.generate_altered_fields()
+197:         self.generate_altered_order_with_respect_to()
+198:         self.generate_altered_unique_together()
+199:         self.generate_altered_index_together()
+200:         self.generate_added_indexes()
+201:         self.generate_added_constraints()
+202:         self.generate_altered_db_table()
+203: 
+204:         self._sort_migrations()
+205:         self._build_migration_list(graph)
+206:         self._optimize_migrations()
+207: 
+208:         return self.migrations
+209: 
+210:     def _prepare_field_lists(self):
+211:         """
+212:         Prepare field lists and a list of the fields that used through models
+213:         in the old state so dependencies can be made from the through model
+214:         deletion to the field that uses it.
+215:         """
+216:         self.kept_model_keys = self.old_model_keys & self.new_model_keys
+217:         self.kept_proxy_keys = self.old_proxy_keys & self.new_proxy_keys
+218:         self.kept_unmanaged_keys = self.old_unmanaged_keys & self.new_unmanaged_keys
+219:         self.through_users = {}
+220:         self.old_field_keys = {
+221:             (app_label, model_name, field_name)
+222:             for app_label, model_name in self.kept_model_keys
+223:             for field_name in self.from_state.models[
+224:                 app_label, self.renamed_models.get((app_label, model_name), model_name)
+225:             ].fields
+226:         }
+227:         self.new_field_keys = {
+228:             (app_label, model_name, field_name)
+229:             for app_label, model_name in self.kept_model_keys
+230:             for field_name in self.to_state.models[app_label, model_name].fields
+231:         }
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

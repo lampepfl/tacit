@@ -1,0 +1,26 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = ProcessResult(
+  exitCode = 0,
+  stdout = """AUTHORS
+CONTRIBUTING.rst
+Gruntfile.js
+INSTALL
+LICENSE
+LICENSE.python
+MANIFEST.in
+README.rst
+django
+docs
+extras
+js_tests
+opencode.json
+package.json
+pyproject.toml
+scripts
+setup.cfg
+setup.py
+tests
+tox.ini""",
+  stderr = ""
+)

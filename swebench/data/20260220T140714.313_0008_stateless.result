@@ -1,0 +1,14 @@
+status: failure
+-- [E006] Not Found Error: -----------------------------------------------------
+2 |  requestFileSystem("/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15400/repo") { (fs: FileSystem^ ^) =>
+  |                                                                                                                                                  ^
+  |                                                         Not found: type ^
+  |
+  | longer explanation available when compiling with `-explain`
+-- [E006] Not Found Error: -----------------------------------------------------
+2 |  requestFileSystem("/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15400/repo") { (fs: FileSystem^ ^) =>
+  |                                                                                                                                                    ^
+  |                                                         Not found: type ^
+  |
+  | longer explanation available when compiling with `-explain`
+2 errors found

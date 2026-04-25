@@ -1,0 +1,6 @@
+status: success
+Line 23:             db_table_models[(model._meta.db_table, router.db_for_write(model))].append(model._meta.label)
+Line 44:                     % (db_table[0], ', '.join(db_table_models[db_table])),
+Line 45:                     obj=db_table[0],
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

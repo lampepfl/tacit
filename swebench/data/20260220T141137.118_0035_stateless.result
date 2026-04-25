@@ -1,0 +1,8 @@
+status: success
+136:         if int(mtime) > header_mtime:
+137:             raise ValueError
+138:     except (AttributeError, ValueError, OverflowError, TypeError):
+139:         return True
+140:     return False
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

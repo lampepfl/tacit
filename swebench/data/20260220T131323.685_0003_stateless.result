@@ -1,0 +1,33 @@
+status: success
+115:         # RemovedInDjango40Warning: DEFAULT_HASHING_ALGORITHM will be removed.
+116:         if settings.DEFAULT_HASHING_ALGORITHM == 'sha1':
+117:             return self._legacy_encode(session_dict)
+118:         return signing.dumps(
+119:             session_dict, salt=self.key_salt, serializer=self.serializer,
+120:             compress=True,
+121:         )
+122: 
+123:     def decode(self, session_data):
+124:         try:
+125:             return signing.loads(session_data, salt=self.key_salt, serializer=self.serializer)
+126:         # RemovedInDjango40Warning: when the deprecation ends, handle here
+127:         # exceptions similar to what _legacy_decode() does now.
+128:         except Exception:
+129:             return self._legacy_decode(session_data)
+130: 
+131:     def _legacy_encode(self, session_dict):
+132:         # RemovedInDjango40Warning.
+133:         serialized = self.serializer().dumps(session_dict)
+134:         hash = self._hash(serialized)
+135:         return base64.b64encode(hash.encode() + b':' + serialized).decode('ascii')
+136: 
+137:     def _legacy_decode(self, session_data):
+138:         # RemovedInDjango40Warning: pre-Django 3.1 format will be invalid.
+139:         encoded_data = base64.b64decode(session_data.encode('ascii'))
+140:         try:
+141:             # could produce ValueError if there is no ':'
+142:             hash, serialized = encoded_data.split(b':', 1)
+143:             expected_hash = self._hash(serialized)
+144:             if not constant_time_compare(hash.decode(), expected_hash):
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,133 @@
+status: success
+771: class ForeignKey(ForeignObject):
+772:     """
+773:     Provide a many-to-one relation by adding a column to the local model
+774:     to hold the remote value.
+775: 
+776:     By default ForeignKey will target the pk of the remote model but this
+777:     behavior can be changed by using the ``to_field`` argument.
+778:     """
+779:     descriptor_class = ForeignKeyDeferredAttribute
+780:     # Field flags
+781:     many_to_many = False
+782:     many_to_one = True
+783:     one_to_many = False
+784:     one_to_one = False
+785: 
+786:     rel_class = ManyToOneRel
+787: 
+788:     empty_strings_allowed = False
+789:     default_error_messages = {
+790:         'invalid': _('%(model)s instance with %(field)s %(value)r does not exist.')
+791:     }
+792:     description = _("Foreign Key (type determined by related field)")
+793: 
+794:     def __init__(self, to, on_delete, related_name=None, related_query_name=None,
+795:                  limit_choices_to=None, parent_link=False, to_field=None,
+796:                  db_constraint=True, **kwargs):
+797:         try:
+798:             to._meta.model_name
+799:         except AttributeError:
+800:             assert isinstance(to, str), (
+801:                 "%s(%r) is invalid. First parameter to ForeignKey must be "
+802:                 "either a model, a model name, or the string %r" % (
+803:                     self.__class__.__name__, to,
+804:                     RECURSIVE_RELATIONSHIP_CONSTANT,
+805:                 )
+806:             )
+807:         else:
+808:             # For backwards compatibility purposes, we need to *try* and set
+809:             # the to_field during FK construction. It won't be guaranteed to
+810:             # be correct until contribute_to_class is called. Refs #12190.
+811:             to_field = to_field or (to._meta.pk and to._meta.pk.name)
+812:         if not callable(on_delete):
+813:             raise TypeError('on_delete must be callable.')
+814: 
+815:         kwargs['rel'] = self.rel_class(
+816:             self, to, to_field,
+817:             related_name=related_name,
+818:             related_query_name=related_query_name,
+819:             limit_choices_to=limit_choices_to,
+820:             parent_link=parent_link,
+821:             on_delete=on_delete,
+822:         )
+823:         kwargs.setdefault('db_index', True)
+824: 
+825:         super().__init__(
+826:             to,
+827:             on_delete,
+828:             from_fields=[RECURSIVE_RELATIONSHIP_CONSTANT],
+829:             to_fields=[to_field],
+830:             **kwargs,
+831:         )
+832:         self.db_constraint = db_constraint
+833: 
+834:     def check(self, **kwargs):
+835:         return [
+836:             *super().check(**kwargs),
+837:             *self._check_on_delete(),
+838:             *self._check_unique(),
+839:         ]
+840: 
+841:     def _check_on_delete(self):
+842:         on_delete = getattr(self.remote_field, 'on_delete', None)
+843:         if on_delete == SET_NULL and not self.null:
+844:             return [
+845:                 checks.Error(
+846:                     'Field specifies on_delete=SET_NULL, but cannot be null.',
+847:                     hint='Set null=True argument on the field, or change the on_delete rule.',
+848:                     obj=self,
+849:                     id='fields.E320',
+850:                 )
+851:             ]
+852:         elif on_delete == SET_DEFAULT and not self.has_default():
+853:             return [
+854:                 checks.Error(
+855:                     'Field specifies on_delete=SET_DEFAULT, but has no default value.',
+856:                     hint='Set a default value, or change the on_delete rule.',
+857:                     obj=self,
+858:                     id='fields.E321',
+859:                 )
+860:             ]
+861:         else:
+862:             return []
+863: 
+864:     def _check_unique(self, **kwargs):
+865:         return [
+866:             checks.Warning(
+867:                 'Setting unique=True on a ForeignKey has the same effect as using a OneToOneField.',
+868:                 hint='ForeignKey(unique=True) is usually better served by a OneToOneField.',
+869:                 obj=self,
+870:                 id='fields.W342',
+871:             )
+872:         ] if self.unique else []
+873: 
+874:     def deconstruct(self):
+875:         name, path, args, kwargs = super().deconstruct()
+876:         del kwargs['to_fields']
+877:         del kwargs['from_fields']
+878:         # Handle the simpler arguments
+879:         if self.db_index:
+880:             del kwargs['db_index']
+881:         else:
+882:             kwargs['db_index'] = False
+883:         if self.db_constraint is not True:
+884:             kwargs['db_constraint'] = self.db_constraint
+885:         # Rel needs more work.
+886:         to_meta = getattr(self.remote_field.model, "_meta", None)
+887:         if self.remote_field.field_name and (
+888:                 not to_meta or (to_meta.pk and self.remote_field.field_name != to_meta.pk.name)):
+889:             kwargs['to_field'] = self.remote_field.field_name
+890:         return name, path, args, kwargs
+891: 
+892:     def to_python(self, value):
+893:         return self.target_field.to_python(value)
+894: 
+895:     @property
+896:     def target_field(self):
+897:         return self.foreign_related_fields[0]
+898: 
+899:     def get_reverse_path_info(self, filtered_relation=None):
+900:         """Get path from the related model to this field's model."""
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

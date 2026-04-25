@@ -1,0 +1,6 @@
+status: success
+0: Found 'return [self]' at 11898, Ref class before at -1
+1: Found 'return [self]' at 27995, Ref class before at -1
+2: Found 'return [self]' at 37767, Ref class before at 28294
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

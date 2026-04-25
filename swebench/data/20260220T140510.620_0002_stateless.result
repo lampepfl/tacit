@@ -1,0 +1,5 @@
+status: success
+292:             formatter_class=DjangoHelpFormatter,
+368:         Call the parser's add_argument() method, suppressing the help text
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

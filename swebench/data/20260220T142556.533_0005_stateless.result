@@ -1,0 +1,10 @@
+status: failure
+-- [E081] Type Error: ----------------------------------------------------------
+3 |  val result: List[String] = requestFileSystem(repoPath)(fs => {
+  |                                                         ^^
+  |                           Missing parameter type
+  |
+  |                           I could not infer the type of the parameter fs
+  |                           Expected type for the whole anonymous function:
+  |                             List[String]
+1 error found

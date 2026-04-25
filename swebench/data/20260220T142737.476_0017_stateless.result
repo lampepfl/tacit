@@ -1,0 +1,8 @@
+status: failure
+-- [E006] Not Found Error: -----------------------------------------------------
+7 |    lines.zipWithIndex.filter(_._1.contains("@property") && lines(zipWithIndex.map(_+1).getOrElse(idx+1, "")).exists(_.contains("ordering"))).foreach { case (line, idx) =>
+  |                                                                  ^^^^^^^^^^^^
+  |                                                   Not found: zipWithIndex
+  |
+  | longer explanation available when compiling with `-explain`
+1 error found

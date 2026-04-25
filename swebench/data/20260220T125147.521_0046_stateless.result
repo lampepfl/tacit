@@ -1,0 +1,75 @@
+status: success
+392:     def delete(self):
+393:         # sort instance collections
+394:         for model, instances in self.data.items():
+395:             self.data[model] = sorted(instances, key=attrgetter("pk"))
+396: 
+397:         # if possible, bring the models in an order suitable for databases that
+398:         # don't support transactions or cannot defer constraint checks until the
+399:         # end of a transaction.
+400:         self.sort()
+401:         # number of objects deleted for each model label
+402:         deleted_counter = Counter()
+403: 
+404:         # Optimize for the case with a single obj and no dependencies
+405:         if len(self.data) == 1 and len(instances) == 1:
+406:             instance = list(instances)[0]
+407:             if self.can_fast_delete(instance):
+408:                 with transaction.mark_for_rollback_on_error():
+409:                     count = sql.DeleteQuery(model).delete_batch([instance.pk], self.using)
+410:                 setattr(instance, model._meta.pk.attname, None)
+411:                 return count, {model._meta.label: count}
+412: 
+413:         with transaction.atomic(using=self.using, savepoint=False):
+414:             # send pre_delete signals
+415:             for model, obj in self.instances_with_model():
+416:                 if not model._meta.auto_created:
+417:                     signals.pre_delete.send(
+418:                         sender=model, instance=obj, using=self.using
+419:                     )
+420: 
+421:             # fast deletes
+422:             for qs in self.fast_deletes:
+423:                 count = qs._raw_delete(using=self.using)
+424:                 deleted_counter[qs.model._meta.label] += count
+425: 
+426:             # update fields
+427:             for model, instances_for_fieldvalues in self.field_updates.items():
+428:                 for (field, value), instances in instances_for_fieldvalues.items():
+429:                     query = sql.UpdateQuery(model)
+430:                     query.update_batch([obj.pk for obj in instances],
+431:                                        {field.name: value}, self.using)
+432: 
+433:             # reverse instance collections
+434:             for instances in self.data.values():
+435:                 instances.reverse()
+436: 
+437:             # delete instances
+438:             for model, instances in self.data.items():
+439:                 query = sql.DeleteQuery(model)
+440:                 pk_list = [obj.pk for obj in instances]
+441:                 count = query.delete_batch(pk_list, self.using)
+442:                 deleted_counter[model._meta.label] += count
+443: 
+444:                 if not model._meta.auto_created:
+445:                     for obj in instances:
+446:                         signals.post_delete.send(
+447:                             sender=model, instance=obj, using=self.using
+448:                         )
+449: 
+450:         # update collected instances
+451:         for instances_for_fieldvalues in self.field_updates.values():
+452:             for (field, value), instances in instances_for_fieldvalues.items():
+453:                 for obj in instances:
+454:                     setattr(obj, field.attname, value)
+455:         for model, instances in self.data.items():
+456:             for instance in instances:
+457:                 setattr(instance, model._meta.pk.attname, None)
+458:         # Ensure models that were originally collected are in the result
+459:         # This handles the case when deleting from an empty QuerySet
+460:         for model in self._collected_models:
+461:             if model._meta.label not in deleted_counter:
+462:                 deleted_counter[model._meta.label] = 0
+463:         return sum(deleted_counter.values()), dict(deleted_counter)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

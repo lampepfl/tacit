@@ -1,0 +1,78 @@
+status: success
+245:             except EmptyResultSet:
+246:                 # Select a predicate that's always False.
+247:                 sql, params = '0', ()
+248:             ret.append((col, (sql, params), alias))
+249:         return ret, klass_info, annotations
+250: 
+251:     def get_order_by(self):
+252:         """
+253:         Return a list of 2-tuples of form (expr, (sql, params, is_ref)) for the
+254:         ORDER BY clause.
+255: 
+256:         The order_by clause can alter the select clause (for example it
+257:         can add aliases to clauses that do not yet have one, or it can
+258:         add totally new select clauses).
+259:         """
+260:         if self.query.extra_order_by:
+261:             ordering = self.query.extra_order_by
+262:         elif not self.query.default_ordering:
+263:             ordering = self.query.order_by
+264:         elif self.query.order_by:
+265:             ordering = self.query.order_by
+266:         elif self.query.get_meta().ordering:
+267:             ordering = self.query.get_meta().ordering
+268:             self._meta_ordering = ordering
+269:         else:
+270:             ordering = []
+271:         if self.query.standard_ordering:
+272:             asc, desc = ORDER_DIR['ASC']
+273:         else:
+274:             asc, desc = ORDER_DIR['DESC']
+275: 
+276:         order_by = []
+277:         for field in ordering:
+278:             if hasattr(field, 'resolve_expression'):
+279:                 if not isinstance(field, OrderBy):
+280:                     field = field.asc()
+281:                 if not self.query.standard_ordering:
+282:                     field.reverse_ordering()
+283:                 order_by.append((field, False))
+284:                 continue
+285:             if field == '?':  # random
+286:                 order_by.append((OrderBy(Random()), False))
+287:                 continue
+288: 
+289:             col, order = get_order_dir(field, asc)
+290:             descending = order == 'DESC'
+291: 
+292:             if col in self.query.annotation_select:
+293:                 # Reference to expression in SELECT clause
+294:                 order_by.append((
+295:                     OrderBy(Ref(col, self.query.annotation_select[col]), descending=descending),
+296:                     True))
+297:                 continue
+298:             if col in self.query.annotations:
+299:                 # References to an expression which is masked out of the SELECT clause
+300:                 order_by.append((
+301:                     OrderBy(self.query.annotations[col], descending=descending),
+302:                     False))
+303:                 continue
+304: 
+305:             if '.' in field:
+306:                 # This came in through an extra(order_by=...) addition. Pass it
+307:                 # on verbatim.
+308:                 table, col = col.split('.', 1)
+309:                 order_by.append((
+310:                     OrderBy(
+311:                         RawSQL('%s.%s' % (self.quote_name_unless_alias(table), col), []),
+312:                         descending=descending
+313:                     ), False))
+314:                 continue
+315: 
+316:             if not self.query.extra or col not in self.query.extra:
+317:                 # 'col' is of the form 'field' or 'field1__field2' or
+318:                 # '-field1__field2__field', etc.
+319:                 order_by.extend(self.find_ordering_name(
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

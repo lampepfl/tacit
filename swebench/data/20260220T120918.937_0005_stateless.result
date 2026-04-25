@@ -1,0 +1,10 @@
+status: success
+925:                 # Handle ForeignKey which can only have a single to_field.
+928:                     to_field_rename_key = rename_key + (remote_field_name,)
+929:                     if to_field_rename_key in self.renamed_fields:
+931:                 # Handle ForeignObjects which can have multiple from_fields/to_fields.
+939:                     new_field.to_fields = tuple([
+940:                         self.renamed_fields.get(rename_key + (to_field,), to_field)
+941:                         for to_field in new_field.to_fields
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,10 @@
+status: success
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11910/repo/tests/migrations/test_operations.py:1502:         self.assertEqual(new_state.models['app', 'othermodel'].fields[1][1].to_fields, ('renamed',))
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11910/repo/tests/migrations/test_operations.py:1504:         self.assertEqual(new_state.models['app', 'othermodel'].fields[2][1].to_fields, ('renamed',))
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11910/repo/tests/migrations/test_operations.py:1510:         self.assertEqual(new_state.models['app', 'othermodel'].fields[1][1].to_fields, ('renamed',))
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11910/repo/tests/migrations/test_operations.py:1512:         self.assertEqual(new_state.models['app', 'othermodel'].fields[2][1].to_fields, ('renamed',))
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11910/repo/tests/migrations/test_autodetector.py:857:                 ('foo', models.ForeignKey('app.Foo', models.CASCADE, to_field='renamed_field')),
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11910/repo/tests/migrations/test_autodetector.py:884:         # Case 1: to_fields renames.
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11910/repo/tests/migrations/test_autodetector.py:896:                     'app.Foo', models.CASCADE, from_fields=fields, to_fields=renamed_fields,
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

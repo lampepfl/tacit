@@ -1,0 +1,7 @@
+status: success
+java.lang.Exception: not implemented
+  at rs$line$2$$anon$1.access(rs$line$2:5)
+  at library.FileOps$.grep(FileOps.scala:8)
+  at library.InterfaceImpl.grep(InterfaceImpl.scala:12)
+  at rs$line$2$.run(rs$line$2:7)
+  ... 53 elided

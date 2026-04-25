@@ -1,0 +1,7 @@
+status: success
+-- Error: ----------------------------------------------------------------------
+45 |  """), workingDir = Some("/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13757/repo"))
+   |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |method execOutput in trait Interface: (command: String, args: List[String])
+   |  (using pp: library.ProcessPermission): String does not have a parameter workingDir
+1 error found

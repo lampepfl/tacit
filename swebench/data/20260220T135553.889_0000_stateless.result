@@ -1,0 +1,34 @@
+status: success
+Root contents:
+  Gruntfile.js
+  .tx
+  js_tests
+  INSTALL
+  LICENSE
+  CONTRIBUTING.rst
+  AUTHORS
+  .pre-commit-config.yaml
+  pyproject.toml
+  .eslintrc
+  tests
+  MANIFEST.in
+  docs
+  .readthedocs.yml
+  .editorconfig
+  LICENSE.python
+  setup.py
+  .gitignore
+  package.json
+  scripts
+  .github
+  tox.ini
+  .gitattributes
+  opencode.json
+  setup.cfg
+  .eslintignore
+  README.rst
+  .git
+  django
+  extras
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

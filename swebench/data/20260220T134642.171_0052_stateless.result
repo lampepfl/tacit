@@ -1,0 +1,15 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = """227:        self.deferred_loading = (frozenset(), True)
+669:        Convert the self.deferred_loading data structure to an alternate data
+681:        field_names, defer = self.deferred_loading
+2068:    def clear_deferred_loading(self):
+2070:        self.deferred_loading = (frozenset(), True)
+2072:    def add_deferred_loading(self, field_names):
+2084:        existing, defer = self.deferred_loading
+2087:            self.deferred_loading = existing.union(field_names), True
+2090:            self.deferred_loading = existing.difference(field_names), True
+2102:        existing, defer = self.deferred_loading
+2111:            self.deferred_loading = field_names.difference(existing), False
+2114:            self.deferred_loading = frozenset(field_names), False
+2164:        self.clear_deferred_loading()"""

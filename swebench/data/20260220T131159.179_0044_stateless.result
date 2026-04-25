@@ -1,0 +1,50 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = """In Django's migration serializer, the `FieldSerializer` class handles serializing `django.db.models.Field` instances. Here's how it works:
+
+## The FieldSerializer Class
+
+Located in `django/db/migrations/serializer.py`:
+
+```python
+class FieldSerializer(BaseSerializer):
+    """For django.db.models.Field instances"""
+    
+    def serialize(self):
+        module = self.value.__class__.__module__
+        # Handle both django.db.models and contrib.gis fields
+        if module.startswith('django.contrib.gis'):
+            self._kwargs['db_tablespace'] = self.value.db_tablespace
+        # Check if the field class is from django.db.models
+        elif module == "django.db.models":
+            # Fields from django.db.models use a plain name (e.g., "CharField")
+            # without the module path in migrations
+            name = self.value.__class__.__name__
+            imports = {"import django.db.models"}
+            return self._serialize_path(name, imports)
+        else:
+            # For custom fields from other modules
+            name = "%s.%s" % (self.value.__class__.__module__, self.value.__class__.__name__)
+        
+        return Serializer(self.value.deconstruct()).serialize()
+```
+
+## The Key `serialize` Method
+
+The actual serialization happens in `FieldSerializer.serialize()` method. Here's a simplified version showing the core logic:
+
+```python
+def serialize(self):
+    # Get the field's class module
+    module = self.value.__class__.__module__
+    klass = self.value.__class__.__name__
+    
+    # Special handling for built-in Django fields
+    if module == "django.db.models":
+        # For built-in fields, we only use the class name
+        # The imports will handle the module
+        return (
+            self.value.__class__.__name__,
+            {"import django.db.models"},
+            self._serialize_kwargs(),
+...

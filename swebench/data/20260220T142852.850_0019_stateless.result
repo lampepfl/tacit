@@ -1,0 +1,8 @@
+status: success
+123:             '%s.%s[%r]' % (module, enum_class.__qualname__, self.value.name),
+154:         if '<' not in self.value.__qualname__:  # Qualname can include <locals>
+155:             return '%s.%s' % (module_name, self.value.__qualname__), {'import %s' % self.value.__module__}
+270:                 return "%s.%s" % (module, self.value.__qualname__), {"import %s" % module}
+271:                 return "%s.%s" % (module, self.value.__qualname__), {"import %s" % module}
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

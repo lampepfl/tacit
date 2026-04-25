@@ -1,0 +1,22 @@
+status: success
+1986:     def db_type(self, connection):
+1987:         # A ManyToManyField is not represented by a single column,
+1988:         # so return None.
+1989:         return None
+1990: 
+1991:     def db_parameters(self, connection):
+1992:         return {"type": None, "check": None}
+java.lang.IndexOutOfBoundsException: 1992
+  at scala.collection.LinearSeqOps.apply(LinearSeq.scala:134)
+  at scala.collection.LinearSeqOps.apply$(LinearSeq.scala:38)
+  at scala.collection.immutable.List.apply(List.scala:83)
+  at rs$line$2$.runFs$1$$anonfun$1(rs$line$2:7)
+  at scala.runtime.java8.JFunction1$mcVI$sp.apply(JFunction1$mcVI$sp.scala:20)
+  at scala.collection.immutable.Range.foreach(Range.scala:256)
+  at rs$line$2$.runFs$1(rs$line$2:6)
+  at rs$line$2$.run$$anonfun$1(rs$line$2:9)
+  at scala.runtime.function.JProcedure1.apply(JProcedure1.java:15)
+  at scala.runtime.function.JProcedure1.apply(JProcedure1.java:10)
+  at library.InterfaceImpl.requestFileSystem(InterfaceImpl.scala:33)
+  at rs$line$2$.run(rs$line$2:9)
+  ... 53 elided

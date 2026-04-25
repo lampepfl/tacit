@@ -1,0 +1,82 @@
+status: success
+321: 
+322: class StatReloader(BaseReloader):
+323:     SLEEP_TIME = 1  # Check for changes once per second.
+324: 
+325:     def tick(self):
+326:         mtimes = {}
+327:         while True:
+328:             for filepath, mtime in self.snapshot_files():
+329:                 old_time = mtimes.get(filepath)
+330:                 if old_time is None:
+331:                     logger.debug('File %s first seen with mtime %s', filepath, mtime)
+332:                     mtimes[filepath] = mtime
+333:                     continue
+334:                 elif mtime > old_time:
+335:                     logger.debug('File %s previous mtime: %s, current mtime: %s', filepath, old_time, mtime)
+336:                     self.notify_file_changed(filepath)
+337: 
+338:             time.sleep(self.SLEEP_TIME)
+339:             yield
+340: 
+341:     def snapshot_files(self):
+342:         # watched_files may produce duplicate paths if globs overlap.
+343:         seen_files = set()
+344:         for file in self.watched_files():
+345:             if file in seen_files:
+346:                 continue
+347:             try:
+348:                 mtime = file.stat().st_mtime
+349:             except OSError:
+350:                 # This is thrown when the file does not exist.
+351:                 continue
+352:             seen_files.add(file)
+353:             yield file, mtime
+354: 
+355:     @classmethod
+356:     def check_availability(cls):
+357:         return True
+358: 
+359: 
+360: class WatchmanUnavailable(RuntimeError):
+361:     pass
+362: 
+363: 
+364: class WatchmanReloader(BaseReloader):
+365:     def __init__(self):
+366:         self.roots = defaultdict(set)
+367:         self.processed_request = threading.Event()
+368:         self.client_timeout = int(os.environ.get('DJANGO_WATCHMAN_TIMEOUT', 5))
+369:         super().__init__()
+370: 
+371:     @cached_property
+372:     def client(self):
+373:         return pywatchman.client(timeout=self.client_timeout)
+374: 
+375:     def _watch_root(self, root):
+376:         # In practice this shouldn't occur, however, it's possible that a
+377:         # directory that doesn't exist yet is being watched. If it's outside of
+378:         # sys.path then this will end up a new root. How to handle this isn't
+379:         # clear: Not adding the root will likely break when subscribing to the
+380:         # changes, however, as this is currently an internal API,  no files
+381:         # will be being watched outside of sys.path. Fixing this by checking
+382:         # inside watch_glob() and watch_dir() is expensive, instead this could
+383:         # could fall back to the StatReloader if this case is detected? For
+384:         # now, watching its parent, if possible, is sufficient.
+385:         if not root.exists():
+386:             if not root.parent.exists():
+387:                 logger.warning('Unable to watch root dir %s as neither it or its parent exist.', root)
+388:                 return
+389:             root = root.parent
+390:         result = self.client.query('watch-project', str(root.absolute()))
+391:         if 'warning' in result:
+392:             logger.warning('Watchman warning: %s', result['warning'])
+393:         logger.debug('Watchman watch-project result: %s', result)
+394:         return result['watch'], result.get('relative_path')
+395: 
+396:     @functools.lru_cache()
+397:     def _get_clock(self, root):
+398:         return self.client.query('clock', root)['clock']
+399: 
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

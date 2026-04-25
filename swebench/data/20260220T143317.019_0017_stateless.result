@@ -1,0 +1,5 @@
+status: failure
+
+Error: Code validation failed (1 violation):
+  [proc-scala] Line 5: scala.sys.process is forbidden; use requestExecPermission
+    > val result = scala.sys.process.Process("git checkout django/utils/functional.py").!!

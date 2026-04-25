@@ -1,0 +1,34 @@
+status: success
+161:     """Create the test databases."""
+162:     if time_keeper is None:
+163:         time_keeper = NullTimeKeeper()
+164: 
+165:     test_databases, mirrored_aliases = get_unique_databases_and_mirrors(aliases)
+166: 
+167:     old_names = []
+168: 
+169:     for db_name, aliases in test_databases.values():
+170:         first_alias = None
+171:         for alias in aliases:
+172:             connection = connections[alias]
+173:             old_names.append((connection, db_name, first_alias is None))
+174: 
+175:             # Actually create the database for the first connection
+176:             if first_alias is None:
+177:                 first_alias = alias
+178:                 with time_keeper.timed("  Creating '%s'" % alias):
+179:                     connection.creation.create_test_db(
+180:                         verbosity=verbosity,
+181:                         autoclobber=not interactive,
+182:                         keepdb=keepdb,
+183:                         serialize=connection.settings_dict['TEST'].get('SERIALIZE', True),
+184:                     )
+185:                 if parallel > 1:
+186:                     for index in range(parallel):
+187:                         with time_keeper.timed("  Cloning '%s'" % alias):
+188:                             connection.creation.clone_test_db(
+189:                                 suffix=str(index + 1),
+190:                                 verbosity=verbosity,
+191:                                 keepdb=keepdb,
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

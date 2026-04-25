@@ -1,0 +1,19 @@
+status: success
+1271:         if condition or include or opclasses or expressions:
+1272:             sql = self.sql_create_unique_index
+1273:         else:
+1274:             sql = self.sql_create_unique
+1275:         if columns:
+1276:             columns = self._index_columns(table, columns, col_suffixes=(), opclasses=opclasses)
+1277:         else:
+1278:             columns = Expressions(table, expressions, compiler, self.quote_value)
+1279:         return Statement(
+1280:             sql,
+1281:             table=Table(table, self.quote_name),
+1282:             name=name,
+1283:             columns=columns,
+1284:             condition=self._index_condition_sql(condition),
+1285:             deferrable=self._deferrable_constraint_sql(deferrable),
+1286:             include=self._index_include_sql(model, include),
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

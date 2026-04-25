@@ -1,0 +1,53 @@
+status: success
+271: class KeyTransform(Transform):
+272:     postgres_operator = '->'
+273:     postgres_nested_operator = '#>'
+274: 
+275:     def __init__(self, key_name, *args, **kwargs):
+276:         super().__init__(*args, **kwargs)
+277:         self.key_name = str(key_name)
+278: 
+279:     def preprocess_lhs(self, compiler, connection):
+280:         key_transforms = [self.key_name]
+281:         previous = self.lhs
+282:         while isinstance(previous, KeyTransform):
+283:             key_transforms.insert(0, previous.key_name)
+284:             previous = previous.lhs
+285:         lhs, params = compiler.compile(previous)
+286:         if connection.vendor == 'oracle':
+287:             # Escape string-formatting.
+288:             key_transforms = [key.replace('%', '%%') for key in key_transforms]
+289:         return lhs, params, key_transforms
+290: 
+291:     def as_mysql(self, compiler, connection):
+292:         lhs, params, key_transforms = self.preprocess_lhs(compiler, connection)
+293:         json_path = compile_json_path(key_transforms)
+294:         return 'JSON_EXTRACT(%s, %%s)' % lhs, tuple(params) + (json_path,)
+295: 
+296:     def as_oracle(self, compiler, connection):
+297:         lhs, params, key_transforms = self.preprocess_lhs(compiler, connection)
+298:         json_path = compile_json_path(key_transforms)
+299:         return (
+300:             "COALESCE(JSON_QUERY(%s, '%s'), JSON_VALUE(%s, '%s'))" %
+301:             ((lhs, json_path) * 2)
+302:         ), tuple(params) * 2
+303: 
+304:     def as_postgresql(self, compiler, connection):
+305:         lhs, params, key_transforms = self.preprocess_lhs(compiler, connection)
+306:         if len(key_transforms) > 1:
+307:             sql = '(%s %s %%s)' % (lhs, self.postgres_nested_operator)
+308:             return sql, tuple(params) + (key_transforms,)
+309:         try:
+310:             lookup = int(self.key_name)
+311:         except ValueError:
+312:             lookup = self.key_name
+313:         return '(%s %s %%s)' % (lhs, self.postgres_operator), tuple(params) + (lookup,)
+314: 
+315:     def as_sqlite(self, compiler, connection):
+316:         lhs, params, key_transforms = self.preprocess_lhs(compiler, connection)
+317:         json_path = compile_json_path(key_transforms)
+318:         return 'JSON_EXTRACT(%s, %%s)' % lhs, tuple(params) + (json_path,)
+319: 
+320: 
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

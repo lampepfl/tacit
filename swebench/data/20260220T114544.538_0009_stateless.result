@@ -1,0 +1,33 @@
+status: success
+def write(self, lines):
+        if self.start_line is not None:
+            for i, spacer_line in zip(
+                range(self.start_line), itertools.cycle(self.write_spacer_lines)
+            ):
+                lines.append(spacer_line)
+            lines.append(self.splitter.join([x.info.name for x in self.cols]))
+
+    @property
+    def colnames(self):
+        """Return the column names of the table"""
+        return tuple(
+            col.name if isinstance(col, Column) else col.info.name for col in self.cols
+        )
+
+    def remove_columns(self, names):
+        """
+        Remove several columns from the table.
+
+        Parameters
+        ----------
+        names : list
+            A list containing the names of the columns to remove
+        """
+        colnames = self.colnames
+        for name in names:
+            if name not in colnames:
+                raise KeyError(f"Column {name} does not exist")
+
+        self.cols = [col for col in self.cols if col.name not in names]
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

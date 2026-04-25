@@ -1,0 +1,14 @@
+status: success
+Line 206-215:
+206:     def get_admin_url(self, remote_field, remote_obj):
+207:         url_name = 'admin:%s_%s_change' % (
+208:             remote_field.model._meta.app_label,
+209:             remote_field.model._meta.model_name,
+210:         )
+211:         try:
+212:             url = reverse(url_name, args=[quote(remote_obj.pk)])
+213:             return format_html('<a href="{}">{}</a>', url, remote_obj)
+214:         except NoReverseMatch:
+215:             return str(remote_obj)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,23 @@
+status: success
+253:     def match(self, path):
+254:         match = self.regex.search(path)
+255:         if match:
+256:             # RoutePattern doesn't allow non-named groups so args are ignored.
+257:             kwargs = match.groupdict()
+258:             for key, value in kwargs.items():
+259:                 converter = self.converters[key]
+260:                 try:
+261:                     kwargs[key] = converter.to_python(value)
+262:                 except ValueError:
+263:                     return None
+264:                 except Http404:
+265:                 raise Resolver404()
+266:             return path[match.end():], (), kwargs
+267:         return None
+268: 
+269:     def check(self):
+270:         warnings = self._check_pattern_startswith_slash()
+271:         route = self._route
+272:         if '(?P<' in route or route.startswith('^') or route.endswith('$'):
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

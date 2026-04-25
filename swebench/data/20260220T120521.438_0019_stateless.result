@@ -1,0 +1,30 @@
+status: success
+954:     def check(self, **kwargs):
+955:         return [
+956:             *super().check(**kwargs),
+957:             *self._check_max_length_attribute(**kwargs),
+958:         ]
+959: 
+960:     def _check_max_length_attribute(self, **kwargs):
+961:         if self.max_length is None:
+962:             return [
+963:                 checks.Error(
+964:                     "CharFields must define a 'max_length' attribute.",
+965:                     obj=self,
+966:                     id='fields.E120',
+967:                 )
+968:             ]
+969:         elif (not isinstance(self.max_length, int) or isinstance(self.max_length, bool) or
+970:                 self.max_length <= 0):
+971:             return [
+972:                 checks.Error(
+973:                     "'max_length' must be a positive integer.",
+974:                     obj=self,
+975:                     id='fields.E121',
+976:                 )
+977:             ]
+978:         else:
+979:             return []
+980: 
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

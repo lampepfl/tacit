@@ -1,0 +1,9 @@
+status: failure
+-- [E007] Type Mismatch Error: -------------------------------------------------
+3 |  val pp: ProcessPermission = requestExecPermission(cmds) { (p: ProcessPermission) => p }
+  |                                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |          Found:    library.ProcessPermission -> library.ProcessPermission
+  |          Required: library.ProcessPermission
+  |
+  | longer explanation available when compiling with `-explain`
+1 error found

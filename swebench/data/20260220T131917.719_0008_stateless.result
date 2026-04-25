@@ -1,0 +1,6 @@
+status: success
+(    def resolve_lookup_value(self, value, can_reuse, allow_joins):,1071)
+(                self.resolve_lookup_value(sub_value, can_reuse, allow_joins),1080)
+(        value = self.resolve_lookup_value(value, can_reuse, allow_joins),1277)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,40 @@
+status: success
+833:         # Right number/type of migrations?
+834:         self.assertNumberMigrations(changes, 'testapp', 1)
+835:         self.assertOperationTypes(changes, 'testapp', 0, ["RenameField"])
+836:         self.assertOperationAttributes(changes, 'testapp', 0, 0, old_name="name", new_name="names")
+837: 
+838:     def test_rename_field_foreign_key_to_field(self):
+839:         before = [
+840:             ModelState('app', 'Foo', [
+841:                 ('id', models.AutoField(primary_key=True)),
+842:                 ('field', models.IntegerField(unique=True)),
+843:             ]),
+844:             ModelState('app', 'Bar', [
+845:                 ('id', models.AutoField(primary_key=True)),
+846:                 ('foo', models.ForeignKey('app.Foo', models.CASCADE, to_field='field')),
+847:             ]),
+848:         ]
+849:         after = [
+850:             ModelState('app', 'Foo', [
+851:                 ('id', models.AutoField(primary_key=True)),
+852:                 ('renamed_field', models.IntegerField(unique=True)),
+853:             ]),
+854:             ModelState('app', 'Bar', [
+855:                 ('id', models.AutoField(primary_key=True)),
+856:                 ('foo', models.ForeignKey('app.Foo', models.CASCADE, to_field='renamed_field')),
+857:             ]),
+858:         ]
+859:         changes = self.get_changes(before, after, MigrationQuestioner({'ask_rename': True}))
+860:         # Right number/type of migrations?
+861:         self.assertNumberMigrations(changes, 'app', 1)
+862:         self.assertOperationTypes(changes, 'app', 0, ['RenameField'])
+863:         self.assertOperationAttributes(changes, 'app', 0, 0, old_name='field', new_name='renamed_field')
+864: 
+865:     def test_rename_foreign_object_fields(self):
+866:         fields = ('first', 'second')
+867:         renamed_fields = ('first_renamed', 'second_renamed')
+868:         before = [
+869:             ModelState('app', 'Foo', [
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

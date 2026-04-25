@@ -1,0 +1,52 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = """"""
+Functions for reversing a regular expression (used in reverse URL resolving).
+Used internally by Django and not intended for external use.
+
+This is not, and is not intended to be, a complete reg-exp decompiler. It
+should be good enough for a large class of URLS, however.
+"""
+import re
+
+from django.utils.functional import SimpleLazyObject
+
+# Mapping of an escape character to a representative of that class. So, e.g.,
+# "\w" is replaced by "x" in a reverse URL. A value of None means to ignore
+# this sequence. Any missing key is mapped to itself.
+ESCAPE_MAPPINGS = {
+    "A": None,
+    "b": None,
+    "B": None,
+    "d": "0",
+    "D": "x",
+    "s": " ",
+    "S": "x",
+    "w": "x",
+    "W": "!",
+    "Z": None,
+}
+
+
+class Choice(list):
+    """Represent multiple possibilities at this point in a pattern string."""
+
+
+class Group(list):
+    """Represent a capturing group in the pattern string."""
+
+
+class NonCapture(list):
+    """Represent a non-capturing group in the pattern string."""
+
+
+def normalize(pattern):
+    r"""
+    Given a reg-exp pattern, normalize it to an iterable of forms that
+    suffice for reverse matching. This does the following:
+
+    (1) For any repeating sections, keeps the minimum number of occurrences
+        permitted (this means zero for optional groups).
+    (2) If an optional group includes parameters, include one occurrence of
+        that group (along with the zero occurrence case from step (1)).
+...

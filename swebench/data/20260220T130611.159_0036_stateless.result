@@ -1,0 +1,16 @@
+status: failure
+-- Warning: --------------------------------------------------------------------
+4 |  val rf = requestFileSystem("/tmp") _
+  |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |The trailing ` _` for eta-expansion is unnecessary;
+  |the compiler performs eta-expansion automatically, so you can write the function value directly instead.
+-- [E057] Type Mismatch Error: -------------------------------------------------
+5 |  println(s"rf: $rf, type: ${rf.getClass}")
+  |                                ^
+  |Type argument ((library.FileSystem^'s1) ?->'s2 Any) ->'s3 Any does not conform to lower bound (rf : ((library.FileSystem) ?=> Any) ->{x$1} Any)
+  |
+  |where:    ?=> refers to the root capability caps.any
+  |
+  | longer explanation available when compiling with `-explain`
+1 warning found
+1 error found

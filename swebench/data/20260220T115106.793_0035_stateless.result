@@ -1,0 +1,5 @@
+status: success
+astropy/nddata/mixins/ndarithmetic.py | 3 +++
+ 1 file changed, 3 insertions(+)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,4 @@
+status: success
+751:                 opts = cur_model._meta
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

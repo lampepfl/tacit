@@ -1,0 +1,42 @@
+status: success
+561:     def _delete_composed_index(self, model, fields, constraint_kwargs, sql):
+562:         meta_constraint_names = {
+563:             constraint.name for constraint in model._meta.constraints
+564:         }
+565:         meta_index_names = {constraint.name for constraint in model._meta.indexes}
+566:         columns = [model._meta.get_field(field).column for field in fields]
+567:         constraint_names = self._constraint_names(
+568:             model,
+569:             columns,
+570:             exclude=meta_constraint_names | meta_index_names,
+571:             **constraint_kwargs,
+572:         )
+573:         if (
+574:             constraint_kwargs.get("unique") is True
+575:             and constraint_names
+576:             and self.connection.features.allows_multiple_constraints_on_same_fields
+577:         ):
+578:             # Constraint matching the unique_together name.
+579:             default_name = str(
+580:                 self._unique_constraint_name(model._meta.db_table, columns, quote=False)
+581:             )
+582:             if default_name in constraint_names:
+583:                 constraint_names = [default_name]
+584:         if len(constraint_names) != 1:
+585:             raise ValueError(
+586:                 "Found wrong number (%s) of constraints for %s(%s)"
+587:                 % (
+588:                     len(constraint_names),
+589:                     model._meta.db_table,
+590:                     ", ".join(columns),
+591:                 )
+592:             )
+593:         self.execute(self._delete_constraint_sql(sql, model, constraint_names[0]))
+594: 
+595:     def alter_db_table(self, model, old_db_table, new_db_table):
+596:         """Rename the table a model points to."""
+597:         if old_db_table == new_db_table or (
+598:             self.connection.features.ignores_table_name_case
+599:             and old_db_table.lower() == new_db_table.lower()
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

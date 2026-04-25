@@ -1,0 +1,6 @@
+status: failure
+-- [E008] Not Found Error: -----------------------------------------------------
+4 |    val testsDir = testDir.child("test_fix")
+  |                   ^^^^^^^^^^^^^
+  |value child is not a member of library.FileEntry^{contextual$1} - did you mean testDir.children?
+1 error found

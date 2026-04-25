@@ -1,0 +1,5 @@
+status: success
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13158/repo/django/db/models/sql/compiler.py:476:             raise EmptyResultSet
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13158/repo/django/db/models/sql/compiler.py:1150:                 raise EmptyResultSet
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,6 @@
+status: success
+433:     def _build_app_dict(self, request, label=None):
+506:         app_dict = self._build_app_dict(request)
+537:         app_dict = self._build_app_dict(request, app_label)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

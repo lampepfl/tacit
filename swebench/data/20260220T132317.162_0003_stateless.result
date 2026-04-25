@@ -1,0 +1,63 @@
+status: success
+361:         if connection.vendor == 'mysql':
+362:             return 'LOWER(%s)' % rhs, rhs_params
+363:         return rhs, rhs_params
+364: 
+365: 
+366: class KeyTransformIsNull(lookups.IsNull):
+367:     # key__isnull=False is the same as has_key='key'
+368:     def as_oracle(self, compiler, connection):
+369:         if not self.rhs:
+370:             return HasKey(self.lhs.lhs, self.lhs.key_name).as_oracle(compiler, connection)
+371:         return super().as_sql(compiler, connection)
+372: 
+373:     def as_sqlite(self, compiler, connection):
+374:         if not self.rhs:
+375:             return HasKey(self.lhs.lhs, self.lhs.key_name).as_sqlite(compiler, connection)
+376:         return super().as_sql(compiler, connection)
+377: 
+378: 
+379: class KeyTransformIn(lookups.In):
+380:     def resolve_expression_parameter(self, compiler, connection, sql, param):
+381:         sql, params = super().resolve_expression_parameter(
+382:             compiler, connection, sql, param,
+383:         )
+384:         if (
+385:             not hasattr(param, 'as_sql') and
+386:             not connection.features.has_native_json_field
+387:         ):
+388:             if connection.vendor == 'oracle':
+389:                 value = json.loads(param)
+390:                 sql = "%s(JSON_OBJECT('value' VALUE %%s FORMAT JSON), '$.value')"
+391:                 if isinstance(value, (list, dict)):
+392:                     sql = sql % 'JSON_QUERY'
+393:                 else:
+394:                     sql = sql % 'JSON_VALUE'
+395:             elif connection.vendor in {'sqlite', 'mysql'}:
+396:                 sql = "JSON_EXTRACT(%s, '$')"
+397:         if connection.vendor == 'mysql' and connection.mysql_is_mariadb:
+398:             sql = 'JSON_UNQUOTE(%s)' % sql
+399:         return sql, params
+400: 
+401: 
+402: class KeyTransformExact(JSONExact):
+403:     def process_lhs(self, compiler, connection):
+404:         lhs, lhs_params = super().process_lhs(compiler, connection)
+405:         if connection.vendor == 'sqlite':
+406:             rhs, rhs_params = super().process_rhs(compiler, connection)
+407:             if rhs == '%s' and rhs_params == ['null']:
+408:                 lhs, *_ = self.lhs.preprocess_lhs(compiler, connection)
+409:                 lhs = 'JSON_TYPE(%s, %%s)' % lhs
+410:         return lhs, lhs_params
+411: 
+412:     def process_rhs(self, compiler, connection):
+413:         if isinstance(self.rhs, KeyTransform):
+414:             return super(lookups.Exact, self).process_rhs(compiler, connection)
+415:         rhs, rhs_params = super().process_rhs(compiler, connection)
+416:         if connection.vendor == 'oracle':
+417:             func = []
+418:             sql = "%s(JSON_OBJECT('value' VALUE %%s FORMAT JSON), '$.value')"
+419:             for value in rhs_params:
+420:                 value = json.loads(value)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

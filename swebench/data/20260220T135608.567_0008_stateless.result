@@ -1,0 +1,8 @@
+status: failure
+-- [E006] Not Found Error: -----------------------------------------------------
+2 |  create_repl_session("django-bugfix")
+  |  ^^^^^^^^^^^^^^^^^^^
+  |  Not found: create_repl_session
+  |
+  | longer explanation available when compiling with `-explain`
+1 error found

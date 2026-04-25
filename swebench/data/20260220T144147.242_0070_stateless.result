@@ -1,0 +1,17 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = """    return module.__name__.startswith('django.')
+
+
+def is_django_path(path):
+    """Return True if the given file path is nested under Django."""
+    return Path(django.__file__).parent in Path(path).parents
+
+
+def check_errors(fn):
+    @functools.wraps(fn)
+    def wrapper(*args, **kwargs):
+        global _exception
+        try:
+            fn(*args, **kwargs)
+        except Exception:"""

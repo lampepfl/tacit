@@ -1,0 +1,43 @@
+status: success
+626:         # ------------------------------------------------------------------------------
+627:         # True               | False            | False              | False
+628:         # True               | False            | False              | True
+629:         # True               | False            | True               | True
+630:         if old_field.db_index and not old_field.unique and (not new_field.db_index or new_field.unique):
+631:             # Find the index for this field
+632:             meta_index_names = {index.name for index in model._meta.indexes}
+633:             # Retrieve only BTREE indexes since this is what's created with
+634:             # db_index=True.
+635:             index_names = self._constraint_names(
+636:                 model, [old_field.column], index=True, type_=Index.suffix,
+637:                 exclude=meta_index_names,
+638:             )
+639:             for index_name in index_names:
+640:                 # The only way to check if an index was created with
+641:                 # db_index=True or with Index(['field'], name='foo')
+642:                 # is to look at its name (refs #28053).
+643:                 self.execute(self._delete_index_sql(model, index_name))
+644:         # Change check constraints?
+645:         if old_db_params['check'] != new_db_params['check'] and old_db_params['check']:
+646:             meta_constraint_names = {constraint.name for constraint in model._meta.constraints}
+647:             constraint_names = self._constraint_names(
+648:                 model, [old_field.column], check=True,
+649:                 exclude=meta_constraint_names,
+650:             )
+651:             if strict and len(constraint_names) != 1:
+652:                 raise ValueError("Found wrong number (%s) of check constraints for %s.%s" % (
+653:                     len(constraint_names),
+654:                     model._meta.db_table,
+655:                     old_field.column,
+656:                 ))
+657:             for constraint_name in constraint_names:
+658:                 self.execute(self._delete_check_sql(model, constraint_name))
+659:         # Have they renamed the column?
+660:         if old_field.column != new_field.column:
+661:             self.execute(self._rename_field_sql(model._meta.db_table, old_field, new_field, new_type))
+662:             # Rename all references to the renamed column.
+663:             for sql in self.deferred_sql:
+664:                 if isinstance(sql, Statement):
+665:                     sql.rename_column_references(model._meta.db_table, old_field.column, new_field.column)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

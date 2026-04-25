@@ -1,0 +1,34 @@
+status: success
+50:         A defined field name (name="fieldname") is used instead of the model
+51:         model's attribute name (modelname).
+52:         """
+53:         instance = RenamedField()
+54:         self.assertTrue(hasattr(instance, 'get_fieldname_display'))
+55:         self.assertFalse(hasattr(instance, 'get_modelname_display'))
+56: 
+57:     def test_field_verbose_name(self):
+58:         m = VerboseNameField
+59:         for i in range(1, 23):
+60:             self.assertEqual(m._meta.get_field('field%d' % i).verbose_name, 'verbose field%d' % i)
+61: 
+62:         self.assertEqual(m._meta.get_field('id').verbose_name, 'verbose pk')
+63: 
+64:     def test_choices_form_class(self):
+65:         """Can supply a custom choices form class to Field.formfield()"""
+66:         choices = [('a', 'a')]
+67:         field = models.CharField(choices=choices)
+68:         klass = forms.TypedMultipleChoiceField
+69:         self.assertIsInstance(field.formfield(choices_form_class=klass), klass)
+70: 
+71:     def test_formfield_disabled(self):
+72:         """Field.formfield() sets disabled for fields with choices."""
+73:         field = models.CharField(choices=[('a', 'b')])
+74:         form_field = field.formfield(disabled=True)
+75:         self.assertIs(form_field.disabled, True)
+76: 
+77:     def test_field_str(self):
+78:         f = models.Field()
+79:         self.assertEqual(str(f), '<django.db.models.fields.Field>')
+80:         f = Foo._meta.get_field('a')
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

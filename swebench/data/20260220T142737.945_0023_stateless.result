@@ -1,0 +1,52 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = """from django.contrib.syndication import views
+from django.utils import feedgenerator
+from django.utils.timezone import get_fixed_timezone
+
+from .models import Article, Entry
+
+
+class TestRss2Feed(views.Feed):
+    title = 'My blog'
+    description = 'A more thorough description of my blog.'
+    link = '/blog/'
+    feed_guid = '/foo/bar/1234'
+    author_name = 'Sally Smith'
+    author_email = 'test@example.com'
+    author_link = 'http://www.example.com/'
+    categories = ('python', 'django')
+    feed_copyright = 'Copyright (c) 2007, Sally Smith'
+    ttl = 600
+
+    def items(self):
+        return Entry.objects.all()
+
+    def item_description(self, item):
+        return "Overridden description: %s" % item
+
+    def item_pubdate(self, item):
+        return item.published
+
+    def item_updateddate(self, item):
+        return item.updated
+
+    item_author_name = 'Sally Smith'
+    item_author_email = 'test@example.com'
+    item_author_link = 'http://www.example.com/'
+    item_categories = ('python', 'testing')
+    item_copyright = 'Copyright (c) 2007, Sally Smith'
+
+
+class TestRss2FeedWithGuidIsPermaLinkTrue(TestRss2Feed):
+    def item_guid_is_permalink(self, item):
+        return True
+
+
+class TestRss2FeedWithGuidIsPermaLinkFalse(TestRss2Feed):
+    def item_guid(self, item):
+        return str(item.pk)
+
+    def item_guid_is_permalink(self, item):
+        return False
+...

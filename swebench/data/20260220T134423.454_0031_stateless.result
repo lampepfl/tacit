@@ -1,0 +1,8 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = ProcessResult(
+  exitCode = 0,
+  stdout = """1210:    def defer(self, *fields):
+1227:    def only(self, *fields):""",
+  stderr = ""
+)

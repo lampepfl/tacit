@@ -1,0 +1,16 @@
+status: success
+144: 
+145: def parse_http_date_safe(date):
+146:     """
+147:     Same as parse_http_date, but return None if the input is invalid.
+148:     """
+149:     try:
+150:         return parse_http_date(date)
+151:     except Exception:
+152:         pass
+153: 
+154: 
+155: # Base 36 functions: useful for generating compact URLs
+156: 
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

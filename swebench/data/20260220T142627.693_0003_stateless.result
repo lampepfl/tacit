@@ -1,0 +1,6 @@
+status: failure
+-- [E008] Not Found Error: -----------------------------------------------------
+7 |    content.lines.zipWithIndex.filter(_._1.contains("order")).take(30).foreach { case (line, idx) =>
+  |    ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |  value zipWithIndex is not a member of (java.util.stream.Stream[String])?
+1 error found

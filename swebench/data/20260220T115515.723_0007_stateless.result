@@ -1,0 +1,13 @@
+status: failure
+-- [E018] Syntax Error: --------------------------------------------------------
+11 |      of the proxy model.
+   |                        ^
+   |                        expression expected but [31m'.'[0m found
+   |
+   | longer explanation available when compiling with `-explain`
+-- [E018] Syntax Error: --------------------------------------------------------
+44 |      of the concrete model.
+   |                           ^
+   |                           expression expected but [31m'.'[0m found
+   |
+   | longer explanation available when compiling with `-explain`

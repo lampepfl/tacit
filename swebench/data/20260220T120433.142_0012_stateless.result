@@ -1,0 +1,7 @@
+status: success
+1010: class CommaSeparatedIntegerField(CharField):
+1552: class EmailField(CharField):
+1958: class SlugField(CharField):
+2156: class URLField(CharField):
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

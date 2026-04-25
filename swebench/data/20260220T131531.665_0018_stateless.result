@@ -1,0 +1,13 @@
+status: success
+Found 9 matches
+2783: Tests the functionality of ``limit_choices_to``.
+2796: def test_limit_choices_to_callable_for_fk_rel(self):
+2798: A ForeignKey can use limit_choices_to as a callable (#2554).
+2803: def test_limit_choices_to_callable_for_m2m_rel(self):
+2805: A ManyToManyField can use limit_choices_to as a callable (#2554).
+2810: def test_custom_field_with_queryset_but_no_limit_choices_to(self):
+2812: A custom field with a `queryset` attribute but no `limit_choices_to`
+2818: def test_fields_for_model_applies_limit_choices_to(self):
+2824: with mock.patch.object(field, 'limit_choices_to') as today_callable_dict:
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

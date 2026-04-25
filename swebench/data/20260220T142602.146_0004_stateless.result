@@ -1,0 +1,7 @@
+status: failure
+-- [E173] Reference Error: -----------------------------------------------------
+2 |  given IOCapability = new IOCapability {}
+  |                           ^^^^^^^^^^^^
+  |constructor IOCapability cannot be accessed as a member of library.IOCapability from anonymous class library.IOCapability {...}.
+  |  private constructor IOCapability can only be accessed from anonymous class library.IOCapability {...}.
+1 error found

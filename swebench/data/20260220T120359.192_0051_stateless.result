@@ -1,0 +1,6 @@
+status: success
+Number of spaces before 'except ValueError:': 16
+Number of spaces before 'return None': 20
+Number of spaces before 'return path...': 12
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

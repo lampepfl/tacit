@@ -1,0 +1,33 @@
+status: success
+2250:             connections[DEFAULT_DB_ALIAS].features.interprets_empty_strings_as_nulls and
+2251:             field.empty_strings_allowed
+2252:         ) or field.null
+2253: 
+2254: 
+2255: def get_order_dir(field, default='ASC'):
+2256:     """
+2257:     Return the field name and direction for an order specification. For
+2258:     example, '-foo' is returned as ('foo', 'DESC').
+2259: 
+2260:     The 'default' param is used to indicate which way no prefix (or a '+'
+2261:     prefix) should sort. The '-' prefix always sorts the opposite way.
+2262:     """
+2263:     dirn = ORDER_DIR[default]
+2264:     if field[0] == '-':
+2265:         return field[1:], dirn[1]
+2266:     return field, dirn[0]
+2267: 
+2268: 
+2269: def add_to_dict(data, key, value):
+2270:     """
+2271:     Add "value" to the set of values for "key", whether or not "key" already
+2272:     exists.
+2273:     """
+2274:     if key in data:
+2275:         data[key].add(value)
+2276:     else:
+2277:         data[key] = {value}
+2278: 
+2279: 
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

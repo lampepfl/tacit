@@ -1,0 +1,8 @@
+status: failure
+-- [E006] Not Found Error: -----------------------------------------------------
+9 |    before.foreach(c => print(if c == '\n' then "\\" else if cn\n == ' ' then "·s" else if c == '\t' then "\\t" else c))
+  |                                                             ^^
+  |                                          Not found: cn - did you mean nn?
+  |
+  | longer explanation available when compiling with `-explain`
+1 error found

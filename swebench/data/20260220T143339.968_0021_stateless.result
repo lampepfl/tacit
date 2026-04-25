@@ -1,0 +1,11 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = List(
+  ("        def __radd__(self, other):", 196),
+  ("        return copy.deepcopy(self._wrapped, memo)", 349),
+  ("        return copy.deepcopy(self._wrapped, memo)", 432),
+  ("    def __radd__(self, other):", 434),
+  ("    def __radd__(self, other):", 439),
+  ("    def __radd__(self, other):", 444),
+  ("        return copy.deepcopy(self._wrapped, memo)", 448)
+)

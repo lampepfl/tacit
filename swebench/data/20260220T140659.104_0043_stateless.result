@@ -1,0 +1,24 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = List(
+  "",
+  "    def update_watches(self):",
+  "        try:",
+  "            self._update_watches()",
+  "        except Exception as ex:",
+  "            # If the service is still available, raise the original exception.",
+  "            if self.check_server_status(ex):",
+  "                raise",
+  "",
+  "    def _check_subscription(self, sub):",
+  "        subscription = self.client.getSubscription(sub)",
+  "        if not subscription:",
+  "            return",
+  "        logger.debug('Watchman subscription %s has results.', sub)",
+  "        for result in subscription:",
+  "            # When using watch-project, it's not simple to get the relative",
+  "            # directory without storing some specific state. Store the full",
+  "            # path to the directory in the subscription name, prefixed by its",
+  "            # type (glob, files).",
+  "            root_directory = Path(result['subscription'].split(':', 1)[1])"
+)

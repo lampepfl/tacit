@@ -1,0 +1,51 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = """            for filepath, mtime in self.snapshot_files():
+                old_time = mtimes.get(filepath)
+                mtimes[filepath] = mtime
+                if old_time is None:
+                    logger.debug('File %s first seen with mtime %s', filepath, mtime)
+                    continue
+                elif mtime > old_time:
+                    logger.debug('File %s previous mtime: %s, current mtime: %s', filepath, old_time, mtime)
+                    self.notify_file_changed(filepath)
+
+            time.sleep(self.SLEEP_TIME)
+            yield
+
+    def snapshot_files(self):
+        # watched_files may produce duplicate paths if globs overlap.
+        seen_files = set()
+        for file in self.watched_files():
+            if file in seen_files:
+                continue
+            try:
+                mtime = file.stat().st_mtime
+            except OSError:
+                # This is thrown when the file does not exist.
+                continue
+            seen_files.add(file)
+            yield file, mtime
+
+    @classmethod
+    def check_availability(cls):
+        return True
+
+
+class WatchmanUnavailable(RuntimeError):
+    pass
+
+
+class WatchmanReloader(BaseReloader):
+    def __init__(self):
+        self.roots = defaultdict(set)
+        self.processed_request = threading.Event()
+        self.client_timeout = int(os.environ.get('DJANGO_WATCHMAN_TIMEOUT', 5))
+        super().__init__()
+
+    @cached_property
+    def client(self):
+        return pywatchman.client(timeout=self.client_timeout)
+
+    def _watch_root(self, root):
+...

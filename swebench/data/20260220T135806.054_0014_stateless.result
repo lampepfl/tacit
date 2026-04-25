@@ -1,0 +1,23 @@
+status: success
+1146:     template = '(%(subquery)s)'
+1147:     contains_aggregate = False
+1148:     empty_result_set_value = None
+1149: 
+1150:     def __init__(self, queryset, output_field=None, **extra):
+1151:         # Allow the usage of both QuerySet and sql.Query objects.
+1152:         self.query = getattr(queryset, 'query', queryset)
+1153:         self.extra = extra
+1154:         super().__init__(output_field)
+1155: 
+1156:     def get_source_expressions(self):
+1157:         return [self.query]
+1158: 
+1159:     def set_source_expressions(self, exprs):
+1160:         self.query = exprs[0]
+1161: 
+1162:     def _resolve_output_field(self):
+1163:         return self.query.output_field
+1164: 
+1165:     def copy(self):
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

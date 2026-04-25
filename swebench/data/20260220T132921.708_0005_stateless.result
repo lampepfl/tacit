@@ -1,0 +1,19 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = List(
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14016/repo/django/db/models/query.py",
+    lineNumber = 175,
+    line = "class QuerySet:"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14016/repo/django/db/models/query_utils.py",
+    lineNumber = 29,
+    line = "class Q(tree.Node):"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14016/repo/django/db/models/sql/query.py",
+    lineNumber = 140,
+    line = "class Query(BaseExpression):"
+  )
+)

@@ -1,0 +1,18 @@
+status: success
+Current Subquery.get_group_by_cols:
+def get_group_by_cols(self, alias=None):
+        if alias:
+            return [Ref(alias, self)]
+        external_cols = self.query.get_external_cols()
+        if any(col.possibly_multivalued for col in external_cols):
+            return [self]
+        return external_cols
+
+
+class Exists(Subquery):
+    template = 'EXISTS(%(subquery)s)'
+    output_field = fields.BooleanField()
+
+Fixed Subquery.get_group_by_cols!
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

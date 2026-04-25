@@ -1,0 +1,17 @@
+status: success
+=== Verifying all changes ===
+
+1. Method definition (should be public now):
+   Line 433:     def build_app_dict(self, request, label=None):
+
+2. Model key in model_dict:
+   Line 468:                 'model': model,
+
+3. Internal calls to build_app_dict:
+   Line 506:         app_dict = self.build_app_dict(request)
+   Line 537:         app_dict = self.build_app_dict(request, app_label)
+
+4. Old _build_app_dict references (should be empty):
+   None found - OK!
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

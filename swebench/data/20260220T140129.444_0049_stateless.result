@@ -1,0 +1,11 @@
+status: success
+database_forwards starts at line: 88
+319:     def database_forwards(self, app_label, schema_editor, from_state, to_state):
+320:         new_model = to_state.apps.get_model(app_label, self.new_name)
+321:         if self.allow_migrate_model(schema_editor.connection.alias, new_model):
+322:             old_model = from_state.apps.get_model(app_label, self.old_name)
+323:             # Move the main table
+324:             schema_editor.alter_db_table(
+325:                 new_model,
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

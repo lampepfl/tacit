@@ -1,0 +1,53 @@
+status: success
+1201:                 "permitted%s" % (name, output_field.__name__, suggestion)
+1202:             )
+1203: 
+1204:     def build_filter(self, filter_expr, branch_negated=False, current_negated=False,
+1205:                      can_reuse=None, allow_joins=True, split_subq=True,
+1206:                      reuse_with_filtered_relation=False, simple_col=False):
+1207:         """
+1208:         Build a WhereNode for a single filter clause but don't add it
+1209:         to this Query. Query.add_q() will then add this filter to the where
+1210:         Node.
+1211: 
+1212:         The 'branch_negated' tells us if the current branch contains any
+1213:         negations. This will be used to determine if subqueries are needed.
+1214: 
+1215:         The 'current_negated' is used to determine if the current filter is
+1216:         negated or not and this will be used to determine if IS NULL filtering
+1217:         is needed.
+1218: 
+1219:         The difference between current_negated and branch_negated is that
+1220:         branch_negated is set on first negation, but current_negated is
+1221:         flipped for each negation.
+1222: 
+1223:         Note that add_filter will not do any negating itself, that is done
+1224:         upper in the code by add_q().
+1225: 
+1226:         The 'can_reuse' is a set of reusable joins for multijoins.
+1227: 
+1228:         If 'reuse_with_filtered_relation' is True, then only joins in can_reuse
+1229:         will be reused.
+1230: 
+1231:         The method will create a filter clause that can be added to the current
+1232:         query. However, if the filter isn't added to the query then the caller
+1233:         is responsible for unreffing the joins used.
+1234:         """
+1235:         if isinstance(filter_expr, dict):
+1236:             raise FieldError("Cannot parse keyword query as dict")
+1237:         if hasattr(filter_expr, 'resolve_expression') and getattr(filter_expr, 'conditional', False):
+1238:             if connections[DEFAULT_DB_ALIAS].ops.conditional_expression_supported_in_where_clause(filter_expr):
+1239:                 condition = filter_expr.resolve_expression(self)
+1240:             else:
+1241:                 # Expression is not supported in the WHERE clause, add
+1242:                 # comparison with True.
+1243:                 condition = self.build_lookup(['exact'], filter_expr.resolve_expression(self), True)
+1244:             clause = self.where_class()
+1245:             clause.add(condition, AND)
+1246:             return clause, []
+1247:         arg, value = filter_expr
+1248:         if not arg:
+1249:             raise FieldError("Cannot parse keyword query %r" % arg)
+1250:         lookups, parts, reffed_expression = self.solve_lookup_type(arg)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

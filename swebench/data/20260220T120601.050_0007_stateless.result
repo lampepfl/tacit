@@ -1,0 +1,54 @@
+status: success
+430:         # aggregates on the limit and/or distinct results instead of applying
+431:         # the distinct and limit after the aggregation.
+432:         if (isinstance(self.group_by, tuple) or self.is_sliced or existing_annotations or
+433:                 self.distinct or self.combinator):
+434:             from django.db.models.sql.subqueries import AggregateQuery
+435:             outer_query = AggregateQuery(self.model)
+436:             inner_query = self.clone()
+437:             inner_query.select_for_update = False
+438:             inner_query.select_related = False
+439:             inner_query.set_annotation_mask(self.annotation_select)
+440:             if not self.is_sliced and not self.distinct_fields:
+441:                 # Queries with distinct_fields need ordering and when a limit
+442:                 # is applied we must take the slice from the ordered query.
+443:                 # Otherwise no need for ordering.
+444:                 inner_query.clear_ordering(True)
+445:             if not inner_query.distinct:
+446:                 # If the inner query uses default select and it has some
+447:                 # aggregate annotations, then we must make sure the inner
+448:                 # query is grouped by the main model's primary key. However,
+449:                 # clearing the select clause can alter results if distinct is
+450:                 # used.
+451:                 has_existing_aggregate_annotations = any(
+452:                     annotation for annotation in existing_annotations
+453:                     if getattr(annotation, 'contains_aggregate', True)
+454:                 )
+455:                 if inner_query.default_cols and has_existing_aggregate_annotations:
+456:                     inner_query.group_by = (self.model._meta.pk.get_col(inner_query.get_initial_alias()),)
+457:                 inner_query.default_cols = False
+458: 
+459:             relabels = {t: 'subquery' for t in inner_query.alias_map}
+460:             relabels[None] = 'subquery'
+461:             # Remove any aggregates marked for reduction from the subquery
+462:             # and move them to the outer AggregateQuery.
+463:             col_cnt = 0
+464:             for alias, expression in list(inner_query.annotation_select.items()):
+465:                 annotation_select_mask = inner_query.annotation_select_mask
+466:                 if expression.is_summary:
+467:                     expression, col_cnt = inner_query.rewrite_cols(expression, col_cnt)
+468:                     outer_query.annotations[alias] = expression.relabeled_clone(relabels)
+469:                     del inner_query.annotations[alias]
+470:                     annotation_select_mask.remove(alias)
+471:                 # Make sure the annotation_select wont use cached results.
+472:                 inner_query.set_annotation_mask(inner_query.annotation_select_mask)
+473:             if inner_query.select == () and not inner_query.default_cols and not inner_query.annotation_select_mask:
+474:                 # In case of Model.objects[0:3].count(), there would be no
+475:                 # field selected in the inner query, yet we must use a subquery.
+476:                 # So, make sure at least one field is selected.
+477:                 inner_query.select = (self.model._meta.pk.get_col(inner_query.get_initial_alias()),)
+478:             try:
+479:                 outer_query.add_subquery(inner_query, using)
+480:             except EmptyResultSet:
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

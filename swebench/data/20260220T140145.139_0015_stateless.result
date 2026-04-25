@@ -1,0 +1,6 @@
+status: failure
+-- [E008] Not Found Error: -----------------------------------------------------
+2 |  import library.given_IOapability
+  |                 ^^^^^^^^^^^^^^^^^
+  |                 value given_IOapability is not a member of library
+1 error found

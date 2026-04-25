@@ -1,0 +1,83 @@
+status: success
+301: 
+302: 
+303: @Field.register_lookup
+304: class LessThanOrEqual(FieldGetDbPrepValueMixin, BuiltinLookup):
+305:     lookup_name = 'lte'
+306: 
+307: 
+308: class IntegerFieldFloatRounding:
+309:     """
+310:     Allow floats to work as query values for IntegerField. Without this, the
+311:     decimal portion of the float would always be discarded.
+312:     """
+313:     def get_prep_lookup(self):
+314:         if isinstance(self.rhs, float):
+315:             self.rhs = math.ceil(self.rhs)
+316:         return super().get_prep_lookup()
+317: 
+318: 
+319: @IntegerField.register_lookup
+320: class IntegerGreaterThanOrEqual(IntegerFieldFloatRounding, GreaterThanOrEqual):
+321:     pass
+322: 
+323: 
+324: @IntegerField.register_lookup
+325: class IntegerLessThan(IntegerFieldFloatRounding, LessThan):
+326:     pass
+327: 
+328: 
+329: @Field.register_lookup
+330: class In(FieldGetDbPrepValueIterableMixin, BuiltinLookup):
+331:     lookup_name = 'in'
+332: 
+333:     def process_rhs(self, compiler, connection):
+334:         db_rhs = getattr(self.rhs, '_db', None)
+335:         if db_rhs is not None and db_rhs != connection.alias:
+336:             raise ValueError(
+337:                 "Subqueries aren't allowed across different databases. Force "
+338:                 "the inner query to be evaluated using `list(inner_query)`."
+339:             )
+340: 
+341:         if self.rhs_is_direct_value():
+342:             try:
+343:                 rhs = OrderedSet(self.rhs)
+344:             except TypeError:  # Unhashable items in self.rhs
+345:                 rhs = self.rhs
+346: 
+347:             if not rhs:
+348:                 raise EmptyResultSet
+349: 
+350:             # rhs should be an iterable; use batch_process_rhs() to
+351:             # prepare/transform those values.
+352:             sqls, sqls_params = self.batch_process_rhs(compiler, connection, rhs)
+353:             placeholder = '(' + ', '.join(sqls) + ')'
+354:             return (placeholder, sqls_params)
+355:         else:
+356:             if not getattr(self.rhs, 'has_select_fields', True):
+357:                 self.rhs.clear_select_clause()
+358:                 self.rhs.add_fields(['pk'])
+359:             return super().process_rhs(compiler, connection)
+360: 
+361:     def get_rhs_op(self, connection, rhs):
+362:         return 'IN %s' % rhs
+363: 
+364:     def as_sql(self, compiler, connection):
+365:         max_in_list_size = connection.ops.max_in_list_size()
+366:         if self.rhs_is_direct_value() and max_in_list_size and len(self.rhs) > max_in_list_size:
+367:             return self.split_parameter_list_as_sql(compiler, connection)
+368:         return super().as_sql(compiler, connection)
+369: 
+370:     def split_parameter_list_as_sql(self, compiler, connection):
+371:         # This is a special case for databases which limit the number of
+372:         # elements which can appear in an 'IN' clause.
+373:         max_in_list_size = connection.ops.max_in_list_size()
+374:         lhs, lhs_params = self.process_lhs(compiler, connection)
+375:         rhs, rhs_params = self.batch_process_rhs(compiler, connection)
+376:         in_clause_elements = ['(']
+377:         params = []
+378:         for offset in range(0, len(rhs_params), max_in_list_size):
+379:             if offset > 0:
+380:                 in_clause_elements.append(' OR ')
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

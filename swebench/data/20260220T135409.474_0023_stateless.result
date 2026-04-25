@@ -1,0 +1,69 @@
+status: success
+=== Lines 1406-1470 ===
+    def _add_q(self, q_object, used_aliases, branch_negated=False,
+               current_negated=False, allow_joins=True, split_subq=True,
+               check_filterable=True):
+        """Add a Q-object to the current filter."""
+        connector = q_object.connector
+        current_negated = current_negated ^ q_object.negated
+        branch_negated = branch_negated or q_object.negated
+        target_clause = WhereNode(connector=connector, negated=q_object.negated)
+        joinpromoter = JoinPromoter(q_object.connector, len(q_object.children), current_negated)
+        for child in q_object.children:
+            child_clause, needed_inner = self.build_filter(
+                child, can_reuse=used_aliases, branch_negated=branch_negated,
+                current_negated=current_negated, allow_joins=allow_joins,
+                split_subq=split_subq, check_filterable=check_filterable,
+            )
+            joinpromoter.add_votes(needed_inner)
+            if child_clause:
+                target_clause.add(child_clause, connector)
+        needed_inner = joinpromoter.update_join_types(self)
+        return target_clause, needed_inner
+
+    def build_filtered_relation_q(self, q_object, reuse, branch_negated=False, current_negated=False):
+        """Add a FilteredRelation object to the current filter."""
+        connector = q_object.connector
+        current_negated ^= q_object.negated
+        branch_negated = branch_negated or q_object.negated
+        target_clause = WhereNode(connector=connector, negated=q_object.negated)
+        for child in q_object.children:
+            if isinstance(child, Node):
+                child_clause = self.build_filtered_relation_q(
+                    child, reuse=reuse, branch_negated=branch_negated,
+                    current_negated=current_negated,
+                )
+            else:
+                child_clause, _ = self.build_filter(
+                    child, can_reuse=reuse, branch_negated=branch_negated,
+                    current_negated=current_negated,
+                    allow_joins=True, split_subq=False,
+                )
+            target_clause.add(child_clause, connector)
+        return target_clause
+
+    def add_filtered_relation(self, filtered_relation, alias):
+        filtered_relation.alias = alias
+        lookups = dict(get_children_from_q(filtered_relation.condition))
+        relation_lookup_parts, relation_field_parts, _ = self.solve_lookup_type(filtered_relation.relation_name)
+        if relation_lookup_parts:
+            raise ValueError(
+                "FilteredRelation's relation_name cannot contain lookups "
+                "(got %r)." % filtered_relation.relation_name
+            )
+        for lookup in chain(lookups):
+            lookup_parts, lookup_field_parts, _ = self.solve_lookup_type(lookup)
+            shift = 2 if not lookup_parts else 1
+            lookup_field_path = lookup_field_parts[:-shift]
+            for idx, lookup_field_part in enumerate(lookup_field_path):
+                if len(relation_field_parts) > idx:
+                    if relation_field_parts[idx] != lookup_field_part:
+                        raise ValueError(
+                            "FilteredRelation's condition doesn't support "
+                            "relations outside the %r (got %r)."
+                            % (filtered_relation.relation_name, lookup)
+                        )
+                else:
+                    raise ValueError(
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

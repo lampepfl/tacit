@@ -1,0 +1,14 @@
+status: success
+config
+objects
+HEAD
+info
+logs
+description
+hooks
+refs
+index
+packed-refs
+opencode
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,51 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = """e(value.__class__, instance=instance)
+            if not router.allow_relation(value, instance):
+                raise ValueError('Cannot assign "%r": the current database router prevents this relation.' % value)
+
+        remote_field = self.field.remote_field
+        # If we're setting the value of a OneToOneField to None, we need to clear
+        # out the cache on any old related object. Otherwise, deleting the
+        # previously-related object will also cause this object to be deleted,
+        # which is wrong.
+        if value is None:
+            # Look up the previously-related object, which may still be available
+            # since we've not yet cleared out the related field.
+            # Use the cache directly, instead of the accessor; if we haven't
+            # populated the cache, then we don't care - we're only accessing
+            # the object to invalidate the accessor cache, so there's no
+            # need to populate the cache just to expire it again.
+            related = self.field.get_cached_value(instance, default=None)
+
+            # If we've got an old related object, we need to clear out its
+            # cache. This cache also might not exist if the related object
+            # hasn't been accessed yet.
+            if related is not None:
+                remote_field.set_cached_value(related, None)
+
+            for lh_field, rh_field in self.field.related_fields:
+                setattr(instance, lh_field.attname, None)
+
+        # Set the values of the related field.
+        else:
+            for lh_field, rh_field in self.field.related_fields:
+                setattr(instance, lh_field.attname, getattr(value, rh_field.attname))
+
+        # Set the related instance cache used by __get__ to avoid an SQL query
+        # when accessing the attribute we just set.
+        self.field.set_cached_value(instance, value)
+
+        # If this is a one-to-one relation, set the reverse accessor cache on
+        # the related object to the current instance to avoid an extra SQL
+        # query if it's accessed later on.
+        if value is not None and not remote_field.multiple:
+            remote_field.set_cached_value(value, instance)
+
+    def __reduce__(self):
+        """
+        Pickling should return the instance attached by self.field on the
+        model, not a new copy of that descriptor. Use getattr() to retrieve
+        the instance directly from the model.
+        """
+...

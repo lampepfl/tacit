@@ -1,0 +1,9 @@
+status: success
+Found 5 matches
+1085:         _, field, _, lookup_parts = self.names_to_path(lookup_splitted, self.get_meta())
+1424:     def names_to_path(self, names, opts, allow_many=True, fail_on_missing=False):
+1566:                 path, final_field, targets, rest = self.names_to_path(
+1918:                 # names_to_path() validates the lookup. A descriptive
+1920:                 self.names_to_path(item.split(LOOKUP_SEP), self.model._meta)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

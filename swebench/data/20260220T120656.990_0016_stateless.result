@@ -1,0 +1,4 @@
+status: success
+410:     def get_aggregation(self, using, added_aggregate_names):
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

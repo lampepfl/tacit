@@ -1,0 +1,12 @@
+status: success
+After removing line 1194:
+1193:     }
+1194:                             ' available choices.'),
+1195:                  help_text='', to_field_name=None, limit_choices_to=None,
+1196:                  blank=False, **kwargs):
+1197:         # Call Field instead of ChoiceField __init__() because we don't need
+1198:         # ChoiceField.__init__().
+1199:         Field.__init__(
+1200:             self, required=required, widget=widget, label=label,
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

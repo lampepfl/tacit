@@ -1,0 +1,9 @@
+status: success
+stdout: Test RFC850 year 80 (should be 1980): 315532800
+Test RFC850 year 25 (should be 2025): 1735689600
+Test RFC850 year 76 (should be 1976): 3345062400
+Test RFC850 year 26 (should be 2026): 1767225600
+stderr: 
+exit: 0
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

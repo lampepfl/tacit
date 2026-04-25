@@ -1,0 +1,29 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = List(
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13033/repo/django/db/models/sql/query.py",
+    lineNumber = 1085,
+    line = "        _, field, _, lookup_parts = self.names_to_path(lookup_splitted, self.get_meta())"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13033/repo/django/db/models/sql/query.py",
+    lineNumber = 1424,
+    line = "    def names_to_path(self, names, opts, allow_many=True, fail_on_missing=False):"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13033/repo/django/db/models/sql/query.py",
+    lineNumber = 1566,
+    line = "                path, final_field, targets, rest = self.names_to_path("
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13033/repo/django/db/models/sql/query.py",
+    lineNumber = 1918,
+    line = "                # names_to_path() validates the lookup. A descriptive"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13033/repo/django/db/models/sql/query.py",
+    lineNumber = 1920,
+    line = "                self.names_to_path(item.split(LOOKUP_SEP), self.model._meta)"
+  )
+)

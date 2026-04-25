@@ -1,0 +1,20 @@
+status: success
+70:                 run_syncdb=True,
+71:             )
+72: 
+73:         # We then serialize the current state of the database into a string
+74:         # and store it on the connection. This slightly horrific process is so people
+75:         # who are testing on databases without transactions or who are using
+76:         # a TransactionTestCase still get a clean database on every test run.
+77:         if serialize and self.connection.settings_dict['TEST']['MIGRATE']:
+78:             self.connection._test_serialized_contents = self.serialize_db_to_string()
+79: 
+80:         call_command('createcachetable', database=self.connection.alias)
+81: 
+82:         # Ensure a connection for the side effect of initializing the test database.
+83:         self.connection.ensure_connection()
+84: 
+85:         return test_database_name
+86: 
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

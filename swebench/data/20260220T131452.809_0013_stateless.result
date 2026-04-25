@@ -1,0 +1,28 @@
+status: success
+1672:     def formfield(self, *, using=None, **kwargs):
+1673:         defaults = {
+1674:             'form_class': forms.ModelMultipleChoiceField,
+1675:             'queryset': self.remote_field.model._default_manager.using(using),
+1676:             **kwargs,
+1677:         }
+1678:         # If initial is passed in, it's a list of related objects, but the
+1679:         # MultipleChoiceField takes a list of IDs.
+1680:         if defaults.get('initial') is not None:
+1681:             initial = defaults['initial']
+1682:             if callable(initial):
+1683:                 initial = initial()
+1684:             defaults['initial'] = [i.pk for i in initial]
+1685:         return super().formfield(**defaults)
+1686: 
+1687:     def db_check(self, connection):
+1688:         return None
+1689: 
+1690:     def db_type(self, connection):
+1691:         # A ManyToManyField is not represented by a single column,
+1692:         # so return None.
+1693:         return None
+1694: 
+1695:     def db_parameters(self, connection):
+1696:         return {"type": None, "check": None}
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

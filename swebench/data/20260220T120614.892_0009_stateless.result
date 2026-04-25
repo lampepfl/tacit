@@ -1,0 +1,11 @@
+status: success
+167:         self.default_cols = True
+455:                 if inner_query.default_cols and has_existing_aggregate_annotations:
+457:                 inner_query.default_cols = False
+473:             if inner_query.select == () and not inner_query.default_cols and not inner_query.annotation_select_mask:
+488:             self.default_cols = False
+1809:         self.default_cols = False
+1828:         self.default_cols = False
+2099:                 self.default_cols = False
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

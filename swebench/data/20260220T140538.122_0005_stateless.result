@@ -1,0 +1,53 @@
+status: success
+101: 
+102:     return wrapper
+103: 
+104: 
+105: class DjangoHelpFormatter(HelpFormatter):
+106:     """
+107:     Customized formatter so that command-specific arguments appear in the
+108:     --help output before arguments common to all commands.
+109:     """
+110: 
+111:     show_last = {
+112:         "--version",
+113:         "--verbosity",
+114:         "--traceback",
+115:         "--settings",
+116:         "--pythonpath",
+117:         "--no-color",
+118:         "--force-color",
+119:         "--skip-checks",
+120:     }
+121: 
+122:     def _reordered_actions(self, actions):
+123:         return sorted(
+124:             actions, key=lambda a: set(a.option_strings) & self.show_last != set()
+125:         )
+126: 
+127:     def add_usage(self, usage, actions, *args, **kwargs):
+128:         super().add_usage(usage, self._reordered_actions(actions), *args, **kwargs)
+129: 
+130:     def add_arguments(self, actions):
+131:         super().add_arguments(self._reordered_actions(actions))
+132: 
+133: 
+134: class OutputWrapper(TextIOBase):
+135:     """
+136:     Wrapper around stdout/stderr
+137:     """
+138: 
+139:     @property
+140:     def style_func(self):
+141:         return self._style_func
+142: 
+143:     @style_func.setter
+144:     def style_func(self, style_func):
+145:         if style_func and self.isatty():
+146:             self._style_func = style_func
+147:         else:
+148:             self._style_func = lambda x: x
+149: 
+150:     def __init__(self, out, ending="\n"):
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

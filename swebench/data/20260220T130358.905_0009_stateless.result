@@ -1,0 +1,19 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = List(
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12589/repo/django/db/models/sql/compiler.py",
+    lineNumber = 120,
+    line = "            cols = expr.get_group_by_cols()"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12589/repo/django/db/models/sql/compiler.py",
+    lineNumber = 127,
+    line = "                expressions.extend(expr.get_group_by_cols())"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12589/repo/django/db/models/sql/compiler.py",
+    lineNumber = 128,
+    line = "        having_group_by = self.having.get_group_by_cols() if self.having else ()"
+  )
+)

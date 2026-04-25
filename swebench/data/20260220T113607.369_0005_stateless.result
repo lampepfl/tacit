@@ -1,0 +1,38 @@
+status: success
+166:     def _arithmetic(
+221:             different :meth:`NDArithmeticMixin._arithmetic_mask` (or wcs, ...)
+258:             kwargs["wcs"] = self._arithmetic_wcs(
+290:             result = self._arithmetic_data(
+307:             kwargs["uncertainty"] = self._arithmetic_uncertainty(
+335:             kwargs["mask"] = self._arithmetic_mask(
+347:             kwargs["meta"] = self._arithmetic_meta(
+354:     def _arithmetic_data(self, operation, operand, **kwds):
+361:             see `NDArithmeticMixin._arithmetic` parameter description.
+399:     def _arithmetic_uncertainty(self, operation, operand, result, correlation, **kwds):
+406:             see :meth:`NDArithmeticMixin._arithmetic` parameter description.
+413:             The result of :meth:`NDArithmeticMixin._arithmetic_data`.
+485:     def _arithmetic_mask(self, operation, operand, handle_mask, axis=None, **kwds):
+495:             see :meth:`NDArithmeticMixin._arithmetic` parameter description.
+529:     def _arithmetic_wcs(self, operation, operand, compare_wcs, **kwds):
+541:             see :meth:`NDArithmeticMixin._arithmetic` parameter description.
+575:     def _arithmetic_meta(self, operation, operand, handle_meta, **kwds):
+582:             see :meth:`NDArithmeticMixin._arithmetic` parameter description.
+606:         return self._prepare_then_do_arithmetic(np.add, operand, operand2, **kwargs)
+611:         return self._prepare_then_do_arithmetic(
+618:         return self._prepare_then_do_arithmetic(
+625:         return self._prepare_then_do_arithmetic(
+631:         return self._prepare_then_do_arithmetic(np.sum, **kwargs)
+635:         return self._prepare_then_do_arithmetic(np.mean, **kwargs)
+641:         return self._prepare_then_do_arithmetic(
+649:         return self._prepare_then_do_arithmetic(
+654:     def _prepare_then_do_arithmetic(
+658:         before the processing method (``_arithmetic``) is invoked.
+664:         then wraps the operands and the result from ``_arithmetic`` in the
+702:                 # This is important so that always the correct _arithmetics is
+730:             # Now call the _arithmetics method to do the arithmetic.
+731:             result, init_kwds = operand._arithmetic(operation, operand2, **kwargs)
+734:             result, init_kwds = cls._arithmetic(
+741:             # otherwise call the _arithmetic method on self for a collapse operation:
+743:             result, init_kwds = self_or_cls._arithmetic(
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,101 @@
+status: success
+403: 
+404:     def __init__(self, *args, **kwargs):
+405:         # Alias some things as locals to avoid repeat global lookups
+406:         cls = self.__class__
+407:         opts = self._meta
+408:         _setattr = setattr
+409:         _DEFERRED = DEFERRED
+410: 
+411:         pre_init.send(sender=cls, args=args, kwargs=kwargs)
+412: 
+413:         # Set up the storage for instance state
+414:         self._state = ModelState()
+415: 
+416:         # There is a rather weird disparity here; if kwargs, it's set, then args
+417:         # overrides it. It should be one or the other; don't duplicate the work
+418:         # The reason for the kwargs check is that standard iterator passes in by
+419:         # args, and instantiation for iteration is 33% faster.
+420:         if len(args) > len(opts.concrete_fields):
+421:             # Daft, but matches old exception sans the err msg.
+422:             raise IndexError("Number of args exceeds number of fields")
+423: 
+424:         if not kwargs:
+425:             fields_iter = iter(opts.concrete_fields)
+426:             # The ordering of the zip calls matter - zip throws StopIteration
+427:             # when an iter throws it. So if the first iter throws it, the second
+428:             # is *not* consumed. We rely on this, so don't change the order
+429:             # without changing the logic.
+430:             for val, field in zip(args, fields_iter):
+431:                 if val is _DEFERRED:
+432:                     continue
+433:                 _setattr(self, field.attname, val)
+434:         else:
+435:             # Slower, kwargs-ready version.
+436:             fields_iter = iter(opts.fields)
+437:             for val, field in zip(args, fields_iter):
+438:                 if val is _DEFERRED:
+439:                     continue
+440:                 _setattr(self, field.attname, val)
+441:                 kwargs.pop(field.name, None)
+442: 
+443:         # Now we're left with the unprocessed fields that *must* come from
+444:         # keywords, or default.
+445: 
+446:         for field in fields_iter:
+447:             is_related_object = False
+448:             # Virtual field
+449:             if field.attname not in kwargs and field.column is None:
+450:                 continue
+451:             if kwargs:
+452:                 if isinstance(field.remote_field, ForeignObjectRel):
+453:                     try:
+454:                         # Assume object instance was passed in.
+455:                         rel_obj = kwargs.pop(field.name)
+456:                         is_related_object = True
+457:                     except KeyError:
+458:                         try:
+459:                             # Object instance wasn't passed in -- must be an ID.
+460:                             val = kwargs.pop(field.attname)
+461:                         except KeyError:
+462:                             val = field.get_default()
+463:                 else:
+464:                     try:
+465:                         val = kwargs.pop(field.attname)
+466:                     except KeyError:
+467:                         # This is done with an exception rather than the
+468:                         # default argument on pop because we don't want
+469:                         # get_default() to be evaluated, and then not used.
+470:                         # Refs #12057.
+471:                         val = field.get_default()
+472:             else:
+473:                 val = field.get_default()
+474: 
+475:             if is_related_object:
+476:                 # If we are passed a related instance, set it using the
+477:                 # field.name instead of field.attname (e.g. "user" instead of
+478:                 # "user_id") so that the object gets properly cached (and type
+479:                 # checked) by the RelatedObjectDescriptor.
+480:                 if rel_obj is not _DEFERRED:
+481:                     _setattr(self, field.name, rel_obj)
+482:             else:
+483:                 if val is not _DEFERRED:
+484:                     _setattr(self, field.attname, val)
+485: 
+486:         if kwargs:
+487:             property_names = opts._property_names
+488:             for prop in tuple(kwargs):
+489:                 try:
+490:                     # Any remaining kwargs must correspond to properties or
+491:                     # virtual fields.
+492:                     if prop in property_names or opts.get_field(prop):
+493:                         if kwargs[prop] is not _DEFERRED:
+494:                             _setattr(self, prop, kwargs[prop])
+495:                         del kwargs[prop]
+496:                 except (AttributeError, FieldDoesNotExist):
+497:                     pass
+498:             for kwarg in kwargs:
+499:                 raise TypeError("%s() got an unexpected keyword argument '%s'" % (cls.__name__, kwarg))
+500:         super().__init__()
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

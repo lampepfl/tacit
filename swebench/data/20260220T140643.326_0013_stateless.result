@@ -1,0 +1,5 @@
+status: success
+228:             "are: example, force_color, help, integer, no_color, opt_3, "
+237:             "Valid options are: example, force_color, help, integer, no_color, "
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

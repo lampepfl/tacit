@@ -1,0 +1,49 @@
+status: success
+701:             if self.extra and rhs.extra:
+702:                 raise ValueError(
+703:                     "When merging querysets using 'or', you cannot have "
+704:                     "extra(select=...) on both sides."
+705:                 )
+706:         self.extra.update(rhs.extra)
+707:         extra_select_mask = set()
+708:         if self.extra_select_mask is not None:
+709:             extra_select_mask.update(self.extra_select_mask)
+710:         if rhs.extra_select_mask is not None:
+711:             extra_select_mask.update(rhs.extra_select_mask)
+712:         if extra_select_mask:
+713:             self.set_extra_mask(extra_select_mask)
+714:         self.extra_tables += rhs.extra_tables
+715: 
+716:         # Ordering uses the 'rhs' ordering, unless it has none, in which case
+717:         # the current ordering is used.
+718:         self.order_by = rhs.order_by or self.order_by
+719:         self.extra_order_by = rhs.extra_order_by or self.extra_order_by
+720: 
+721:     def deferred_to_data(self, target):
+722:         """
+723:         Convert the self.deferred_loading data structure to an alternate data
+724:         structure, describing the field that *will* be loaded. This is used to
+725:         compute the columns to select from the database and also by the
+726:         QuerySet class to work out which fields are being initialized on each
+727:         model. Models that have all their fields included aren't mentioned in
+728:         the result, only those that have field restrictions in place.
+729: 
+730:         The "target" parameter is the instance that is populated (in place).
+731:         """
+732:         field_names, defer = self.deferred_loading
+733:         if not field_names:
+734:             return
+735:         orig_opts = self.get_meta()
+736:         seen = {}
+737:         must_include = {orig_opts.concrete_model: {orig_opts.pk}}
+738:         for field_name in field_names:
+739:             parts = field_name.split(LOOKUP_SEP)
+740:             cur_model = self.model._meta.concrete_model
+741:             opts = orig_opts
+742:             for name in parts[:-1]:
+743:                 old_model = cur_model
+744:                 if name in self._filtered_relations:
+745:                     name = self._filtered_relations[name].relation_name
+746:                 source = opts.get_field(name)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

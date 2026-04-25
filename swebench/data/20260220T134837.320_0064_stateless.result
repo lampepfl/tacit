@@ -1,0 +1,21 @@
+status: success
+Method starts at: 2070
+2070:     def add_deferred_loading(self, field_names):
+2071:         """
+2072:         Add the given list of model field names to the set of fields to
+2073:         exclude from loading from the database when automatic column selection
+2074:         is done. Add the new field names to any existing field names that
+2075:         are deferred (or removed from any existing field names that are marked
+2076:         as the only ones for immediate loading).
+2077:         """
+2078:         # Fields on related models are stored in the literal double-underscore
+2079:         # format, so that we can use a set datastructure. We do the foo__bar
+2080:         # splitting and handling when computing the SQL column names (as part of
+2081:         # get_columns()).
+1 warning found
+def run()(using x$1: IOCapability): Any
+-- Deprecation Warning: --------------------------------------------------------
+21 |    println(i + ": " + lines(i))  
+   |            ^^^
+   |method + in class Int is deprecated since 2.13.0: Adding a number and a String is deprecated. Use the string interpolation `s"$num$str"`
+val res0: Any = ()

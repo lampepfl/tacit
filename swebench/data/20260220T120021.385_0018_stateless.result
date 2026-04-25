@@ -1,0 +1,18 @@
+status: success
+18: from django.core.checks.urls import check_resolver
+19: from django.core.exceptions import ImproperlyConfigured, ViewDoesNotExist
+20: from django.http import Http404
+21: from django.utils.datastructures import MultiValueDict
+22: from django.utils.functional import cached_property
+23: from django.utils.http import RFC3986_SUBDELIMS, escape_leading_slashes
+24: from django.utils.regex_helper import normalize
+25: from django.utils.translation import get_language
+26: 
+27: from .converters import get_converter
+28: from .exceptions import NoReverseMatch, Resolver404
+29: from .utils import get_callable
+30: 
+31: 
+32: class ResolverMatch:
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

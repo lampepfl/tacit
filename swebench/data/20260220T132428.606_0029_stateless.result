@@ -1,0 +1,33 @@
+status: success
+1: #!/usr/bin/env python
+2: import argparse
+3: import atexit
+4: import copy
+5: import gc
+6: import os
+7: import shutil
+8: import socket
+9: import subprocess
+10: import sys
+11: import tempfile
+12: import warnings
+13: from pathlib import Path
+14: 
+15: try:
+16:     import django
+17: except ImportError as e:
+18:     raise RuntimeError(
+19:         'Django module not found, reference tests/README.rst for instructions.'
+20:     ) from e
+21: else:
+22:     from django.apps import apps
+23:     from django.conf import settings
+24:     from django.db import connection, connections
+25:     from django.test import TestCase, TransactionTestCase
+26:     from django.test.runner import get_max_test_processes, parallel_type
+27:     from django.test.selenium import SeleniumTestCaseBase
+28:     from django.test.utils import NullTimeKeeper, TimeKeeper, get_runner
+29:     from django.utils.deprecation import (
+30:         RemovedInDjango41Warning, RemovedInDjango50Warning,
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,12 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = """import collections.abc
+import copy
+import datetime
+import decimal
+import operator
+import uuid
+import warnings
+from base64 import b64decode, b64encode
+from functools import partialmethod, total_ordering
+"""

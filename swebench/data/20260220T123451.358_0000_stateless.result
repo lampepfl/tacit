@@ -1,0 +1,65 @@
+status: success
+Found _delete_composed_index at line 401
+Context:
+    def _delete_composed_index(self, model, fields, constraint_kwargs, sql):
+        meta_constraint_names = {constraint.name for constraint in model._meta.constraints}
+        meta_index_names = {constraint.name for constraint in model._meta.indexes}
+        columns = [model._meta.get_field(field).column for field in fields]
+        constraint_names = self._constraint_names(
+            model, columns, exclude=meta_constraint_names | meta_index_names,
+            **constraint_kwargs
+        )
+        if len(constraint_names) != 1:
+            raise ValueError("Found wrong number (%s) of constraints for %s(%s)" % (
+                len(constraint_names),
+                model._meta.db_table,
+                ", ".join(columns),
+            ))
+        self.execute(self._delete_constraint_sql(sql, model, constraint_names[0]))
+
+    def alter_db_table(self, model, old_db_table, new_db_table):
+        """Rename the table a model points to."""
+        if (old_db_table == new_db_table or
+            (self.connection.features.ignores_table_name_case and
+                old_db_table.lower() == new_db_table.lower())):
+            return
+        self.execute(self.sql_rename_table % {
+            "old_table": self.quote_name(old_db_table),
+            "new_table": self.quote_name(new_db_table),
+        })
+        # Rename all references to the old table name.
+        for sql in self.deferred_sql:
+            if isinstance(sql, Statement):
+                sql.rename_table_references(old_db_table, new_db_table)
+
+    def alter_db_tablespace(self, model, old_db_tablespace, new_db_tablespace):
+        """Move a model's table between tablespaces."""
+        self.execute(self.sql_retablespace_table % {
+            "table": self.quote_name(model._meta.db_table),
+            "old_tablespace": self.quote_name(old_db_tablespace),
+            "new_tablespace": self.quote_name(new_db_tablespace),
+        })
+
+    def add_field(self, model, field):
+        """
+        Create a field on a model. Usually involves adding a column, but may
+        involve adding a table instead (for M2M fields).
+        """
+        # Special-case implicit M2M tables
+        if field.many_to_many and field.remote_field.through._meta.auto_created:
+            return self.create_model(field.remote_field.through)
+        # Get the column's definition
+        definition, params = self.column_sql(model, field, include_default=True)
+        # It might not actually have a column behind it
+        if definition is None:
+            return
+        # Check constraints can go on the column SQL here
+        db_params = field.db_parameters(connection=self.connection)
+        if db_params['check']:
+            definition += " " + self.sql_check_constraint % db_params
+        if field.remote_field and self.connection.features.supports_foreign_keys and field.db_constraint:
+            constraint_suffix = '_fk_%(to_table)s_%(to_column)s'
+            # Add FK constraint inline, if supported.
+            if self.sql_create_column_inline_fk:
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

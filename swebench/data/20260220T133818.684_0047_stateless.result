@@ -1,0 +1,48 @@
+status: success
+=== ModelChoiceField default_error_messages ===
+1186: class ModelChoiceField(ChoiceField):
+1187:     """A ChoiceField whose choices are a model QuerySet."""
+1188:     # This class is a subclass of ChoiceField for purity, but it doesn't
+1189:     # actually use any of ChoiceField's implementation.
+1190:     default_error_messages = {
+1191:         'invalid_choice': _('Select a valid choice. %(value)s is not one of the'
+1192:                             ' available choices.'),
+1193:     }
+1194:                             ' available choices.'),
+1195:     def __init__(self, queryset, *, empty_label="---------",
+1196:                  blank=False, **kwargs):
+1197:         # Call Field instead of ChoiceField __init__() because we don't need
+1198:         # ChoiceField.__init__().
+1199:         Field.__init__(
+1200:             self, required=required, widget=widget, label=label,
+
+=== ModelChoiceField.to_python ===
+to_python starts at line 1275
+1275:     def to_python(self, value):
+1276:         if value in self.empty_values:
+1277:             return None
+1278:         try:
+1279:             key = self.to_field_name or 'pk'
+1280:             if isinstance(value, self.queryset.model):
+1281:                 value = getattr(value, key)
+1282:             value = self.queryset.get(**{key: value})
+1283:         except (ValueError, TypeError, self.queryset.model.DoesNotExist):
+1284:             raise ValidationError(self.error_messages['invalid_choice'], code='invalid_choice', params={'value': value})
+1285:         return value
+1286: 
+
+=== ModelMultipleChoiceField default_error_messages ===
+1298: class ModelMultipleChoiceField(ModelChoiceField):
+1299:     """A MultipleChoiceField whose choices are a model QuerySet."""
+1300:     widget = SelectMultiple
+1301:     hidden_widget = MultipleHiddenInput
+1302:     default_error_messages = {
+1303:         'invalid_list': _('Enter a list of values.'),
+1304:         'invalid_choice': _('Select a valid choice. %(value)s is not one of the'
+1305:                             ' available choices.'),
+1306:         'invalid_pk_value': _('“%(pk)s” is not a valid value.')
+1307:     }
+1308: 
+1309:     def __init__(self, queryset, **kwargs):
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

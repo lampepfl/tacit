@@ -1,0 +1,26 @@
+status: success
+Line 330-350:
+329:         for i in range(1, 5):
+330:             author = Author.objects.get(pk=i)
+331:             article = getattr(self, "a%d" % (5 - i))
+332:             article.author = author
+333:             article.save(update_fields={'author'})
+334: 
+335:         self.assertQuerysetEqual(
+336:             Article.objects.order_by('author_id'), [
+337:                 "Article 4",
+338:                 "Article 3",
+339:                 "Article 2",
+340:                 "Article 1",
+341:             ],
+342:             attrgetter("headline")
+343:         )
+344: 
+345:     def test_order_by_f_expression(self):
+346:         self.assertQuerysetEqual(
+347:             Article.objects.order_by(F('headline')), [
+348:                 "Article 1",
+349:                 "Article 2",
+350:                 "Article 3",
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

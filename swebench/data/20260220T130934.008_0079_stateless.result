@@ -1,0 +1,52 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = """            # If update_fields is empty, skip the save. We do also check for
+            # no-op saves later on for inheritance cases. This bailout is
+            # still needed for skipping signal sending.
+            if not update_fields:
+                return
+
+            update_fields = frozenset(update_fields)
+            field_names = set()
+
+            for field in self._meta.fields:
+                if not field.primary_key:
+                    field_names.add(field.name)
+
+                    if field.name != field.attname:
+                        field_names.add(field.attname)
+
+            non_model_fields = update_fields.difference(field_names)
+
+            if non_model_fields:
+                raise ValueError("The following fields do not exist in this "
+                                 "model or are m2m fields: %s"
+                                 % ', '.join(non_model_fields))
+
+        # If saving to the same database, and this model is deferred, then
+        # automatically do an "update_fields" save on the loaded fields.
+        elif not force_insert and deferred_fields and using == self._state.db:
+            field_names = set()
+            for field in self._meta.concrete_fields:
+                if not field.primary_key and not hasattr(field, 'through'):
+                    field_names.add(field.attname)
+            loaded_fields = field_names.difference(deferred_fields)
+            if loaded_fields:
+                update_fields = frozenset(loaded_fields)
+
+        self.save_base(using=using, force_insert=force_insert,
+                       force_update=force_update, update_fields=update_fields)
+    save.alters_data = True
+
+    def save_base(self, raw=False, force_insert=False,
+                  force_update=False, using=None, update_fields=None):
+        """
+        Handle the parts of saving which should be done only once per save,
+        yet need to be done in raw saves, too. This includes some sanity
+        checks and signal sending.
+
+        The 'raw' argument is telling save_base not to save any parent
+        models and not to do any changes to the values before save. This
+        is used by fixture loading.
+        """
+        using = using or router.db_for_write(self.__class__, instance=self)"""

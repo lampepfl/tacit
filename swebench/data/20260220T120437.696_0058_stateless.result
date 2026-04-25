@@ -1,0 +1,16 @@
+status: success
+Exit: 1
+Output: 
+Error: Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+    from django.urls.resolvers import RoutePattern; print('RoutePattern imported successfully')
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11620/repo/django/urls/__init__.py", line 1, in <module>
+    from .base import (
+    ...<3 lines>...
+    )
+  File "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11620/repo/django/urls/base.py", line 3, in <module>
+    from asgiref.local import Local
+ModuleNotFoundError: No module named 'asgiref'
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

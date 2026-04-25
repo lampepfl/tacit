@@ -1,0 +1,34 @@
+status: success
+Found 125 matches
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13315/repo/tests/model_forms/models.py:413: limit_choices_to=today_callable_dict,
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13315/repo/tests/model_forms/models.py:416: has_fooled_today = models.ManyToManyField(Character, limit_choices_to=today_callable_q, related_name="+")
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13315/repo/tests/model_forms/tests.py:2783: Tests the functionality of ``limit_choices_to``.
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13315/repo/tests/model_forms/tests.py:2796: def test_limit_choices_to_callable_for_fk_rel(self):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13315/repo/tests/model_forms/tests.py:2798: A ForeignKey can use limit_choices_to as a callable (#2554).
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13315/repo/tests/model_forms/tests.py:2803: def test_limit_choices_to_callable_for_m2m_rel(self):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13315/repo/tests/model_forms/tests.py:2805: A ManyToManyField can use limit_choices_to as a callable (#2554).
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13315/repo/tests/model_forms/tests.py:2810: def test_custom_field_with_queryset_but_no_limit_choices_to(self):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13315/repo/tests/model_forms/tests.py:2812: A custom field with a `queryset` attribute but no `limit_choices_to`
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13315/repo/tests/model_forms/tests.py:2818: def test_fields_for_model_applies_limit_choices_to(self):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13315/repo/tests/model_forms/tests.py:2824: with mock.patch.object(field, 'limit_choices_to') as today_callable_dict:
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13315/repo/tests/invalid_models_tests/test_relative_fields.py:89: m2m = models.ManyToManyField(Model, limit_choices_to={'name': 'test_name'})
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13315/repo/tests/invalid_models_tests/test_relative_fields.py:102: limit_choices_to={'name': 'test_name'},
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13315/repo/tests/invalid_models_tests/test_relative_fields.py:124: 'limit_choices_to has no effect on ManyToManyField '
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13315/repo/tests/admin_views/models.py:152: color = models.ForeignKey(Color, models.CASCADE, limit_choices_to={'warm': True})
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13315/repo/tests/admin_views/models.py:182: limit_choices_to={
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13315/repo/tests/admin_views/models.py:191: limit_choices_to={'title__isnull': False},
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13315/repo/tests/admin_views/models.py:197: limit_choices_to={'title__isnull': True},
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13315/repo/tests/admin_views/models.py:226: limit_choices_to=today_callable_dict,
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13315/repo/tests/admin_views/models.py:229: has_fooled_today = models.ManyToManyField(Character, limit_choices_to=today_callable_q, related_name="+")
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13315/repo/tests/admin_views/tests.py:617: """Ensure admin changelist filters do not contain objects excluded via limit_choices_to.
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13315/repo/tests/admin_views/tests.py:627: msg_prefix="Changelist filter not correctly limited by limit_choices_to"
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13315/repo/tests/admin_views/tests.py:878: ForeignKey 'limit_choices_to' should be allowed, otherwise raw_id_fields
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13315/repo/tests/admin_views/tests.py:5175: def test_limit_choices_to_as_callable(self):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13315/repo/tests/admin_views/tests.py:5201: def test_limit_choices_to(self):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13315/repo/tests/admin_views/tests.py:5221: # limit_choices_to option that includes a filter on a string field
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13315/repo/tests/admin_views/tests.py:5229: def test_limit_choices_to_isnull_false(self):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13315/repo/tests/admin_views/tests.py:5244: # limit_choices_to option that includes "actor__title__isnull=False".
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13315/repo/tests/admin_views/tests.py:5249: def test_limit_choices_to_isnull_true(self):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13315/repo/tests/admin_views/tests.py:5264: # limit_choices_to option that includes "actor__title__isnull=True".
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

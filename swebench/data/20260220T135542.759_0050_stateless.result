@@ -1,0 +1,34 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = List(
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14997/repo/django/db/models/expressions.py",
+    lineNumber = 338,
+    line = "    def relabeled_clone(self, change_map):"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14997/repo/django/db/models/expressions.py",
+    lineNumber = 341,
+    line = "            e.relabeled_clone(change_map) if e is not None else None"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14997/repo/django/db/models/expressions.py",
+    lineNumber = 635,
+    line = "    def relabeled_clone(self, relabels):"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14997/repo/django/db/models/expressions.py",
+    lineNumber = 650,
+    line = "    def relabeled_clone(self, relabels):"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14997/repo/django/db/models/expressions.py",
+    lineNumber = 867,
+    line = "    def relabeled_clone(self, relabels):"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14997/repo/django/db/models/expressions.py",
+    lineNumber = 905,
+    line = "    def relabeled_clone(self, relabels):"
+  )
+)

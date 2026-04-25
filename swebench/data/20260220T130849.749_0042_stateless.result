@@ -1,0 +1,8 @@
+status: success
+Ref class get_group_by_cols at: 27946
+def get_group_by_cols(self, alias=None):
+        return [self]
+
+    def get_db_c
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

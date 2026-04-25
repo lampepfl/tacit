@@ -1,0 +1,23 @@
+status: success
+531:             self.assertEqual(storage.base_url, 'explicit_base_url/')
+532:             self.assertEqual(storage.file_permissions_mode, 0o666)
+533:             self.assertEqual(storage.directory_permissions_mode, 0o666)
+534:             self.assertEqual(defaults_storage.base_location, settings['MEDIA_ROOT'])
+535:             self.assertIn(settings['MEDIA_ROOT'], defaults_storage.location)
+536:             self.assertEqual(defaults_storage.base_url, settings['MEDIA_URL'])
+537:             self.assertEqual(defaults_storage.file_permissions_mode, settings['FILE_UPLOAD_PERMISSIONS'])
+538:             self.assertEqual(
+539:                 defaults_storage.directory_permissions_mode, settings['FILE_UPLOAD_DIRECTORY_PERMISSIONS']
+540:             )
+541: 
+542: 
+543: class CustomStorage(FileSystemStorage):
+544:     def get_available_name(self, name, max_length=None):
+545:         """
+546:         Append numbers to duplicate files rather than underscores, like Trac.
+547:         """
+548:         basename, *ext = name.split('.')
+549:         number = 2
+550:         while self.exists(name):
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

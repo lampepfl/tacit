@@ -1,0 +1,110 @@
+status: success
+144:     def installed(self):
+145:         return self.app_config is not None
+146: 
+147:     def contribute_to_class(self, cls, name):
+148:         from django.db import connection
+149:         from django.db.backends.utils import truncate_name
+150: 
+151:         cls._meta = self
+152:         self.model = cls
+153:         # First, construct the default values for these options.
+154:         self.object_name = cls.__name__
+155:         self.model_name = self.object_name.lower()
+156:         self.verbose_name = camel_case_to_spaces(self.object_name)
+157: 
+158:         # Store the original user-defined values for each option,
+159:         # for use when serializing the model definition
+160:         self.original_attrs = {}
+161: 
+162:         # Next, apply any overridden values from 'class Meta'.
+163:         if self.meta:
+164:             meta_attrs = self.meta.__dict__.copy()
+165:             for name in self.meta.__dict__:
+166:                 # Ignore any private attributes that Django doesn't care about.
+167:                 # NOTE: We can't modify a dictionary's contents while looping
+168:                 # over it, so we loop over the *original* dictionary instead.
+169:                 if name.startswith('_'):
+170:                     del meta_attrs[name]
+171:             for attr_name in DEFAULT_NAMES:
+172:                 if attr_name in meta_attrs:
+173:                     setattr(self, attr_name, meta_attrs.pop(attr_name))
+174:                     self.original_attrs[attr_name] = getattr(self, attr_name)
+175:                 elif hasattr(self.meta, attr_name):
+176:                     setattr(self, attr_name, getattr(self.meta, attr_name))
+177:                     self.original_attrs[attr_name] = getattr(self, attr_name)
+178: 
+179:             self.unique_together = normalize_together(self.unique_together)
+180:             self.index_together = normalize_together(self.index_together)
+181:             # App label/class name interpolation for names of constraints and
+182:             # indexes.
+183:             if not getattr(cls._meta, 'abstract', False):
+184:                 for attr_name in {'constraints', 'indexes'}:
+185:                     objs = getattr(self, attr_name, [])
+186:                     setattr(self, attr_name, self._format_names_with_class(cls, objs))
+187: 
+188:             # verbose_name_plural is a special case because it uses a 's'
+189:             # by default.
+190:             if self.verbose_name_plural is None:
+191:                 self.verbose_name_plural = format_lazy('{}s', self.verbose_name)
+192: 
+193:             # order_with_respect_and ordering are mutually exclusive.
+194:             self._ordering_clash = bool(self.ordering and self.order_with_respect_to)
+195: 
+196:             # Any leftover attributes must be invalid.
+197:             if meta_attrs != {}:
+198:                 raise TypeError("'class Meta' got invalid attribute(s): %s" % ','.join(meta_attrs))
+199:         else:
+200:             self.verbose_name_plural = format_lazy('{}s', self.verbose_name)
+201:         del self.meta
+202: 
+203:         # If the db_table wasn't provided, use the app_label + model_name.
+204:         if not self.db_table:
+205:             self.db_table = "%s_%s" % (self.app_label, self.model_name)
+206:             self.db_table = truncate_name(self.db_table, connection.ops.max_name_length())
+207: 
+208:     def _format_names_with_class(self, cls, objs):
+209:         """App label/class name interpolation for object names."""
+210:         new_objs = []
+211:         for obj in objs:
+212:             obj = obj.clone()
+213:             obj.name = obj.name % {
+214:                 'app_label': cls._meta.app_label.lower(),
+215:                 'class': cls.__name__.lower(),
+216:             }
+217:             new_objs.append(obj)
+218:         return new_objs
+219: 
+220:     def _prepare(self, model):
+221:         if self.order_with_respect_to:
+222:             # The app registry will not be ready at this point, so we cannot
+223:             # use get_field().
+224:             query = self.order_with_respect_to
+225:             try:
+226:                 self.order_with_respect_to = next(
+227:                     f for f in self._get_fields(reverse=False)
+228:                     if f.name == query or f.attname == query
+229:                 )
+230:             except StopIteration:
+231:                 raise FieldDoesNotExist("%s has no field named '%s'" % (self.object_name, query))
+232: 
+233:             self.ordering = ('_order',)
+234:             if not any(isinstance(field, OrderWrt) for field in model._meta.local_fields):
+235:                 model.add_to_class('_order', OrderWrt())
+236:         else:
+237:             self.order_with_respect_to = None
+238: 
+239:         if self.pk is None:
+240:             if self.parents:
+241:                 # Promote the first parent link in lieu of adding yet another
+242:                 # field.
+243:                 field = next(iter(self.parents.values()))
+244:                 # Look for a local field with the same name as the
+245:                 # first parent link. If a local field has already been
+246:                 # created, use it instead of promoting the parent
+247:                 already_created = [fld for fld in self.local_fields if fld.name == field.name]
+248:                 if already_created:
+249:                     field = already_created[0]
+250:                 field.primary_key = True
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

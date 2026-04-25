@@ -1,0 +1,5 @@
+status: success
+Found 1 matches
+1520:     def setup_joins(self, names, opts, alias, can_reuse=None, allow_many=True,
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

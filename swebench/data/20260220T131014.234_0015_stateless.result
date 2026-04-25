@@ -1,0 +1,3 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = List("1375:     def _not_support_combined_queries(self, operation_name):")

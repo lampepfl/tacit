@@ -1,0 +1,28 @@
+status: success
+1500: 
+1501:     def generate_removed_altered_index_together(self):
+1502:         self._generate_removed_altered_foo_together(operations.AlterIndexTogether)
+1503: 
+1504:     def _generate_altered_foo_together(self, operation):
+1505:         for (
+1506:             old_value,
+1507:             new_value,
+1508:             app_label,
+1509:             model_name,
+1510:             dependencies,
+1511:         ) in self._get_altered_foo_together_operations(operation.option_name):
+1512:             removal_value = new_value.intersection(old_value)
+1513:             if new_value != removal_value:
+1514:                 self.add_operation(
+1515:                     app_label,
+1516:                     operation(name=model_name, **{operation.option_name: new_value}),
+1517:                     dependencies=dependencies,
+1518:                 )
+1519: 
+1520:     def generate_altered_unique_together(self):
+1521:         self._generate_altered_foo_together(operations.AlterUniqueTogether)
+1522: 
+1523:     def generate_altered_index_together(self):
+1524:         self._generate_altered_foo_together(operations.AlterIndexTogether)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

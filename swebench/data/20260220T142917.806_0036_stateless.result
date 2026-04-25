@@ -1,0 +1,9 @@
+status: success
+if self.choices is not None:
+            if 'get_%s_display' % self.name not in cls.__dict__:
+                setattr(
+                    cls,
+                    'get_%s_display' % self.name,
+                    partialmethod(cls._get_FIELD_di
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,30 @@
+status: success
+0: """
+1: Constants specific to the SQL storage portion of the ORM.
+2: """
+3: 
+4: from django.utils.regex_helper import _lazy_re_compile
+5: 
+6: # Size of each "chunk" for get_iterator calls.
+7: # Larger values are slightly faster at the expense of more storage space.
+8: GET_ITERATOR_CHUNK_SIZE = 100
+9: 
+10: # Namedtuples for sql.* internal use.
+11: 
+12: # How many results to expect from a cursor.execute call
+13: MULTI = 'multi'
+14: SINGLE = 'single'
+15: CURSOR = 'cursor'
+16: NO_RESULTS = 'no results'
+17: 
+18: ORDER_PATTERN = _lazy_re_compile(r'\?|[-+]?[.\w]+$')
+19: ORDER_DIR = {
+20:     'ASC': ('ASC', 'DESC'),
+21:     'DESC': ('DESC', 'ASC'),
+22: }
+23: 
+24: # SQL join types.
+25: INNER = 'INNER JOIN'
+26: LOUTER = 'LEFT OUTER JOIN'
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

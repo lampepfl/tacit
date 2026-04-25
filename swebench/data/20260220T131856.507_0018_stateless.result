@@ -1,0 +1,22 @@
+status: success
+Total lines: 569
+
+Context around model_dict:
+460: ||
+461: |            info = (app_label, model._meta.model_name)|
+462: |            model_dict = {|
+463: |                'name': capfirst(model._meta.verbose_name_plural),|
+464: |                'object_name': model._meta.object_name,|
+465: |                'perms': perms,|
+466: |                'admin_url': None,|
+467: |                'model': model,|
+468: |            }|
+469: |            if perms.get('change') or perms.get('view'):|
+470: |                model_dict['view_only'] = not perms.get('change')|
+471: |                try:|
+472: |                    model_dict['admin_url'] = reverse('admin:%s_%s_changelist' % info, current_app=self.name)|
+473: |                except NoReverseMatch:|
+474: |                    pass|
+475: |            if perms.get('add'):|
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

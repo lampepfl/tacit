@@ -1,0 +1,63 @@
+status: success
+241: 
+242: class RoutePattern(CheckURLMixin):
+243:     regex = LocaleRegexDescriptor('_route')
+244: 
+245:     def __init__(self, route, name=None, is_endpoint=False):
+246:         self._route = route
+247:         self._regex_dict = {}
+248:         self._is_endpoint = is_endpoint
+249:         self.name = name
+250:         self.converters = _route_to_regex(str(route), is_endpoint)[1]
+251: 
+252:     def match(self, path):
+253:         match = self.regex.search(path)
+254:         if match:
+255:             # RoutePattern doesn't allow non-named groups so args are ignored.
+256:             kwargs = match.groupdict()
+257:             for key, value in kwargs.items():
+258:                 converter = self.converters[key]
+259:                 try:
+260:                     kwargs[key] = converter.to_python(value)
+261:                 except ValueError:
+262:                     return None
+263:             return path[match.end():], (), kwargs
+264:         return None
+265: 
+266:     def check(self):
+267:         warnings = self._check_pattern_startswith_slash()
+268:         route = self._route
+269:         if '(?P<' in route or route.startswith('^') or route.endswith('$'):
+270:             warnings.append(Warning(
+271:                 "Your URL pattern {} has a route that contains '(?P<', begins "
+272:                 "with a '^', or ends with a '$'. This was likely an oversight "
+273:                 "when migrating to django.urls.path().".format(self.describe()),
+274:                 id='2_0.W001',
+275:             ))
+276:         return warnings
+277: 
+278:     def _compile(self, route):
+279:         return re.compile(_route_to_regex(route, self._is_endpoint)[0])
+280: 
+281:     def __str__(self):
+282:         return str(self._route)
+283: 
+284: 
+285: class LocalePrefixPattern:
+286:     def __init__(self, prefix_default_language=True):
+287:         self.prefix_default_language = prefix_default_language
+288:         self.converters = {}
+289: 
+290:     @property
+291:     def regex(self):
+292:         # This is only used by reverse() and cached in _reverse_dict.
+293:         return re.compile(self.language_prefix)
+294: 
+295:     @property
+296:     def language_prefix(self):
+297:         language_code = get_language() or settings.LANGUAGE_CODE
+298:         if language_code == settings.LANGUAGE_CODE and not self.prefix_default_language:
+299:             return ''
+300:         else:
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

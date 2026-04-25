@@ -1,0 +1,5 @@
+status: success
+-- Error: ----------------------------------------------------------------------
+7 |  :Author: Simon Gibbons (simongibbons@gmail.com)
+  |         ^
+  |         end of statement expected but ':' found

@@ -1,0 +1,18 @@
+status: success
+136: # unique_together tests are very similar to index_together tests.
+143:                 unique_together = 42
+147:                 "'unique_together' must be a list or tuple.",
+159:                 unique_together = [('a', 'b'), 42]
+163:                 "All 'unique_together' elements must be lists or tuples.",
+172:                 unique_together = 'not-a-list'
+176:                 "'unique_together' must be a list or tuple.",
+188:                 # unique_together can be a simple tuple
+189:                 unique_together = ('one', 'two')
+196:                 unique_together = [['missing_field']]
+200:                 "'unique_together' refers to the nonexistent field 'missing_field'.",
+211:                 unique_together = [['m2m']]
+215:                 "'unique_together' refers to a ManyToManyField 'm2m', but "
+216:                 "ManyToManyFields are not permitted in 'unique_together'.",
+231:                 unique_together = [['foo_1_id', 'foo_2']]
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

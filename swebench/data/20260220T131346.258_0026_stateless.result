@@ -1,0 +1,62 @@
+status: success
+1192:     def generate_altered_order_with_respect_to(self):
+1193:         for app_label, model_name in sorted(self.kept_model_keys):
+1194:             old_model_name = self.renamed_models.get((app_label, model_name), model_name)
+1195:             old_model_state = self.from_state.models[app_label, old_model_name]
+1196:             new_model_state = self.to_state.models[app_label, model_name]
+1197:             if (old_model_state.options.get("order_with_respect_to") !=
+1198:                     new_model_state.options.get("order_with_respect_to")):
+1199:                 # Make sure it comes second if we're adding
+1200:                 # (removal dependency is part of RemoveField)
+1201:                 dependencies = []
+1202:                 if new_model_state.options.get("order_with_respect_to"):
+1203:                     dependencies.append((
+1204:                         app_label,
+1205:                         model_name,
+1206:                         new_model_state.options["order_with_respect_to"],
+1207:                         True,
+1208:                     ))
+1209:                 # Actually generate the operation
+1210:                 self.add_operation(
+1211:                     app_label,
+1212:                     operations.AlterOrderWithRespectTo(
+1213:                         name=model_name,
+1214:                         order_with_respect_to=new_model_state.options.get('order_with_respect_to'),
+1215:                     ),
+1216:                     dependencies=dependencies,
+1217:                 )
+1218: 
+1219:     def generate_altered_managers(self):
+1220:         for app_label, model_name in sorted(self.kept_model_keys):
+1221:             old_model_name = self.renamed_models.get((app_label, model_name), model_name)
+1222:             old_model_state = self.from_state.models[app_label, old_model_name]
+1223:             new_model_state = self.to_state.models[app_label, model_name]
+1224:             if old_model_state.managers != new_model_state.managers:
+1225:                 self.add_operation(
+1226:                     app_label,
+1227:                     operations.AlterModelManagers(
+1228:                         name=model_name,
+1229:                         managers=new_model_state.managers,
+1230:                     )
+1231:                 )
+1232: 
+1233:     def arrange_for_graph(self, changes, graph, migration_name=None):
+1234:         """
+1235:         Take a result from changes() and a MigrationGraph, and fix the names
+1236:         and dependencies of the changes so they extend the graph from the leaf
+1237:         nodes for each app.
+1238:         """
+1239:         leaves = graph.leaf_nodes()
+1240:         name_map = {}
+1241:         for app_label, migrations in list(changes.items()):
+1242:             if not migrations:
+1243:                 continue
+1244:             # Find the app label's current leaf node
+1245:             app_leaf = None
+1246:             for leaf in leaves:
+1247:                 if leaf[0] == app_label:
+1248:                     app_leaf = leaf
+1249:                     break
+1250:             # Do they want an initial migration for this app?
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

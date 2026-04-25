@@ -1,0 +1,93 @@
+status: success
+1560:     @classmethod
+1561:     def _check_unique_together(cls):
+1562:         """Check the value of "unique_together" option."""
+1563:         if not isinstance(cls._meta.unique_together, (tuple, list)):
+1564:             return [
+1565:                 checks.Error(
+1566:                     "'unique_together' must be a list or tuple.",
+1567:                     obj=cls,
+1568:                     id='models.E010',
+1569:                 )
+1570:             ]
+1571: 
+1572:         elif any(not isinstance(fields, (tuple, list)) for fields in cls._meta.unique_together):
+1573:             return [
+1574:                 checks.Error(
+1575:                     "All 'unique_together' elements must be lists or tuples.",
+1576:                     obj=cls,
+1577:                     id='models.E011',
+1578:                 )
+1579:             ]
+1580: 
+1581:         else:
+1582:             errors = []
+1583:             for fields in cls._meta.unique_together:
+1584:                 errors.extend(cls._check_local_fields(fields, "unique_together"))
+1585:             return errors
+1586: 
+1587:     @classmethod
+1588:     def _check_indexes(cls, databases):
+1589:         """Check fields, names, and conditions of indexes."""
+1590:         errors = []
+1591:         for index in cls._meta.indexes:
+1592:             # Index name can't start with an underscore or a number, restricted
+1593:             # for cross-database compatibility with Oracle.
+1594:             if index.name[0] == '_' or index.name[0].isdigit():
+1595:                 errors.append(
+1596:                     checks.Error(
+1597:                         "The index name '%s' cannot start with an underscore "
+1598:                         "or a number." % index.name,
+1599:                         obj=cls,
+1600:                         id='models.E033',
+1601:                     ),
+1602:                 )
+1603:             if len(index.name) > index.max_name_length:
+1604:                 errors.append(
+1605:                     checks.Error(
+1606:                         "The index name '%s' cannot be longer than %d "
+1607:                         "characters." % (index.name, index.max_name_length),
+1608:                         obj=cls,
+1609:                         id='models.E034',
+1610:                     ),
+1611:                 )
+1612:         for db in databases:
+1613:             if not router.allow_migrate_model(db, cls):
+1614:                 continue
+1615:             connection = connections[db]
+1616:             if (
+1617:                 connection.features.supports_partial_indexes or
+1618:                 'supports_partial_indexes' in cls._meta.required_db_features
+1619:             ):
+1620:                 continue
+1621:             if any(index.condition is not None for index in cls._meta.indexes):
+1622:                 errors.append(
+1623:                     checks.Warning(
+1624:                         '%s does not support indexes with conditions.'
+1625:                         % connection.display_name,
+1626:                         hint=(
+1627:                             "Conditions will be ignored. Silence this warning "
+1628:                             "if you don't care about it."
+1629:                         ),
+1630:                         obj=cls,
+1631:                         id='models.W037',
+1632:                     )
+1633:                 )
+1634:         fields = [field for index in cls._meta.indexes for field, _ in index.fields_orders]
+1635:         errors.extend(cls._check_local_fields(fields, 'indexes'))
+1636:         return errors
+1637: 
+1638:     @classmethod
+1639:     def _check_local_fields(cls, fields, option):
+1640:         from django.db import models
+1641: 
+1642:         # In order to avoid hitting the relation tree prematurely, we use our
+1643:         # own fields_map instead of using get_field()
+1644:         forward_fields_map = {}
+1645:         for field in cls._meta._get_fields(reverse=False):
+1646:             forward_fields_map[field.name] = field
+1647:             if hasattr(field, 'attname'):
+1648:                 forward_fields_map[field.attname] = field
+1649: 
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

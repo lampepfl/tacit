@@ -1,0 +1,13 @@
+status: failure
+-- [E018] Syntax Error: --------------------------------------------------------
+7 |          """Raise an error if expression cannot be used in a WHERE clause."""
+  |                            ^^
+  |                            expression expected but [31mif[0m found
+  |
+  | longer explanation available when compiling with `-explain`
+-- [E018] Syntax Error: --------------------------------------------------------
+18 |          """Raise an error if expression cannot be used in a WHERE clause."""
+   |                            ^^
+   |                            expression expected but [31mif[0m found
+   |
+   | longer explanation available when compiling with `-explain`

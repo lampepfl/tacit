@@ -1,0 +1,29 @@
+status: success
+505: class IsNull(BuiltinLookup):
+506:     lookup_name = 'isnull'
+507:     prepare_rhs = False
+508: 
+509:     def as_sql(self, compiler, connection):
+510:         if not isinstance(self.rhs, bool):
+511:             # When the deprecation ends, replace with:
+512:             # raise ValueError(
+513:             #     'The QuerySet value for an isnull lookup must be True or '
+514:             #     'False.'
+515:             # )
+516:             warnings.warn(
+517:                 'Using a non-boolean value for an isnull lookup is '
+518:                 'deprecated, use True or False instead.',
+519:                 RemovedInDjango40Warning,
+520:             )
+521:         sql, params = compiler.compile(self.lhs)
+522:         if self.rhs:
+523:             return "%s IS NULL" % sql, params
+524:         else:
+525:             return "%s IS NOT NULL" % sql, params
+526: 
+527: 
+528: @Field.register_lookup
+529: class Regex(BuiltinLookup):
+530:     lookup_name = 'regex'
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

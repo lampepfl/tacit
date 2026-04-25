@@ -1,0 +1,5 @@
+status: success
+Found in: /Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12284/repo/tests/admin_utils/test_logentry.py
+Found in: /Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12284/repo/tests/admin_utils/tests.py
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

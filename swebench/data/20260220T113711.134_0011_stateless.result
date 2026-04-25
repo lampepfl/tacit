@@ -1,0 +1,17 @@
+status: success
+Original lines:
+514:         """
+515:         # If only one mask is present we need not bother about any type checks
+516:         if (
+517:             self.mask is None and operand is not None and operand.mask is None
+518:         ) or handle_mask is None:
+519:             return None
+520:         elif self.mask is None and operand is not None:
+521:             # Make a copy so there is no reference in the result.
+522:             return deepcopy(operand.mask)
+523:         elif operand is None:
+524:             return deepcopy(self.mask)
+525:         else:
+526:             # Now lets calculate the resulting mask (operation enforces copy)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,33 @@
+status: success
+548: def get_reloader():
+549:     """Return the most suitable reloader for this environment."""
+550:     try:
+551:         WatchmanReloader.check_availability()
+552:     except WatchmanUnavailable:
+553:         return StatReloader()
+554:     return WatchmanReloader()
+555: 
+556: 
+557: def start_django(reloader, main_func, *args, **kwargs):
+558:     ensure_echo_on()
+559: 
+560:     main_func = check_errors(main_func)
+561:     django_main_thread = threading.Thread(target=main_func, args=args, kwargs=kwargs, name='django-main-thread')
+562:     django_main_thread.setDaemon(True)
+563:     django_main_thread.start()
+564: 
+565:     while not reloader.should_stop:
+566:         try:
+567:             reloader.run(django_main_thread)
+568:         except WatchmanUnavailable as ex:
+569:             # It's possible that the watchman service shuts down or otherwise
+570:             # becomes unavailable. In that case, use the StatReloader.
+571:             reloader = StatReloader()
+572:             logger.error('Error connecting to Watchman: %s', ex)
+573:             logger.info('Watching for file changes with %s', reloader.__class__.__name__)
+574: 
+575: 
+576: def run_with_reloader(main_func, *args, **kwargs):
+577:     signal.signal(signal.SIGTERM, lambda *args: sys.exit(0))
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

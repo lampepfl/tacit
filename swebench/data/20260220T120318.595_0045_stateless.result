@@ -1,0 +1,18 @@
+status: success
+252: ||
+253: |    def match(self, path):|
+254: |        match = self.regex.search(path)|
+255: |        if match:|
+256: |            # RoutePattern doesn't allow non-named groups so args are ignored.|
+257: |            kwargs = match.groupdict()|
+258: |            for key, value in kwargs.items():|
+259: |                converter = self.converters[key]|
+260: |                try:|
+261: |                    kwargs[key] = converter.to_python(value)|
+262: |                except ValueError:|
+263: |                    return None|
+264: |            return path[match.end():], (), kwargs|
+265: |        return None|
+266: ||
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

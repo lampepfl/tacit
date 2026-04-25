@@ -1,0 +1,12 @@
+status: success
+29:     'verbose_name', 'verbose_name_plural', 'db_table', 'ordering',
+31:     'app_label', 'db_tablespace', 'abstract', 'managed', 'proxy', 'swappable',
+86:         self.db_table = ''
+100:         self.db_tablespace = settings.DEFAULT_TABLESPACE
+205:         # If the db_table wasn't provided, use the app_label + model_name.
+206:         if not self.db_table:
+207:             self.db_table = "%s_%s" % (self.app_label, self.model_name)
+208:             self.db_table = truncate_name(self.db_table, connection.ops.max_name_length())
+308:         self.db_table = target._meta.db_table
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

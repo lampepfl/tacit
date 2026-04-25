@@ -1,0 +1,29 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = List(
+  "    @classmethod",
+  "    def check_availability(cls):",
+  "        raise NotImplementedError('subclasses must implement check_availability().')",
+  "",
+  "    def notify_file_changed(self, path):",
+  "        results = file_changed.send(sender=self, file_path=path)",
+  "        logger.debug('%s notified as changed. Signal results: %s.', path, results)",
+  "        if not any(res[1] for res in results):",
+  "            trigger_reload(path)",
+  "",
+  "    # These are primarily used for testing.",
+  "    @property",
+  "    def should_stop(self):",
+  "        return self._stop_condition.is_set()",
+  "",
+  "    def stop(self):",
+  "        self._stop_condition.set()",
+  "",
+  "",
+  "class StatReloader(BaseReloader):",
+  "    SLEEP_TIME = 1  # Check for changes once per second.",
+  "",
+  "    def tick(self):",
+  "        mtimes = {}",
+  "        while True:"
+)

@@ -1,0 +1,7 @@
+status: success
+-- Error: ----------------------------------------------------------------------
+3 |    grep("/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15388/repo/django", "autoreload", "*.py").map(_.file).distinct
+  |                                                                                                                                           ^^^^^^
+  |too many arguments for method grep in trait Interface: (path: String, pattern: String)
+  |  (using x$3: library.FileSystem): List[library.GrepMatch]
+1 error found

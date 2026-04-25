@@ -1,0 +1,40 @@
+status: success
+925:                 remote_field_name = getattr(new_field.remote_field, 'field_name', None)
+926:                 if remote_field_name:
+927:                     to_field_rename_key = rename_key + (remote_field_name,)
+928:                     if to_field_rename_key in self.renamed_fields:
+929:                         new_field.remote_field.field_name = old_field.remote_field.field_name
+930:                 # Handle ForeignObjects which can have multiple from_fields/to_fields.
+931:                 from_fields = getattr(new_field, 'from_fields', None)
+932:                 if from_fields:
+933:                     from_rename_key = (app_label, model_name)
+934:                     new_field.from_fields = tuple([
+935:                         self.renamed_fields.get(from_rename_key + (from_field,), from_field)
+936:                         for from_field in from_fields
+937:                     ])
+938:                     new_field.to_fields = tuple([
+939:                         self.renamed_fields.get(rename_key + (to_field,), to_field)
+940:                         for to_field in new_field.to_fields
+941:                     ])
+942:                 dependencies.extend(self._get_dependencies_for_foreign_key(new_field))
+943:             if hasattr(new_field, "remote_field") and getattr(new_field.remote_field, "through", None):
+944:                 rename_key = (
+945:                     new_field.remote_field.through._meta.app_label,
+946:                     new_field.remote_field.through._meta.model_name,
+947:                 )
+948:                 if rename_key in self.renamed_models:
+949:                     new_field.remote_field.through = old_field.remote_field.through
+950:             old_field_dec = self.deep_deconstruct(old_field)
+951:             new_field_dec = self.deep_deconstruct(new_field)
+952:             if old_field_dec != new_field_dec:
+953:                 both_m2m = old_field.many_to_many and new_field.many_to_many
+954:                 neither_m2m = not old_field.many_to_many and not new_field.many_to_many
+955:                 if both_m2m or neither_m2m:
+956:                     # Either both fields are m2m or neither is
+957:                     preserve_default = True
+958:                     if (old_field.null and not new_field.null and not new_field.has_default() and
+959:                             not new_field.many_to_many):
+960:                         field = new_field.clone()
+961:                         new_default = self.questioner.ask_not_null_alteration(field_name, model_name)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

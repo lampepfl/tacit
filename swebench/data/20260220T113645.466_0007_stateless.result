@@ -1,0 +1,13 @@
+status: failure
+-- [E007] Type Mismatch Error: -------------------------------------------------
+5 |    val children = root.children.map((e: FileEntry) => e.name).take(20)
+  |                                     ^^^^^^^^^^^^^^^^^^^^^^^^
+  |Found:    (e: library.FileEntry) ->{root} String
+  |Required: library.FileEntry^{root} => String
+  |
+  |Note that capability `root` cannot flow into capture set {}.
+  |
+  |where:    => refers to a root capability created in value children when checking argument to parameter f of method map
+  |
+  | longer explanation available when compiling with `-explain`
+1 error found

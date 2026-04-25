@@ -1,0 +1,35 @@
+status: success
+1054:         if hasattr(value, 'resolve_expression'):
+1055:             kwargs = {'reuse': can_reuse, 'allow_joins': allow_joins}
+1056:             if isinstance(value, F):
+1057:                 kwargs['simple_col'] = simple_col
+1058:             value = value.resolve_expression(self, **kwargs)
+1059:         elif isinstance(value, (list, tuple)):
+1060:             # The items of the iterable may be expressions and therefore need
+1061:             # to be resolved independently.
+1062:             resolved_values = []
+1063:             for sub_value in value:
+1064:                 if hasattr(sub_value, 'resolve_expression'):
+1065:                     if isinstance(sub_value, F):
+1066:                         resolved_values.append(sub_value.resolve_expression(
+1067:                             self, reuse=can_reuse, allow_joins=allow_joins,
+1068:                             simple_col=simple_col,
+1069:                         ))
+1070:                     else:
+1071:                         resolved_values.append(sub_value.resolve_expression(
+1072:                             self, reuse=can_reuse, allow_joins=allow_joins,
+1073:                         ))
+1074:                 else:
+1075:                     resolved_values.append(sub_value)
+1076:             value = tuple(resolved_values)
+1077:         return value
+1078: 
+1079:     def solve_lookup_type(self, lookup):
+1080:         """
+1081:         Solve the lookup type from the lookup (e.g.: 'foobar__id__icontains').
+1082:         """
+1083:         lookup_splitted = lookup.split(LOOKUP_SEP)
+1084:         if self.annotations:
+1085:             expression, expression_lookups = refs_expression(lookup_splitted, self.annotations)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

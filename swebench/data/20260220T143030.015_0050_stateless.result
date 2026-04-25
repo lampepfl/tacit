@@ -1,0 +1,54 @@
+status: success
+0: import pickle
+1: 
+2: from django import forms
+3: from django.core.exceptions import ValidationError
+4: from django.db import models
+5: from django.test import SimpleTestCase, TestCase
+6: from django.utils.functional import lazy
+7: 
+8: from .models import (
+9:     Bar, Choiceful, Foo, RenamedField, VerboseNameField, Whiz, WhizDelayed,
+10:     WhizIter, WhizIterEmpty,
+11: )
+12: 
+13: 
+14: class Nested:
+15:     class Field(models.Field):
+16:         pass
+17: 
+18: 
+19: class BasicFieldTests(SimpleTestCase):
+20: 
+21:     def test_show_hidden_initial(self):
+22:         """
+23:         Fields with choices respect show_hidden_initial as a kwarg to
+24:         formfield().
+25:         """
+26:         choices = [(0, 0), (1, 1)]
+27:         model_field = models.Field(choices=choices)
+28:         form_field = model_field.formfield(show_hidden_initial=True)
+29:         self.assertTrue(form_field.show_hidden_initial)
+30: 
+31:         form_field = model_field.formfield(show_hidden_initial=False)
+32:         self.assertFalse(form_field.show_hidden_initial)
+33: 
+34:     def test_field_repr(self):
+35:         """
+36:         __repr__() of a field displays its name.
+37:         """
+38:         f = Foo._meta.get_field('a')
+39:         self.assertEqual(repr(f), '<django.db.models.fields.CharField: a>')
+40:         f = models.fields.CharField()
+41:         self.assertEqual(repr(f), '<django.db.models.fields.CharField>')
+42: 
+43:     def test_field_repr_nested(self):
+44:         """__repr__() uses __qualname__ for nested class support."""
+45:         self.assertEqual(repr(Nested.Field()), '<model_fields.tests.Nested.Field>')
+46: 
+47:     def test_field_name(self):
+48:         """
+49:         A defined field name (name="fieldname") is used instead of the model
+50:         model's attribute name (modelname).
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

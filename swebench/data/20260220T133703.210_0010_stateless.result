@@ -1,0 +1,25 @@
+status: success
+124: def compile_json_path(key_transforms, include_root=True):
+125:     path = ['$'] if include_root else []
+126:     for key_transform in key_transforms:
+127:         try:
+128:             num = int(key_transform)
+129:         except ValueError:  # non-integer
+130:             path.append('.')
+131:             path.append(json.dumps(key_transform))
+132:         else:
+133:             path.append('[%s]' % num)
+134:     return ''.join(path)
+135: 
+136: 
+137: class DataContains(PostgresOperatorLookup):
+138:     lookup_name = 'contains'
+139:     postgres_operator = '@>'
+140: 
+141:     def as_sql(self, compiler, connection):
+142:         if not connection.features.supports_json_field_contains:
+143:             raise NotSupportedError(
+144:                 'contains lookup is not supported on this database backend.'
+145:             )
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

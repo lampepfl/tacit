@@ -1,0 +1,14 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = """
+    def to_python(self, value):
+        """
+        Convert the input value into the expected Python data type, raising
+        django.core.exceptions.ValidationError if the data can't be converted.
+        Return the converted value. Subclasses should override this.
+        """
+        if isinstance(value, enum.Enum):
+            return value.value
+        return value
+
+    @cached_property"""

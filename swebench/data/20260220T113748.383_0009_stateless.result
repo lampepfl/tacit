@@ -1,0 +1,23 @@
+status: success
+884:     def tearDown(self):
+885:         shutil.rmtree(self.storage_dir)
+886:         os.umask(self.old_umask)
+887: 
+888:     @override_settings(FILE_UPLOAD_PERMISSIONS=0o654)
+889:     def test_file_upload_permissions(self):
+890:         self.storage = FileSystemStorage(self.storage_dir)
+891:         name = self.storage.save("the_file", ContentFile("data"))
+892:         actual_mode = os.stat(self.storage.path(name))[0] & 0o777
+893:         self.assertEqual(actual_mode, 0o654)
+894: 
+895:     @override_settings(FILE_UPLOAD_PERMISSIONS=None)
+896:     def test_file_upload_default_permissions(self):
+897:         self.storage = FileSystemStorage(self.storage_dir)
+898:         fname = self.storage.save("some_file", ContentFile("data"))
+899:         mode = os.stat(self.storage.path(fname))[0] & 0o777
+900:         self.assertEqual(mode, 0o666 & ~self.umask)
+901: 
+902:     @override_settings(FILE_UPLOAD_DIRECTORY_PERMISSIONS=0o765)
+903:     def test_file_upload_directory_permissions(self):
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

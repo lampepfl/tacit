@@ -1,0 +1,7 @@
+status: success
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15320/repo/tests/custom_lookups/tests.py:562: class SubqueryTransformTests(TestCase):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15320/repo/tests/queries/tests.py:2004: class SubqueryTests(TestCase):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15320/repo/django/db/models/expressions.py:1141: class Subquery(BaseExpression, Combinable):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15320/repo/django/db/models/sql/where.py:249: class SubqueryConstraint:
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

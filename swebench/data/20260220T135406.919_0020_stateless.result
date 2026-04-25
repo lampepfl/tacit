@@ -1,0 +1,35 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = ProcessResult(
+  exitCode = 1,
+  stdout = "",
+  stderr = """Traceback (most recent call last):
+  File "<string>", line 12, in <module>
+    result = validator('////]@N.AN')
+  File "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15202/repo/django/core/validators.py", line 108, in __call__
+    raise ValidationError(self.message, code=self.code, params={'value': value})
+django.core.exceptions.ValidationError: <exception str() failed>
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<string>", line 15, in <module>
+    print(f'ValidationError (CORRECT!): {e.message}')
+                                        ^^^^^^^^^^^
+  File "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15202/repo/django/utils/functional.py", line 150, in __text_cast
+    return func(*self.__args, **self.__kw)
+  File "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15202/repo/django/utils/translation/__init__.py", line 74, in gettext
+    return _trans.gettext(message)
+           ^^^^^^^^^^^^^^
+  File "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15202/repo/django/utils/translation/__init__.py", line 50, in __getattr__
+    if settings.USE_I18N:
+       ^^^^^^^^^^^^^^^^^
+  File "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15202/repo/django/conf/__init__.py", line 89, in __getattr__
+    self._setup(name)
+    ~~~~~~~~~~~^^^^^^
+  File "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15202/repo/django/conf/__init__.py", line 70, in _setup
+    raise ImproperlyConfigured(
+    ...<3 lines>...
+        % (desc, ENVIRONMENT_VARIABLE))
+django.core.exceptions.ImproperlyConfigured: Requested setting USE_I18N, but settings are not configured. You must either define the environment variable DJANGO_SETTINGS_MODULE or call settings.configure() before accessing settings."""
+)

@@ -1,0 +1,19 @@
+status: success
+templatetags
+middleware
+forms
+core
+test
+bin
+dispatch
+template
+utils
+contrib
+http
+urls
+db
+views
+conf
+apps
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

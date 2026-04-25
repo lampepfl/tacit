@@ -1,0 +1,52 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = """import datetime
+import posixpath
+
+from django import forms
+from django.core import checks
+from django.core.files.base import File
+from django.core.files.images import ImageFile
+from django.core.files.storage import default_storage
+from django.db.models import signals
+from django.db.models.fields import Field
+from django.utils.translation import gettext_lazy as _
+
+
+class FieldFile(File):
+    def __init__(self, instance, field, name):
+        super().__init__(None, name)
+        self.instance = instance
+        self.field = field
+        self.storage = field.storage
+        self._committed = True
+
+    def __eq__(self, other):
+        # Older code may be expecting FileField values to be simple strings.
+        # By overriding the == operator, it can remain backwards compatibility.
+        if hasattr(other, 'name'):
+            return self.name == other.name
+        return self.name == other
+
+    def __hash__(self):
+        return hash(self.name)
+
+    # The standard File contains most of the necessary properties, but
+    # FieldFiles can be instantiated without a name, so that needs to
+    # be checked for here.
+
+    def _require_file(self):
+        if not self:
+            raise ValueError("The '%s' attribute has no file associated with it." % self.field.name)
+
+    def _get_file(self):
+        self._require_file()
+        if getattr(self, '_file', None) is None:
+            self._file = self.storage.open(self.name, 'rb')
+        return self._file
+
+    def _set_file(self, file):
+        self._file = file
+
+    def _del_file(self):
+...

@@ -1,0 +1,44 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = List(
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12589/repo/django/db/models/expressions.py",
+    lineNumber = 346,
+    line = "    def get_group_by_cols(self, alias=None):"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12589/repo/django/db/models/expressions.py",
+    lineNumber = 351,
+    line = "            cols.extend(source.get_group_by_cols())"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12589/repo/django/db/models/expressions.py",
+    lineNumber = 574,
+    line = "    def get_group_by_cols(self, alias=None):"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12589/repo/django/db/models/expressions.py",
+    lineNumber = 699,
+    line = "    def get_group_by_cols(self, alias=None):"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12589/repo/django/db/models/expressions.py",
+    lineNumber = 724,
+    line = "    def get_group_by_cols(self, alias=None):"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12589/repo/django/db/models/expressions.py",
+    lineNumber = 783,
+    line = "    def get_group_by_cols(self, alias=None):"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12589/repo/django/db/models/expressions.py",
+    lineNumber = 822,
+    line = "    def get_group_by_cols(self, alias=None):"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12589/repo/django/db/models/expressions.py",
+    lineNumber = 922,
+    line = "    def get_group_by_cols(self, alias=None):"
+  ),
+...

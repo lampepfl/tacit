@@ -1,0 +1,24 @@
+status: success
+180:         self.select = ()
+181:         self.where = where()
+182:         self.where_class = where
+183:         # The group_by attribute can have one of the following forms:
+184:         #  - None: no group by at all in the query
+185:         #  - A tuple of expressions: group by (at least) those expressions.
+186:         #    String refs are also allowed for now.
+187:         #  - True: group by all select fields of the model
+188:         # See compiler.get_group_by() for details.
+189:         self.group_by = None
+190:         self.order_by = ()
+191:         self.low_mark, self.high_mark = 0, None  # Used for offset/limit
+192:         self.distinct = False
+193:         self.distinct_fields = ()
+194:         self.select_for_update = False
+195:         self.select_for_update_nowait = False
+196:         self.select_for_update_skip_locked = False
+197:         self.select_for_update_of = ()
+198: 
+199:         self.select_related = False
+200:         # Arbitrary limit for select_related to prevents infinite recursion.
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,8 @@
+status: failure
+-- [E039] Reference Error: -----------------------------------------------------
+3 |    println("Starting...")
+  |                          ^
+  |forward reference to given_IOCapability (defined on line 6) extends over the definition of step1 (on line 4)
+  |
+  | longer explanation available when compiling with `-explain`
+1 error found

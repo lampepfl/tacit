@@ -1,0 +1,25 @@
+status: success
+79:     def _make_hash_value(self, user, timestamp):
+80:         """
+81:         Hash the user's primary key and some user state that's sure to change
+82:         after a password reset to produce a token that invalidated when it's
+83:         used:
+84:         1. The password field will change upon a password reset (even if the
+85:            same password is chosen, due to password salting).
+86:         2. The last_login field will usually be updated very shortly after
+87:            a password reset.
+88:         Failing those things, settings.PASSWORD_RESET_TIMEOUT eventually
+89:         invalidates the token.
+90: 
+91:         Running this data through salted_hmac() prevents password cracking
+92:         attempts using the reset token, provided the secret isn't compromised.
+93:         """
+94:         # Truncate microseconds so that tokens are consistent even if the
+95:         # database doesn't support microseconds.
+96:         login_timestamp = '' if user.last_login is None else user.last_login.replace(microsecond=0, tzinfo=None)
+97:         email_field = getattr(user, 'email', '') or ''
+98:         return str(user.pk) + user.password + str(login_timestamp) + str(timestamp) + email_field
+99: 
+100:     def _num_seconds(self, dt):
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

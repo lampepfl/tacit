@@ -1,0 +1,54 @@
+status: success
+1296:                 )
+1297:                 seen_to = sum(
+1298:                     to_model == getattr(field.remote_field, 'model', None)
+1299:                     for field in self.remote_field.through._meta.fields
+1300:                 )
+1301: 
+1302:                 if seen_from > 1 and not self.remote_field.through_fields:
+1303:                     errors.append(
+1304:                         checks.Error(
+1305:                             ("The model is used as an intermediate model by "
+1306:                              "'%s', but it has more than one foreign key "
+1307:                              "from '%s', which is ambiguous. You must specify "
+1308:                              "which foreign key Django should use via the "
+1309:                              "through_fields keyword argument.") % (self, from_model_name),
+1310:                             hint=(
+1311:                                 'If you want to create a recursive relationship, '
+1312:                                 'use ForeignKey("%s", symmetrical=False, through="%s").'
+1313:                             ) % (
+1314:                                 RECURSIVE_RELATIONSHIP_CONSTANT,
+1315:                                 relationship_model_name,
+1316:                             ),
+1317:                             obj=self,
+1318:                             id='fields.E334',
+1319:                         )
+1320:                     )
+1321: 
+1322:                 if seen_to > 1 and not self.remote_field.through_fields:
+1323:                     errors.append(
+1324:                         checks.Error(
+1325:                             "The model is used as an intermediate model by "
+1326:                             "'%s', but it has more than one foreign key "
+1327:                             "to '%s', which is ambiguous. You must specify "
+1328:                             "which foreign key Django should use via the "
+1329:                             "through_fields keyword argument." % (self, to_model_name),
+1330:                             hint=(
+1331:                                 'If you want to create a recursive relationship, '
+1332:                                 'use ForeignKey("%s", symmetrical=False, through="%s").'
+1333:                             ) % (
+1334:                                 RECURSIVE_RELATIONSHIP_CONSTANT,
+1335:                                 relationship_model_name,
+1336:                             ),
+1337:                             obj=self,
+1338:                             id='fields.E335',
+1339:                         )
+1340:                     )
+1341: 
+1342:                 if seen_from == 0 or seen_to == 0:
+1343:                     errors.append(
+1344:                         checks.Error(
+1345:                             "The model is used as an intermediate model by "
+1346:                             "'%s', but it does not have a foreign key to '%s' or '%s'." % (
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

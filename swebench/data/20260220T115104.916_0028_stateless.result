@@ -1,0 +1,14 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = List(
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11019/repo/tests/forms_tests/tests/test_media.py",
+    lineNumber = 538,
+    line = "                self.assertEqual(Media.merge(list1, list2), expected)"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11019/repo/tests/forms_tests/tests/test_media.py",
+    lineNumber = 543,
+    line = "            self.assertEqual(Media.merge([1, 2], [2, 1]), [1, 2])"
+  )
+)

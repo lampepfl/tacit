@@ -1,0 +1,28 @@
+status: success
+test_charfield.py
+test_promises.py
+models.py
+test_field_flags.py
+test_filepathfield.py
+test_floatfield.py
+__init__.py
+test_slugfield.py
+test_integerfield.py
+test_foreignkey.py
+test_filefield.py
+test_datetimefield.py
+test_textfield.py
+test_booleanfield.py
+test_binaryfield.py
+test_autofield.py
+test_decimalfield.py
+test_genericipaddressfield.py
+4x8.png
+8x4.png
+test_manytomanyfield.py
+tests.py
+test_imagefield.py
+test_uuid.py
+test_durationfield.py
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

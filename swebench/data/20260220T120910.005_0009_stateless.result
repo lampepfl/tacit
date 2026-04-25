@@ -1,0 +1,33 @@
+status: success
+254: 
+255:     def test_serialize_enums(self):
+256:         class TextEnum(enum.Enum):
+257:             A = 'a-value'
+258:             B = 'value-b'
+259: 
+260:         class BinaryEnum(enum.Enum):
+261:             A = b'a-value'
+262:             B = b'value-b'
+263: 
+264:         class IntEnum(enum.IntEnum):
+265:             A = 1
+266:             B = 2
+267: 
+268:         self.assertSerializedResultEqual(
+269:             TextEnum.A,
+270:             ("migrations.test_writer.TextEnum('a-value')", {'import migrations.test_writer'})
+271:         )
+272:         self.assertSerializedResultEqual(
+273:             BinaryEnum.A,
+274:             ("migrations.test_writer.BinaryEnum(b'a-value')", {'import migrations.test_writer'})
+275:         )
+276:         self.assertSerializedResultEqual(
+277:             IntEnum.B,
+278:             ("migrations.test_writer.IntEnum(2)", {'import migrations.test_writer'})
+279:         )
+280: 
+281:         field = models.CharField(default=TextEnum.B, choices=[(m.value, m) for m in TextEnum])
+282:         string = MigrationWriter.serialize(field)[0]
+283:         self.assertEqual(
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,4 @@
+status: success
+Line 1142:     def _constraint_names(self, model, column_names=None, unique=None,
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

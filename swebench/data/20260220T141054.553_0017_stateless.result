@@ -1,0 +1,88 @@
+status: success
+515:         sql = constraint.remove_sql(model, self)
+516:         if sql:
+517:             self.execute(sql)
+518: 
+519:     def alter_unique_together(self, model, old_unique_together, new_unique_together):
+520:         """
+521:         Deal with a model changing its unique_together. The input
+522:         unique_togethers must be doubly-nested, not the single-nested
+523:         ["foo", "bar"] format.
+524:         """
+525:         olds = {tuple(fields) for fields in old_unique_together}
+526:         news = {tuple(fields) for fields in new_unique_together}
+527:         # Deleted uniques
+528:         for fields in olds.difference(news):
+529:             self._delete_composed_index(
+530:                 model,
+531:                 fields,
+532:                 {"unique": True, "primary_key": False},
+533:                 self.sql_delete_unique,
+534:             )
+535:         # Created uniques
+536:         for field_names in news.difference(olds):
+537:             fields = [model._meta.get_field(field) for field in field_names]
+538:             self.execute(self._create_unique_sql(model, fields))
+539: 
+540:     def alter_index_together(self, model, old_index_together, new_index_together):
+541:         """
+542:         Deal with a model changing its index_together. The input
+543:         index_togethers must be doubly-nested, not the single-nested
+544:         ["foo", "bar"] format.
+545:         """
+546:         olds = {tuple(fields) for fields in old_index_together}
+547:         news = {tuple(fields) for fields in new_index_together}
+548:         # Deleted indexes
+549:         for fields in olds.difference(news):
+550:             self._delete_composed_index(
+551:                 model,
+552:                 fields,
+553:                 {"index": True, "unique": False},
+554:                 self.sql_delete_index,
+555:             )
+556:         # Created indexes
+557:         for field_names in news.difference(olds):
+558:             fields = [model._meta.get_field(field) for field in field_names]
+559:             self.execute(self._create_index_sql(model, fields=fields, suffix="_idx"))
+560: 
+561:     def _delete_composed_index(self, model, fields, constraint_kwargs, sql):
+562:         meta_constraint_names = {
+563:             constraint.name for constraint in model._meta.constraints
+564:         }
+565:         meta_index_names = {constraint.name for constraint in model._meta.indexes}
+566:         columns = [model._meta.get_field(field).column for field in fields]
+567:         constraint_names = self._constraint_names(
+568:             model,
+569:             columns,
+570:             exclude=meta_constraint_names | meta_index_names,
+571:             **constraint_kwargs,
+572:         )
+573:         if (
+574:             constraint_kwargs.get("unique") is True
+575:             and constraint_names
+576:             and self.connection.features.allows_multiple_constraints_on_same_fields
+577:         ):
+578:             # Constraint matching the unique_together name.
+579:             default_name = str(
+580:                 self._unique_constraint_name(model._meta.db_table, columns, quote=False)
+581:             )
+582:             if default_name in constraint_names:
+583:                 constraint_names = [default_name]
+584:         if len(constraint_names) != 1:
+585:             raise ValueError(
+586:                 "Found wrong number (%s) of constraints for %s(%s)"
+587:                 % (
+588:                     len(constraint_names),
+589:                     model._meta.db_table,
+590:                     ", ".join(columns),
+591:                 )
+592:             )
+593:         self.execute(self._delete_constraint_sql(sql, model, constraint_names[0]))
+594: 
+595:     def alter_db_table(self, model, old_db_table, new_db_table):
+596:         """Rename the table a model points to."""
+597:         if old_db_table == new_db_table or (
+598:             self.connection.features.ignores_table_name_case
+599:             and old_db_table.lower() == new_db_table.lower()
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

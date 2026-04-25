@@ -1,0 +1,24 @@
+status: success
+Found 150 matches
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13033/repo/django/db/models/options.py:228:                     if f.name == query or f.attname == query
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13033/repo/django/db/models/options.py:531:             # be able to fetch a field by attname. In the case of a concrete
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13033/repo/django/db/models/options.py:534:                 res[field.attname] = field
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13033/repo/django/db/models/options.py:546:             # be able to fetch a field by attname. In the case of a concrete
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13033/repo/django/db/models/options.py:549:                 res[field.attname] = field
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13033/repo/django/db/models/query.py:59:         init_list = [f[0].target.attname
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13033/repo/django/db/models/query.py:64:                 field.attname
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13033/repo/django/db/models/query.py:66:                 queryset.model._meta.get_field(from_field).attname
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13033/repo/django/db/models/query.py:500:                             setattr(obj_with_pk, field.attname, result)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13033/repo/django/db/models/query.py:513:                         setattr(obj_without_pk, field.attname, result)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13033/repo/django/db/models/query.py:549:                     attr = getattr(obj, field.attname)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13033/repo/django/db/models/query.py:556:                 update_kwargs[field.attname] = case_statement
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13033/repo/django/db/models/query.py:1106:                 (field.name, field.attname) if hasattr(field, 'attname') else (field.name,)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13033/repo/django/db/models/query.py:1425:         model_init_names = [f.attname for f in model_init_fields]
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13033/repo/django/db/models/query.py:1479:             if self.model._meta.pk.attname not in model_init_names:
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13033/repo/django/db/models/query.py:1547:             name, column = field.get_attname_column()
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13033/repo/django/db/models/query.py:1928:         #  - init_list: the field attnames fetched from the database. For
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13033/repo/django/db/models/query.py:1929:         #    deferred models this isn't the same as all attnames of the
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13033/repo/django/db/models/query.py:1942:                 f[0].target.attname for f in select[self.cols_start:self.cols_end]
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13033/repo/django/db/models/query.py:1946:             attname_indexes = {select[idx][0].target.attname: idx for idx in select_fields}
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

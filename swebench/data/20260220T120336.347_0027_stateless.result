@@ -1,0 +1,4 @@
+status: success
+Updated static.py - removed duplicate prefix addition
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

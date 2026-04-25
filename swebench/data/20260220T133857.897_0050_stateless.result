@@ -1,0 +1,28 @@
+status: success
+=== ModelMultipleChoiceField default_error_messages ===
+1297: class ModelMultipleChoiceField(ModelChoiceField):
+1298:     """A MultipleChoiceField whose choices are a model QuerySet."""
+1299:     widget = SelectMultiple
+1300:     hidden_widget = MultipleHiddenInput
+1301:     default_error_messages = {
+1302:         'invalid_list': _('Enter a list of values.'),
+1303:         'invalid_choice': _('Select a valid choice. %(value)s is not one of the'
+1304:                             ' available choices.'),
+1305:         'invalid_pk_value': _('“%(pk)s” is not a valid value.')
+1306:     }
+1307: 
+1308:     def __init__(self, queryset, **kwargs):
+
+=== ModelMultipleChoiceField._check_values (invalid_choice part) ===
+1353:             except (ValueError, TypeError):
+1354:                 raise ValidationError(
+1355:                     self.error_messages['invalid_pk_value'],
+1356:                     code='invalid_pk_value',
+1357:                     params={'pk': pk},
+1358:                 )
+1359:         qs = self.queryset.filter(**{'%s__in' % key: value})
+1360:         pks = {str(getattr(o, key)) for o in qs}
+1361:         for val in value:
+1362:             if str(val) not in pks:
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

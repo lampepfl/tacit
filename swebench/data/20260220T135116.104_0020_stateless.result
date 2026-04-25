@@ -1,0 +1,49 @@
+status: success
+176:         if not self.expressions:
+177:             return None
+178:         index_expressions = []
+179:         for expression in self.expressions:
+180:             index_expression = IndexExpression(expression)
+181:             index_expression.set_wrapper_classes(schema_editor.connection)
+182:             index_expressions.append(index_expression)
+183:         return ExpressionList(*index_expressions).resolve_expression(
+184:             Query(model, alias_cols=False),
+185:         )
+186: 
+187:     def constraint_sql(self, model, schema_editor):
+188:         fields = [model._meta.get_field(field_name) for field_name in self.fields]
+189:         include = [model._meta.get_field(field_name).column for field_name in self.include]
+190:         condition = self._get_condition_sql(model, schema_editor)
+191:         expressions = self._get_index_expressions(model, schema_editor)
+192:         return schema_editor._unique_sql(
+193:             model, fields, self.name, condition=condition,
+194:             deferrable=self.deferrable, include=include,
+195:             opclasses=self.opclasses, expressions=expressions,
+196:         )
+197: 
+198:     def create_sql(self, model, schema_editor):
+199:         fields = [model._meta.get_field(field_name) for field_name in self.fields]
+200:         include = [model._meta.get_field(field_name).column for field_name in self.include]
+201:         condition = self._get_condition_sql(model, schema_editor)
+202:         expressions = self._get_index_expressions(model, schema_editor)
+203:         return schema_editor._create_unique_sql(
+204:             model, fields, self.name, condition=condition,
+205:             deferrable=self.deferrable, include=include,
+206:             opclasses=self.opclasses, expressions=expressions,
+207:         )
+208: 
+209:     def remove_sql(self, model, schema_editor):
+210:         condition = self._get_condition_sql(model, schema_editor)
+211:         include = [model._meta.get_field(field_name).column for field_name in self.include]
+212:         expressions = self._get_index_expressions(model, schema_editor)
+213:         return schema_editor._delete_unique_sql(
+214:             model, self.name, condition=condition, deferrable=self.deferrable,
+215:             include=include, opclasses=self.opclasses, expressions=expressions,
+216:         )
+217: 
+218:     def __repr__(self):
+219:         return '<%s:%s%s%s%s%s%s%s>' % (
+220:             self.__class__.__qualname__,
+221:             '' if not self.fields else ' fields=%s' % repr(self.fields),
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

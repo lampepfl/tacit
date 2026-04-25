@@ -1,0 +1,23 @@
+status: success
+1374:                 )
+1375:             )
+1376: 
+1377:     def _not_support_combined_queries(self, operation_name):
+1378:         if self.query.combinator:
+1379:             raise NotSupportedError(
+1380:                 'Calling QuerySet.%s() after %s() is not supported.'
+1381:                 % (operation_name, self.query.combinator)
+1382:             )
+1383: 
+1384: 
+1385: class InstanceCheckMeta(type):
+1386:     def __instancecheck__(self, instance):
+1387:         return isinstance(instance, QuerySet) and instance.query.is_empty()
+1388: 
+1389: 
+1390: class EmptyQuerySet(metaclass=InstanceCheckMeta):
+1391:     """
+1392:     Marker class to checking if a queryset is empty by .none():
+1393:         isinstance(qs.none(), EmptyQuerySet) -> True
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

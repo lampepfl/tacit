@@ -1,0 +1,14 @@
+status: success
+1585:     """
+1586:     empty_strings_allowed = False
+1587:     default_error_messages = {
+1588:         'invalid': _("'%(value)s' value has an invalid format. It must be in "
+1589:                      "[DD] [[HH:]MM:]ss[.uuuuuu] format.")
+1590:     }
+1591:     description = _("Duration")
+1592: 
+1593:     def get_internal_type(self):
+1594:         return "DurationField"
+1595: 
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

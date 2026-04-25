@@ -1,0 +1,13 @@
+status: success
+(    def get_connection_params(self):,171)
+(        # Always allow the underlying SQLite connection to be shareable,184)
+(        # default in pysqlite and it cannot be changed once a connection is,188)
+(    def get_new_connection(self, conn_params):,202)
+(        conn = Database.connect(**conn_params),203)
+(    def init_connection_state(self):,253)
+(        return self.connection.cursor(factory=SQLiteCursorWrapper),257)
+(        # If database is in memory, closing the connection destroys the,262)
+(            # See Modules/_sqlite/connection.c.,281)
+(            self.connection.isolation_level = level,286)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

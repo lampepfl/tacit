@@ -1,0 +1,4 @@
+status: success
+List(options.py, signals.py, enums.py, query.py, constants.py, expressions.py, __init__.py, lookups.py, indexes.py, utils.py, aggregates.py, deletion.py, functions, fields, constraints.py, manager.py, query_utils.py, base.py, sql)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

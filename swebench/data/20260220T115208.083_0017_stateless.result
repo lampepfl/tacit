@@ -1,0 +1,4 @@
+status: success
+List(library.RealFileSystem$FileEntryImpl@483f749f)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

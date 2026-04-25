@@ -1,0 +1,5 @@
+status: success
+31:     ForeignObjectRel, ManyToManyRel, ManyToOneRel, OneToOneRel,
+1161:     rel_class = ManyToManyRel
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,17 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = """        """
+        Yield all files that need to be watched, including module files and
+        files within globs.
+        """
+        yield from iter_all_python_module_files()
+        yield from self.extra_files
+        if include_globs:
+            for directory, patterns in self.directory_globs.items():
+                for pattern in patterns:
+                    yield from directory.glob(pattern)
+
+    def wait_for_apps_ready(self, app_reg, django_main_thread):
+        """
+        Wait until Django reports that the apps have been loaded. If the given
+        thread has terminated before the apps are ready, then a SyntaxError or"""

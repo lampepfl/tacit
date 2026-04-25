@@ -1,0 +1,5 @@
+status: success
+Open parens: 278, Close parens: 278
+Open braces: 5, Close braces: 5
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,11 @@
+status: success
+Char at 29243: 'd'
+Substring from 29243 to 29343:
+def get_group_by_cols(self, alias=None):
+        return [self]
+
+
+class ExpressionList(Func):
+    """
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,43 @@
+status: success
+451: 
+452: @Field.register_lookup
+453: class Range(FieldGetDbPrepValueIterableMixin, BuiltinLookup):
+454:     lookup_name = 'range'
+455: 
+456:     def get_rhs_op(self, connection, rhs):
+457:         return "BETWEEN %s AND %s" % (rhs[0], rhs[1])
+458: 
+459: 
+460: @Field.register_lookup
+461: class IsNull(BuiltinLookup):
+462:     lookup_name = 'isnull'
+463:     prepare_rhs = False
+464: 
+465:     def as_sql(self, compiler, connection):
+466:         sql, params = compiler.compile(self.lhs)
+467:         if self.rhs:
+468:             return "%s IS NULL" % sql, params
+469:         else:
+470:             return "%s IS NOT NULL" % sql, params
+471: 
+472: 
+473: @Field.register_lookup
+474: class Regex(BuiltinLookup):
+475:     lookup_name = 'regex'
+476:     prepare_rhs = False
+477: 
+478:     def as_sql(self, compiler, connection):
+479:         if self.lookup_name in connection.operators:
+480:             return super().as_sql(compiler, connection)
+481:         else:
+482:             lhs, lhs_params = self.process_lhs(compiler, connection)
+483:             rhs, rhs_params = self.process_rhs(compiler, connection)
+484:             sql_template = connection.ops.regex_lookup(self.lookup_name)
+485:             return sql_template % (lhs, rhs), lhs_params + rhs_params
+486: 
+487: 
+488: @Field.register_lookup
+489: class IRegex(Regex):
+490:     lookup_name = 'iregex'
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

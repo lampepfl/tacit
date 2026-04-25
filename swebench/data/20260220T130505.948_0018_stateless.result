@@ -1,0 +1,33 @@
+status: success
+# Skip members of the select clause that are already included
+            # by reference.
+            if expr in ref_sources:
+                continue
+            cols = expr.get_group_by_cols()
+            for col in cols:
+                expressions.append(col)
+        for expr, (sql, params, is_ref) in order_by:
+            # Skip References to the select clause, as all expressions in the
+            # select clause are already part of the group by.
+            if not is_ref:
+                expressions.extend(expr.get_group_by_cols())
+        having_group_by = self.having.get_group_by_cols() if self.having else ()
+        for expr in having_group_by:
+            expressions.append(expr)
+        result = []
+        seen = set()
+        expressions = self.collapse_group_by(expressions, having_group_by)
+
+        for expr in expressions:
+            sql, params = self.compile(expr)
+            params_hash = make_hashable(params)
+            if (sql, params_hash) not in seen:
+                result.append((sql, params))
+                seen.add((sql, params_hash))
+        return result
+
+    def collapse_group_by(self, expressions, having):
+        # If the DB can group by primary key, then group by the primary key of
+        # query's main model. Note that for PostgreSQL the GROUP BY clause must
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

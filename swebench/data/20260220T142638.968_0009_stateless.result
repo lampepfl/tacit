@@ -1,0 +1,4 @@
+status: success
+322: class StatReloader(BaseReloader):
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

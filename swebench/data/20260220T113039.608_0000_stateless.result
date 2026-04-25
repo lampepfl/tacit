@@ -1,0 +1,4 @@
+status: success
+List(/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/astropy__astropy-14365/repo/astropy/io/ascii/qdp.py, /Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/astropy__astropy-14365/repo/astropy/io/ascii/tests/test_qdp.py)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

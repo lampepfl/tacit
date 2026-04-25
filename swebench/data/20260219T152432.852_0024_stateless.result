@@ -1,0 +1,43 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = ProcessResult(
+  exitCode = 1,
+  stdout = """Obtaining file:///Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260219_162036/workspace/astropy__astropy-12907/repo
+  Checking if build backend supports build_editable: started
+  Checking if build backend supports build_editable: finished with status 'done'
+  Preparing editable metadata (pyproject.toml): started
+  Preparing editable metadata (pyproject.toml): finished with status 'error'""",
+  stderr = """  error: subprocess-exited-with-error
+  
+  × Preparing editable metadata (pyproject.toml) did not run successfully.
+  │ exit code: 1
+  ╰─> [36 lines of output]
+      Traceback (most recent call last):
+        File "/Users/tacit/Work/SafeExecMCP/bench/.venv/lib/python3.14/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py", line 389, in <module>
+          main()
+          ~~~~^^
+        File "/Users/tacit/Work/SafeExecMCP/bench/.venv/lib/python3.14/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py", line 373, in main
+          json_out["return_val"] = hook(**hook_input["kwargs"])
+                                   ~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+        File "/Users/tacit/Work/SafeExecMCP/bench/.venv/lib/python3.14/site-packages/pip/_vendor/pyproject_hooks/_in_process/_in_process.py", line 209, in prepare_metadata_for_build_editable
+          return hook(metadata_directory, config_settings)
+        File "/Users/tacit/Work/SafeExecMCP/bench/.venv/lib/python3.14/site-packages/setuptools/build_meta.py", line 486, in prepare_metadata_for_build_editable
+          return self.prepare_metadata_for_build_wheel(
+                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+              metadata_directory, config_settings
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+          )
+          ^
+        File "/Users/tacit/Work/SafeExecMCP/bench/.venv/lib/python3.14/site-packages/setuptools/build_meta.py", line 380, in prepare_metadata_for_build_wheel
+          self.run_setup()
+          ~~~~~~~~~~~~~~^^
+        File "/Users/tacit/Work/SafeExecMCP/bench/.venv/lib/python3.14/site-packages/setuptools/build_meta.py", line 317, in run_setup
+          exec(code, locals())
+          ~~~~^^^^^^^^^^^^^^^^
+        File "<string>", line 68, in <module>
+        File "/Users/tacit/Work/SafeExecMCP/bench/.venv/lib/python3.14/site-packages/extension_helpers/_setup_helpers.py", line 68, in get_extensions
+          for setuppkg in iter_setup_packages(srcdir, packages):
+                          ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+        File "/Users/tacit/Work/SafeExecMCP/bench/.venv/lib/python3.14/site-packages/extension_helpers/_setup_helpers.py", line 179, in iter_setup_packages
+          module = import_file(setup_package, name=packagename + ".setup_package")
+...

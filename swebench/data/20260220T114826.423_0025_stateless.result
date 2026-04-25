@@ -1,0 +1,43 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = List(
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-10924/repo/tests/expressions_case/models.py",
+    lineNumber = 23,
+    line = "    file_path = models.FilePathField(null=True)"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-10924/repo/tests/model_forms/models.py",
+    lineNumber = 147,
+    line = "    path = models.FilePathField(path=os.path.dirname(__file__), match='models.py', blank=True)"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-10924/repo/tests/model_forms/tests.py",
+    lineNumber = 2119,
+    line = "        \"\"\"FilePathField(blank=True) includes the empty option.\"\"\""
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-10924/repo/tests/bulk_create/models.py",
+    lineNumber = 87,
+    line = "    file_path_field = models.FilePathField(path='/tmp', null=True, default='file.txt')"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-10924/repo/tests/forms_tests/field_tests/test_filepathfield.py",
+    lineNumber = 3,
+    line = "from django.forms import FilePathField, ValidationError"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-10924/repo/tests/forms_tests/field_tests/test_filepathfield.py",
+    lineNumber = 22,
+    line = "class FilePathFieldTest(SimpleTestCase):"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-10924/repo/tests/forms_tests/field_tests/test_filepathfield.py",
+    lineNumber = 45,
+    line = "        f = FilePathField(path=self.path)"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-10924/repo/tests/forms_tests/field_tests/test_filepathfield.py",
+    lineNumber = 52,
+    line = "        f = FilePathField(path=self.path)"
+...

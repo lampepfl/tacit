@@ -1,0 +1,103 @@
+status: success
+"""
+SQLite backend for the sqlite3 module in the standard library.
+"""
+import datetime
+import decimal
+import functools
+import hashlib
+import math
+import operator
+import re
+import statistics
+import warnings
+from itertools import chain
+from sqlite3 import dbapi2 as Database
+
+import pytz
+
+from django.core.exceptions import ImproperlyConfigured
+from django.db import utils
+from django.db.backends import utils as backend_utils
+from django.db.backends.base.base import BaseDatabaseWrapper
+from django.utils import timezone
+from django.utils.asyncio import async_unsafe
+from django.utils.dateparse import parse_datetime, parse_time
+from django.utils.duration import duration_microseconds
+from django.utils.regex_helper import _lazy_re_compile
+
+from .client import DatabaseClient                          # isort:skip
+from .creation import DatabaseCreation                      # isort:skip
+from .features import DatabaseFeatures                      # isort:skip
+from .introspection import DatabaseIntrospection            # isort:skip
+from .operations import DatabaseOperations                  # isort:skip
+from .schema import DatabaseSchemaEditor                    # isort:skip
+
+
+def decoder(conv_func):
+    """
+    Convert bytestrings from Python's sqlite3 interface to a regular string.
+    """
+    return lambda s: conv_func(s.decode())
+
+
+def none_guard(func):
+    """
+    Decorator that returns None if any of the arguments to the decorated
+    function are None. Many SQL functions return NULL if any of their arguments
+    are NULL. This decorator simplifies the implementation of this for the
+    custom functions registered below.
+    """
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        return None if None in args else func(*args, **kwargs)
+    return wrapper
+
+
+def list_aggregate(function):
+    """
+    Return an aggregate class that accumulates values in a list and applies
+    the provided function to the data.
+    """
+    return type('ListAggregate', (list,), {'finalize': function, 'step': list.append})
+
+
+def check_sqlite_version():
+    if Database.sqlite_version_info < (3, 8, 3):
+        raise ImproperlyConfigured('SQLite 3.8.3 or later is required (found %s).' % Database.sqlite_version)
+
+
+check_sqlite_version()
+
+Database.register_converter("bool", b'1'.__eq__)
+Database.register_converter("time", decoder(parse_time))
+Database.register_converter("datetime", decoder(parse_datetime))
+Database.register_converter("timestamp", decoder(parse_datetime))
+Database.register_converter("TIMESTAMP", decoder(parse_datetime))
+
+Database.register_adapter(decimal.Decimal, str)
+
+
+class DatabaseWrapper(BaseDatabaseWrapper):
+    vendor = 'sqlite'
+    display_name = 'SQLite'
+    # SQLite doesn't actually support most of these types, but it "does the right
+    # thing" given more verbose field definitions, so leave them as is so that
+    # schema inspection is more useful.
+    data_types = {
+        'AutoField': 'integer',
+        'BigAutoField': 'integer',
+        'BinaryField': 'BLOB',
+        'BooleanField': 'bool',
+        'CharField': 'varchar(%(max_length)s)',
+        'DateField': 'date',
+        'DateTimeField': 'datetime',
+        'DecimalField': 'decimal',
+        'DurationField': 'bigint',
+        'FileField': 'varchar(%(max_length)s)',
+        'FilePathField': 'varchar(%(max_length)s)',
+        'FloatField': 'real',
+        'IntegerField': 'integer',
+        'BigIntegerField': 'bigint',
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

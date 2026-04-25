@@ -1,0 +1,52 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = """        if self.null and value in self.empty_values:
+            return None
+        if value in (True, False):
+            # 1/0 are equal to True/False. bool() converts former to latter.
+            return bool(value)
+        if value in ('t', 'True', '1'):
+            return True
+        if value in ('f', 'False', '0'):
+            return False
+        raise exceptions.ValidationError(
+            self.error_messages['invalid_nullable' if self.null else 'invalid'],
+            code='invalid',
+            params={'value': value},
+        )
+
+    def get_prep_value(self, value):
+        value = super().get_prep_value(value)
+        if value is None:
+            return None
+        return self.to_python(value)
+
+    def formfield(self, **kwargs):
+        if self.choices is not None:
+            include_blank = not (self.has_default() or 'initial' in kwargs)
+            defaults = {'choices': self.get_choices(include_blank=include_blank)}
+        else:
+            form_class = forms.NullBooleanField if self.null else forms.BooleanField
+            # In HTML checkboxes, 'required' means "must be checked" which is
+            # different from the choices case ("must select some value").
+            # required=False allows unchecked checkboxes.
+            defaults = {'form_class': form_class, 'required': False}
+        return super().formfield(**{**defaults, **kwargs})
+
+
+class CharField(Field):
+    description = _("String (up to %(max_length)s)")
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.validators.append(validators.MaxLengthValidator(self.max_length))
+
+    def check(self, **kwargs):
+        return [
+            *super().check(**kwargs),
+            *self._check_max_length_attribute(**kwargs),
+        ]
+
+    def _check_max_length_attribute(self, **kwargs):
+        if self.max_length is None:
+            return ["""

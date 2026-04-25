@@ -1,0 +1,12 @@
+status: failure
+-- [E006] Not Found Error: -----------------------------------------------------
+2 |  requestFilePathSystem("/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15695/repo") {
+  |  ^^^^^^^^^^^^^^^^^^^^^
+  |  Not found: requestFilePathSystem
+  |
+  | longer explanation available when compiling with `-explain`
+-- [E172] Type Error: ----------------------------------------------------------
+3 |    given fs: FileSystem = summon[FileSystem]
+  |                                             ^
+  |No given instance of type library.FileSystem was found for parameter x of method summon in object Predef
+2 errors found

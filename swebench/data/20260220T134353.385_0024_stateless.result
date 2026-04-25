@@ -1,0 +1,6 @@
+status: failure
+-- [E172] Type Error: ----------------------------------------------------------
+2 |  exec("ls", List("."))
+  |                       ^
+  |No given instance of type library.ProcessPermission was found for parameter pp of method exec in trait Interface
+1 error found

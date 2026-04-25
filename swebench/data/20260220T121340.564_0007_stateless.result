@@ -1,0 +1,5 @@
+status: success
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11999/repo/django/db/models/fields/__init__.py:767:                     partialmethod(cls._get_FIELD_display, field=self))
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11999/repo/django/db/models/base.py:941:     def _get_FIELD_display(self, field):
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

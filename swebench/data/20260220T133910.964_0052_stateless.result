@@ -1,0 +1,18 @@
+status: success
+=== ModelMultipleChoiceField._check_values (more context) ===
+1362:             if str(val) not in pks:
+1363:                 raise ValidationError(
+1364:                     self.error_messages['invalid_choice'],
+1365:                     code='invalid_choice',
+1366:                     params={'value': val},
+1367:                 )
+1368:         return qs
+1369: 
+1370:     def prepare_value(self, value):
+1371:         if (hasattr(value, '__iter__') and
+1372:                 not isinstance(value, str) and
+1373:                 not hasattr(value, '_meta')):
+1374:             prepare_value = super().prepare_value
+1375:             return [prepare_value(v) for v in value]
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,34 @@
+status: success
+1181:                     "the string at that location.".format(
+1182:                         self._coldefs[col_idx].name,
+1183:                         exc.index[0] if len(exc.index) == 1 else exc.index,
+1184:                         exc.start))
+1185:         else:
+1186:             # Otherwise go ahead and do a direct copy into--if both are type
+1187:             # 'U' we'll handle encoding later
+1188:             input_field = input_field.flatten().view(output_field.dtype)
+1189:             output_field.flat[:] = input_field
+1190: 
+1191:         # Ensure that blanks at the end of each string are
+1192:         # converted to nulls instead of spaces, see Trac #15
+1193:         # and #111
+1194:         _rstrip_inplace(output_field)
+1195: 
+1196:     def _scale_back_ascii(self, col_idx, input_field, output_field):
+1197:         """
+1198:         Convert internal array values back to ASCII table representation.
+1199: 
+1200:         The ``input_field`` is the internal representation of the values, and
+1201:         the ``output_field`` is the character array representing the ASCII
+1202:         output that will be written.
+1203:         """
+1204: 
+1205:         starts = self._coldefs.starts[:]
+1206:         spans = self._coldefs.spans
+1207:         format = self._coldefs[col_idx].format
+1208: 
+1209:         # The the index of the "end" column of the record, beyond
+1210:         # which we can't write
+1211:         end = super().field(-1).itemsize
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

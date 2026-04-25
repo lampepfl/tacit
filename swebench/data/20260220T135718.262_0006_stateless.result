@@ -1,0 +1,83 @@
+status: success
+961:                 columns = self.get_default_columns(
+962:                     start_alias=alias, opts=model._meta, from_parent=opts.model)
+963:                 for col in columns:
+964:                     select_fields.append(len(select))
+965:                     select.append((col, None))
+966:                 klass_info['select_fields'] = select_fields
+967:                 next = requested.get(f.related_query_name(), {})
+968:                 next_klass_infos = self.get_related_selections(
+969:                     select, model._meta, alias, cur_depth + 1,
+970:                     next, restricted)
+971:                 get_related_klass_infos(klass_info, next_klass_infos)
+972: 
+973:             def local_setter(obj, from_obj):
+974:                 # Set a reverse fk object when relation is non-empty.
+975:                 if from_obj:
+976:                     f.remote_field.set_cached_value(from_obj, obj)
+977: 
+978:             def remote_setter(name, obj, from_obj):
+979:                 setattr(from_obj, name, obj)
+980: 
+981:             for name in list(requested):
+982:                 # Filtered relations work only on the topmost level.
+983:                 if cur_depth > 1:
+984:                     break
+985:                 if name in self.query._filtered_relations:
+986:                     fields_found.add(name)
+987:                     f, _, join_opts, joins, _, _ = self.query.setup_joins([name], opts, root_alias)
+988:                     model = join_opts.model
+989:                     alias = joins[-1]
+990:                     from_parent = issubclass(model, opts.model) and model is not opts.model
+991:                     klass_info = {
+992:                         'model': model,
+993:                         'field': f,
+994:                         'reverse': True,
+995:                         'local_setter': local_setter,
+996:                         'remote_setter': partial(remote_setter, name),
+997:                         'from_parent': from_parent,
+998:                     }
+999:                     related_klass_infos.append(klass_info)
+1000:                     select_fields = []
+1001:                     columns = self.get_default_columns(
+1002:                         start_alias=alias, opts=model._meta,
+1003:                         from_parent=opts.model,
+1004:                     )
+1005:                     for col in columns:
+1006:                         select_fields.append(len(select))
+1007:                         select.append((col, None))
+1008:                     klass_info['select_fields'] = select_fields
+1009:                     next_requested = requested.get(name, {})
+1010:                     next_klass_infos = self.get_related_selections(
+1011:                         select, opts=model._meta, root_alias=alias,
+1012:                         cur_depth=cur_depth + 1, requested=next_requested,
+1013:                         restricted=restricted,
+1014:                     )
+1015:                     get_related_klass_infos(klass_info, next_klass_infos)
+1016:             fields_not_found = set(requested).difference(fields_found)
+1017:             if fields_not_found:
+1018:                 invalid_fields = ("'%s'" % s for s in fields_not_found)
+1019:                 raise FieldError(
+1020:                     'Invalid field name(s) given in select_related: %s. '
+1021:                     'Choices are: %s' % (
+1022:                         ', '.join(invalid_fields),
+1023:                         ', '.join(_get_field_choices()) or '(none)',
+1024:                     )
+1025:                 )
+1026:         return related_klass_infos
+1027: 
+1028:     def get_select_for_update_of_arguments(self):
+1029:         """
+1030:         Return a quoted list of arguments for the SELECT FOR UPDATE OF part of
+1031:         the query.
+1032:         """
+1033:         def _get_parent_klass_info(klass_info):
+1034:             concrete_model = klass_info['model']._meta.concrete_model
+1035:             for parent_model, parent_link in concrete_model._meta.parents.items():
+1036:                 parent_list = parent_model._meta.get_parent_list()
+1037:                 yield {
+1038:                     'model': parent_model,
+1039:                     'field': parent_link,
+1040:                     'reverse': False,
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

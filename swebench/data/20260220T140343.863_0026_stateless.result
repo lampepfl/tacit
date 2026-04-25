@@ -1,0 +1,33 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = List(
+  "            expression = ['name', filenames]",
+  "        self._subscribe(directory, '%s:%s' % (prefix, directory), expression)",
+  "",
+  "    def _watch_glob(self, directory, patterns):",
+  "        \"\"\"",
+  "        Watch a directory with a specific glob. If the directory doesn't yet",
+  "        exist, attempt to watch the parent directory and amend the patterns to",
+  "        include this. It's important this method isn't called more than one per",
+  "        directory when updating all subscriptions. Subsequent calls will",
+  "        overwrite the named subscription, so it must include all possible glob",
+  "        expressions.",
+  "        \"\"\"",
+  "        prefix = 'glob'",
+  "        if not directory.exists():",
+  "            if not directory.parent.exists():",
+  "                logger.warning('Unable to watch directory %s as neither it or its parent exist.', directory)",
+  "                return",
+  "            prefix = 'glob-parent-%s' % directory.name",
+  "            patterns = ['%s/%s' % (directory.name, pattern) for pattern in patterns]",
+  "            directory = directory.parent",
+  "",
+  "        expression = ['anyof']",
+  "        for pattern in patterns:",
+  "            expression.append(['match', pattern, 'wholename'])",
+  "        self._subscribe(directory, '%s:%s' % (prefix, directory), expression)",
+  "",
+  "    def watched_roots(self, watched_files):",
+  "        extra_directories = self.directory_globs.keys()",
+  "        watched_file_dirs = [f.parent for f in watched_files]"
+)

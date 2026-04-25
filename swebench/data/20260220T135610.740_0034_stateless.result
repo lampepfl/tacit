@@ -1,0 +1,30 @@
+status: success
+=== Lines 405-430 ===
+    def cached_col(self):
+        from django.db.models.expressions import Col
+        return Col(self.model._meta.db_table, self)
+
+    def select_format(self, compiler, sql, params):
+        """
+        Custom format for select clauses. For example, GIS columns need to be
+        selected as AsText(table.col) on MySQL as the table.col data can't be
+        used by Django.
+        """
+        return sql, params
+
+    def deconstruct(self):
+        """
+        Return enough information to recreate the field as a 4-tuple:
+
+         * The name of the field on the model, if contribute_to_class() has
+           been run.
+         * The import path of the field, including the class, e.g.
+           django.db.models.IntegerField. This should be the most portable
+           version, so less specific may be better.
+         * A list of positional arguments.
+         * A dict of keyword arguments.
+
+        Note that the positional or keyword arguments must contain values of
+        the following types (including inner values of collection types):
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

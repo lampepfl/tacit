@@ -1,0 +1,51 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = """The `requestFileSystem` function in Scala.js is an asynchronous API that requires careful handling due to capture checking in Scala 3. Here's how to use it properly:
+
+## Basic Usage Pattern
+
+```scala
+import org.scalajs.dom
+import scala.scalajs.js
+import scala.scalajs.js.typedarray._
+
+// Define your success and error handlers
+val successHandler: js.Function1[dom.FileSystem, Unit] = 
+  (fs: dom.FileSystem) => {
+    println(s"Got filesystem: ${fs.name}")
+    // Use the filesystem here
+  }
+
+val errorHandler: js.Function1[dom.DOMException, Unit] =
+  (err: dom.DOMException) => {
+    println(s"Error: ${err.message}")
+  }
+
+// Request persistent storage
+dom.window.requestFileSystem(
+  dom.PERSISTENT,
+  5 * 1024 * 1024, // 5MB
+  successHandler,
+  errorHandler
+)
+```
+
+## Common Solutions for Capture Checking Errors
+
+### 1. **Use `js.ThisFunction` for methods that need `this` context**
+```scala
+val successHandler: js.ThisFunction0[dom.FileSystem, Unit] = 
+  (fs: dom.FileSystem) => {
+    println(s"Got filesystem: ${fs.name}")
+  }
+
+dom.window.requestFileSystem(
+  dom.PERSISTENT,
+  1024 * 1024,
+  successHandler,
+  (err: dom.DOMException) => println(s"Error: ${err.message}")
+)
+```
+
+### 2. **Define handlers as `js.Dynamic` to bypass typing**
+...

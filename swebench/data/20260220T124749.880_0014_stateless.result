@@ -1,0 +1,125 @@
+status: success
+79: class Collector:
+80:     def __init__(self, using):
+81:         self.using = using
+82:         # Initially, {model: {instances}}, later values become lists.
+83:         self.data = defaultdict(set)
+84:         # {model: {(field, value): {instances}}}
+85:         self.field_updates = defaultdict(partial(defaultdict, set))
+86:         # {model: {field: {instances}}}
+87:         self.restricted_objects = defaultdict(partial(defaultdict, set))
+88:         # fast_deletes is a list of queryset-likes that can be deleted without
+89:         # fetching the objects into memory.
+90:         self.fast_deletes = []
+91: 
+92:         # Tracks deletion-order dependency for databases without transactions
+93:         # or ability to defer constraint checks. Only concrete model classes
+94:         # should be included, as the dependencies exist only between actual
+95:         # database tables; proxy models are represented here by their concrete
+96:         # parent.
+97:         self.dependencies = defaultdict(set)  # {model: {models}}
+98: 
+99:     def add(self, objs, source=None, nullable=False, reverse_dependency=False):
+100:         """
+101:         Add 'objs' to the collection of objects to be deleted.  If the call is
+102:         the result of a cascade, 'source' should be the model that caused it,
+103:         and 'nullable' should be set to True if the relation can be null.
+104: 
+105:         Return a list of all objects that were not already collected.
+106:         """
+107:         if not objs:
+108:             return []
+109:         new_objs = []
+110:         model = objs[0].__class__
+111:         instances = self.data[model]
+112:         for obj in objs:
+113:             if obj not in instances:
+114:                 new_objs.append(obj)
+115:         instances.update(new_objs)
+116:         # Nullable relationships can be ignored -- they are nulled out before
+117:         # deleting, and therefore do not affect the order in which objects have
+118:         # to be deleted.
+119:         if source is not None and not nullable:
+120:             self.add_dependency(source, model, reverse_dependency=reverse_dependency)
+121:         return new_objs
+122: 
+123:     def add_dependency(self, model, dependency, reverse_dependency=False):
+124:         if reverse_dependency:
+125:             model, dependency = dependency, model
+126:         self.dependencies[model._meta.concrete_model].add(dependency._meta.concrete_model)
+127:         self.data.setdefault(dependency, self.data.default_factory())
+128: 
+129:     def add_field_update(self, field, value, objs):
+130:         """
+131:         Schedule a field update. 'objs' must be a homogeneous iterable
+132:         collection of model instances (e.g. a QuerySet).
+133:         """
+134:         if not objs:
+135:             return
+136:         model = objs[0].__class__
+137:         self.field_updates[model][field, value].update(objs)
+138: 
+139:     def add_restricted_objects(self, field, objs):
+140:         if objs:
+141:             model = objs[0].__class__
+142:             self.restricted_objects[model][field].update(objs)
+143: 
+144:     def clear_restricted_objects_from_set(self, model, objs):
+145:         if model in self.restricted_objects:
+146:             self.restricted_objects[model] = {
+147:                 field: items - objs
+148:                 for field, items in self.restricted_objects[model].items()
+149:             }
+150: 
+151:     def clear_restricted_objects_from_queryset(self, model, qs):
+152:         if model in self.restricted_objects:
+153:             objs = set(qs.filter(pk__in=[
+154:                 obj.pk
+155:                 for objs in self.restricted_objects[model].values() for obj in objs
+156:             ]))
+157:             self.clear_restricted_objects_from_set(model, objs)
+158: 
+159:     def _has_signal_listeners(self, model):
+160:         return (
+161:             signals.pre_delete.has_listeners(model) or
+162:             signals.post_delete.has_listeners(model)
+163:         )
+164: 
+165:     def can_fast_delete(self, objs, from_field=None):
+166:         """
+167:         Determine if the objects in the given queryset-like or single object
+168:         can be fast-deleted. This can be done if there are no cascades, no
+169:         parents and no signal listeners for the object class.
+170: 
+171:         The 'from_field' tells where we are coming from - we need this to
+172:         determine if the objects are in fact to be deleted. Allow also
+173:         skipping parent -> child -> parent chain preventing fast delete of
+174:         the child.
+175:         """
+176:         if from_field and from_field.remote_field.on_delete is not CASCADE:
+177:             return False
+178:         if hasattr(objs, '_meta'):
+179:             model = objs._meta.model
+180:         elif hasattr(objs, 'model') and hasattr(objs, '_raw_delete'):
+181:             model = objs.model
+182:         else:
+183:             return False
+184:         if self._has_signal_listeners(model):
+185:             return False
+186:         # The use of from_field comes from the need to avoid cascade back to
+187:         # parent when parent delete is cascading to child.
+188:         opts = model._meta
+189:         return (
+190:             all(link == from_field for link in opts.concrete_model._meta.parents.values()) and
+191:             # Foreign keys pointing to this model.
+192:             all(
+193:                 related.field.remote_field.on_delete is DO_NOTHING
+194:                 for related in get_candidate_relations_to_delete(opts)
+195:             ) and (
+196:                 # Something like generic foreign key.
+197:                 not any(hasattr(field, 'bulk_related_objects') for field in opts.private_fields)
+198:             )
+199:         )
+200: 
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

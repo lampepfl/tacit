@@ -1,0 +1,9 @@
+status: success
+java.lang.SecurityException: Access denied: command 'sed' is not in allowed commands Set(python3)
+  at library.CommandValidator$.validate(CommandValidator.scala:39)
+  at library.ProcessOps$.exec(ProcessOps.scala:14)
+  at library.InterfaceImpl.exec(InterfaceImpl.scala:13)
+  at rs$line$2$.run$$anonfun$1(rs$line$2:3)
+  at library.InterfaceImpl.requestExecPermission(InterfaceImpl.scala:37)
+  at rs$line$2$.run(rs$line$2:4)
+  ... 53 elided

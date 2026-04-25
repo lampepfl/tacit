@@ -1,0 +1,16 @@
+status: success
+ManyToManyField.check found at line 1211
+1211:     def check(self, **kwargs):
+1212:         return [
+1213:             *super().check(**kwargs),
+1214:             *self._check_unique(**kwargs),
+1215:             *self._check_relationship_model(**kwargs),
+1216:             *self._check_ignored_options(**kwargs),
+1217:             *self._check_table_uniqueness(**kwargs),
+1218:         ]
+1219: 
+1220:     def _check_unique(self, **kwargs):
+1221:         if self.unique:
+1222:             return [
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

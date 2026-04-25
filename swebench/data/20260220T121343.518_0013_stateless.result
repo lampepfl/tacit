@@ -1,0 +1,13 @@
+status: success
+Found at: 30589
+def get_prep_value(self, value):
+        """Perform preliminary non-db specific value checks and conversions."""
+        if isinstance(value, Promise):
+            value = value._proxy____cast()
+        return value
+
+    def get_db_prep_value(self, value, connection, prepared=False):
+        """
+   
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

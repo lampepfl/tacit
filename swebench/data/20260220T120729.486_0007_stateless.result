@@ -1,0 +1,53 @@
+status: success
+131:     def contains_aggregate(self):
+132:         return self.lhs.contains_aggregate or getattr(self.rhs, 'contains_aggregate', False)
+133: 
+134:     @cached_property
+135:     def contains_over_clause(self):
+136:         return self.lhs.contains_over_clause or getattr(self.rhs, 'contains_over_clause', False)
+137: 
+138:     @property
+139:     def is_summary(self):
+140:         return self.lhs.is_summary or getattr(self.rhs, 'is_summary', False)
+141: 
+142: 
+143: class Transform(RegisterLookupMixin, Func):
+144:     """
+145:     RegisterLookupMixin() is first so that get_lookup() and get_transform()
+146:     first examine self and then check output_field.
+147:     """
+148:     bilateral = False
+149:     arity = 1
+150: 
+151:     @property
+152:     def lhs(self):
+153:         return self.get_source_expressions()[0]
+154: 
+155:     def get_bilateral_transforms(self):
+156:         if hasattr(self.lhs, 'get_bilateral_transforms'):
+157:             bilateral_transforms = self.lhs.get_bilateral_transforms()
+158:         else:
+159:             bilateral_transforms = []
+160:         if self.bilateral:
+161:             bilateral_transforms.append(self.__class__)
+162:         return bilateral_transforms
+163: 
+164: 
+165: class BuiltinLookup(Lookup):
+166:     def process_lhs(self, compiler, connection, lhs=None):
+167:         lhs_sql, params = super().process_lhs(compiler, connection, lhs)
+168:         field_internal_type = self.lhs.output_field.get_internal_type()
+169:         db_type = self.lhs.output_field.db_type(connection=connection)
+170:         lhs_sql = connection.ops.field_cast_sql(
+171:             db_type, field_internal_type) % lhs_sql
+172:         lhs_sql = connection.ops.lookup_cast(self.lookup_name, field_internal_type) % lhs_sql
+173:         return lhs_sql, list(params)
+174: 
+175:     def as_sql(self, compiler, connection):
+176:         lhs_sql, params = self.process_lhs(compiler, connection)
+177:         rhs_sql, rhs_params = self.process_rhs(compiler, connection)
+178:         params.extend(rhs_params)
+179:         rhs_sql = self.get_rhs_op(connection, rhs_sql)
+180:         return '%s %s' % (lhs_sql, rhs_sql), params
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

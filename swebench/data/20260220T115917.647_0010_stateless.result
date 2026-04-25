@@ -1,0 +1,88 @@
+status: success
+346:             return []
+347: 
+348:     def resolve(self, path):
+349:         match = self.pattern.match(path)
+350:         if match:
+351:             new_path, args, kwargs = match
+352:             # Pass any extra_kwargs as **kwargs.
+353:             kwargs.update(self.default_args)
+354:             return ResolverMatch(self.callback, args, kwargs, self.pattern.name, route=str(self.pattern))
+355: 
+356:     @cached_property
+357:     def lookup_str(self):
+358:         """
+359:         A string that identifies the view (e.g. 'path.to.view_function' or
+360:         'path.to.ClassBasedView').
+361:         """
+362:         callback = self.callback
+363:         if isinstance(callback, functools.partial):
+364:             callback = callback.func
+365:         if not hasattr(callback, '__name__'):
+366:             return callback.__module__ + "." + callback.__class__.__name__
+367:         return callback.__module__ + "." + callback.__qualname__
+368: 
+369: 
+370: class URLResolver:
+371:     def __init__(self, pattern, urlconf_name, default_kwargs=None, app_name=None, namespace=None):
+372:         self.pattern = pattern
+373:         # urlconf_name is the dotted Python path to the module defining
+374:         # urlpatterns. It may also be an object with an urlpatterns attribute
+375:         # or urlpatterns itself.
+376:         self.urlconf_name = urlconf_name
+377:         self.callback = None
+378:         self.default_kwargs = default_kwargs or {}
+379:         self.namespace = namespace
+380:         self.app_name = app_name
+381:         self._reverse_dict = {}
+382:         self._namespace_dict = {}
+383:         self._app_dict = {}
+384:         # set of dotted paths to all functions and classes that are used in
+385:         # urlpatterns
+386:         self._callback_strs = set()
+387:         self._populated = False
+388:         self._local = Local()
+389: 
+390:     def __repr__(self):
+391:         if isinstance(self.urlconf_name, list) and self.urlconf_name:
+392:             # Don't bother to output the whole list, it can be huge
+393:             urlconf_repr = '<%s list>' % self.urlconf_name[0].__class__.__name__
+394:         else:
+395:             urlconf_repr = repr(self.urlconf_name)
+396:         return '<%s %s (%s:%s) %s>' % (
+397:             self.__class__.__name__, urlconf_repr, self.app_name,
+398:             self.namespace, self.pattern.describe(),
+399:         )
+400: 
+401:     def check(self):
+402:         messages = []
+403:         for pattern in self.url_patterns:
+404:             messages.extend(check_resolver(pattern))
+405:         messages.extend(self._check_custom_error_handlers())
+406:         return messages or self.pattern.check()
+407: 
+408:     def _check_custom_error_handlers(self):
+409:         messages = []
+410:         # All handlers take (request, exception) arguments except handler500
+411:         # which takes (request).
+412:         for status_code, num_parameters in [(400, 2), (403, 2), (404, 2), (500, 1)]:
+413:             try:
+414:                 handler, param_dict = self.resolve_error_handler(status_code)
+415:             except (ImportError, ViewDoesNotExist) as e:
+416:                 path = getattr(self.urlconf_module, 'handler%s' % status_code)
+417:                 msg = (
+418:                     "The custom handler{status_code} view '{path}' could not be imported."
+419:                 ).format(status_code=status_code, path=path)
+420:                 messages.append(Error(msg, hint=str(e), id='urls.E008'))
+421:                 continue
+422:             signature = inspect.signature(handler)
+423:             args = [None] * num_parameters
+424:             try:
+425:                 signature.bind(*args)
+426:             except TypeError:
+427:                 msg = (
+428:                     "The custom handler{status_code} view '{path}' does not "
+429:                     "take the correct number of arguments ({args})."
+430:                 ).format(
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

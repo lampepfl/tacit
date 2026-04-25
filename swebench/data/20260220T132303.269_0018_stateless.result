@@ -1,0 +1,6 @@
+status: success
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13710/repo/tests/admin_inlines/tests.py:970:     def test_verbose_name_plural_inline(self):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13710/repo/tests/admin_inlines/tests.py:1016:     def test_both_verbose_names_inline(self):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13710/repo/tests/admin_inlines/tests.py:1473:         verbose_name in the inline form.
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

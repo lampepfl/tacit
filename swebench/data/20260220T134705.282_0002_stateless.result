@@ -1,0 +1,48 @@
+status: success
+180:         if field in form.fields:
+181:             is_hidden = form.fields[field].widget.is_hidden
+182:         else:
+183:             is_hidden = False
+184: 
+185:         self.field = {
+186:             'name': class_name,
+187:             'label': label,
+188:             'help_text': help_text,
+189:             'field': field,
+190:             'is_hidden': is_hidden,
+191:         }
+192:         self.form = form
+193:         self.model_admin = model_admin
+194:         self.is_first = is_first
+195:         self.is_checkbox = False
+196:         self.is_readonly = True
+197:         self.empty_value_display = model_admin.get_empty_value_display()
+198: 
+199:     def label_tag(self):
+200:         attrs = {}
+201:         if not self.is_first:
+202:             attrs["class"] = "inline"
+203:         label = self.field['label']
+204:         return format_html('<label{}>{}{}</label>', flatatt(attrs), capfirst(label), self.form.label_suffix)
+205: 
+206:     def get_admin_url(self, remote_field, remote_obj):
+207:         url_name = 'admin:%s_%s_change' % (
+208:             remote_field.model._meta.app_label,
+209:             remote_field.model._meta.model_name,
+210:         )
+211:         try:
+212:             url = reverse(url_name, args=[quote(remote_obj.pk)])
+213:             return format_html('<a href="{}">{}</a>', url, remote_obj)
+214:         except NoReverseMatch:
+215:             return str(remote_obj)
+216: 
+217:     def contents(self):
+218:         from django.contrib.admin.templatetags.admin_list import _boolean_icon
+219:         field, obj, model_admin = self.field['field'], self.form.instance, self.model_admin
+220:         try:
+221:             f, attr, value = lookup_field(field, obj, model_admin)
+222:         except (AttributeError, ValueError, ObjectDoesNotExist):
+223:             result_repr = self.empty_value_display
+224:         else:
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

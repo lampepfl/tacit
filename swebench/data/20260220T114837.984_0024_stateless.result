@@ -1,0 +1,6 @@
+status: failure
+-- [E008] Not Found Error: -----------------------------------------------------
+6 |    val matches = content.lines.zipWithIndex.filter { case (line, idx) => 
+  |                  ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |  value zipWithIndex is not a member of (java.util.stream.Stream[String])?
+1 error found

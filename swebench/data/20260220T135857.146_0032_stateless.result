@@ -1,0 +1,8 @@
+status: success
+testFS2 called with /test
+scala.NotImplementedError: an implementation is missing
+  at scala.Predef$.$qmark$qmark$qmark(Predef.scala:383)
+  at rs$line$2$.testFS2$1(rs$line$2:4)
+  at rs$line$2$.testWrapper2$1(rs$line$2:10)
+  at rs$line$2$.run(rs$line$2:12)
+  ... 53 elided

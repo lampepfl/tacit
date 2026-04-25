@@ -1,0 +1,67 @@
+status: success
+1:         assert not cls._meta.auto_field, (
+2:             "Model %s can't have more than one auto-generated field."
+3:             % cls._meta.label
+4:         )
+5:         super().contribute_to_class(cls, name, **kwargs)
+6:         cls._meta.auto_field = self
+7: 
+8:     def formfield(self, **kwargs):
+9:         return None
+10: 
+11: 
+12: class AutoFieldMeta(type):
+13:     """
+14:     Metaclass to maintain backward inheritance compatibility for AutoField.
+15: 
+16:     It is intended that AutoFieldMixin become public API when it is possible to
+17:     create a non-integer automatically-generated field using column defaults
+18:     stored in the database.
+19: 
+20:     In many areas Django also relies on using isinstance() to check for an
+21:     automatically-generated field as a subclass of AutoField. A new flag needs
+22:     to be implemented on Field to be used instead.
+23: 
+24:     When these issues have been addressed, this metaclass could be used to
+25:     deprecate inheritance from AutoField and use of isinstance() with AutoField
+26:     for detecting automatically-generated fields.
+27:     """
+28: 
+29:     @property
+30:     def _subclasses(self):
+31:         return (BigAutoField, SmallAutoField)
+32: 
+33:     def __instancecheck__(self, instance):
+34:         return isinstance(instance, self._subclasses) or super().__instancecheck__(instance)
+35: 
+36:     def __subclasscheck__(self, subclass):
+37:         return subclass in self._subclasses or super().__subclasscheck__(subclass)
+38: 
+39: 
+40: class AutoField(AutoFieldMixin, IntegerField, metaclass=AutoFieldMeta):
+41: 
+42:     def get_internal_type(self):
+43:         return 'AutoField'
+44: 
+45:     def rel_db_type(self, connection):
+46:         return IntegerField().db_type(connection=connection)
+47: 
+48: 
+49: class BigAutoField(AutoFieldMixin, BigIntegerField):
+50: 
+51:     def get_internal_type(self):
+52:         return 'BigAutoField'
+53: 
+54:     def rel_db_type(self, connection):
+55:         return BigIntegerField().db_type(connection=connection)
+56: 
+57: 
+58: class SmallAutoField(AutoFieldMixin, SmallIntegerField):
+59: 
+60:     def get_internal_type(self):
+61:         return 'SmallAutoField'
+62: 
+63:     def rel_db_type(self, connection):
+64:         return SmallIntegerField().db_type(connection=connection)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

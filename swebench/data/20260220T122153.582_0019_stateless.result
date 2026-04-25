@@ -1,0 +1,5 @@
+status: success
+Total lines: 1909
+Line 404:     def __init__(self, *args, **kwargs):
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,23 @@
+status: success
+500:             # Is a LIMIT/OFFSET clause needed?
+501:             with_limit_offset = with_limits and (self.query.high_mark is not None or self.query.low_mark)
+502:             combinator = self.query.combinator
+503:             features = self.connection.features
+504:             if combinator:
+505:                 if not getattr(features, 'supports_select_{}'.format(combinator)):
+506:                     raise NotSupportedError('{} is not supported on this database backend.'.format(combinator))
+507:                 if self.query.is_empty():
+508:                     raise EmptyResultSet
+509:                 result, params = self.get_combinator_sql(combinator, self.query.combinator_all)
+510:             else:
+511:                 distinct_fields, distinct_params = self.get_distinct()
+512:                 # This must come after 'select', 'ordering', and 'distinct'
+513:                 # (see docstring of get_from_clause() for details).
+514:                 from_, f_params = self.get_from_clause()
+515:                 where, w_params = self.compile(self.where) if self.where is not None else ("", [])
+516:                 having, h_params = self.compile(self.having) if self.having is not None else ("", [])
+517:                 result = ['SELECT']
+518:                 params = []
+519: 
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

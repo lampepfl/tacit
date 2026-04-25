@@ -1,0 +1,83 @@
+status: success
+1: from datetime import datetime, timedelta
+2: 
+3: from django.conf import settings
+4: from django.contrib.auth.models import User
+5: from django.contrib.auth.tokens import PasswordResetTokenGenerator
+6: from django.test import TestCase
+7: from django.test.utils import ignore_warnings
+8: from django.utils.deprecation import RemovedInDjango40Warning
+9: 
+10: 
+11: class MockedPasswordResetTokenGenerator(PasswordResetTokenGenerator):
+12:     def __init__(self, now):
+13:         self._now_val = now
+14:         super().__init__()
+15: 
+16:     def _now(self):
+17:         return self._now_val
+18: 
+19: 
+20: class TokenGeneratorTest(TestCase):
+21: 
+22:     def test_make_token(self):
+23:         user = User.objects.create_user('tokentestuser', 'test2@example.com', 'testpw')
+24:         p0 = PasswordResetTokenGenerator()
+25:         tk1 = p0.make_token(user)
+26:         self.assertIs(p0.check_token(user, tk1), True)
+27: 
+28:     def test_10265(self):
+29:         """
+30:         The token generated for a user created in the same request
+31:         will work correctly.
+32:         """
+33:         user = User.objects.create_user('comebackkid', 'test3@example.com', 'testpw')
+34:         user_reload = User.objects.get(username='comebackkid')
+35:         p0 = MockedPasswordResetTokenGenerator(datetime.now())
+36:         tk1 = p0.make_token(user)
+37:         tk2 = p0.make_token(user_reload)
+38:         self.assertEqual(tk1, tk2)
+39: 
+40:     def test_timeout(self):
+41:         """The token is valid after n seconds, but no greater."""
+42:         # Uses a mocked version of PasswordResetTokenGenerator so we can change
+43:         # the value of 'now'.
+44:         user = User.objects.create_user('tokentestuser', 'test2@example.com', 'testpw')
+45:         now = datetime.now()
+46:         p0 = MockedPasswordResetTokenGenerator(now)
+47:         tk1 = p0.make_token(user)
+48:         p1 = MockedPasswordResetTokenGenerator(
+49:             now + timedelta(seconds=settings.PASSWORD_RESET_TIMEOUT)
+50:         )
+51:         self.assertIs(p1.check_token(user, tk1), True)
+52:         p2 = MockedPasswordResetTokenGenerator(
+53:             now + timedelta(seconds=(settings.PASSWORD_RESET_TIMEOUT + 1))
+54:         )
+55:         self.assertIs(p2.check_token(user, tk1), False)
+56:         with self.settings(PASSWORD_RESET_TIMEOUT=60 * 60):
+57:             p3 = MockedPasswordResetTokenGenerator(
+58:                 now + timedelta(seconds=settings.PASSWORD_RESET_TIMEOUT)
+59:             )
+60:             self.assertIs(p3.check_token(user, tk1), True)
+61:             p4 = MockedPasswordResetTokenGenerator(
+62:                 now + timedelta(seconds=(settings.PASSWORD_RESET_TIMEOUT + 1))
+63:             )
+64:             self.assertIs(p4.check_token(user, tk1), False)
+65: 
+66:     def test_check_token_with_nonexistent_token_and_user(self):
+67:         user = User.objects.create_user('tokentestuser', 'test2@example.com', 'testpw')
+68:         p0 = PasswordResetTokenGenerator()
+69:         tk1 = p0.make_token(user)
+70:         self.assertIs(p0.check_token(None, tk1), False)
+71:         self.assertIs(p0.check_token(user, None), False)
+72: 
+73:     def test_token_with_different_secret(self):
+74:         """
+75:         A valid token can be created with a secret other than SECRET_KEY by
+76:         using the PasswordResetTokenGenerator.secret attribute.
+77:         """
+78:         user = User.objects.create_user('tokentestuser', 'test2@example.com', 'testpw')
+79:         new_secret = 'abcdefghijkl'
+80:         # Create and check a token with a different secret.
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

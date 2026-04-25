@@ -1,0 +1,5 @@
+status: success
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15738/repo/django/db/migrations/autodetector.py:191:         self.generate_removed_altered_unique_together()
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15738/repo/django/db/migrations/autodetector.py:1499:     def generate_removed_altered_unique_together(self):
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,6 @@
+status: failure
+-- [E172] Type Error: ----------------------------------------------------------
+5 |  grepRecursive(".", "def defer", "*.py")
+  |                                         ^
+  |No given instance of type library.FileSystem was found for parameter x$4 of method grepRecursive in trait Interface
+1 error found

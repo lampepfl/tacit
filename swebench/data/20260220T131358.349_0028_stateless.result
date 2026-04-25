@@ -1,0 +1,34 @@
+status: success
+265:             # If we find that a subset of the operations are complete we can
+266:             # try to chop it off from the rest and continue, but we only
+267:             # do this if we've already been through the list once before
+268:             # without any chopping and nothing has changed.
+269:             for app_label in sorted(self.generated_operations):
+270:                 chopped = []
+271:                 dependencies = set()
+272:                 for operation in list(self.generated_operations[app_label]):
+273:                     deps_satisfied = True
+274:                     operation_dependencies = set()
+275:                     for dep in operation._auto_deps:
+276:                         # Temporarily resolve the swappable dependency to
+277:                         # prevent circular references. While keeping the
+278:                         # dependency checks on the resolved model, add the
+279:                         # swappable dependencies.
+280:                         original_dep = dep
+281:                         dep, is_swappable_dep = self._resolve_dependency(dep)
+282:                         if dep[0] != app_label:
+283:                             # External app dependency. See if it's not yet
+284:                             # satisfied.
+285:                             for other_operation in self.generated_operations.get(dep[0], []):
+286:                                 if self.check_dependency(other_operation, dep):
+287:                                     deps_satisfied = False
+288:                                     break
+289:                             if not deps_satisfied:
+290:                                 break
+291:                             else:
+292:                                 if is_swappable_dep:
+293:                                     operation_dependencies.add((original_dep[0], original_dep[1]))
+294:                                 elif dep[0] in self.migrations:
+295:                                     operation_dependencies.add((dep[0], self.migrations[dep[0]][-1].name))
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

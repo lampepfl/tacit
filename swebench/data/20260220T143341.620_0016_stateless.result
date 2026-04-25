@@ -1,0 +1,75 @@
+status: success
+230:                     ),
+231:                 ]
+232:             elif isinstance(operation, AlterField):
+233:                 return [
+234:                     CreateModel(
+235:                         self.name,
+236:                         fields=[
+237:                             (n, operation.field if n == operation.name else v)
+238:                             for n, v in self.fields
+239:                         ],
+240:                         options=self.options,
+241:                         bases=self.bases,
+242:                         managers=self.managers,
+243:                     ),
+244:                 ]
+245:             elif isinstance(operation, RemoveField):
+246:                 options = self.options.copy()
+247:                 for option_name in ("unique_together", "index_together"):
+248:                     option = options.pop(option_name, None)
+249:                     if option:
+250:                         option = set(
+251:                             filter(
+252:                                 bool,
+253:                                 (
+254:                                     tuple(
+255:                                         f for f in fields if f != operation.name_lower
+256:                                     )
+257:                                     for fields in option
+258:                                 ),
+259:                             )
+260:                         )
+261:                         if option:
+262:                             options[option_name] = option
+263:                 order_with_respect_to = options.get("order_with_respect_to")
+264:                 if order_with_respect_to == operation.name_lower:
+265:                     del options["order_with_respect_to"]
+266:                 return [
+267:                     CreateModel(
+268:                         self.name,
+269:                         fields=[
+270:                             (n, v)
+271:                             for n, v in self.fields
+272:                             if n.lower() != operation.name_lower
+273:                         ],
+274:                         options=options,
+275:                         bases=self.bases,
+276:                         managers=self.managers,
+277:                     ),
+278:                 ]
+279:             elif isinstance(operation, RenameField):
+280:                 options = self.options.copy()
+281:                 for option_name in ("unique_together", "index_together"):
+282:                     option = options.get(option_name)
+283:                     if option:
+284:                         options[option_name] = {
+285:                             tuple(
+286:                                 operation.new_name if f == operation.old_name else f
+287:                                 for f in fields
+288:                             )
+289:                             for fields in option
+290:                         }
+291:                 order_with_respect_to = options.get("order_with_respect_to")
+292:                 if order_with_respect_to == operation.old_name:
+293:                     options["order_with_respect_to"] = operation.new_name
+294:                 return [
+295:                     CreateModel(
+296:                         self.name,
+297:                         fields=[
+298:                             (operation.new_name if n == operation.old_name else n, v)
+299:                             for n, v in self.fields
+300:                         ],
+301:                         options=options,
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

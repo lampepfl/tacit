@@ -1,0 +1,6 @@
+status: failure
+-- [E008] Not Found Error: -----------------------------------------------------
+3 |  import scala.implicits.*
+  |         ^^^^^^^^^^^^^^^
+  |         value implicits is not a member of scala
+1 error found

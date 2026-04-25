@@ -1,0 +1,33 @@
+status: success
+stdout: 
+stderr: Traceback (most recent call last):
+  File "<string>", line 9, in <module>
+    result1 = Q() | q1
+              ~~~~^~~~
+  File "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14016/repo/django/db/models/query_utils.py", line 61, in __or__
+    return self._combine(other, self.OR)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14016/repo/django/db/models/query_utils.py", line 52, in _combine
+    return copy.deepcopy(other)
+           ~~~~~~~~~~~~~^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/copy.py", line 138, in deepcopy
+    y = copier(memo)
+  File "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14016/repo/django/utils/tree.py", line 53, in __deepcopy__
+    obj.children = copy.deepcopy(self.children, memodict)
+                   ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/copy.py", line 131, in deepcopy
+    y = copier(x, memo)
+  File "/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/copy.py", line 177, in _deepcopy_list
+    append(deepcopy(a, memo))
+           ~~~~~~~~^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/copy.py", line 131, in deepcopy
+    y = copier(x, memo)
+  File "/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/copy.py", line 182, in _deepcopy_tuple
+    y = [deepcopy(a, memo) for a in x]
+         ~~~~~~~~^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/copy.py", line 146, in deepcopy
+    rv = reductor(4)
+TypeError: cannot pickle 'dict_keys' object
+exitCode: 1
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

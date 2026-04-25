@@ -1,0 +1,11 @@
+status: success
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13551/repo/django/contrib/auth/mixins.py:107: class UserPassesTestMixin(AccessMixin):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13551/repo/django/contrib/auth/password_validation.py:118: class UserAttributeSimilarityValidator:
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13551/repo/django/contrib/auth/models.py:129: class UserManager(BaseUserManager):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13551/repo/django/contrib/auth/models.py:389: class User(AbstractUser):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13551/repo/django/contrib/auth/forms.py:70: class UsernameField(forms.CharField):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13551/repo/django/contrib/auth/forms.py:82: class UserCreationForm(forms.ModelForm):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13551/repo/django/contrib/auth/forms.py:142: class UserChangeForm(forms.ModelForm):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13551/repo/django/contrib/auth/admin.py:41: class UserAdmin(admin.ModelAdmin):
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

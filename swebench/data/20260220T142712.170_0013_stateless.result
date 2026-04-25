@@ -1,0 +1,31 @@
+status: success
+70:     return wrapper
+71: 
+72: 
+73: def raise_last_exception():
+74:     global _exception
+75:     if _exception is not None:
+76:         raise _exception[0](_exception[1]).with_traceback(_exception[2])
+77: 
+78: 
+79: def ensure_echo_on():
+80:     """
+81:     Ensure that echo mode is enabled. Some tools such as PDB disable
+82:     it which causes usability issues after reload.
+83:     """
+84:     if not termios or not sys.stdin.isatty():
+85:         return
+86:     attr_list = termios.tcgetattr(sys.stdin)
+87:     if not attr_list[3] & termios.ECHO:
+88:         attr_list[3] |= termios.ECHO
+89:         if hasattr(signal, 'SIGTTOU'):
+90:             old_handler = signal.signal(signal.SIGTTOU, signal.SIG_IGN)
+91:         else:
+92:             old_handler = None
+93:         termios.tcsetattr(sys.stdin, termios.TCSANOW, attr_list)
+94:         if old_handler is not None:
+95:             signal.signal(signal.SIGTTOU, old_handler)
+96: 
+97: 
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

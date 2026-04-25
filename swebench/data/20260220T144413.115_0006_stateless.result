@@ -1,0 +1,19 @@
+status: success
+746:                 source = opts.get_field(name)
+747:                 if is_reverse_o2o(source):
+748:                     cur_model = source.related_model
+749:                 else:
+750:                     cur_model = source.remote_field.model
+751:                 opts = cur_model._meta.concrete_model._meta
+752:                 # Even if we're "just passing through" this model, we must add
+753:                 # both the current model's pk and the related reference field
+754:                 # (if it's not a reverse relation) to the things we select.
+755:                 if not is_reverse_o2o(source):
+756:                     must_include[old_model].add(source)
+757:                 add_to_dict(must_include, cur_model, opts.pk)
+758:             field = opts.get_field(parts[-1])
+759:             is_reverse_object = field.auto_created and not field.concrete
+760:             model = field.related_model if is_reverse_object else field.model
+761:             model = model._meta.concrete_model
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

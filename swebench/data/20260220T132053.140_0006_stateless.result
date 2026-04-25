@@ -1,0 +1,6 @@
+status: success
+17:     BaseCommand, CommandError, CommandParser, handle_default_options,
+184: class ManagementUtility:
+347:         parser = CommandParser(usage='%(prog)s subcommand [options] [args]', add_help=False, allow_abbrev=False)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

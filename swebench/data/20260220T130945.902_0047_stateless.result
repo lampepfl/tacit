@@ -1,0 +1,10 @@
+status: success
+Ref class: 28254, method after: 949, full: 29203
+Context:
+def get_group_by_cols(self, alias=None):
+        return [self]
+
+
+class Expressio
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

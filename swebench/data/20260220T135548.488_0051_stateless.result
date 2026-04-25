@@ -1,0 +1,29 @@
+status: success
+336:         return self.output_field.get_transform(name)
+337: 
+338:     def relabeled_clone(self, change_map):
+339:         clone = self.copy()
+340:         clone.set_source_expressions([
+341:             e.relabeled_clone(change_map) if e is not None else None
+342:             for e in self.get_source_expressions()
+343:         ])
+344:         return clone
+345: 
+346:     def copy(self):
+347:         return copy.copy(self)
+348: 
+349:     def get_group_by_cols(self, alias=None):
+350:         if not self.contains_aggregate:
+351:             return [self]
+352:         cols = []
+353:         for source in self.get_source_expressions():
+354:             cols.extend(source.get_group_by_cols())
+355:         return cols
+356: 
+357:     def get_source_fields(self):
+358:         """Return the underlying field types used by this aggregate."""
+359:         return [e._output_field_or_none for e in self.get_source_expressions()]
+360: 
+361:     def asc(self, **kwargs):
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

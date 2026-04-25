@@ -1,0 +1,33 @@
+status: success
+280: class ManyToManyRel(ForeignObjectRel):
+281:     """
+282:     Used by ManyToManyField to store information about the relation.
+283: 
+284:     ``_meta.get_fields()`` returns this class to provide access to the field
+285:     flags for the reverse relation.
+286:     """
+287: 
+288:     def __init__(self, field, to, related_name=None, related_query_name=None,
+289:                  limit_choices_to=None, symmetrical=True, through=None,
+290:                  through_fields=None, db_constraint=True):
+291:         super().__init__(
+292:             field, to,
+293:             related_name=related_name,
+294:             related_query_name=related_query_name,
+295:             limit_choices_to=limit_choices_to,
+296:         )
+297: 
+298:         if through and not db_constraint:
+299:             raise ValueError("Can't supply a through model and db_constraint=False")
+300:         self.through = through
+301: 
+302:         if through_fields and not through:
+303:             raise ValueError("Cannot specify through_fields without a through model")
+304:         self.through_fields = through_fields
+305: 
+306:         self.symmetrical = symmetrical
+307:         self.db_constraint = db_constraint
+308: 
+309:     @property
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,50 @@
+status: success
+750:     def contribute_to_class(self, cls, name, private_only=False):
+751:         """
+752:         Register the field with the model class it belongs to.
+753: 
+754:         If private_only is True, create a separate instance of this field
+755:         for every subclass of cls, even if cls is not an abstract model.
+756:         """
+757:         self.set_attributes_from_name(name)
+758:         self.model = cls
+759:         cls._meta.add_field(self, private=private_only)
+760:         if self.column:
+761:             # Don't override classmethods with the descriptor. This means that
+762:             # if you have a classmethod and a field with the same name, then
+763:             # such fields can't be deferred (we don't have a check for this).
+764:             if not getattr(cls, self.attname, None):
+765:                 setattr(cls, self.attname, self.descriptor_class(self))
+766:         if self.choices is not None:
+767:             if not hasattr(cls, 'get_%s_display' % self.name):
+768:                 setattr(
+769:                     cls,
+770:                     'get_%s_display' % self.name,
+771:                     partialmethod(cls._get_FIELD_display, field=self),
+772:                 )
+773: 
+774:     def get_filter_kwargs_for_object(self, obj):
+775:         """
+776:         Return a dict that when passed as kwargs to self.model.filter(), would
+777:         yield all instances having the same value for this field as obj has.
+778:         """
+779:         return {self.name: getattr(obj, self.attname)}
+780: 
+781:     def get_attname(self):
+782:         return self.name
+783: 
+784:     def get_attname_column(self):
+785:         attname = self.get_attname()
+786:         column = self.db_column or attname
+787:         return attname, column
+788: 
+789:     def get_internal_type(self):
+790:         return self.__class__.__name__
+791: 
+792:     def pre_save(self, model_instance, add):
+793:         """Return field's value just before saving."""
+794:         return getattr(model_instance, self.attname)
+795: 
+796:     def get_prep_value(self, value):
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

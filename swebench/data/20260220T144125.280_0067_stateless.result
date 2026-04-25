@@ -1,0 +1,34 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = List(
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15388/repo/django/template/loaders/filesystem.py",
+    lineNumber = 18,
+    line = "    def get_dirs(self):"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15388/repo/django/template/loaders/filesystem.py",
+    lineNumber = 34,
+    line = "        for template_dir in self.get_dirs():"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15388/repo/django/template/loaders/cached.py",
+    lineNumber = 21,
+    line = "    def get_dirs(self):"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15388/repo/django/template/loaders/cached.py",
+    lineNumber = 23,
+    line = "            if hasattr(loader, \"get_dirs\"):"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15388/repo/django/template/loaders/cached.py",
+    lineNumber = 24,
+    line = "                yield from loader.get_dirs()"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15388/repo/django/template/loaders/app_directories.py",
+    lineNumber = 13,
+    line = "    def get_dirs(self):"
+  )
+)

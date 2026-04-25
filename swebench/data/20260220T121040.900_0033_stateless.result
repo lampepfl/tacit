@@ -1,0 +1,13 @@
+status: success
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11905/repo/django/contrib/admin/templatetags/admin_list.py:41:             cl.get_query_string({PAGE_VAR: i}),
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11905/repo/django/contrib/admin/templatetags/admin_list.py:88:         'show_all_url': need_show_all_link and cl.get_query_string({ALL_VAR: ''}),
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11905/repo/django/contrib/admin/templatetags/admin_list.py:190:             "url_primary": cl.get_query_string({ORDER_VAR: '.'.join(o_list_primary)}),
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11905/repo/django/contrib/admin/templatetags/admin_list.py:191:             "url_remove": cl.get_query_string({ORDER_VAR: '.'.join(o_list_remove)}),
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11905/repo/django/contrib/admin/templatetags/admin_list.py:192:             "url_toggle": cl.get_query_string({ORDER_VAR: '.'.join(o_list_toggle)}),
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11905/repo/django/contrib/admin/templatetags/admin_list.py:371:             return cl.get_query_string(filters, [field_generic])
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11905/repo/django/contrib/admin/views/main.py:205:     def get_query_string(self, new_params=None, remove=None):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11905/repo/django/contrib/admin/filters.py:107:             'query_string': changelist.get_query_string(remove=[self.parameter_name]),
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11905/repo/django/contrib/admin/filters.py:113:                 'query_string': changelist.get_query_string({self.parameter_name: lookup}),
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11905/repo/django/contrib/admin/filters.py:212:             'query_string': changelist.get_query_string(remove=[self.lookup_kwarg, self.lookup_kwarg_isnull]),
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

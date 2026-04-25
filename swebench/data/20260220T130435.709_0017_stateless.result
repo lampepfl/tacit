@@ -1,0 +1,50 @@
+status: success
+"""
+    Reference to column alias of the query. For example, Ref('sum_cost') in
+    qs.annotate(sum_cost=Sum('cost')) query.
+    """
+    def __init__(self, refs, source):
+        super().__init__()
+        self.refs, self.source = refs, source
+
+    def __repr__(self):
+        return "{}({}, {})".format(self.__class__.__name__, self.refs, self.source)
+
+    def get_source_expressions(self):
+        return [self.source]
+
+    def set_source_expressions(self, exprs):
+        self.source, = exprs
+
+    def resolve_expression(self, query=None, allow_joins=True, reuse=None, summarize=False, for_save=False):
+        # The sub-expression `source` has already been resolved, as this is
+        # just a reference to the name of `source`.
+        return self
+
+    def relabeled_clone(self, relabels):
+        return self
+
+    def as_sql(self, compiler, connection):
+        return connection.ops.quote_name(self.refs), []
+
+    def get_group_by_cols(self, alias=None):
+        return [self]
+
+
+class ExpressionList(Func):
+    """
+    An expression containing multiple expressions. Can be used to provide a
+    list of expressions as an argument to another expression, like an
+    ordering clause.
+    """
+    template = '%(expressions)s'
+
+    def __init__(self, *expressions, **extra):
+        if not expressions:
+            raise ValueError('%s requires at least one expression.' % self.__class__.__name__)
+        super().__init__(*expressions, **extra)
+
+    def __str__(self):
+        return self.arg_joiner.join(str(arg) for arg in self.source_expressions)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

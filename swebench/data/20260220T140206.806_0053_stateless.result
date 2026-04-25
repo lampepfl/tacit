@@ -1,0 +1,104 @@
+status: success
+Found test_rename_model at line: 599
+600:     def test_rename_model(self):
+601:         """
+602:         Tests the RenameModel operation.
+603:         """
+604:         project_state = self.set_up_test_model("test_rnmo", related_model=True)
+605:         # Test the state alteration
+606:         operation = migrations.RenameModel("Pony", "Horse")
+607:         self.assertEqual(operation.describe(), "Rename model Pony to Horse")
+608:         self.assertEqual(operation.migration_name_fragment, 'rename_pony_horse')
+609:         # Test initial state and database
+610:         self.assertIn(("test_rnmo", "pony"), project_state.models)
+611:         self.assertNotIn(("test_rnmo", "horse"), project_state.models)
+612:         self.assertTableExists("test_rnmo_pony")
+613:         self.assertTableNotExists("test_rnmo_horse")
+614:         if connection.features.supports_foreign_keys:
+615:             self.assertFKExists("test_rnmo_rider", ["pony_id"], ("test_rnmo_pony", "id"))
+616:             self.assertFKNotExists("test_rnmo_rider", ["pony_id"], ("test_rnmo_horse", "id"))
+617:         # Migrate forwards
+618:         new_state = project_state.clone()
+619:         atomic_rename = connection.features.supports_atomic_references_rename
+620:         new_state = self.apply_operations("test_rnmo", new_state, [operation], atomic=atomic_rename)
+621:         # Test new state and database
+622:         self.assertNotIn(("test_rnmo", "pony"), new_state.models)
+623:         self.assertIn(("test_rnmo", "horse"), new_state.models)
+624:         # RenameModel also repoints all incoming FKs and M2Ms
+625:         self.assertEqual(
+626:             new_state.models['test_rnmo', 'rider'].fields['pony'].remote_field.model,
+627:             'test_rnmo.Horse',
+628:         )
+629:         self.assertTableNotExists("test_rnmo_pony")
+630:         self.assertTableExists("test_rnmo_horse")
+631:         if connection.features.supports_foreign_keys:
+632:             self.assertFKNotExists("test_rnmo_rider", ["pony_id"], ("test_rnmo_pony", "id"))
+633:             self.assertFKExists("test_rnmo_rider", ["pony_id"], ("test_rnmo_horse", "id"))
+634:         # Migrate backwards
+635:         original_state = self.unapply_operations("test_rnmo", project_state, [operation], atomic=atomic_rename)
+636:         # Test original state and database
+637:         self.assertIn(("test_rnmo", "pony"), original_state.models)
+638:         self.assertNotIn(("test_rnmo", "horse"), original_state.models)
+639:         self.assertEqual(
+640:             original_state.models['test_rnmo', 'rider'].fields['pony'].remote_field.model,
+641:             'Pony',
+642:         )
+643:         self.assertTableExists("test_rnmo_pony")
+644:         self.assertTableNotExists("test_rnmo_horse")
+645:         if connection.features.supports_foreign_keys:
+646:             self.assertFKExists("test_rnmo_rider", ["pony_id"], ("test_rnmo_pony", "id"))
+647:             self.assertFKNotExists("test_rnmo_rider", ["pony_id"], ("test_rnmo_horse", "id"))
+648:         # And deconstruction
+649:         definition = operation.deconstruct()
+650:         self.assertEqual(definition[0], "RenameModel")
+651:         self.assertEqual(definition[1], [])
+652:         self.assertEqual(definition[2], {'old_name': "Pony", 'new_name': "Horse"})
+653: 
+654:     def test_rename_model_state_forwards(self):
+655:         """
+656:         RenameModel operations shouldn't trigger the caching of rendered apps
+657:         on state without prior apps.
+658:         """
+659:         state = ProjectState()
+660:         state.add_model(ModelState('migrations', 'Foo', []))
+661:         operation = migrations.RenameModel('Foo', 'Bar')
+662:         operation.state_forwards('migrations', state)
+663:         self.assertNotIn('apps', state.__dict__)
+664:         self.assertNotIn(('migrations', 'foo'), state.models)
+665:         self.assertIn(('migrations', 'bar'), state.models)
+666:         # Now with apps cached.
+667:         apps = state.apps
+668:         operation = migrations.RenameModel('Bar', 'Foo')
+669:         operation.state_forwards('migrations', state)
+670:         self.assertIs(state.apps, apps)
+671:         self.assertNotIn(('migrations', 'bar'), state.models)
+672:         self.assertIn(('migrations', 'foo'), state.models)
+673: 
+674:     def test_rename_model_with_self_referential_fk(self):
+675:         """
+676:         Tests the RenameModel operation on model with self referential FK.
+677:         """
+678:         project_state = self.set_up_test_model("test_rmwsrf", related_model=True)
+679:         # Test the state alteration
+680:         operation = migrations.RenameModel("Rider", "HorseRider")
+681:         self.assertEqual(operation.describe(), "Rename model Rider to HorseRider")
+682:         new_state = project_state.clone()
+683:         operation.state_forwards("test_rmwsrf", new_state)
+684:         self.assertNotIn(("test_rmwsrf", "rider"), new_state.models)
+685:         self.assertIn(("test_rmwsrf", "horserider"), new_state.models)
+686:         # Remember, RenameModel also repoints all incoming FKs and M2Ms
+687:         self.assertEqual(
+688:             'self',
+689:             new_state.models["test_rmwsrf", "horserider"].fields['friend'].remote_field.model
+690:         )
+691:         HorseRider = new_state.apps.get_model('test_rmwsrf', 'horserider')
+692:         self.assertIs(HorseRider._meta.get_field('horserider').remote_field.model, HorseRider)
+693:         # Test the database alteration
+694:         self.assertTableExists("test_rmwsrf_rider")
+695:         self.assertTableNotExists("test_rmwsrf_horserider")
+696:         if connection.features.supports_foreign_keys:
+697:             self.assertFKExists("test_rmwsrf_rider", ["friend_id"], ("test_rmwsrf_rider", "id"))
+698:             self.assertFKNotExists("test_rmwsrf_rider", ["friend_id"], ("test_rmwsrf_horserider", "id"))
+699:         atomic_rename = connection.features.supports_atomic_references_rename
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,8 @@
+status: success
+Line 516: '    def __eq__(self, other):'
+Line 517: '        # Needed for @total_ordering'
+Line 518: '        if isinstance(other, Field):'
+Line 519: '            return self.creation_counter == other.creation_counter'
+Line 520: '        return NotImplemented'
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

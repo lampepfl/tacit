@@ -1,0 +1,80 @@
+status: success
+984:     def formfield(self, *, using=None, **kwargs):
+985:         if isinstance(self.remote_field.model, str):
+986:             raise ValueError("Cannot create form field for %r yet, because "
+987:                              "its related model %r has not been loaded yet" %
+988:                              (self.name, self.remote_field.model))
+989:         return super().formfield(**{
+990:             'form_class': forms.ModelChoiceField,
+991:             'queryset': self.remote_field.model._default_manager.using(using),
+992:             'to_field_name': self.remote_field.field_name,
+993:             **kwargs,
+994:             'blank': self.blank,
+995:         })
+996: 
+997:     def db_check(self, connection):
+998:         return []
+999: 
+1000:     def db_type(self, connection):
+1001:         return self.target_field.rel_db_type(connection=connection)
+1002: 
+1003:     def db_parameters(self, connection):
+1004:         return {"type": self.db_type(connection), "check": self.db_check(connection)}
+1005: 
+1006:     def convert_empty_strings(self, value, expression, connection):
+1007:         if (not value) and isinstance(value, str):
+1008:             return None
+1009:         return value
+1010: 
+1011:     def get_db_converters(self, connection):
+1012:         converters = super().get_db_converters(connection)
+1013:         if connection.features.interprets_empty_strings_as_nulls:
+1014:             converters += [self.convert_empty_strings]
+1015:         return converters
+1016: 
+1017:     def get_col(self, alias, output_field=None):
+1018:         if output_field is None:
+1019:             output_field = self.target_field
+1020:             while isinstance(output_field, ForeignKey):
+1021:                 output_field = output_field.target_field
+1022:                 if output_field is self:
+1023:                     raise ValueError('Cannot resolve output_field.')
+1024:         return super().get_col(alias, output_field)
+1025: 
+1026: 
+1027: class OneToOneField(ForeignKey):
+1028:     """
+1029:     A OneToOneField is essentially the same as a ForeignKey, with the exception
+1030:     that it always carries a "unique" constraint with it and the reverse
+1031:     relation always returns the object pointed to (since there will only ever
+1032:     be one), rather than returning a list.
+1033:     """
+1034: 
+1035:     # Field flags
+1036:     many_to_many = False
+1037:     many_to_one = False
+1038:     one_to_many = False
+1039:     one_to_one = True
+1040: 
+1041:     related_accessor_class = ReverseOneToOneDescriptor
+1042:     forward_related_accessor_class = ForwardOneToOneDescriptor
+1043:     rel_class = OneToOneRel
+1044: 
+1045:     description = _("One-to-one relationship")
+1046: 
+1047:     def __init__(self, to, on_delete, to_field=None, **kwargs):
+1048:         kwargs['unique'] = True
+1049:         super().__init__(to, on_delete, to_field=to_field, **kwargs)
+1050: 
+1051:     def deconstruct(self):
+1052:         name, path, args, kwargs = super().deconstruct()
+1053:         if "unique" in kwargs:
+1054:             del kwargs['unique']
+1055:         return name, path, args, kwargs
+1056: 
+1057:     def formfield(self, **kwargs):
+1058:         if self.remote_field.parent_link:
+1059:             return None
+1060:         return super().formfield(**kwargs)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

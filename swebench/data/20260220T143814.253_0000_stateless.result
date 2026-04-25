@@ -1,0 +1,24 @@
+status: failure
+-- Error: ----------------------------------------------------------------------
+2 |  import language.experimental.captureChecking
+  |                               ^^^^^^^^^^^^^^^
+  |this language import is not allowed in the REPL
+  |To use this language feature, include the flag `-language:experimental.captureChecking` when starting the REPL
+-- [E103] Syntax Error: --------------------------------------------------------
+6 |    given fs: FileSystem^{fs} = FileSystem()
+  |                          ^^
+  |                          Illegal start of declaration
+  |
+  | longer explanation available when compiling with `-explain`
+-- [E040] Syntax Error: --------------------------------------------------------
+14 |      println(s"${i+1}: ${lines(i))}")
+   |                                  ^
+   |                                  '}' expected, but ')' found
+-- [E040] Syntax Error: --------------------------------------------------------
+14 |      println(s"${i+1}: ${lines(i))}")
+   |                                   ^
+   |                                   unindent expected, but '}' found
+-- Error: ----------------------------------------------------------------------
+14 |      println(s"${i+1}: ${lines(i))}")
+   |                                    ^
+   |                      end of statement expected but string literal found

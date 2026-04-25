@@ -1,0 +1,6 @@
+status: success
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-10914/repo/django/core/files/storage.py:193:         elif setting == 'FILE_UPLOAD_PERMISSIONS':
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-10914/repo/django/core/files/storage.py:217:         return self._value_or_setting(self._file_permissions_mode, settings.FILE_UPLOAD_PERMISSIONS)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-10914/repo/django/conf/global_settings.py:307: FILE_UPLOAD_PERMISSIONS = None
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

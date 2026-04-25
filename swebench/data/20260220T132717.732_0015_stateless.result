@@ -1,0 +1,5 @@
+status: success
+-- Error: ----------------------------------------------------------------------
+6 |  }(using implicitly[IOCapability])
+  |   ^
+  |   end of statement expected but '(' found

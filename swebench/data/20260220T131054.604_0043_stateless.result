@@ -1,0 +1,51 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = """Here's the exact code of the `TypeSerializer` class from Django's migrations serializer, along with an explanation of how it gets type names:
+
+## The `TypeSerializer` Class Code
+
+```python
+class TypeSerializer(BaseSerializer):
+    def serialize(self):
+        special_cases = [
+            (models.Model, "models.Model", {}),
+            (type(None), "type(None)", {}),
+            (type(...), "type(...)", {}),
+        ]
+        for case, string, imports in special_cases:
+            if self.value is case:
+                return string, imports
+        
+        if hasattr(self.value, "__module__") and hasattr(self.value, "__qualname__"):
+            module = self.value.__module__
+            name = self.value.__qualname__
+            # Make sure it's not a function
+            if module is not None and not isinstance(self.value, types.FunctionType):
+                return self._format(module, name), {"import %s" % module}
+        
+        return super().serialize()
+```
+
+## How It Gets the Type Name
+
+The `TypeSerializer` gets the type name through these mechanisms:
+
+### 1. **Special Cases Handling**
+First, it checks for special predefined cases:
+- `models.Model` → returns `"models.Model"`
+- `type(None)` → returns `"type(None)"` 
+- `type(...)` → returns `"type(...)"`
+
+### 2. **Using `__module__` and `__qualname__`**
+For regular types, it uses two special attributes:
+
+```python
+# These are the key lines:
+module = self.value.__module__      # Gets the module name (e.g., 'django.db.models')
+name = self.value.__qualname__      # Gets the qualified name (e.g., 'Model')
+```
+
+#### What are these attributes?
+- **`__module__`**: The name of the module where the type/class is defined
+- **`__qualname__`**: The qualified name of the type/class (includes nested class paths)
+...

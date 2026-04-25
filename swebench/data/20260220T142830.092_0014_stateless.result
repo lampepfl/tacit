@@ -1,0 +1,5 @@
+status: success
+Found 1 matches
+715:     def find_ordering_name(self, name, opts, alias=None, default_order='ASC',
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

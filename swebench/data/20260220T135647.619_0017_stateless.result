@@ -1,0 +1,10 @@
+status: failure
+-- [E057] Type Mismatch Error: -------------------------------------------------
+3 |  println(s"Step1 type: ${step1.getClass.getName}")
+  |                                ^
+  |Type argument ((library.FileSystem^'s1) ?->'s2 Any) ->'s3 Any does not conform to lower bound (step1 : ((library.FileSystem) ?=> Any) ->{x$1} Any)
+  |
+  |where:    ?=> refers to the root capability caps.any
+  |
+  | longer explanation available when compiling with `-explain`
+1 error found

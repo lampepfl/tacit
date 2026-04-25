@@ -1,0 +1,20 @@
+status: failure
+-- [E007] Type Mismatch Error: -------------------------------------------------
+3 |    requestExecPermission(Set("python", "python3")) { (pp: ProcessPermission) =>
+  |                                                    ^
+  |Capability `contextual$1` outlives its scope: it leaks into outer capture set 's1 which is owned by method run.
+  |The leakage occurred when trying to match the following types:
+  |
+  |Found:    (contextual$1: library.ProcessPermission^) ?->{x$1}
+  |  library.ProcessPermission^'s2 ->{contextual$1, x$1} Unit
+  |Required: (library.ProcessPermission^) ?=> library.ProcessPermission^'s3 ->'s1 Unit
+  |
+  |where:    ?=> refers to a root capability created in method run when checking argument to parameter op of method requestExecPermission
+  |          ^   refers to the root capability caps.any
+  |
+4 |      val result = exec("python", List("-m", "pytest", "tests/forms_tests/tests/test_media.py::MediaMergeTest::test_merge_warning", "-xvs"), workingDir = Option("/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11019/repo"))
+5 |...
+7 |    }
+  |
+  | longer explanation available when compiling with `-explain`
+1 error found

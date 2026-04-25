@@ -1,0 +1,42 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = List(
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13925/repo/django/db/models/options.py",
+    lineNumber = 116,
+    line = "        # concrete models, the concrete_model is always the class itself."
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13925/repo/django/db/models/options.py",
+    lineNumber = 117,
+    line = "        self.concrete_model = None"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13925/repo/django/db/models/options.py",
+    lineNumber = 669,
+    line = "        proxied_model = self.concrete_model"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13925/repo/django/db/models/options.py",
+    lineNumber = 698,
+    line = "        model = self.concrete_model"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13925/repo/django/db/models/options.py",
+    lineNumber = 734,
+    line = "                    remote_label = f.remote_field.model._meta.concrete_model._meta.label"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13925/repo/django/db/models/options.py",
+    lineNumber = 743,
+    line = "            related_objects = related_objects_graph[model._meta.concrete_model._meta.label]"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13925/repo/django/db/models/options.py",
+    lineNumber = 826,
+    line = "                if (parent._meta.concrete_model != self.concrete_model and"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13925/repo/django/db/models/options.py",
+    lineNumber = 832,
+...

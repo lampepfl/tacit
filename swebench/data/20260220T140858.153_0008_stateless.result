@@ -1,0 +1,53 @@
+status: success
+930:                 app_label, self.model_name_lower, self.old_name, self.new_name
+931:             )
+932: 
+933:     def database_forwards(self, app_label, schema_editor, from_state, to_state):
+934:         model = to_state.apps.get_model(app_label, self.model_name)
+935:         if not self.allow_migrate_model(schema_editor.connection.alias, model):
+936:             return
+937: 
+938:         if self.old_fields:
+939:             from_model = from_state.apps.get_model(app_label, self.model_name)
+940:             columns = [
+941:                 from_model._meta.get_field(field).column for field in self.old_fields
+942:             ]
+943:             matching_index_name = schema_editor._constraint_names(
+944:                 from_model, column_names=columns, index=True
+945:             )
+946:             if len(matching_index_name) != 1:
+947:                 raise ValueError(
+948:                     "Found wrong number (%s) of indexes for %s(%s)."
+949:                     % (
+950:                         len(matching_index_name),
+951:                         from_model._meta.db_table,
+952:                         ", ".join(columns),
+953:                     )
+954:                 )
+955:             old_index = models.Index(
+956:                 fields=self.old_fields,
+957:                 name=matching_index_name[0],
+958:             )
+959:         else:
+960:             from_model_state = from_state.models[app_label, self.model_name_lower]
+961:             old_index = from_model_state.get_index_by_name(self.old_name)
+962:         # Don't alter when the index name is not changed.
+963:         if old_index.name == self.new_name:
+964:             return
+965: 
+966:         to_model_state = to_state.models[app_label, self.model_name_lower]
+967:         new_index = to_model_state.get_index_by_name(self.new_name)
+968:         schema_editor.rename_index(model, old_index, new_index)
+969: 
+970:     def database_backwards(self, app_label, schema_editor, from_state, to_state):
+971:         if self.old_fields:
+972:             # Backward operation with unnamed index is a no-op.
+973:             return
+974: 
+975:         self.new_name_lower, self.old_name_lower = (
+976:             self.old_name_lower,
+977:             self.new_name_lower,
+978:         )
+979:         self.new_name, self.old_name = self.old_name, self.new_name
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

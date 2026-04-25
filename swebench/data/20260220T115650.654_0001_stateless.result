@@ -1,0 +1,19 @@
+status: failure
+-- [E172] Type Error: ----------------------------------------------------------
+5 |    djangoDir.children.filter(_.isDirectory).sorted.foreach(e => println(e.name))
+  |                                                   ^
+  |No given instance of type Ordering[library.FileEntry^{djangoDir}] was found for parameter ord of method sorted in trait StrictOptimizedSeqOps.
+  |I found:
+  |
+  |    scala.math.Ordering.ordered[library.FileEntry^{djangoDir}](
+  |      /* missing */
+  |        summon[scala.math.Ordering.AsComparable[library.FileEntry^{djangoDir}]]
+  |    )
+  |
+  |But no implicit values were found that match type scala.math.Ordering.AsComparable[library.FileEntry^{djangoDir}].
+  |
+  |The following import might make progress towards fixing the problem:
+  |
+  |  import scala.math.Ordered.orderingToOrdered
+  |
+1 error found

@@ -1,0 +1,6 @@
+status: success
+15: from django.db.models.sql.query import Query, get_order_dir
+307:             col, order = get_order_dir(field, asc)
+706:         name, order = get_order_dir(name, default_order)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

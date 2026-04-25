@@ -1,0 +1,5 @@
+status: success
+1312:                                 'use ForeignKey("%s", symmetrical=False, through="%s").'
+1332:                                 'use ForeignKey("%s", symmetrical=False, through="%s").'
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

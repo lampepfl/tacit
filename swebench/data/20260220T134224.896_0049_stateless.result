@@ -1,0 +1,31 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = ProcessResult(
+  exitCode = 0,
+  stdout = """        self.view_name = ':'.join(self.namespaces + [view_path])
+
+    def __getitem__(self, index):
+        return (self.func, self.args, self.kwargs)[index]
+
+    def __repr__(self):
+        return "ResolverMatch(func=%s, args=%s, kwargs=%s, url_name=%s, app_names=%s, namespaces=%s, route=%s)" % (
+            self._func_path, self.args, self.kwargs, self.url_name,
+            self.app_names, self.namespaces, self.route,
+        )
+
+
+def get_resolver(urlconf=None):
+    if urlconf is None:
+        urlconf = settings.ROOT_URLCONF
+    return _get_cached_resolver(urlconf)
+
+
+@functools.lru_cache(maxsize=None)
+def _get_cached_resolver(urlconf=None):
+    return URLResolver(RegexPattern(r'^/'), urlconf)
+
+
+@functools.lru_cache(maxsize=None)
+def get_ns_resolver(ns_pattern, resolver, converters):""",
+  stderr = ""
+)

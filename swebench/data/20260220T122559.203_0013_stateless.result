@@ -1,0 +1,52 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = """                    result.extend([result[-1]] * (count - 1))
+            else:
+                # Anything else is a literal.
+                result.append(ch)
+
+            if consume_next:
+                ch, escaped = next(pattern_iter)
+            consume_next = True
+    except StopIteration:
+        pass
+    except NotImplementedError:
+        # A case of using the disjunctive form. No results for you!
+        return [('', [])]
+
+    return list(zip(*flatten_result(result)))
+
+
+def next_char(input_iter):
+    r"""
+    An iterator that yields the next character from "pattern_iter", respecting
+    escape sequences. An escaped character is replaced by a representative of
+    its class (e.g. \w -> "x"). If the escaped character is one that is
+    skipped, it is not returned (the next character is returned instead).
+
+    Yield the next character, along with a boolean indicating whether it is a
+    raw (unescaped) character or not.
+    """
+    for ch in input_iter:
+        if ch != '\\':
+            yield ch, False
+            continue
+        ch = next(input_iter)
+        representative = ESCAPE_MAPPINGS.get(ch, ch)
+        if representative is None:
+            continue
+        yield representative, True
+
+
+def walk_to_end(ch, input_iter):
+    """
+    The iterator is currently inside a capturing group. Walk to the close of
+    this group, skipping over any nested groups and handling escaped
+    parentheses correctly.
+    """
+    if ch == '(':
+        nesting = 1
+    else:
+        nesting = 0
+    for ch, escaped in input_iter:
+...

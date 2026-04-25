@@ -1,0 +1,104 @@
+status: success
+1: import json
+2: 
+3: from django import forms
+4: from django.core import checks, exceptions
+5: from django.db import NotSupportedError, connections, router
+6: from django.db.models import lookups
+7: from django.db.models.lookups import PostgresOperatorLookup, Transform
+8: from django.utils.translation import gettext_lazy as _
+9: 
+10: from . import Field
+11: from .mixins import CheckFieldDefaultMixin
+12: 
+13: __all__ = ['JSONField']
+14: 
+15: 
+16: class JSONField(CheckFieldDefaultMixin, Field):
+17:     empty_strings_allowed = False
+18:     description = _('A JSON object')
+19:     default_error_messages = {
+20:         'invalid': _('Value must be valid JSON.'),
+21:     }
+22:     _default_hint = ('dict', '{}')
+23: 
+24:     def __init__(
+25:         self, verbose_name=None, name=None, encoder=None, decoder=None,
+26:         **kwargs,
+27:     ):
+28:         if encoder and not callable(encoder):
+29:             raise ValueError('The encoder parameter must be a callable object.')
+30:         if decoder and not callable(decoder):
+31:             raise ValueError('The decoder parameter must be a callable object.')
+32:         self.encoder = encoder
+33:         self.decoder = decoder
+34:         super().__init__(verbose_name, name, **kwargs)
+35: 
+36:     def check(self, **kwargs):
+37:         errors = super().check(**kwargs)
+38:         databases = kwargs.get('databases') or []
+39:         errors.extend(self._check_supported(databases))
+40:         return errors
+41: 
+42:     def _check_supported(self, databases):
+43:         errors = []
+44:         for db in databases:
+45:             if not router.allow_migrate_model(db, self.model):
+46:                 continue
+47:             connection = connections[db]
+48:             if not (
+49:                 'supports_json_field' in self.model._meta.required_db_features or
+50:                 connection.features.supports_json_field
+51:             ):
+52:                 errors.append(
+53:                     checks.Error(
+54:                         '%s does not support JSONFields.'
+55:                         % connection.display_name,
+56:                         obj=self.model,
+57:                         id='fields.E180',
+58:                     )
+59:                 )
+60:         return errors
+61: 
+62:     def deconstruct(self):
+63:         name, path, args, kwargs = super().deconstruct()
+64:         if self.encoder is not None:
+65:             kwargs['encoder'] = self.encoder
+66:         if self.decoder is not None:
+67:             kwargs['decoder'] = self.decoder
+68:         return name, path, args, kwargs
+69: 
+70:     def from_db_value(self, value, expression, connection):
+71:         if value is None:
+72:             return value
+73:         if connection.features.has_native_json_field and self.decoder is None:
+74:             return value
+75:         try:
+76:             return json.loads(value, cls=self.decoder)
+77:         except json.JSONDecodeError:
+78:             return value
+79: 
+80:     def get_internal_type(self):
+81:         return 'JSONField'
+82: 
+83:     def get_prep_value(self, value):
+84:         if value is None:
+85:             return value
+86:         return json.dumps(value, cls=self.encoder)
+87: 
+88:     def get_transform(self, name):
+89:         transform = super().get_transform(name)
+90:         if transform:
+91:             return transform
+92:         return KeyTransformFactory(name)
+93: 
+94:     def select_format(self, compiler, sql, params):
+95:         if (
+96:             compiler.connection.features.has_native_json_field and
+97:             self.decoder is not None
+98:         ):
+99:             return compiler.connection.ops.json_cast_text_sql(sql), params
+100:         return super().select_format(compiler, sql, params)
+101: 
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

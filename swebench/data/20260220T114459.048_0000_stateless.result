@@ -1,0 +1,37 @@
+status: success
+Root contents:
+  CITATION
+  .git-blame-ignore-revs
+  CODE_OF_CONDUCT.md
+  codecov.yml
+  conftest.py
+  licenses
+  .pre-commit-config.yaml
+  GOVERNANCE.md
+  pyproject.toml
+  .pyinstaller
+  MANIFEST.in
+  .pep8speaks.yml
+  docs
+  .astropy-root
+  cextern
+  pip-requirements
+  setup.py
+  .gitignore
+  CONTRIBUTING.md
+  examples
+  .github
+  tox.ini
+  .gitattributes
+  opencode.json
+  LICENSE.rst
+  setup.cfg
+  README.rst
+  .mailmap
+  .git
+  astropy
+  CHANGES.rst
+  .circleci
+  .readthedocs.yaml
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

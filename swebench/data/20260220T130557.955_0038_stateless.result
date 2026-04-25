@@ -1,0 +1,17 @@
+status: failure
+-- [E081] Type Error: ----------------------------------------------------------
+7 |  requestExecPermission(Set("ls"))(pp => 
+  |                                   ^^
+  |                           Missing parameter type
+  |
+  |                           I could not infer the type of the parameter pp
+  |                           Expected type for the whole anonymous function:
+  |                             Any
+-- [E007] Type Mismatch Error: -------------------------------------------------
+8 |    exec("ls", List("/"), 30000)
+  |                          ^^^^^
+  |                          Found:    (30000 : Int)
+  |                          Required: Option[String]
+  |
+  | longer explanation available when compiling with `-explain`
+2 errors found

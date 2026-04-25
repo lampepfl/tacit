@@ -1,0 +1,70 @@
+status: success
+251:     """
+252:     Function corresponding to "|" operation.
+253: 
+254:     Parameters
+255:     ----------
+256:     left, right : `astropy.modeling.Model` or ndarray
+257:         If input is of an array, it is the output of `coord_matrix`.
+258: 
+259:     Returns
+260:     -------
+261:     result : ndarray
+262:         Result from this operation.
+263:     """
+264: 
+265:     left, right = right, left
+266: 
+267:     def _n_inputs_outputs(input, position):
+268:         """
+269:         Return ``n_inputs``, ``n_outputs`` for a model or coord_matrix.
+270:         """
+271:         if isinstance(input, Model):
+272:             coords = _coord_matrix(input, position, input.n_outputs)
+273:         else:
+274:             coords = input
+275:         return coords
+276: 
+277:     cleft = _n_inputs_outputs(left, 'left')
+278:     cright = _n_inputs_outputs(right, 'right')
+279: 
+280:     try:
+281:         result = np.dot(cleft, cright)
+282:     except ValueError:
+283:         raise ModelDefinitionError(
+284:             'Models cannot be combined with the "|" operator; '
+285:             'left coord_matrix is {}, right coord_matrix is {}'.format(
+286:                 cright, cleft))
+287:     return result
+288: 
+289: 
+290: def _separable(transform):
+291:     """
+292:     Calculate the separability of outputs.
+293: 
+294:     Parameters
+295:     ----------
+296:     transform : `astropy.modeling.Model`
+297:         A transform (usually a compound model).
+298: 
+299:     Returns :
+300:     is_separable : ndarray of dtype np.bool
+301:         An array of shape (transform.n_outputs,) of boolean type
+302:         Each element represents the separablity of the corresponding output.
+303:     """
+304:     if (transform_matrix := transform._calculate_separability_matrix()) is not NotImplemented:
+305:         return transform_matrix
+306:     elif isinstance(transform, CompoundModel):
+307:         sepleft = _separable(transform.left)
+308:         sepright = _separable(transform.right)
+309:         return _operators[transform.op](sepleft, sepright)
+310:     elif isinstance(transform, Model):
+311:         return _coord_matrix(transform, 'left', transform.n_outputs)
+312: 
+313: 
+314: # Maps modeling operators to a function computing and represents the
+315: # relationship of axes as an array of 0-es and 1-s
+316: _operators = {'&': _cstack, '|': _cdot, '+': _arith_oper, '-': _arith_oper,
+317:               '*': _arith_oper, '/': _arith_oper, '**': _arith_oper}
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

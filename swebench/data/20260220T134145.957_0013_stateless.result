@@ -1,0 +1,10 @@
+status: success
+267:     def id_for_label(self, id_):
+626:             option_attrs['id'] = self.id_for_label(option_attrs['id'], index)
+644:     def id_for_label(self, id_, index='0'):
+781:     def id_for_label(self, id_, index=None):
+788:         return super().id_for_label(id_, index)
+849:     def id_for_label(self, id_):
+1059:     def id_for_label(self, id_):
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

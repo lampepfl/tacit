@@ -1,0 +1,23 @@
+status: success
+236: 
+237:         If 'fail_on_restricted' is False, error won't be raised even if it's
+238:         prohibited to delete such objects due to RESTRICT, that defers
+239:         restricted object checking in recursive calls where the top-level call
+240:         may need to collect more objects to determine whether restricted ones
+241:         can be deleted.
+242:         """
+243:         if self.can_fast_delete(objs):
+244:             self.fast_deletes.append(objs)
+245:             return
+246:         new_objs = self.add(objs, source, nullable,
+247:                             reverse_dependency=reverse_dependency)
+248:         if not new_objs:
+249:             return
+250: 
+251:         model = new_objs[0].__class__
+252: 
+253:         if not keep_parents:
+254:             # Recursively collect concrete model's parent models, but not their
+255:             # related objects. These will be found by meta.get_fields()
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

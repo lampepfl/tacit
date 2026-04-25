@@ -1,0 +1,33 @@
+status: success
+491:                 if not compiler.query.values_select and self.query.values_select:
+492:                     compiler.query = compiler.query.clone()
+493:                     compiler.query.set_values((
+494:                         *self.query.extra_select,
+495:                         *self.query.values_select,
+496:                         *self.query.annotation_select,
+497:                     ))
+498:                 part_sql, part_args = compiler.as_sql()
+499:                 if compiler.query.combinator:
+500:                     # Wrap in a subquery if wrapping in parentheses isn't
+501:                     # supported.
+502:                     if not features.supports_parentheses_in_compound:
+503:                         part_sql = 'SELECT * FROM ({})'.format(part_sql)
+504:                     # Add parentheses when combining with compound query if not
+505:                     # already added for all compound queries.
+506:                     elif not features.supports_slicing_ordering_in_compound:
+507:                         part_sql = '({})'.format(part_sql)
+508:                 parts += ((part_sql, part_args),)
+509:             except EmptyResultSet:
+510:                 # Omit the empty queryset with UNION and with DIFFERENCE if the
+511:                 # first queryset is nonempty.
+512:                 if combinator == 'union' or (combinator == 'difference' and parts):
+513:                     continue
+514:                 raise
+515:         if not parts:
+516:             raise EmptyResultSet
+517:         combinator_sql = self.connection.ops.set_operators[combinator]
+518:         if all and combinator == 'union':
+519:             combinator_sql += ' ALL'
+520:         braces = '({})' if features.supports_slicing_ordering_in_compound else '{}'
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

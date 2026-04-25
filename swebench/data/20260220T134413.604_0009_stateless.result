@@ -1,0 +1,54 @@
+status: success
+100: 
+101:     def bitleftshift(self, other):
+102:         return self._combine(other, self.BITLEFTSHIFT, False)
+103: 
+104:     def bitrightshift(self, other):
+105:         return self._combine(other, self.BITRIGHTSHIFT, False)
+106: 
+107:     def bitxor(self, other):
+108:         return self._combine(other, self.BITXOR, False)
+109: 
+110:     def __or__(self, other):
+111:         if getattr(self, 'conditional', False) and getattr(other, 'conditional', False):
+112:             return Q(self) | Q(other)
+113:         raise NotImplementedError(
+114:             "Use .bitand() and .bitor() for bitwise logical operations."
+115:         )
+116: 
+117:     def bitor(self, other):
+118:         return self._combine(other, self.BITOR, False)
+119: 
+120:     def __radd__(self, other):
+121:         return self._combine(other, self.ADD, True)
+122: 
+123:     def __rsub__(self, other):
+124:         return self._combine(other, self.SUB, True)
+125: 
+126:     def __rmul__(self, other):
+127:         return self._combine(other, self.MUL, True)
+128: 
+129:     def __rtruediv__(self, other):
+130:         return self._combine(other, self.DIV, True)
+131: 
+132:     def __rmod__(self, other):
+133:         return self._combine(other, self.MOD, True)
+134: 
+135:     def __rpow__(self, other):
+136:         return self._combine(other, self.POW, True)
+137: 
+138:     def __rand__(self, other):
+139:         raise NotImplementedError(
+140:             "Use .bitand() and .bitor() for bitwise logical operations."
+141:         )
+142: 
+143:     def __ror__(self, other):
+144:         raise NotImplementedError(
+145:             "Use .bitand() and .bitor() for bitwise logical operations."
+146:         )
+147: 
+148: 
+149: @deconstructible
+150: class BaseExpression:
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

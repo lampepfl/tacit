@@ -1,0 +1,6 @@
+status: success
+functions
+fields
+sql
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

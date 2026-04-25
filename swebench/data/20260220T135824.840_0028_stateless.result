@@ -1,0 +1,6 @@
+status: failure
+-- [E008] Not Found Error: -----------------------------------------------------
+4 |    step1.applyOrElse(
+  |    ^^^^^^^^^^^^^^^^^
+  |value applyOrElse is not a member of ((library.FileSystem^) ?=> Any) -> Any
+1 error found

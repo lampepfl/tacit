@@ -1,0 +1,103 @@
+status: success
+70: 
+71: class ModelBase(type):
+72:     """Metaclass for all models."""
+73:     def __new__(cls, name, bases, attrs, **kwargs):
+74:         super_new = super().__new__
+75: 
+76:         # Also ensure initialization is only performed for subclasses of Model
+77:         # (excluding Model class itself).
+78:         parents = [b for b in bases if isinstance(b, ModelBase)]
+79:         if not parents:
+80:             return super_new(cls, name, bases, attrs)
+81: 
+82:         # Create the class.
+83:         module = attrs.pop('__module__')
+84:         new_attrs = {'__module__': module}
+85:         classcell = attrs.pop('__classcell__', None)
+86:         if classcell is not None:
+87:             new_attrs['__classcell__'] = classcell
+88:         attr_meta = attrs.pop('Meta', None)
+89:         # Pass all attrs without a (Django-specific) contribute_to_class()
+90:         # method to type.__new__() so that they're properly initialized
+91:         # (i.e. __set_name__()).
+92:         contributable_attrs = {}
+93:         for obj_name, obj in list(attrs.items()):
+94:             if _has_contribute_to_class(obj):
+95:                 contributable_attrs[obj_name] = obj
+96:             else:
+97:                 new_attrs[obj_name] = obj
+98:         new_class = super_new(cls, name, bases, new_attrs, **kwargs)
+99: 
+100:         abstract = getattr(attr_meta, 'abstract', False)
+101:         meta = attr_meta or getattr(new_class, 'Meta', None)
+102:         base_meta = getattr(new_class, '_meta', None)
+103: 
+104:         app_label = None
+105: 
+106:         # Look for an application configuration to attach the model to.
+107:         app_config = apps.get_containing_app_config(module)
+108: 
+109:         if getattr(meta, 'app_label', None) is None:
+110:             if app_config is None:
+111:                 if not abstract:
+112:                     raise RuntimeError(
+113:                         "Model class %s.%s doesn't declare an explicit "
+114:                         "app_label and isn't in an application in "
+115:                         "INSTALLED_APPS." % (module, name)
+116:                     )
+117: 
+118:             else:
+119:                 app_label = app_config.label
+120: 
+121:         new_class.add_to_class('_meta', Options(meta, app_label))
+122:         if not abstract:
+123:             new_class.add_to_class(
+124:                 'DoesNotExist',
+125:                 subclass_exception(
+126:                     'DoesNotExist',
+127:                     tuple(
+128:                         x.DoesNotExist for x in parents if hasattr(x, '_meta') and not x._meta.abstract
+129:                     ) or (ObjectDoesNotExist,),
+130:                     module,
+131:                     attached_to=new_class))
+132:             new_class.add_to_class(
+133:                 'MultipleObjectsReturned',
+134:                 subclass_exception(
+135:                     'MultipleObjectsReturned',
+136:                     tuple(
+137:                         x.MultipleObjectsReturned for x in parents if hasattr(x, '_meta') and not x._meta.abstract
+138:                     ) or (MultipleObjectsReturned,),
+139:                     module,
+140:                     attached_to=new_class))
+141:             if base_meta and not base_meta.abstract:
+142:                 # Non-abstract child classes inherit some attributes from their
+143:                 # non-abstract parent (unless an ABC comes before it in the
+144:                 # method resolution order).
+145:                 if not hasattr(meta, 'ordering'):
+146:                     new_class._meta.ordering = base_meta.ordering
+147:                 if not hasattr(meta, 'get_latest_by'):
+148:                     new_class._meta.get_latest_by = base_meta.get_latest_by
+149: 
+150:         is_proxy = new_class._meta.proxy
+151: 
+152:         # If the model is a proxy, ensure that the base class
+153:         # hasn't been swapped out.
+154:         if is_proxy and base_meta and base_meta.swapped:
+155:             raise TypeError("%s cannot proxy the swapped model '%s'." % (name, base_meta.swapped))
+156: 
+157:         # Add remaining attributes (those with a contribute_to_class() method)
+158:         # to the class.
+159:         for obj_name, obj in contributable_attrs.items():
+160:             new_class.add_to_class(obj_name, obj)
+161: 
+162:         # All the fields of any type declared on this model
+163:         new_fields = chain(
+164:             new_class._meta.local_fields,
+165:             new_class._meta.local_many_to_many,
+166:             new_class._meta.private_fields
+167:         )
+168:         field_names = {f.name for f in new_fields}
+169: 
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

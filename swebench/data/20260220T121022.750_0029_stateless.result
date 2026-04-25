@@ -1,0 +1,72 @@
+status: success
+Exit: 0
+stdout: diff --git a/django/db/models/fields/__init__.py b/django/db/models/fields/__init__.py
+index 9ce46e3f73..3998dd678e 100644
+--- a/django/db/models/fields/__init__.py
++++ b/django/db/models/fields/__init__.py
+@@ -955,6 +955,7 @@ class CharField(Field):
+         return [
+             *super().check(**kwargs),
+             *self._check_max_length_attribute(**kwargs),
++            *self._check_max_length_choices(**kwargs),
+         ]
+ 
+     def _check_max_length_attribute(self, **kwargs):
+@@ -978,6 +979,47 @@ class CharField(Field):
+         else:
+             return []
+ 
++    def _check_max_length_choices(self):
++    if not self.choices:
++    return []
++
++    if self.max_length is None:
++    return []
++
++    if not isinstance(self.max_length, int) or isinstance(self.max_length, bool) or self.max_length <= 0:
++    return []
++
++    max_choice_length = 0
++    for choice in self.choices:
++    try:
++    group_name, group_choices = choice
++    if isinstance(group_choices, (list, tuple)):
++    for value, _ in group_choices:
++    if value is None:
++    continue
++    value_str = str(value) if isinstance(value, Promise) else str(value)
++    max_choice_length = max(max_choice_length, len(value_str))
++    else:
++    value = group_name
++    value_str = str(value) if isinstance(value, Promise) else str(value)
++    max_choice_length = max(max_choice_length, len(value_str))
++    except (TypeError, ValueError):
++    value, _ = choice
++    if value is None:
++    continue
++    value_str = str(value) if isinstance(value, Promise) else str(value)
++    max_choice_length = max(max_choice_length, len(value_str))
++
++    if max_choice_length > self.max_length:
++    return [
++    checks.Error(
++    "max_length must be at least %d to accommodate the longest choice value (%d)." % (max_choice_length, max_choice_length),
++    obj=self,
++    id='fields.E122',
++    )
++    ]
++    return []
++      
+     def cast_db_type(self, connection):
+         if self.max_length is None:
+             return connection.ops.cast_char_field_without_max_length
+@@ -2396,4 +2438,4 @@ class SmallAutoField(AutoFieldMixin, SmallIntegerField):
+         return 'SmallAutoField'
+ 
+     def rel_db_type(self, connection):
+-        return SmallIntegerField().db_type(connection=connection)
++        return SmallIntegerField().db_type(connection=connection)
+\ No newline at end of file
+stderr: 
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

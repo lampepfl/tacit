@@ -1,0 +1,12 @@
+status: success
+# pack-refs with: peeled fully-peeled sorted 
+4139cb8d35cfcb2beba6a8c629c20016ae84cf18 refs/remotes/origin/main
+e0896dfe83cce33b5cae3fcf0bbbef89e92b4bc6 refs/remotes/origin/stable/4.2.x
+a4999ef1b9790a4c0e793cf0e5c464e9935c3c3a refs/remotes/origin/stable/5.2.x
+deac58ed822c6cd819e916e6c3d1736c7adfa31e refs/remotes/origin/stable/6.0.x
+abd14962c88883b397ff9608ccc19ffa4dfd7419 refs/tags/1.0
+^42ef6557a9b88cfc277eb79ddb980e1c62add144
+6df1fa16a0cb0100815db149eafa15d89ee72cb9 refs/tags/1.0.1
+^13f63f051bf
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

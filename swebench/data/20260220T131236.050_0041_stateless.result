@@ -1,0 +1,25 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = ProcessResult(
+  exitCode = 0,
+  stdout = """diff --git a/django/db/models/query.py b/django/db/models/query.py
+index e0eeccefa6..59a0631b79 100644
+--- a/django/db/models/query.py
++++ b/django/db/models/query.py
+@@ -1138,6 +1138,7 @@ class QuerySet:
+         """
+         Return a new QuerySet instance that will select only distinct results.
+         """
++        self._not_support_combined_queries('distinct')
+         assert not self.query.is_sliced, \
+             "Cannot create distinct fields once a slice has been taken."
+         obj = self._chain()
+@@ -1974,4 +1975,4 @@ def get_related_populators(klass_info, select, db):
+     for rel_klass_info in related_klass_infos:
+         rel_cls = RelatedPopulator(rel_klass_info, select, db)
+         iterators.append(rel_cls)
+-    return iterators
++    return iterators
+\ No newline at end of file""",
+  stderr = ""
+)

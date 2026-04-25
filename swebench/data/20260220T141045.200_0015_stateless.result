@@ -1,0 +1,44 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = List(
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15738/repo/django/db/backends/mysql/schema.py",
+    lineNumber = 149,
+    line = "            constraint_names = self._constraint_names("
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15738/repo/django/db/backends/base/schema.py",
+    lineNumber = 563,
+    line = "        meta_constraint_names = {"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15738/repo/django/db/backends/base/schema.py",
+    lineNumber = 568,
+    line = "        constraint_names = self._constraint_names("
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15738/repo/django/db/backends/base/schema.py",
+    lineNumber = 571,
+    line = "            exclude=meta_constraint_names | meta_index_names,"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15738/repo/django/db/backends/base/schema.py",
+    lineNumber = 711,
+    line = "            fk_names = self._constraint_names(model, [field.column], foreign_key=True)"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15738/repo/django/db/backends/base/schema.py",
+    lineNumber = 813,
+    line = "            fk_names = self._constraint_names("
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15738/repo/django/db/backends/base/schema.py",
+    lineNumber = 833,
+    line = "            meta_constraint_names = {"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15738/repo/django/db/backends/base/schema.py",
+    lineNumber = 836,
+    line = "            constraint_names = self._constraint_names("
+  ),
+...

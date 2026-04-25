@@ -1,0 +1,6 @@
+status: success
+5: def update_proxy_model_permissions(apps, schema_editor, reverse=False):
+38:     update_proxy_model_permissions(apps, schema_editor, reverse=True)
+47:         migrations.RunPython(update_proxy_model_permissions, revert_proxy_model_permissions),
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

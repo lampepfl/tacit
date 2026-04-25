@@ -1,0 +1,19 @@
+status: success
+340: 
+341: 
+342: class VerboseNameProfile(Profile):
+343:     class Meta:
+344:         verbose_name = 'Model with verbose name only'
+345: 
+346: 
+347: class VerboseNamePluralProfile(Profile):
+348:     class Meta:
+349:         verbose_name_plural = 'Model with verbose name plural only'
+350: 
+351: 
+352: class BothVerboseNameProfile(Profile):
+353:     class Meta:
+354:         verbose_name = 'Model with both - name'
+355:         verbose_name_plural = 'Model with both - plural name'
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

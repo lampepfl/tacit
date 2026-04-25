@@ -1,0 +1,26 @@
+status: success
+176:         self.subquery = False
+387:                 # Its already a Ref to subquery (see resolve_ref() for
+397:                 # Reuse aliases of expressions already selected in subquery.
+403:                     # An expression that is not selected the subquery.
+431:         # Decide if we need to use a subquery.
+439:         # those operations must be done in a subquery so that the query
+446:             inner_query.subquery = True
+469:             relabels = {t: 'subquery' for t in inner_query.alias_map}
+470:             relabels[None] = 'subquery'
+471:             # Remove any aggregates marked for reduction from the subquery
+485:                 # field selected in the inner query, yet we must use a subquery.
+921:         # much depth recursive subquery references add to the stack. This value
+1049:         clone.subquery = True
+1080:         # Some backends (e.g. Oracle) raise an error when a subquery contains
+1083:             self.subquery and
+1088:         if self.subquery:
+1737:                 # which is executed as a wrapped subquery if any of the
+1739:                 # that case we need to return a Ref to the subquery's annotation.
+1772:         to use a subquery. This method constructs the nested query, given the
+1798:         # Try to have as simple as possible subquery -> trim leading joins from
+1799:         # the subquery.
+1808:             # the subquery, too.
+2280:         This method is meant to be used for generating the subquery joins &
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

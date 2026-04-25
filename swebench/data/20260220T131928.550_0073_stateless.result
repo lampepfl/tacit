@@ -1,0 +1,46 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = ProcessResult(
+  exitCode = 2,
+  stdout = """============================= test session starts ==============================
+platform darwin -- Python 3.14.3, pytest-9.0.2, pluggy-1.6.0 -- /Users/tacit/Work/SafeExecMCP/bench/.venv/bin/python3
+cachedir: .pytest_cache
+hypothesis profile 'default'
+rootdir: /Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13265/repo
+plugins: anyio-4.12.1, hypothesis-6.151.9, langsmith-0.7.3
+collecting ... collected 0 items / 1 error
+
+==================================== ERRORS ====================================
+____________ ERROR collecting tests/migrations/test_autodetector.py ____________
+ImportError while importing test module '/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13265/repo/tests/migrations/test_autodetector.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/importlib/__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/migrations/test_autodetector.py:7: in <module>
+    from django.contrib.auth.models import AbstractBaseUser
+django/contrib/auth/__init__.py:7: in <module>
+    from django.middleware.csrf import rotate_token
+django/middleware/csrf.py:14: in <module>
+    from django.urls import get_callable
+django/urls/__init__.py:1: in <module>
+    from .base import (
+django/urls/base.py:9: in <module>
+    from .exceptions import NoReverseMatch, Resolver404
+django/urls/exceptions.py:1: in <module>
+    from django.http import Http404
+django/http/__init__.py:2: in <module>
+    from django.http.request import (
+django/http/request.py:1: in <module>
+    import cgi
+E   ModuleNotFoundError: No module named 'cgi'
+=============================== warnings summary ===============================
+django/utils/encoding.py:266
+  /Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13265/repo/django/utils/encoding.py:266: DeprecationWarning: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15. Use setlocale(), getencoding() and getlocale() instead.
+    encoding = locale.getdefaultlocale()[1] or 'ascii'
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+ERROR tests/migrations/test_autodetector.py
+...

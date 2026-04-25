@@ -1,0 +1,4 @@
+status: success
+equals, getClass, hashCode, notify, notifyAll, res0, run, toString, wait
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

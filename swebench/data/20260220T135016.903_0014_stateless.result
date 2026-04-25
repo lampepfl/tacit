@@ -1,0 +1,31 @@
+status: success
+1089: 
+1090:     def _model_indexes_sql(self, model):
+1091:         """
+1092:         Return a list of all index SQL statements (field indexes,
+1093:         index_together, Meta.indexes) for the specified model.
+1094:         """
+1095:         if not model._meta.managed or model._meta.proxy or model._meta.swapped:
+1096:             return []
+1097:         output = []
+1098:         for field in model._meta.local_fields:
+1099:             output.extend(self._field_indexes_sql(model, field))
+1100: 
+1101:         for field_names in model._meta.index_together:
+1102:             fields = [model._meta.get_field(field) for field in field_names]
+1103:             output.append(self._create_index_sql(model, fields=fields, suffix='_idx'))
+1104: 
+1105:         for index in model._meta.indexes:
+1106:             if (
+1107:                 not index.contains_expressions or
+1108:                 self.connection.features.supports_expression_indexes
+1109:             ):
+1110:                 output.append(index.create_sql(model, self))
+1111:         return output
+1112: 
+1113:     def _field_indexes_sql(self, model, field):
+1114:         """
+1115:         Return a list of all index SQL statements for the specified field.
+1116:         """
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

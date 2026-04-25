@@ -1,0 +1,154 @@
+status: success
+200: 
+201:     def get_del_batches(self, objs, fields):
+202:         """
+203:         Return the objs in suitably sized batches for the used connection.
+204:         """
+205:         field_names = [field.name for field in fields]
+206:         conn_batch_size = max(
+207:             connections[self.using].ops.bulk_batch_size(field_names, objs), 1)
+208:         if len(objs) > conn_batch_size:
+209:             return [objs[i:i + conn_batch_size]
+210:                     for i in range(0, len(objs), conn_batch_size)]
+211:         else:
+212:             return [objs]
+213: 
+214:     def collect(self, objs, source=None, nullable=False, collect_related=True,
+215:                 source_attr=None, reverse_dependency=False, keep_parents=False,
+216:                 fail_on_restricted=True):
+217:         """
+218:         Add 'objs' to the collection of objects to be deleted as well as all
+219:         parent instances.  'objs' must be a homogeneous iterable collection of
+220:         model instances (e.g. a QuerySet).  If 'collect_related' is True,
+221:         related objects will be handled by their respective on_delete handler.
+222: 
+223:         If the call is the result of a cascade, 'source' should be the model
+224:         that caused it and 'nullable' should be set to True, if the relation
+225:         can be null.
+226: 
+227:         If 'reverse_dependency' is True, 'source' will be deleted before the
+228:         current model, rather than after. (Needed for cascading to parent
+229:         models, the one case in which the cascade follows the forwards
+230:         direction of an FK rather than the reverse direction.)
+231: 
+232:         If 'keep_parents' is True, data of parent model's will be not deleted.
+233: 
+234:         If 'fail_on_restricted' is False, error won't be raised even if it's
+235:         prohibited to delete such objects due to RESTRICT, that defers
+236:         restricted object checking in recursive calls where the top-level call
+237:         may need to collect more objects to determine whether restricted ones
+238:         can be deleted.
+239:         """
+240:         if self.can_fast_delete(objs):
+241:             self.fast_deletes.append(objs)
+242:             return
+243:         new_objs = self.add(objs, source, nullable,
+244:                             reverse_dependency=reverse_dependency)
+245:         if not new_objs:
+246:             return
+247: 
+248:         model = new_objs[0].__class__
+249: 
+250:         if not keep_parents:
+251:             # Recursively collect concrete model's parent models, but not their
+252:             # related objects. These will be found by meta.get_fields()
+253:             concrete_model = model._meta.concrete_model
+254:             for ptr in concrete_model._meta.parents.values():
+255:                 if ptr:
+256:                     parent_objs = [getattr(obj, ptr.name) for obj in new_objs]
+257:                     self.collect(parent_objs, source=model,
+258:                                  source_attr=ptr.remote_field.related_name,
+259:                                  collect_related=False,
+260:                                  reverse_dependency=True,
+261:                                  fail_on_restricted=False)
+262:         if not collect_related:
+263:             return
+264: 
+265:         if keep_parents:
+266:             parents = set(model._meta.get_parent_list())
+267:         model_fast_deletes = defaultdict(list)
+268:         protected_objects = defaultdict(list)
+269:         for related in get_candidate_relations_to_delete(model._meta):
+270:             # Preserve parent reverse relationships if keep_parents=True.
+271:             if keep_parents and related.model in parents:
+272:                 continue
+273:             field = related.field
+274:             if field.remote_field.on_delete == DO_NOTHING:
+275:                 continue
+276:             related_model = related.related_model
+277:             if self.can_fast_delete(related_model, from_field=field):
+278:                 model_fast_deletes[related_model].append(field)
+279:                 continue
+280:             batches = self.get_del_batches(new_objs, [field])
+281:             for batch in batches:
+282:                 sub_objs = self.related_objects(related_model, [field], batch)
+283:                 # Non-referenced fields can be deferred if no signal receivers
+284:                 # are connected for the related model as they'll never be
+285:                 # exposed to the user. Skip field deferring when some
+286:                 # relationships are select_related as interactions between both
+287:                 # features are hard to get right. This should only happen in
+288:                 # the rare cases where .related_objects is overridden anyway.
+289:                 if not (sub_objs.query.select_related or self._has_signal_listeners(related_model)):
+290:                     referenced_fields = set(chain.from_iterable(
+291:                         (rf.attname for rf in rel.field.foreign_related_fields)
+292:                         for rel in get_candidate_relations_to_delete(related_model._meta)
+293:                     ))
+294:                     sub_objs = sub_objs.only(*tuple(referenced_fields))
+295:                 if sub_objs:
+296:                     try:
+297:                         field.remote_field.on_delete(self, field, sub_objs, self.using)
+298:                     except ProtectedError as error:
+299:                         key = "'%s.%s'" % (field.model.__name__, field.name)
+300:                         protected_objects[key] += error.protected_objects
+301:         if protected_objects:
+302:             raise ProtectedError(
+303:                 'Cannot delete some instances of model %r because they are '
+304:                 'referenced through protected foreign keys: %s.' % (
+305:                     model.__name__,
+306:                     ', '.join(protected_objects),
+307:                 ),
+308:                 chain.from_iterable(protected_objects.values()),
+309:             )
+310:         for related_model, related_fields in model_fast_deletes.items():
+311:             batches = self.get_del_batches(new_objs, related_fields)
+312:             for batch in batches:
+313:                 sub_objs = self.related_objects(related_model, related_fields, batch)
+314:                 self.fast_deletes.append(sub_objs)
+315:         for field in model._meta.private_fields:
+316:             if hasattr(field, 'bulk_related_objects'):
+317:                 # It's something like generic foreign key.
+318:                 sub_objs = field.bulk_related_objects(new_objs, self.using)
+319:                 self.collect(sub_objs, source=model, nullable=True, fail_on_restricted=False)
+320: 
+321:         if fail_on_restricted:
+322:             # Raise an error if collected restricted objects (RESTRICT) aren't
+323:             # candidates for deletion also collected via CASCADE.
+324:             for related_model, instances in self.data.items():
+325:                 self.clear_restricted_objects_from_set(related_model, instances)
+326:             for qs in self.fast_deletes:
+327:                 self.clear_restricted_objects_from_queryset(qs.model, qs)
+328:             if self.restricted_objects.values():
+329:                 restricted_objects = defaultdict(list)
+330:                 for related_model, fields in self.restricted_objects.items():
+331:                     for field, objs in fields.items():
+332:                         if objs:
+333:                             key = "'%s.%s'" % (related_model.__name__, field.name)
+334:                             restricted_objects[key] += objs
+335:                 if restricted_objects:
+336:                     raise RestrictedError(
+337:                         'Cannot delete some instances of model %r because '
+338:                         'they are referenced through restricted foreign keys: '
+339:                         '%s.' % (
+340:                             model.__name__,
+341:                             ', '.join(restricted_objects),
+342:                         ),
+343:                         chain.from_iterable(restricted_objects.values()),
+344:                     )
+345: 
+346:     def related_objects(self, related_model, related_fields, objs):
+347:         """
+348:         Get a QuerySet of the related model to objs via related fields.
+349:         """
+350:         predicate = reduce(operator.or_, (
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

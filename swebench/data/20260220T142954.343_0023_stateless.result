@@ -1,0 +1,50 @@
+status: success
+Line 660-680:
+659:                         possible_parent_link.model._meta.abstract):
+660:                     ret.append(instance.pk)
+661:                     continue
+662:             ret.append(getattr(instance, field.attname))
+663:         return tuple(ret)
+664: 
+665:     def get_attname_column(self):
+666:         attname, column = super().get_attname_column()
+667:         return attname, None
+668: 
+669:     def get_joining_columns(self, reverse_join=False):
+670:         source = self.reverse_related_fields if reverse_join else self.related_fields
+671:         return tuple((lhs_field.column, rhs_field.column) for lhs_field, rhs_field in source)
+672: 
+673:     def get_reverse_joining_columns(self):
+674:         return self.get_joining_columns(reverse_join=True)
+675: 
+676:     def get_extra_descriptor_filter(self, instance):
+677:         """
+678:         Return an extra filter condition for related object fetching when
+679:         user does 'instance.fieldname', that is the extra filter is used in
+680:         the descriptor of the field.
+---
+Line 940-960:
+939:                         to_field.name,
+940:                         self.remote_field.model._meta.concrete_model._meta.label,
+941:                     )
+942:                 )
+943:         return related_fields
+944: 
+945:     def get_attname(self):
+946:         return '%s_id' % self.name
+947: 
+948:     def get_attname_column(self):
+949:         attname = self.get_attname()
+950:         column = self.db_column or attname
+951:         return attname, column
+952: 
+953:     def get_default(self):
+954:         """Return the to_field if the default value is an object."""
+955:         field_default = super().get_default()
+956:         if isinstance(field_default, self.remote_field.model):
+957:             return getattr(field_default, self.target_field.attname)
+958:         return field_default
+959: 
+960:     def get_db_prep_save(self, value, connection):
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

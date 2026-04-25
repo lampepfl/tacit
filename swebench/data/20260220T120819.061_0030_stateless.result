@@ -1,0 +1,8 @@
+status: success
+492:         authors = Author.objects.filter(book__in=[self.b5, self.b6])
+575:         publishers = Publisher.objects.annotate(num_books=Count("book")).filter(num_books__range=[1, 3]).order_by("pk")
+587:         publishers = Publisher.objects.annotate(num_books=Count("book")).filter(num_books__range=[1, 2]).order_by("pk")
+594:         publishers = Publisher.objects.annotate(num_books=Count("book")).filter(num_books__in=[1, 3]).order_by("pk")
+882:         v = Book.objects.filter(rating=4).aggregate(avg_price=(Avg('price')))['avg_price']
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,19 @@
+status: success
+150:         self.default = default
+151:         self.editable = editable
+152:         self.serialize = serialize
+153:         self.unique_for_date = unique_for_date
+154:         self.unique_for_month = unique_for_month
+155:         self.unique_for_year = unique_for_year
+156:         if isinstance(choices, collections.abc.Iterator):
+157:             choices = list(choices)
+158:         self.choices = choices
+159:         self.help_text = help_text
+160:         self.db_index = db_index
+161:         self.db_column = db_column
+162:         self._db_tablespace = db_tablespace
+163:         self.auto_created = auto_created
+164: 
+165:         # Adjust the appropriate creation counter, and save our local copy.
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

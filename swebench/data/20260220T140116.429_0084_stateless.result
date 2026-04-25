@@ -1,0 +1,18 @@
+status: success
+18:    TextField, TimeField, UniqueConstraint, UUIDField, Value,
+2059:        constraint = UniqueConstraint(fields=['name'], name='author_name_uniq')
+2178:        constraint = UniqueConstraint(fields=['name', 'birthday'], name='author_name_birthday_uniq')
+2220:        constraint = UniqueConstraint(fields=['name'], name='name_uq')
+2237:        constraint = UniqueConstraint(Upper('name').desc(), name='func_upper_uq')
+2261:        constraint = UniqueConstraint(
+2290:        constraint = UniqueConstraint(
+2321:        constraint = UniqueConstraint(
+2349:        constraint = UniqueConstraint(
+2387:            constraint = UniqueConstraint(
+2418:        constraint = UniqueConstraint(
+2444:        # UniqueConstraint is ignored on databases that don't support indexes on
+2448:        constraint = UniqueConstraint(F('name'), name='func_name_uq')
+2455:        constraint = UniqueConstraint(Lower('nonexistent'), name='func_nonexistent_uq')
+2468:        constraint = UniqueConstraint(Random(), name='func_random_uq')
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,67 @@
+status: success
+1226: class JSONField(CharField):
+1227:     default_error_messages = {
+1228:         'invalid': _('Enter a valid JSON.'),
+1229:     }
+1230:     widget = Textarea
+1231: 
+1232:     def __init__(self, encoder=None, decoder=None, **kwargs):
+1233:         self.encoder = encoder
+1234:         self.decoder = decoder
+1235:         super().__init__(**kwargs)
+1236: 
+1237:     def to_python(self, value):
+1238:         if self.disabled:
+1239:             return value
+1240:         if value in self.empty_values:
+1241:             return None
+1242:         elif isinstance(value, (list, dict, int, float, JSONString)):
+1243:             return value
+1244:         try:
+1245:             converted = json.loads(value, cls=self.decoder)
+1246:         except json.JSONDecodeError:
+1247:             raise ValidationError(
+1248:                 self.error_messages['invalid'],
+1249:                 code='invalid',
+1250:                 params={'value': value},
+1251:             )
+1252:         if isinstance(converted, str):
+1253:             return JSONString(converted)
+1254:         else:
+1255:             return converted
+1256: 
+1257:     def bound_data(self, data, initial):
+1258:         if self.disabled:
+1259:             return initial
+1260:         try:
+1261:             return json.loads(data, cls=self.decoder)
+1262:         except json.JSONDecodeError:
+1263:             return InvalidJSONInput(data)
+1264: 
+1265:     def prepare_value(self, value):
+1266:         if isinstance(value, InvalidJSONInput):
+1267:             return value
+1268:         return json.dumps(value, cls=self.encoder)
+1269: 
+1270:     def has_changed(self, initial, data):
+1271:         if super().has_changed(initial, data):
+1272:             return True
+1273:         # For purposes of seeing whether something has changed, True isn't the
+1274:         # same as 1 and the order of keys doesn't matter.
+1275:         return (
+1276:             json.dumps(initial, sort_keys=True, cls=self.encoder) !=
+1277:             json.dumps(self.to_python(data), sort_keys=True, cls=self.encoder)
+1278:         )
+java.lang.IndexOutOfBoundsException: 1278
+  at scala.collection.LinearSeqOps.apply(LinearSeq.scala:134)
+  at scala.collection.LinearSeqOps.apply$(LinearSeq.scala:38)
+  at scala.collection.immutable.List.apply(List.scala:83)
+  at rs$line$2$.run$$anonfun$1$$anonfun$1(rs$line$2:10)
+  at scala.runtime.java8.JFunction1$mcVI$sp.apply(JFunction1$mcVI$sp.scala:20)
+  at scala.collection.immutable.Range.foreach(Range.scala:256)
+  at rs$line$2$.run$$anonfun$1(rs$line$2:9)
+  at scala.runtime.function.JProcedure1.apply(JProcedure1.java:15)
+  at scala.runtime.function.JProcedure1.apply(JProcedure1.java:10)
+  at library.InterfaceImpl.requestFileSystem(InterfaceImpl.scala:33)
+  at rs$line$2$.run(rs$line$2:11)
+  ... 53 elided

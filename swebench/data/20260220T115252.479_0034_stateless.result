@@ -1,0 +1,32 @@
+status: success
+=== Current code (lines 127-150) ===
+127:         """
+128:         # Start with a copy of list_1.
+129:         combined_list = list(list_1)
+130:         last_insert_index = len(list_1)
+131:         # Walk list_2 in reverse, inserting each element into combined_list if
+132:         # it doesn't already exist.
+133:         for path in reversed(list_2):
+134:             try:
+135:                 # Does path already exist in the list?
+136:                 index = combined_list.index(path)
+137:             except ValueError:
+138:                 # Add path to combined_list since it doesn't exist.
+139:                 combined_list.insert(last_insert_index, path)
+140:             else:
+141:                 if index > last_insert_index:
+142:                     warnings.warn(
+143:                         'Detected duplicate Media files in an opposite order:\n'
+144:                         '%s\n%s' % (combined_list[last_insert_index], combined_list[index]),
+145:                         MediaOrderConflictWarning,
+146:                     )
+147:                 # path already exists in the list. Update last_insert_index so
+148:                 # that the following elements are inserted in front of this one.
+149:                 last_insert_index = index
+150:         return combined_list
+
+=== Proposed fix ===
+Add: list_1_len = len(list_1) after line 129
+Change line 144 to use list_1_len instead of last_insert_index
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

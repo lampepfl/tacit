@@ -1,0 +1,41 @@
+status: success
+1244:         }
+1245: 
+1246:     def _create_unique_sql(
+1247:         self, model, fields, name=None, condition=None, deferrable=None,
+1248:         include=None, opclasses=None, expressions=None,
+1249:     ):
+1250:         if (
+1251:             (
+1252:                 deferrable and
+1253:                 not self.connection.features.supports_deferrable_unique_constraints
+1254:             ) or
+1255:             (condition and not self.connection.features.supports_partial_indexes) or
+1256:             (include and not self.connection.features.supports_covering_indexes) or
+1257:             (expressions and not self.connection.features.supports_expression_indexes)
+1258:         ):
+1259:             return None
+1260: 
+1261:         def create_unique_name(*args, **kwargs):
+1262:             return self.quote_name(self._create_index_name(*args, **kwargs))
+1263: 
+1264:         compiler = Query(model, alias_cols=False).get_compiler(connection=self.connection)
+1265:         table = model._meta.db_table
+1266:         columns = [field.column for field in fields]
+1267:         if name is None:
+1268:             name = IndexName(table, columns, '_uniq', create_unique_name)
+1269:         else:
+1270:             name = self.quote_name(name)
+1271:         if condition or include or opclasses or expressions:
+1272:             sql = self.sql_create_unique_index
+1273:         else:
+1274:             sql = self.sql_create_unique
+1275:         if columns:
+1276:             columns = self._index_columns(table, columns, col_suffixes=(), opclasses=opclasses)
+1277:         else:
+1278:             columns = Expressions(table, expressions, compiler, self.quote_value)
+1279:         return Statement(
+1280:             sql,
+1281:             table=Table(table, self.quote_name),
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

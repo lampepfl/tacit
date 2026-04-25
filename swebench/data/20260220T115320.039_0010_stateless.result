@@ -1,0 +1,9 @@
+status: success
+Files in django/http:
+  multipartparser.py
+  request.py
+  __init__.py
+  response.py
+  cookie.py
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

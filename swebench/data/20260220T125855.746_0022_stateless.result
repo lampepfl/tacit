@@ -1,0 +1,18 @@
+status: success
+1145:         """
+1146:         result_type = result_type or NO_RESULTS
+1147:         try:
+1148:             sql, params = self.as_sql()
+1149:             if not sql:
+1150:                 raise EmptyResultSet
+1151:         except EmptyResultSet:
+1152:             if result_type == MULTI:
+1153:                 return iter([])
+1154:             else:
+1155:                 return
+1156:         if chunked_fetch:
+1157:             cursor = self.connection.chunked_cursor()
+1158:         else:
+1159:             cursor = self.connection.cursor()
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

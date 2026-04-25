@@ -1,0 +1,18 @@
+status: success
+266:                     self.rhs.clear_select_clause()
+267:                     self.rhs.add_fields(['pk'])
+268:             else:
+269:                 raise ValueError(
+270:                     'The QuerySet value for an exact lookup must be limited to '
+271:                     'one result using slicing.'
+272:                 )
+273:         return super().process_rhs(compiler, connection)
+274: 
+275: 
+276: @Field.register_lookup
+277: class IExact(BuiltinLookup):
+278:     lookup_name = 'iexact'
+279:     prepare_rhs = False
+280: 
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

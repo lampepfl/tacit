@@ -1,0 +1,436 @@
+status: success
+d with the same name, then
+            # such fields can't be deferred (we don't have a check for this).
+            if not getattr(cls, self.attname, None):
+                setattr(cls, self.attname, self.descriptor_class(self))
+        if self.choices is not None:
+            if not hasattr(cls, 'get_%s_display' % self.name):
+                setattr(
+                    cls,
+                    'get_%s_display' % self.name,
+                    partialmethod(cls._get_FIELD_display, field=self),
+                )
+
+    def get_filter_kwargs_for_object(self, obj):
+        """
+        Return a dict that when passed as kwargs to self.model.filter(), would
+        yield all instances having the same value for this field as obj has.
+        """
+        return {self.name: getattr(obj, self.attname)}
+
+    def get_attname(self):
+        return self.name
+
+    def get_attname_column(self):
+        attname = self.get_attname()
+        column = self.db_column or attname
+        return attname, column
+
+    def get_internal_type(self):
+        return self.__class__.__name__
+
+    def pre_save(self, model_instance, add):
+        """Return field's value just before saving."""
+        return getattr(model_instance, self.attname)
+
+    def get_prep_value(self, value):
+        """Perform preliminary non-db specific value checks and conversions."""
+        if isinstance(value, Promise):
+            value = value._proxy____cast()
+        return value
+
+    def get_db_prep_value(self, value, connection, prepared=False):
+        """
+        Return field's value prepared for interacting with the database backend.
+
+        Used by the default implementations of get_db_prep_save().
+        """
+        if not prepared:
+            value = self.get_prep_value(value)
+        return value
+
+    def get_db_prep_save(self, value, connection):
+        """Return field's value prepared for saving into a database."""
+        return self.get_db_prep_value(value, connection=connection, prepared=False)
+
+    def has_default(self):
+        """Return a boolean of whether this field has a default value."""
+        return self.default is not NOT_PROVIDED
+
+    def get_default(self):
+        """Return the default value for this field."""
+        return self._get_default()
+
+    @cached_property
+    def _get_default(self):
+        if self.has_default():
+            if callable(self.default):
+                return self.default
+            return lambda: self.default
+
+        if not self.empty_strings_allowed or self.null and not connection.features.interprets_empty_strings_as_nulls:
+            return return_None
+        return str  # return empty string
+
+    def get_choices(self, include_blank=True, blank_choice=BLANK_CHOICE_DASH, limit_choices_to=None, ordering=()):
+        """
+        Return choices with a default blank choices included, for use
+        as <select> choices for this field.
+        """
+        if self.choices is not None:
+            choices = list(self.choices)
+            if include_blank:
+                blank_defined = any(choice in ('', None) for choice, _ in self.flatchoices)
+                if not blank_defined:
+                    choices = blank_choice + choices
+            return choices
+        rel_model = self.remote_field.model
+        limit_choices_to = limit_choices_to or self.get_limit_choices_to()
+        choice_func = operator.attrgetter(
+            self.remote_field.get_related_field().attname
+            if hasattr(self.remote_field, 'get_related_field')
+            else 'pk'
+        )
+        qs = rel_model._default_manager.complex_filter(limit_choices_to)
+        if ordering:
+            qs = qs.order_by(*ordering)
+        return (blank_choice if include_blank else []) + [
+            (choice_func(x), str(x)) for x in qs
+        ]
+
+    def value_to_string(self, obj):
+        """
+        Return a string value of this field from the passed obj.
+        This is used by the serialization framework.
+        """
+        return str(self.value_from_object(obj))
+
+    def _get_flatchoices(self):
+        """Flattened version of choices tuple."""
+        if self.choices is None:
+            return []
+        flat = []
+        for choice, value in self.choices:
+            if isinstance(value, (list, tuple)):
+                flat.extend(value)
+            else:
+                flat.append((choice, value))
+        return flat
+    flatchoices = property(_get_flatchoices)
+
+    def save_form_data(self, instance, data):
+        setattr(instance, self.name, data)
+
+    def formfield(self, form_class=None, choices_form_class=None, **kwargs):
+        """Return a django.forms.Field instance for this field."""
+        defaults = {
+            'required': not self.blank,
+            'label': capfirst(self.verbose_name),
+            'help_text': self.help_text,
+        }
+        if self.has_default():
+            if callable(self.default):
+                defaults['initial'] = self.default
+                defaults['show_hidden_initial'] = True
+            else:
+                defaults['initial'] = self.get_default()
+        if self.choices is not None:
+            # Fields with choices get special treatment.
+            include_blank = (self.blank or
+                             not (self.has_default() or 'initial' in kwargs))
+            defaults['choices'] = self.get_choices(include_blank=include_blank)
+            defaults['coerce'] = self.to_python
+            if self.null:
+                defaults['empty_value'] = None
+            if choices_form_class is not None:
+                form_class = choices_form_class
+            else:
+                form_class = forms.TypedChoiceField
+            # Many of the subclass-specific formfield arguments (min_value,
+            # max_value) don't apply for choice fields, so be sure to only pass
+            # the values that TypedChoiceField will understand.
+            for k in list(kwargs):
+                if k not in ('coerce', 'empty_value', 'choices', 'required',
+                             'widget', 'label', 'initial', 'help_text',
+                             'error_messages', 'show_hidden_initial', 'disabled'):
+                    del kwargs[k]
+        defaults.update(kwargs)
+        if form_class is None:
+            form_class = forms.CharField
+        return form_class(**defaults)
+
+    def value_from_object(self, obj):
+        """Return the value of this field in the given model instance."""
+        return getattr(obj, self.attname)
+
+
+class BooleanField(Field):
+    empty_strings_allowed = False
+    default_error_messages = {
+        'invalid': _('“%(value)s” value must be either True or False.'),
+        'invalid_nullable': _('“%(value)s” value must be either True, False, or None.'),
+    }
+    description = _("Boolean (Either True or False)")
+
+    def get_internal_type(self):
+        return "BooleanField"
+
+    def to_python(self, value):
+        if self.null and value in self.empty_values:
+            return None
+        if value in (True, False):
+            # 1/0 are equal to True/False. bool() converts former to latter.
+            return bool(value)
+        if value in ('t', 'True', '1'):
+            return True
+        if value in ('f', 'False', '0'):
+            return False
+        raise exceptions.ValidationError(
+            self.error_messages['invalid_nullable' if self.null else 'invalid'],
+            code='invalid',
+            params={'value': value},
+        )
+
+    def get_prep_value(self, value):
+        value = super().get_prep_value(value)
+        if value is None:
+            return None
+        return self.to_python(value)
+
+    def formfield(self, **kwargs):
+        if self.choices is not None:
+            include_blank = not (self.has_default() or 'initial' in kwargs)
+            defaults = {'choices': self.get_choices(include_blank=include_blank)}
+        else:
+            form_class = forms.NullBooleanField if self.null else forms.BooleanField
+            # In HTML checkboxes, 'required' means "must be checked" which is
+            # different from the choices case ("must select some value").
+            # required=False allows unchecked checkboxes.
+            defaults = {'form_class': form_class, 'required': False}
+        return super().formfield(**{**defaults, **kwargs})
+
+
+class CharField(Field):
+    description = _("String (up to %(max_length)s)")
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.validators.append(validators.MaxLengthValidator(self.max_length))
+
+    def check(self, **kwargs):
+        return [
+            *super().check(**kwargs),
+            *self._check_max_length_attribute(**kwargs),
+        ]
+
+    def _check_max_length_attribute(self, **kwargs):
+        if self.max_length is None:
+            return [
+                checks.Error(
+                    "CharFields must define a 'max_length' attribute.",
+                    obj=self,
+                    id='fields.E120',
+                )
+            ]
+        elif (not isinstance(self.max_length, int) or isinstance(self.max_length, bool) or
+                self.max_length <= 0):
+            return [
+                checks.Error(
+                    "'max_length' must be a positive integer.",
+                    obj=self,
+                    id='fields.E121',
+                )
+            ]
+        else:
+            return []
+
+    def cast_db_type(self, connection):
+        if self.max_length is None:
+            return connection.ops.cast_char_field_without_max_length
+        return super().cast_db_type(connection)
+
+    def get_internal_type(self):
+        return "CharField"
+
+    def to_python(self, value):
+        if isinstance(value, str) or value is None:
+            return value
+        return str(value)
+
+    def get_prep_value(self, value):
+        value = super().get_prep_value(value)
+        return self.to_python(value)
+
+    def formfield(self, **kwargs):
+        # Passing max_length to forms.CharField means that the value's length
+        # will be validated twice. This is considered acceptable since we want
+        # the value in the form field (to pass into widget for example).
+        defaults = {'max_length': self.max_length}
+        # TODO: Handle multiple backends with different feature flags.
+        if self.null and not connection.features.interprets_empty_strings_as_nulls:
+            defaults['empty_value'] = None
+        defaults.update(kwargs)
+        return super().formfield(**defaults)
+
+
+class CommaSeparatedIntegerField(CharField):
+    default_validators = [validators.validate_comma_separated_integer_list]
+    description = _("Comma-separated integers")
+    system_check_removed_details = {
+        'msg': (
+            'CommaSeparatedIntegerField is removed except for support in '
+            'historical migrations.'
+        ),
+        'hint': (
+            'Use CharField(validators=[validate_comma_separated_integer_list]) '
+            'instead.'
+        ),
+        'id': 'fields.E901',
+    }
+
+
+class DateTimeCheckMixin:
+
+    def check(self, **kwargs):
+        return [
+            *super().check(**kwargs),
+            *self._check_mutually_exclusive_options(),
+            *self._check_fix_default_value(),
+        ]
+
+    def _check_mutually_exclusive_options(self):
+        # auto_now, auto_now_add, and default are mutually exclusive
+        # options. The use of more than one of these options together
+        # will trigger an Error
+        mutually_exclusive_options = [self.auto_now_add, self.auto_now, self.has_default()]
+        enabled_options = [option not in (None, False) for option in mutually_exclusive_options].count(True)
+        if enabled_options > 1:
+            return [
+                checks.Error(
+                    "The options auto_now, auto_now_add, and default "
+                    "are mutually exclusive. Only one of these options "
+                    "may be present.",
+                    obj=self,
+                    id='fields.E160',
+                )
+            ]
+        else:
+            return []
+
+    def _check_fix_default_value(self):
+        return []
+
+
+class DateField(DateTimeCheckMixin, Field):
+    empty_strings_allowed = False
+    default_error_messages = {
+        'invalid': _('“%(value)s” value has an invalid date format. It must be '
+                     'in YYYY-MM-DD format.'),
+        'invalid_date': _('“%(value)s” value has the correct format (YYYY-MM-DD) '
+                          'but it is an invalid date.'),
+    }
+    description = _("Date (without time)")
+
+    def __init__(self, verbose_name=None, name=None, auto_now=False,
+                 auto_now_add=False, **kwargs):
+        self.auto_now, self.auto_now_add = auto_now, auto_now_add
+        if auto_now or auto_now_add:
+            kwargs['editable'] = False
+            kwargs['blank'] = True
+        super().__init__(verbose_name, name, **kwargs)
+
+    def _check_fix_default_value(self):
+        """
+        Warn that using an actual date or datetime value is probably wrong;
+        it's only evaluated on server startup.
+        """
+        if not self.has_default():
+            return []
+
+        now = timezone.now()
+        if not timezone.is_naive(now):
+            now = timezone.make_naive(now, timezone.utc)
+        value = self.default
+        if isinstance(value, datetime.datetime):
+            if not timezone.is_naive(value):
+                value = timezone.make_naive(value, timezone.utc)
+            value = value.date()
+        elif isinstance(value, datetime.date):
+            # Nothing to do, as dates don't have tz information
+            pass
+        else:
+            # No explicit date / datetime value -- no checks necessary
+            return []
+        offset = datetime.timedelta(days=1)
+        lower = (now - offset).date()
+        upper = (now + offset).date()
+        if lower <= value <= upper:
+            return [
+                checks.Warning(
+                    'Fixed default value provided.',
+                    hint='It seems you set a fixed date / time / datetime '
+                         'value as default for this field. This may not be '
+                         'what you want. If you want to have the current date '
+                         'as default, use `django.utils.timezone.now`',
+                    obj=self,
+                    id='fields.W161',
+                )
+            ]
+
+        return []
+
+    def deconstruct(self):
+        name, path, args, kwargs = super().deconstruct()
+        if self.auto_now:
+            kwargs['auto_now'] = True
+        if self.auto_now_add:
+            kwargs['auto_now_add'] = True
+        if self.auto_now or self.auto_now_add:
+            del kwargs['editable']
+            del kwargs['blank']
+        return name, path, args, kwargs
+
+    def get_internal_type(self):
+        return "DateField"
+
+    def to_python(self, value):
+        if value is None:
+            return value
+        if isinstance(value, datetime.datetime):
+            if settings.USE_TZ and timezone.is_aware(value):
+                # Convert aware datetimes to the default time zone
+                # before casting them to dates (#17742).
+                default_timezone = timezone.get_default_timezone()
+                value = timezone.make_naive(value, default_timezone)
+            return value.date()
+        if isinstance(value, datetime.date):
+            return value
+
+        try:
+            parsed = parse_date(value)
+            if parsed is not None:
+                return parsed
+        except ValueError:
+            raise exceptions.ValidationError(
+                self.error_messages['invalid_date'],
+                code='invalid_date',
+                params={'value': value},
+            )
+
+        raise exceptions.ValidationError(
+            self.error_messages['invalid'],
+            code='invalid',
+            params={'value': value},
+        )
+
+    def pre_save(self, model_instance, add):
+        if self.auto_now or (self.auto_now_add and add):
+            value = datetime.date.today()
+            setattr(model_instance, self.attname, value)
+            return value
+        else:
+            return super().pre_save(model_instance, add)
+
+    def 
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,18 @@
+status: success
+2521:         return (BigAutoField, SmallAutoField)
+2522: 
+2523:     def __instancecheck__(self, instance):
+2524:         return isinstance(instance, self._subclasses) or super().__instancecheck__(instance)
+2525: 
+2526:     def __subclasscheck__(self, subclass):
+2527:         return issubclass(subclass, self._subclasses) or super().__subclasscheck__(subclass)
+2528: 
+2529: 
+2530: class AutoField(AutoFieldMixin, IntegerField, metaclass=AutoFieldMeta):
+2531: 
+2532:     def get_internal_type(self):
+2533:         return 'AutoField'
+2534: 
+2535:     def rel_db_type(self, connection):
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

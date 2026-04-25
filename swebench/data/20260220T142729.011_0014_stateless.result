@@ -1,0 +1,73 @@
+status: success
+0: import functools
+1: import itertools
+2: import logging
+3: import os
+4: import pathlib
+5: import signal
+6: import subprocess
+7: import sys
+8: import threading
+9: import time
+10: import traceback
+11: import weakref
+12: from collections import defaultdict
+13: from pathlib import Path
+14: from types import ModuleType
+15: from zipimport import zipimporter
+16: 
+17: from django.apps import apps
+18: from django.core.signals import request_finished
+19: from django.dispatch import Signal
+20: from django.utils.functional import cached_property
+21: from django.utils.version import get_version_tuple
+22: 
+23: autoreload_started = Signal()
+24: file_changed = Signal(providing_args=['file_path', 'kind'])
+25: 
+26: DJANGO_AUTORELOAD_ENV = 'RUN_MAIN'
+27: 
+28: logger = logging.getLogger('django.utils.autoreload')
+29: 
+30: # If an error is raised while importing a file, it's not placed in sys.modules.
+31: # This means that any future modifications aren't caught. Keep a list of these
+32: # file paths to allow watching them in the future.
+33: _error_files = []
+34: _exception = None
+35: 
+36: try:
+37:     import termios
+38: except ImportError:
+39:     termios = None
+40: 
+41: 
+42: try:
+43:     import pywatchman
+44: except ImportError:
+45:     pywatchman = None
+46: 
+47: 
+48: def check_errors(fn):
+49:     @functools.wraps(fn)
+50:     def wrapper(*args, **kwargs):
+51:         global _exception
+52:         try:
+53:             fn(*args, **kwargs)
+54:         except Exception:
+55:             _exception = sys.exc_info()
+56: 
+57:             et, ev, tb = _exception
+58: 
+59:             if getattr(ev, 'filename', None) is None:
+60:                 # get the filename from the last item in the stack
+61:                 filename = traceback.extract_tb(tb)[-1][0]
+62:             else:
+63:                 filename = ev.filename
+64: 
+65:             if filename not in _error_files:
+66:                 _error_files.append(filename)
+67: 
+68:             raise
+69: 
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

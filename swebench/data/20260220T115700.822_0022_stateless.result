@@ -1,0 +1,29 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = ProcessResult(
+  exitCode = 0,
+  stdout = """diff --git a/django/contrib/auth/migrations/0011_update_proxy_permissions.py b/django/contrib/auth/migrations/0011_update_proxy_permissions.py
+index 0e66649695..e12f534626 100644
+--- a/django/contrib/auth/migrations/0011_update_proxy_permissions.py
++++ b/django/contrib/auth/migrations/0011_update_proxy_permissions.py
+@@ -27,6 +27,8 @@ def update_proxy_model_permissions(apps, schema_editor, reverse=False):
+         Permission.objects.filter(
+             permissions_query,
+             content_type=old_content_type,
++        ).exclude(
++            Q(content_type=new_content_type) & permissions_query
+         ).update(content_type=new_content_type)
+ 
+ 
+@@ -43,6 +45,7 @@ class Migration(migrations.Migration):
+         ('auth', '0010_alter_group_name_max_length'),
+         ('contenttypes', '0002_remove_content_type_name'),
+     ]
++
+     operations = [
+         migrations.RunPython(update_proxy_model_permissions, revert_proxy_model_permissions),
+-    ]
++    ]
+\ No newline at end of file""",
+  stderr = ""
+)

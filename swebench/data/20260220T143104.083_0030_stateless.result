@@ -1,0 +1,7 @@
+status: success
+Found 3 matches
+66:         '_forward_fields_map', 'managers', 'managers_map', 'base_manager',
+525:     def _forward_fields_map(self):
+561:             return self._forward_fields_map[field_name]
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

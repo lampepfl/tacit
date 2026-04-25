@@ -1,0 +1,45 @@
+status: success
+=== Lines 400-440 ===
+    def process_rhs(self, compiler, connection):
+        db_rhs = getattr(self.rhs, '_db', None)
+        if db_rhs is not None and db_rhs != connection.alias:
+            raise ValueError(
+                "Subqueries aren't allowed across different databases. Force "
+                "the inner query to be evaluated using `list(inner_query)`."
+            )
+
+        if self.rhs_is_direct_value():
+            # Remove None from the list as NULL is never equal to anything.
+            try:
+                rhs = OrderedSet(self.rhs)
+                rhs.discard(None)
+            except TypeError:  # Unhashable items in self.rhs
+                rhs = [r for r in self.rhs if r is not None]
+
+            if not rhs:
+                raise EmptyResultSet
+
+            # rhs should be an iterable; use batch_process_rhs() to
+            # prepare/transform those values.
+            sqls, sqls_params = self.batch_process_rhs(compiler, connection, rhs)
+            placeholder = '(' + ', '.join(sqls) + ')'
+            return (placeholder, sqls_params)
+        return super().process_rhs(compiler, connection)
+
+    def get_rhs_op(self, connection, rhs):
+        return 'IN %s' % rhs
+
+    def as_sql(self, compiler, connection):
+        max_in_list_size = connection.ops.max_in_list_size()
+        if self.rhs_is_direct_value() and max_in_list_size and len(self.rhs) > max_in_list_size:
+            return self.split_parameter_list_as_sql(compiler, connection)
+        return super().as_sql(compiler, connection)
+
+    def split_parameter_list_as_sql(self, compiler, connection):
+        # This is a special case for databases which limit the number of
+        # elements which can appear in an 'IN' clause.
+        max_in_list_size = connection.ops.max_in_list_size()
+        lhs, lhs_params = self.process_lhs(compiler, connection)
+        rhs, rhs_params = self.batch_process_rhs(compiler, connection)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

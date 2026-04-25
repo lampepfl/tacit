@@ -1,0 +1,7 @@
+status: failure
+-- [E103] Syntax Error: --------------------------------------------------------
+3 |    given fs: FileSystem^{fs} = summon
+  |                          ^^
+  |                          Illegal start of declaration
+  |
+  | longer explanation available when compiling with `-explain`

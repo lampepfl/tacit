@@ -1,0 +1,44 @@
+status: success
+1: import os
+2: import sys
+3: from io import StringIO
+4: 
+5: from django.apps import apps
+6: from django.conf import settings
+7: from django.core import serializers
+8: from django.db import router
+9: from django.db.transaction import atomic
+10: 
+11: # The prefix to put on the default database name when creating
+12: # the test database.
+13: TEST_DATABASE_PREFIX = 'test_'
+14: 
+15: 
+16: class BaseDatabaseCreation:
+17:     """
+18:     Encapsulate backend-specific differences pertaining to creation and
+19:     destruction of the test database.
+20:     """
+21:     def __init__(self, connection):
+22:         self.connection = connection
+23: 
+24:     def _nodb_cursor(self):
+25:         return self.connection._nodb_cursor()
+26: 
+27:     def log(self, msg):
+28:         sys.stderr.write(msg + os.linesep)
+29: 
+30:     def create_test_db(self, verbosity=1, autoclobber=False, serialize=True, keepdb=False):
+31:         """
+32:         Create a test database, prompting the user for confirmation if the
+33:         database already exists. Return the name of the test database created.
+34:         """
+35:         # Don't import django.core.management if it isn't needed.
+36:         from django.core.management import call_command
+37: 
+38:         test_database_name = self._get_test_db_name()
+39: 
+40:         if verbosity >= 1:
+41:             action = 'Creating'
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

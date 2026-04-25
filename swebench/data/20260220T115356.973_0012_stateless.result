@@ -1,0 +1,4 @@
+status: success
+Successfully updated make_bytes method
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

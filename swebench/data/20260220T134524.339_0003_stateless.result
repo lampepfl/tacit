@@ -1,0 +1,106 @@
+status: success
+Total lines: 102
+1: from django.apps import apps
+2: from django.core.exceptions import FieldDoesNotExist, PermissionDenied
+3: from django.http import Http404, JsonResponse
+4: from django.views.generic.list import BaseListView
+5: 
+6: 
+7: class AutocompleteJsonView(BaseListView):
+8:     """Handle AutocompleteWidget's AJAX requests for data."""
+9:     paginate_by = 20
+10:     admin_site = None
+11: 
+12:     def get(self, request, *args, **kwargs):
+13:         """
+14:         Return a JsonResponse with search results of the form:
+15:         {
+16:             results: [{id: "123" text: "foo"}],
+17:             pagination: {more: true}
+18:         }
+19:         """
+20:         self.term, self.model_admin, self.source_field, to_field_name = self.process_request(request)
+21: 
+22:         if not self.has_perm(request):
+23:             raise PermissionDenied
+24: 
+25:         self.object_list = self.get_queryset()
+26:         context = self.get_context_data()
+27:         return JsonResponse({
+28:             'results': [
+29:                 {'id': str(getattr(obj, to_field_name)), 'text': str(obj)}
+30:                 for obj in context['object_list']
+31:             ],
+32:             'pagination': {'more': context['page_obj'].has_next()},
+33:         })
+34: 
+35:     def get_paginator(self, *args, **kwargs):
+36:         """Use the ModelAdmin's paginator."""
+37:         return self.model_admin.get_paginator(self.request, *args, **kwargs)
+38: 
+39:     def get_queryset(self):
+40:         """Return queryset based on ModelAdmin.get_search_results()."""
+41:         qs = self.model_admin.get_queryset(self.request)
+42:         qs = qs.complex_filter(self.source_field.get_limit_choices_to())
+43:         qs, search_use_distinct = self.model_admin.get_search_results(self.request, qs, self.term)
+44:         if search_use_distinct:
+45:             qs = qs.distinct()
+46:         return qs
+47: 
+48:     def process_request(self, request):
+49:         """
+50:         Validate request integrity, extract and return request parameters.
+51: 
+52:         Since the subsequent view permission check requires the target model
+53:         admin, which is determined here, raise PermissionDenied if the
+54:         requested app, model or field are malformed.
+55: 
+56:         Raise Http404 if the target model admin is not configured properly with
+57:         search_fields.
+58:         """
+59:         term = request.GET.get('term', '')
+60:         try:
+61:             app_label = request.GET['app_label']
+62:             model_name = request.GET['model_name']
+63:             field_name = request.GET['field_name']
+64:         except KeyError as e:
+65:             raise PermissionDenied from e
+66: 
+67:         # Retrieve objects from parameters.
+68:         try:
+69:             source_model = apps.get_model(app_label, model_name)
+70:         except LookupError as e:
+71:             raise PermissionDenied from e
+72: 
+73:         try:
+74:             source_field = source_model._meta.get_field(field_name)
+75:         except FieldDoesNotExist as e:
+76:             raise PermissionDenied from e
+77:         try:
+78:             remote_model = source_field.remote_field.model
+79:         except AttributeError as e:
+80:             raise PermissionDenied from e
+81:         try:
+82:             model_admin = self.admin_site._registry[remote_model]
+83:         except KeyError as e:
+84:             raise PermissionDenied from e
+85: 
+86:         # Validate suitability of objects.
+87:         if not model_admin.get_search_fields(request):
+88:             raise Http404(
+89:                 '%s must have search_fields for the autocomplete_view.' %
+90:                 type(model_admin).__qualname__
+91:             )
+92: 
+93:         to_field_name = getattr(source_field.remote_field, 'field_name', remote_model._meta.pk.attname)
+94:         to_field_name = remote_model._meta.get_field(to_field_name).attname
+95:         if not model_admin.to_field_allowed(request, to_field_name):
+96:             raise PermissionDenied
+97: 
+98:         return term, model_admin, source_field, to_field_name
+99: 
+100:     def has_perm(self, request, obj=None):
+101:         """Check if user has permission to access the related model."""
+102:         return self.model_admin.has_view_permission(request, obj=obj)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

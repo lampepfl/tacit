@@ -1,0 +1,59 @@
+status: failure
+-- [E018] Syntax Error: --------------------------------------------------------
+95 |      """Base class for all field types"""
+   |              ^^^^^
+   |              expression expected but [31mclass[0m found
+   |
+   | longer explanation available when compiling with `-explain`
+-- [E018] Syntax Error: --------------------------------------------------------
+432 |          Return choices with a default blank choices included, for use
+    |                         ^^^^
+    |                         expression expected but [31mwith[0m found
+    |
+    | longer explanation available when compiling with `-explain`
+-- Error: ----------------------------------------------------------------------
+433 |          as <select> choices for this field.
+    |             ^
+    |             end of statement expected but $XMLSTART$< found
+-- Error: ----------------------------------------------------------------------
+475 |          Return display representation of field's value.
+    |                                                ^
+    |                 end of statement expected but quoted identifier found
+-- Error: ----------------------------------------------------------------------
+502 |          Return field's value prepared for interacting with the database backend.
+    |                      ^
+    |symbol literal 's is no longer supported,
+    |use a string literal "s" or an application Symbol("s") instead,
+    |or enclose in braces '{s} if you want a quoted expression.
+    |For now, you can also `import language.deprecated.symbolLiterals` to accept
+    |the idiom, but this possibility might no longer be available in the future.
+-- Error: ----------------------------------------------------------------------
+502 |          Return field's value prepared for interacting with the database backend.
+    |                                        ^^^
+    |                             end of statement expected but 'for' found
+-- Error: ----------------------------------------------------------------------
+519 |          Return the underlying database column type for the field.
+    |                                                ^^^^
+    |                            end of statement expected but 'type' found
+-- Error: ----------------------------------------------------------------------
+522 |          column type, it is necessary to wrap the value before it is
+    |                 ^^^^
+    |                 end of statement expected but 'type' found
+-- [E018] Syntax Error: --------------------------------------------------------
+523 |          processed by the database. Therefore, this method returns the
+    |                                   ^
+    |                                   expression expected but [31m'.'[0m found
+    |
+    | longer explanation available when compiling with `-explain`
+-- Error: ----------------------------------------------------------------------
+524 |          value of the field wrapped in the database's specific wrapper class.
+    |                                                    ^
+    |symbol literal 's is no longer supported,
+    |use a string literal "s" or an application Symbol("s") instead,
+    |or enclose in braces '{s} if you want a quoted expression.
+    |For now, you can also `import language.deprecated.symbolLiterals` to accept
+    |the idiom, but this possibility might no longer be available in the future.
+-- Error: ----------------------------------------------------------------------
+524 |          value of the field wrapped in the database's specific wrapper class.
+    |                                                                        ^^^^^
+    |                           end of statement expected but 'class' found

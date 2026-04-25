@@ -1,0 +1,32 @@
+status: success
+416:             self.quote_name(old_field.remote_field.through._meta.db_table),
+417:         ))
+418:         # Delete the old through table
+419:         self.delete_model(old_field.remote_field.through)
+420: 
+421:     def add_constraint(self, model, constraint):
+422:         if isinstance(constraint, UniqueConstraint) and (
+423:             constraint.condition or
+424:             constraint.contains_expressions or
+425:             constraint.include or
+426:             constraint.deferrable
+427:         ):
+428:             super().add_constraint(model, constraint)
+429:         else:
+430:             self._remake_table(model)
+431: 
+432:     def remove_constraint(self, model, constraint):
+433:         if isinstance(constraint, UniqueConstraint) and (
+434:             constraint.condition or
+435:             constraint.contains_expressions or
+436:             constraint.include or
+437:             constraint.deferrable
+438:         ):
+439:             super().remove_constraint(model, constraint)
+440:         else:
+441:             self._remake_table(model)
+442: 
+443:     def _collate_sql(self, collation):
+444:         return 'COLLATE ' + collation
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

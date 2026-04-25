@@ -1,0 +1,5 @@
+status: success
+Line 138:     except (AttributeError, ValueError, OverflowError):
+Line 139:         return True
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

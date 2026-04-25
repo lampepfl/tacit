@@ -1,0 +1,19 @@
+status: success
+235:         prohibited to delete such objects due to RESTRICT, that defers
+236:         restricted object checking in recursive calls where the top-level call
+237:         may need to collect more objects to determine whether restricted ones
+238:         can be deleted.
+239:         """
+240:         if self.can_fast_delete(objs):
+241:             self.fast_deletes.append(objs)
+242:             return
+243:         new_objs = self.add(objs, source, nullable,
+244:                             reverse_dependency=reverse_dependency)
+245:         if not new_objs:
+246:             return
+247: 
+248:         model = new_objs[0].__class__
+249: 
+250:         if not keep_parents:
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

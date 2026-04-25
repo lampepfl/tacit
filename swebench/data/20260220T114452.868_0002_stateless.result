@@ -1,0 +1,9 @@
+status: success
+Files in mixins:
+  ndio.py
+  ndslicing.py
+  tests
+  __init__.py
+  ndarithmetic.py
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

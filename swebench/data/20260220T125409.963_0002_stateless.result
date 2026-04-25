@@ -1,0 +1,44 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = List(
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13028/repo/django/db/models/sql/query.py",
+    lineNumber = 1125,
+    line = "    def check_filterable(self, expression):"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13028/repo/django/db/models/sql/query.py",
+    lineNumber = 1134,
+    line = "                self.check_filterable(expr)"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13028/repo/django/db/models/sql/query.py",
+    lineNumber = 1203,
+    line = "                     reuse_with_filtered_relation=False, check_filterable=True):"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13028/repo/django/db/models/sql/query.py",
+    lineNumber = 1242,
+    line = "                check_filterable=check_filterable,"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13028/repo/django/db/models/sql/query.py",
+    lineNumber = 1258,
+    line = "        if check_filterable:"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13028/repo/django/db/models/sql/query.py",
+    lineNumber = 1259,
+    line = "            self.check_filterable(reffed_expression)"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13028/repo/django/db/models/sql/query.py",
+    lineNumber = 1268,
+    line = "        if check_filterable:"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13028/repo/django/db/models/sql/query.py",
+    lineNumber = 1269,
+    line = "            self.check_filterable(value)"
+  ),
+...

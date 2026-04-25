@@ -1,0 +1,18 @@
+status: success
+212: '    def select_format(self, compiler, sql, params):'
+213: '        # Wrap filters with a CASE WHEN expression if a database backend'
+214: '        # (e.g. Oracle) doesn't support boolean expression in SELECT or GROUP'
+215: '        # BY list.'
+216: '        if not compiler.connection.features.supports_boolean_expr_in_select_clause:'
+217: '            sql = f'CASE WHEN {sql} THEN 1 ELSE 0 END''
+218: '        return sql, params'
+219: ''
+220: '    def get_db_converters(self, connection):'
+221: '        return self.output_field.get_db_converters(connection)'
+222: ''
+223: '    def get_lookup(self, lookup):'
+224: '        return self.output_field.get_lookup(lookup)'
+225: ''
+226: ''
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

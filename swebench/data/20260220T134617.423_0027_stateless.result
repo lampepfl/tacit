@@ -1,0 +1,38 @@
+status: success
+1: import functools
+2: import inspect
+3: from functools import partial
+4: 
+5: from django import forms
+6: from django.apps import apps
+7: from django.conf import SettingsReference, settings
+8: from django.core import checks, exceptions
+9: from django.db import connection, router
+10: from django.db.backends import utils
+11: from django.db.models import Q
+12: from django.db.models.constants import LOOKUP_SEP
+13: from django.db.models.deletion import CASCADE, SET_DEFAULT, SET_NULL
+14: from django.db.models.query_utils import PathInfo
+15: from django.db.models.utils import make_model_tuple
+16: from django.utils.functional import cached_property
+17: from django.utils.translation import gettext_lazy as _
+18: 
+19: from . import Field
+20: from .mixins import FieldCacheMixin
+21: from .related_descriptors import (
+22:     ForeignKeyDeferredAttribute, ForwardManyToOneDescriptor,
+23:     ForwardOneToOneDescriptor, ManyToManyDescriptor,
+24:     ReverseManyToOneDescriptor, ReverseOneToOneDescriptor,
+25: )
+26: from .related_lookups import (
+27:     RelatedExact, RelatedGreaterThan, RelatedGreaterThanOrEqual, RelatedIn,
+28:     RelatedIsNull, RelatedLessThan, RelatedLessThanOrEqual,
+29: )
+30: from .reverse_related import (
+31:     ForeignObjectRel, ManyToManyRel, ManyToOneRel, OneToOneRel,
+32: )
+33: 
+34: RECURSIVE_RELATIONSHIP_CONSTANT = 'self'
+35: 
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

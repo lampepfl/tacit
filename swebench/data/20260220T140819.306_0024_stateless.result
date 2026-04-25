@@ -1,0 +1,33 @@
+status: success
+231:         return target_etag in etags
+232: 
+233: 
+234: def _if_unmodified_since_passes(last_modified, if_unmodified_since):
+235:     """
+236:     Test the If-Unmodified-Since comparison as defined in section 3.4 of
+237:     RFC 7232.
+238:     """
+239:     return last_modified and last_modified <= if_unmodified_since
+240: 
+241: 
+242: def _if_none_match_passes(target_etag, etags):
+243:     """
+244:     Test the If-None-Match comparison as defined in section 3.2 of RFC 7232.
+245:     """
+246:     if not target_etag:
+247:         # If there isn't an ETag, then there isn't a match.
+248:         return True
+249:     elif etags == ["*"]:
+250:         # The existence of an ETag means that there is "a current
+251:         # representation for the target resource", so there is a match to '*'.
+252:         return False
+253:     else:
+254:         # The comparison should be weak, so look for a match after stripping
+255:         # off any weak indicators.
+256:         target_etag = target_etag.strip("W/")
+257:         etags = (etag.strip("W/") for etag in etags)
+258:         return target_etag not in etags
+259: 
+260: 
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,39 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = List(
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13028/repo/django/db/models/expressions.py",
+    lineNumber = 159,
+    line = "    filterable = True"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13028/repo/django/db/models/expressions.py",
+    lineNumber = 1205,
+    line = "    filterable = False"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13028/repo/django/db/models/query_utils.py",
+    lineNumber = 105,
+    line = "            check_filterable=False,"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13028/repo/django/db/models/sql/query.py",
+    lineNumber = 1203,
+    line = "                     reuse_with_filtered_relation=False, check_filterable=True):"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13028/repo/django/db/models/sql/query.py",
+    lineNumber = 1242,
+    line = "                check_filterable=check_filterable,"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13028/repo/django/db/models/sql/query.py",
+    lineNumber = 1366,
+    line = "               check_filterable=True):"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13028/repo/django/db/models/sql/query.py",
+    lineNumber = 1378,
+    line = "                split_subq=split_subq, check_filterable=check_filterable,"
+  )
+)

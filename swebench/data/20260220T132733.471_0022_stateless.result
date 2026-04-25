@@ -1,0 +1,10 @@
+status: success
+=== Updated default_error_messages (lines 1189-1194) ===
+1189:     # actually use any of ChoiceField's implementation.
+1190:     default_error_messages = {
+1191:         'invalid_choice': _('Select a valid choice. That choice is not one of'
+1192:     }
+1193:     iterator = ModelChoiceIterator
+1194: 
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

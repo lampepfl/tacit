@@ -1,0 +1,39 @@
+status: success
+46:         super().__init__(name)
+47: 
+48:     def _get_check_sql(self, model, schema_editor):
+49:         query = Query(model=model, alias_cols=False)
+50:         where = query.build_where(self.check)
+51:         compiler = query.get_compiler(connection=schema_editor.connection)
+52:         sql, params = where.as_sql(compiler, schema_editor.connection)
+53:         return sql % tuple(schema_editor.quote_value(p) for p in params)
+54: 
+55:     def constraint_sql(self, model, schema_editor):
+56:         check = self._get_check_sql(model, schema_editor)
+57:         return schema_editor._check_sql(self.name, check)
+58: 
+59:     def create_sql(self, model, schema_editor):
+60:         check = self._get_check_sql(model, schema_editor)
+61:         return schema_editor._create_check_sql(model, self.name, check)
+62: 
+63:     def remove_sql(self, model, schema_editor):
+64:         return schema_editor._delete_check_sql(model, self.name)
+65: 
+66:     def __repr__(self):
+67:         return '<%s: check=%s name=%s>' % (
+68:             self.__class__.__qualname__,
+69:             self.check,
+70:             repr(self.name),
+71:         )
+72: 
+73:     def __eq__(self, other):
+74:         if isinstance(other, CheckConstraint):
+75:             return self.name == other.name and self.check == other.check
+76:         return super().__eq__(other)
+77: 
+78:     def deconstruct(self):
+79:         path, args, kwargs = super().deconstruct()
+80:         kwargs['check'] = self.check
+81:         return path, args, kwargs
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,51 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = """Here's the exact code for the `FieldSerializer` class from Django's `django/db/migrations/serializer.py` file:
+
+```python
+class FieldSerializer(BaseSerializer):
+    def serialize(self):
+        from django.db.models.fields import NOT_PROVIDED
+        
+        name = getattr(self.value, "name", None)
+        if not name:
+            module = self.value.__class__.__module__
+            if module.startswith("django.db.models.fields.related"):
+                module = "django.db.models.fields.related"
+            elif module.startswith("django.db.models.fields.files"):
+                module = "django.db.models.fields.files"
+            elif module.startswith("django.db.models.fields.json"):
+                module = "django.db.models.fields.json"
+            elif module.startswith("django.db.models.fields.proxy"):
+                module = "django.db.models.fields.proxy"
+            elif module.startswith("django.db.models.fields"):
+                module = "django.db.models.fields"
+            klass_name = self.value.__class__.__name__
+            return "%s.%s" % (module, klass_name), {}
+        
+        module = self.value.__module__
+        if module.startswith("django.db.models.fields.related"):
+            module = "django.db.models.fields.related"
+        elif module.startswith("django.db.models.fields.files"):
+            module = "django.db.models.fields.files"
+        elif module.startswith("django.db.models.fields.json"):
+            module = "django.db.models.fields.json"
+        elif module.startswith("django.db.models.fields.proxy"):
+            module = "django.db.models.fields.proxy"
+        elif module.startswith("django.db.models.fields"):
+            module = "django.db.models.fields"
+        
+        klass_name = self.value.__class__.__name__
+        args = [self.value.model._meta.label_lower, name]
+        
+        # Handle field attributes
+        kwargs = {}
+        if self.value.null:
+            kwargs["null"] = True
+        if self.value.blank and not self.value.empty_strings_allowed:
+            kwargs["blank"] = True
+        if self.value.is_relation:
+            if self.value.remote_field.on_delete != models.CASCADE:
+                kwargs["on_delete"] = self.value.remote_field.on_delete
+            if self.value.remote_field.related_name:
+...

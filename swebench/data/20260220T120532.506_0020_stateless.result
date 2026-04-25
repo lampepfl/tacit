@@ -1,0 +1,9 @@
+status: failure
+-- [E007] Type Mismatch Error: -------------------------------------------------
+58 |    val allLines = before ::: newMethod.split("\n").filter(_.nonEmpty).map("    " + _) ::: after
+   |                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |                              Found:    Array[String]
+   |                              Required: List[(String)?]
+   |
+   | longer explanation available when compiling with `-explain`
+1 error found

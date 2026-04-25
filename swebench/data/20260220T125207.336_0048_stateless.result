@@ -1,0 +1,8 @@
+status: success
+1. __init__ has _collected_models: true
+2. collect() tracks empty querysets: true
+3. delete() ensures _collected_models are in result: true
+
+All checks passed!
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

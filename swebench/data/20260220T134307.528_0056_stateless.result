@@ -1,0 +1,16 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = ProcessResult(
+  exitCode = 0,
+  stdout = """Found 0 lines
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14155/repo/tests//urlpatterns_reverse/tests.py:    NoReverseMatch, Resolver404, ResolverMatch, URLPattern, URLResolver,
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14155/repo/tests//urlpatterns_reverse/tests.py:class ResolverMatchTests(SimpleTestCase):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14155/repo/tests//urlpatterns_reverse/tests.py:                # ResolverMatch capabilities.
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14155/repo/tests//urlpatterns_reverse/tests.py:                self.assertEqual(match.__class__, ResolverMatch)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14155/repo/tests//urlpatterns_reverse/tests.py:            "ResolverMatch(func=urlpatterns_reverse.views.empty_view, "
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14155/repo/tests//test_client/tests.py:        The response contains a ResolverMatch instance.
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14155/repo/tests//test_client/tests.py:        The response ResolverMatch instance contains the correct
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14155/repo/tests//test_client/tests.py:        The response ResolverMatch instance contains the correct
+""",
+  stderr = ""
+)

@@ -1,0 +1,74 @@
+status: success
+581: @deconstructible
+582: class F(Combinable):
+583:     """An object capable of resolving references to existing query objects."""
+584: 
+585:     def __init__(self, name):
+586:         """
+587:         Arguments:
+588:          * name: the name of the field this expression references
+589:         """
+590:         self.name = name
+591: 
+592:     def __repr__(self):
+593:         return "{}({})".format(self.__class__.__name__, self.name)
+594: 
+595:     def resolve_expression(self, query=None, allow_joins=True, reuse=None,
+596:                            summarize=False, for_save=False):
+597:         return query.resolve_ref(self.name, allow_joins, reuse, summarize)
+598: 
+599:     def asc(self, **kwargs):
+600:         return OrderBy(self, **kwargs)
+601: 
+602:     def desc(self, **kwargs):
+603:         return OrderBy(self, descending=True, **kwargs)
+604: 
+605:     def __eq__(self, other):
+606:         return self.__class__ == other.__class__ and self.name == other.name
+607: 
+608:     def __hash__(self):
+609:         return hash(self.name)
+610: 
+611: 
+612: class ResolvedOuterRef(F):
+613:     """
+614:     An object that contains a reference to an outer query.
+615: 
+616:     In this case, the reference to the outer query has been resolved because
+617:     the inner query has been used as a subquery.
+618:     """
+619:     contains_aggregate = False
+620: 
+621:     def as_sql(self, *args, **kwargs):
+622:         raise ValueError(
+623:             'This queryset contains a reference to an outer query and may '
+624:             'only be used in a subquery.'
+625:         )
+626: 
+627:     def resolve_expression(self, *args, **kwargs):
+628:         col = super().resolve_expression(*args, **kwargs)
+629:         # FIXME: Rename possibly_multivalued to multivalued and fix detection
+630:         # for non-multivalued JOINs (e.g. foreign key fields). This should take
+631:         # into account only many-to-many and one-to-many relationships.
+632:         col.possibly_multivalued = LOOKUP_SEP in self.name
+633:         return col
+634: 
+635:     def relabeled_clone(self, relabels):
+636:         return self
+637: 
+638:     def get_group_by_cols(self, alias=None):
+639:         return []
+640: 
+641: 
+642: class OuterRef(F):
+643:     contains_aggregate = False
+644: 
+645:     def resolve_expression(self, *args, **kwargs):
+646:         if isinstance(self.name, self.__class__):
+647:             return self.name
+648:         return ResolvedOuterRef(self.name)
+649: 
+650:     def relabeled_clone(self, relabels):
+651:         return self
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

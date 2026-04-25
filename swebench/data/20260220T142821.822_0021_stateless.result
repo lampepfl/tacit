@@ -1,0 +1,11 @@
+status: failure
+-- [E007] Type Mismatch Error: -------------------------------------------------
+9 |    listRefs(refs)
+  |             ^^^^
+  |Found:    library.FileEntry{val origin: library.FileSystem^{refs*}}^{refs}
+  |Required: library.FileEntry
+  |
+  |Note that capability `refs` cannot flow into capture set {}.
+  |
+  | longer explanation available when compiling with `-explain`
+1 error found

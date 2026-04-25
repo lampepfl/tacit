@@ -1,0 +1,19 @@
+status: success
+=== Checking the rest of the error and return ===
+1268:                     checks.Error(
+1269:                         'related_name is not allowed for ManyToManyField '
+1270:                         'with symmetrical=True (e.g., self-referential fields).',
+1271:                         obj=self,
+1272:                         id='fields.E332',
+1273:                     )
+1274:                 )
+1275:         return warnings
+1276: 
+1277:     def _check_relationship_model(self, from_model=None, **kwargs):
+1278:         if hasattr(self.remote_field.through, '_meta'):
+1279:             qualified_model_name = "%s.%s" % (
+1280:                 self.remote_field.through._meta.app_label, self.remote_field.through.__name__)
+1281:         else:
+1282:             qualified_model_name = self.remote_field.through
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

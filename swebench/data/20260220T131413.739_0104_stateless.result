@@ -1,0 +1,7 @@
+status: failure
+-- [E018] Syntax Error: --------------------------------------------------------
+3 |  requestFileSystem(".")((fs: FileSystem^) ?=> 
+  |                                              ^
+  |                                         expression expected but [31mval[0m found
+  |
+  | longer explanation available when compiling with `-explain`

@@ -1,0 +1,29 @@
+status: success
+260:         # Expect [group_name, [value, display]]
+261:         for choices_group in self.choices:
+262:             try:
+263:                 group_name, group_choices = choices_group
+264:             except (TypeError, ValueError):
+265:                 # Containing non-pairs
+266:                 break
+267:             try:
+268:                 if not all(
+269:                     is_value(value) and is_value(human_name)
+270:                     for value, human_name in group_choices
+271:                 ):
+272:                     break
+273:             except (TypeError, ValueError):
+274:                 # No groups, choices in the form [value, display]
+275:                 value, human_name = group_name, group_choices
+276:                 if not is_value(value) or not is_value(human_name):
+277:                     break
+278: 
+279:             # Special case: choices=['ab']
+280:             if isinstance(choices_group, str):
+281:                 break
+282:         else:
+283:             return []
+284: 
+285:         return [
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

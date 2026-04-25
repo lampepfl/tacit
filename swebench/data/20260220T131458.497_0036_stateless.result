@@ -1,0 +1,21 @@
+status: success
+Found at line 418
+Context:             )
+Context:         # order_with_respect_to being unset for a field
+Line:         elif dependency[2] is not None and dependency[3] == "order_wrt_unset":
+Context:             return (
+Context:                 isinstance(operation, operations.AlterOrderWithRespectTo) and
+Context:                 operation.name_lower == dependency[1].lower() and
+Context:                 (operation.order_with_respect_to or "").lower() != dependency[2].lower()
+Context:             )
+Found at line 909
+Context:             # this is safely ignored if there isn't one
+Context:             dependencies=[
+Line:                 (app_label, model_name, field_name, "order_wrt_unset"),
+Context:                 (app_label, model_name, field_name, "foo_together_change"),
+Context:             ],
+Context:         )
+Context: 
+Context:     def generate_altered_fields(self):
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,43 @@
+status: success
+698:     def find_ordering_name(self, name, opts, alias=None, default_order='ASC',
+699:                            already_seen=None):
+700:         """
+701:         Return the table alias (the name might be ambiguous, the alias will
+702:         not be) and column name for ordering by the given 'name' parameter.
+703:         The 'name' is of the form 'field1__field2__...__fieldN'.
+704:         """
+705:         name, order = get_order_dir(name, default_order)
+706:         descending = order == 'DESC'
+707:         pieces = name.split(LOOKUP_SEP)
+708:         field, targets, alias, joins, path, opts, transform_function = self._setup_joins(pieces, opts, alias)
+709: 
+710:         # If we get to this point and the field is a relation to another model,
+711:         # append the default ordering for that model unless the attribute name
+712:         # of the field is specified.
+713:         if field.is_relation and opts.ordering and getattr(field, 'attname', None) != name:
+714:             # Firstly, avoid infinite loops.
+715:             already_seen = already_seen or set()
+716:             join_tuple = tuple(getattr(self.query.alias_map[j], 'join_cols', None) for j in joins)
+717:             if join_tuple in already_seen:
+718:                 raise FieldError('Infinite loop caused by ordering.')
+719:             already_seen.add(join_tuple)
+720: 
+721:             results = []
+722:             for item in opts.ordering:
+723:                 if hasattr(item, 'resolve_expression') and not isinstance(item, OrderBy):
+724:                     item = item.desc() if descending else item.asc()
+725:                 if isinstance(item, OrderBy):
+726:                     results.append((item, False))
+727:                     continue
+728:                 results.extend(self.find_ordering_name(item, opts, alias,
+729:                                                        order, already_seen))
+730:             return results
+731:         targets, alias, _ = self.query.trim_joins(targets, joins, path)
+732:         return [(OrderBy(transform_function(t, alias), descending=descending), False) for t in targets]
+733: 
+734:     def _setup_joins(self, pieces, opts, alias):
+735:         """
+736:         Helper method for get_order_by() and get_distinct().
+737: 
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

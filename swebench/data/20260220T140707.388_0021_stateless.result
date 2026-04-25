@@ -1,0 +1,13 @@
+status: success
+11: from django.template import Context, Engine, TemplateDoesNotExist, loader
+12: from django.utils._os import safe_join
+13: from django.utils.http import http_date, parse_http_date
+14: from django.utils.translation import gettext as _
+15: from django.utils.translation import gettext_lazy
+16: 
+17: 
+18: def serve(request, path, document_root=None, show_indexes=False):
+19:     """
+20:     Serve static files below a given point in the directory structure.
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,4 @@
+status: success
+null
+def run()(using x$1: IOCapability): Any
+val res0: Any = Lambda$2793/0x0000000801a138c8@593ba0c3

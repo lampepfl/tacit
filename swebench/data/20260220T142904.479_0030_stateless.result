@@ -1,0 +1,9 @@
+status: success
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12470/repo/django/db/models/sql/compiler.py:13:     CURSOR, GET_ITERATOR_CHUNK_SIZE, MULTI, NO_RESULTS, ORDER_DIR, SINGLE,
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12470/repo/django/db/models/sql/compiler.py:286:             asc, desc = ORDER_DIR['ASC']
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12470/repo/django/db/models/sql/compiler.py:288:             asc, desc = ORDER_DIR['DESC']
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12470/repo/django/db/models/sql/query.py:34:     INNER, LOUTER, ORDER_DIR, ORDER_PATTERN, SINGLE,
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12470/repo/django/db/models/sql/query.py:2264:     dirn = ORDER_DIR[default]
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12470/repo/django/db/models/sql/constants.py:20: ORDER_DIR = {
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

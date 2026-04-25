@@ -1,0 +1,30 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = List(
+  "975:         filter_obj can be a Q object or a dictionary of keyword lookup",
+  "976:         arguments.",
+  "977: ",
+  "978:         This exists to support framework features such as 'limit_choices_to',",
+  "979:         and usually it will be more natural to use other methods.",
+  "980:         \"\"\"",
+  "981:         if isinstance(filter_obj, Q):",
+  "982:             clone = self._chain()",
+  "983:             clone.query.add_q(filter_obj)",
+  "984:             return clone",
+  "985:         else:",
+  "986:             return self._filter_or_exclude(False, **filter_obj)",
+  "987: ",
+  "988:     def _combinator_query(self, combinator, *other_qs, all=False):",
+  "989:         # Clone the query to inherit the select list and everything",
+  "990:         clone = self._chain()",
+  "991:         # Clear limits and ordering so they can be reapplied",
+  "992:         clone.query.clear_ordering(True)",
+  "993:         clone.query.clear_limits()",
+  "994:         clone.query.combined_queries = (self.query,) + tuple(qs.query for qs in other_qs)",
+  "995:         clone.query.combinator = combinator",
+  "996:         clone.query.combinator_all = all",
+  "997:         return clone",
+  "998: ",
+  "999:     def union(self, *other_qs, all=False):",
+  "1000:         # If the query is an EmptyQuerySet, combine all nonempty querysets."
+)

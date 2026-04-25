@@ -1,0 +1,14 @@
+status: success
+Ref class starts at: 28294
+get_group_by_cols after Ref class starts at: 949
+Full index: 29243
+Context:
+def get_group_by_cols(self, alias=None):
+        return [self]
+
+
+class ExpressionList(Func):
+    """
+    An expression containing multiple expressions
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

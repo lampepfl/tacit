@@ -1,0 +1,47 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = """        """
+        Resolve and call the view, then apply view, exception, and
+        template_response middleware. This method is everything that happens
+        inside the request/response middleware.
+        """
+        response = None
+
+        if hasattr(request, 'urlconf'):
+            urlconf = request.urlconf
+            set_urlconf(urlconf)
+            resolver = get_resolver(urlconf)
+        else:
+            resolver = get_resolver()
+
+        resolver_match = resolver.resolve(request.path_info)
+        callback, callback_args, callback_kwargs = resolver_match
+        request.resolver_match = resolver_match
+
+        # Apply view middleware
+        for middleware_method in self._view_middleware:
+            response = middleware_method(request, callback, callback_args, callback_kwargs)
+            if response:
+                break
+
+        if response is None:
+            wrapped_callback = self.make_view_atomic(callback)
+            try:
+                response = wrapped_callback(request, *callback_args, **callback_kwargs)
+            except Exception as e:
+                response = self.process_exception_by_middleware(e, request)
+
+        # Complain if the view returned None (a common error).
+        if response is None:
+            if isinstance(callback, types.FunctionType):    # FBV
+                view_name = callback.__name__
+            else:                                           # CBV
+                view_name = callback.__class__.__name__ + '.__call__'
+
+            raise ValueError(
+                "The view %s.%s didn't return an HttpResponse object. It "
+                "returned None instead." % (callback.__module__, view_name)
+            )
+
+        # If the response supports deferred rendering, apply template
+        # response middleware and then render the response"""

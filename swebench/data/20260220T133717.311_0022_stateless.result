@@ -1,0 +1,13 @@
+status: success
+stdout: q1 | q2 = (OR: ('x', 1), ('y', 2))
+q1 & q2 = (AND: ('x', 1), ('y', 2))
+Q() | q1 = (AND: ('x', 1))
+q1 | Q() = (AND: ('x', 1))
+Q() & q1 = (AND: ('x', 1))
+q1 & Q() = (AND: ('x', 1))
+q1 children after q1|q2: [('x', 1)], preserved: True
+Q() | Q(x__in=[1,2,3]) = (AND: ('x__in', [1, 2, 3]))
+stderr: 
+exitCode: 0
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

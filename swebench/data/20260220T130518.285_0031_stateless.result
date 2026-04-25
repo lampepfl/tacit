@@ -1,0 +1,8 @@
+status: failure
+-- [E006] Not Found Error: -----------------------------------------------------
+10 |  val result = requestFileSystem(".")(processFs2)
+   |                                      ^^^^^^^^^^
+   |                                      Not found: processFs2
+   |
+   | longer explanation available when compiling with `-explain`
+1 error found

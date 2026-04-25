@@ -1,0 +1,28 @@
+status: success
+1382:     def _check_fields(cls, **kwargs):
+1383:         """Perform all field checks."""
+1384:         errors = []
+1385:         for field in cls._meta.local_fields:
+1386:             errors.extend(field.check(**kwargs))
+1387:         for field in cls._meta.local_many_to_many:
+1388:             errors.extend(field.check(from_model=cls, **kwargs))
+1389:         return errors
+1390: 
+1391:     @classmethod
+1392:     def _check_m2m_through_same_relationship(cls):
+1393:         """ Check if no relationship model is used by more than one m2m field.
+1394:         """
+1395: 
+1396:         errors = []
+1397:         seen_intermediary_signatures = []
+1398: 
+1399:         fields = cls._meta.local_many_to_many
+1400: 
+1401:         # Skip when the target model wasn't found.
+1402:         fields = (f for f in fields if isinstance(f.remote_field.model, ModelBase))
+1403: 
+1404:         # Skip when the relationship model wasn't found.
+1405:         fields = (f for f in fields if isinstance(f.remote_field.through, ModelBase))
+1406: 
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,6 @@
+status: failure
+-- [E008] Not Found Error: -----------------------------------------------------
+6 |    content.lines.drop(14).take(10).foreach(println)
+  |    ^^^^^^^^^^^^^^^^^^
+  |    value drop is not a member of (java.util.stream.Stream[String])?
+1 error found

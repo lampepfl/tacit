@@ -1,0 +1,6 @@
+status: success
+-- Error: ----------------------------------------------------------------------
+2 |  import scala.language.experimental.captureChecking
+  |                                     ^^^^^^^^^^^^^^^
+  |this language import is not allowed in the REPL
+  |To use this language feature, include the flag `-language:experimental.captureChecking` when starting the REPL

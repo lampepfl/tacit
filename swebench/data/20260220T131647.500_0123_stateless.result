@@ -1,0 +1,11 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = """GrepMatch(/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11964/repo/tests/migrations/test_writer.py,345,        class TextChoices(models.TextChoices):)
+GrepMatch(/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11964/repo/tests/migrations/test_writer.py,357,        self.assertSerializedResultEqual(TextChoices.A, ("'A'", set())))
+GrepMatch(/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11964/repo/tests/migrations/test_writer.py,363,        field = models.CharField(default=TextChoices.B, choices=TextChoices.choices))
+GrepMatch(/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11964/repo/tests/model_enums/tests.py,19,class YearInSchool(models.TextChoices):)
+GrepMatch(/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11964/repo/tests/model_enums/tests.py,35,class Gender(models.TextChoices):)
+GrepMatch(/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11964/repo/tests/model_enums/tests.py,114,        Medal = models.TextChoices('Medal', 'GOLD SILVER BRONZE'))
+GrepMatch(/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11964/repo/tests/model_enums/tests.py,125,        class BlankStr(models.TextChoices):)
+GrepMatch(/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11964/repo/tests/model_fields/test_charfield.py,32,        class Event(models.TextChoices):)
+GrepMatch(/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11964/repo/tests/model_fields/test_charfield.py,49,    class Choices(models.TextChoices):)"""

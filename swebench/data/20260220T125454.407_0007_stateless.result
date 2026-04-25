@@ -1,0 +1,15 @@
+status: success
+1201:     # expression with an aggregate function, the GROUP BY that will
+1202:     # be introduced in the query as a result is not desired.
+1203:     contains_aggregate = False
+1204:     contains_over_clause = True
+1205:     filterable = False
+1206: 
+1207:     def __init__(self, expression, partition_by=None, order_by=None, frame=None, output_field=None):
+1208:         self.partition_by = partition_by
+1209:         self.order_by = order_by
+1210:         self.frame = frame
+1211: 
+1212:         if not getattr(expression, 'window_compatible', False):
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

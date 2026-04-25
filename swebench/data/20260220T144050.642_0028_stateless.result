@@ -1,0 +1,45 @@
+status: success
+Found at line: 1499
+1499:     def generate_removed_altered_unique_together(self):
+1500:         self._generate_removed_altered_foo_together(operations.AlterUniqueTogether)
+1501: 
+1502:     def generate_removed_altered_index_together(self):
+1503:         self._generate_removed_altered_foo_together(operations.AlterIndexTogether)
+1504: 
+1505:     def _generate_altered_foo_together(self, operation):
+1506:         for (
+1507:             old_value,
+1508:             new_value,
+1509:             app_label,
+1510:             model_name,
+1511:             dependencies,
+1512:         ) in self._get_altered_foo_together_operations(operation.option_name):
+1513:             removal_value = new_value.intersection(old_value)
+1514:             if new_value != removal_value:
+1515:                 self.add_operation(
+1516:                     app_label,
+1517:                     operation(name=model_name, **{operation.option_name: new_value}),
+1518:                     dependencies=dependencies,
+1519:                 )
+1520: 
+1521:     def generate_altered_unique_together(self):
+1522:         self._generate_altered_foo_together(operations.AlterUniqueTogether)
+1523: 
+1524:     def generate_altered_index_together(self):
+1525:         self._generate_altered_foo_together(operations.AlterIndexTogether)
+1526: 
+1527:     def generate_altered_db_table(self):
+1528:         models_to_check = self.kept_model_keys.union(
+1529:             self.kept_proxy_keys, self.kept_unmanaged_keys
+1530:         )
+1531:         for app_label, model_name in sorted(models_to_check):
+1532:             old_model_name = self.renamed_models.get(
+1533:                 (app_label, model_name), model_name
+1534:             )
+1535:             old_model_state = self.from_state.models[app_label, old_model_name]
+1536:             new_model_state = self.to_state.models[app_label, model_name]
+1537:             old_db_table_name = old_model_state.options.get("db_table")
+1538:             new_db_table_name = new_model_state.options.get("db_table")
+1539:             if old_db_table_name != new_db_table_name:
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

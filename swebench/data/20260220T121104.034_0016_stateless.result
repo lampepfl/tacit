@@ -1,0 +1,13 @@
+status: success
+838:                                     new_name=field_name,
+839:                                 )
+840:                             )
+841:                             self.old_field_keys.remove((rem_app_label, rem_model_name, rem_field_name))
+842:                             self.old_field_keys.add((app_label, model_name, field_name))
+843:                             self.renamed_fields[app_label, model_name, field_name] = rem_field_name
+844:                             break
+845: 
+846:     def generate_added_fields(self):
+847:         """Make AddField operations."""
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

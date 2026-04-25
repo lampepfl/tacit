@@ -1,0 +1,21 @@
+status: success
+def database_backwards(self, app_label, schema_editor, from_state, to_state):
+        model = from_state.apps.get_model(app_label, self.name)
+        if self.allow_migrate_model(schema_editor.connection.alias, model):
+            schema_editor.delete_model(model)
+
+    def describe(self):
+        return "Create %smodel %s" % (
+            "proxy " if self.options.get("proxy", False) else "",
+            self.name,
+        )
+
+    @property
+    def migration_name_fragment(self):
+        return self.name_lower
+
+    def references_model(self, name, app_label):
+        name_lower = name.lower()
+    
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

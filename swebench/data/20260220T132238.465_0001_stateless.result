@@ -1,0 +1,6 @@
+status: failure
+-- [E008] Not Found Error: -----------------------------------------------------
+2 |  import scala.exec_execute_scala.*
+  |         ^^^^^^^^^^^^^^^^^^^^^^^^
+  |         value exec_execute_scala is not a member of scala
+1 error found

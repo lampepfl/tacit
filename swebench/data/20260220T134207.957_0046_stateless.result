@@ -1,0 +1,7 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = ProcessResult(
+  exitCode = 0,
+  stdout = "['resolvers.py', 'conf.py', '__init__.py', 'utils.py', 'exceptions.py', 'converters.py', 'base.py']",
+  stderr = ""
+)

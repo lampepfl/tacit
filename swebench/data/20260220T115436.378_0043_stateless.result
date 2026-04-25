@@ -1,0 +1,44 @@
+status: success
+Modified merge method (lines 127-165):
+126:         global or in CSS you might want to override a style.
+127:         """
+128:         # Start with a copy of list_1.
+129:         combined_list = list(list_1)
+130:         last_insert_index = len(list_1)
+131:         # Walk list_2 in reverse, inserting each element into combined_list if
+132:         # it doesn't already exist.
+133:         for path in reversed(list_2):
+134:             try:
+135:                 # Does path already exist in the list?
+136:                 index = combined_list.index(path)
+137:             except ValueError:
+138:                 # Add path to combined_list since it doesn't exist.
+139:                 combined_list.insert(last_insert_index, path)
+140:             else:
+141:                 if index > last_insert_index:
+142:                     # Find the element from list_1 that's at the highest position <= index
+143:                     list_1_elem = None
+144:                     for elem in reversed(list_1):
+145:                         if elem in combined_list:
+146:                             elem_index = combined_list.index(elem)
+147:                             if elem_index <= index:
+148:                                 list_1_elem = elem
+149:                                 break
+150:                     warnings.warn(
+151:                         'Detected duplicate Media files in an opposite order:\n'
+152:                         '%s
+%s' % (list_1_elem, combined_list[index]),
+153:                         MediaOrderConflictWarning,
+154:                     )
+155:                 # path already exists in the list. Update last_insert_index so
+156:                 # that the following elements are inserted in front of this one.
+157:                 last_insert_index = index
+158:         return combined_list
+159: 
+160:     def __add__(self, other):
+161:         combined = Media()
+162:         combined._css_lists = self._css_lists + other._css_lists
+163:         combined._js_lists = self._js_lists + other._js_lists
+164:         return combined
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

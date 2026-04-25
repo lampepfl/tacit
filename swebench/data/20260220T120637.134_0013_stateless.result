@@ -1,0 +1,17 @@
+status: success
+799:     def _values(self, *fields, **expressions):
+800:         clone = self._chain()
+801:         if expressions:
+802:             clone = clone.annotate(**expressions)
+803:         clone._fields = fields
+804:         clone.query.set_values(fields)
+805:         return clone
+806: 
+807:     def values(self, *fields, **expressions):
+808:         fields += tuple(expressions)
+809:         clone = self._values(*fields, **expressions)
+810:         clone._iterable_class = ValuesIterable
+811:         return clone
+812: 
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

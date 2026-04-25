@@ -1,0 +1,134 @@
+status: success
+import operator
+from collections import Counter, defaultdict
+from functools import partial, reduce
+from itertools import chain
+from operator import attrgetter
+
+from django.db import IntegrityError, connections, transaction
+from django.db.models import query_utils, signals, sql
+
+
+class ProtectedError(IntegrityError):
+    def __init__(self, msg, protected_objects):
+        self.protected_objects = protected_objects
+        super().__init__(msg, protected_objects)
+
+
+class RestrictedError(IntegrityError):
+    def __init__(self, msg, restricted_objects):
+        self.restricted_objects = restricted_objects
+        super().__init__(msg, restricted_objects)
+
+
+def CASCADE(collector, field, sub_objs, using):
+    collector.collect(
+        sub_objs, source=field.remote_field.model, source_attr=field.name,
+        nullable=field.null, fail_on_restricted=False,
+    )
+    if field.null and not connections[using].features.can_defer_constraint_checks:
+        collector.add_field_update(field, None, sub_objs)
+
+
+def PROTECT(collector, field, sub_objs, using):
+    raise ProtectedError(
+        "Cannot delete some instances of model '%s' because they are "
+        "referenced through a protected foreign key: '%s.%s'" % (
+            field.remote_field.model.__name__, sub_objs[0].__class__.__name__, field.name
+        ),
+        sub_objs
+    )
+
+
+def RESTRICT(collector, field, sub_objs, using):
+    collector.add_restricted_objects(field, sub_objs)
+    collector.add_dependency(field.remote_field.model, field.model)
+
+
+def SET(value):
+    if callable(value):
+        def set_on_delete(collector, field, sub_objs, using):
+            collector.add_field_update(field, value(), sub_objs)
+    else:
+        def set_on_delete(collector, field, sub_objs, using):
+            collector.add_field_update(field, value, sub_objs)
+    set_on_delete.deconstruct = lambda: ('django.db.models.SET', (value,), {})
+    return set_on_delete
+
+
+def SET_NULL(collector, field, sub_objs, using):
+    collector.add_field_update(field, None, sub_objs)
+
+
+def SET_DEFAULT(collector, field, sub_objs, using):
+    collector.add_field_update(field, field.get_default(), sub_objs)
+
+
+def DO_NOTHING(collector, field, sub_objs, using):
+    pass
+
+
+def get_candidate_relations_to_delete(opts):
+    # The candidate relations are the ones that come from N-1 and 1-1 relations.
+    # N-N  (i.e., many-to-many) relations aren't candidates for deletion.
+    return (
+        f for f in opts.get_fields(include_hidden=True)
+        if f.auto_created and not f.concrete and (f.one_to_one or f.one_to_many)
+    )
+
+
+class Collector:
+    def __init__(self, using):
+        self.using = using
+        # Initially, {model: {instances}}, later values become lists.
+        self.data = defaultdict(set)
+        # {model: {(field, value): {instances}}}
+        self.field_updates = defaultdict(partial(defaultdict, set))
+        # {model: {field: {instances}}}
+        self.restricted_objects = defaultdict(partial(defaultdict, set))
+        # fast_deletes is a list of queryset-likes that can be deleted without
+        # fetching the objects into memory.
+        self.fast_deletes = []
+
+        # Tracks deletion-order dependency for databases without transactions
+        # or ability to defer constraint checks. Only concrete model classes
+        # should be included, as the dependencies exist only between actual
+        # database tables; proxy models are represented here by their concrete
+        # parent.
+        self.dependencies = defaultdict(set)  # {model: {models}}
+
+    def add(self, objs, source=None, nullable=False, reverse_dependency=False):
+        """
+        Add 'objs' to the collection of objects to be deleted.  If the call is
+        the result of a cascade, 'source' should be the model that caused it,
+        and 'nullable' should be set to True if the relation can be null.
+
+        Return a list of all objects that were not already collected.
+        """
+        if not objs:
+            return []
+        new_objs = []
+        model = objs[0].__class__
+        instances = self.data[model]
+        for obj in objs:
+            if obj not in instances:
+                new_objs.append(obj)
+        instances.update(new_objs)
+        # Nullable relationships can be ignored -- they are nulled out before
+        # deleting, and therefore do not affect the order in which objects have
+        # to be deleted.
+        if source is not None and not nullable:
+            self.add_dependency(source, model, reverse_dependency=reverse_dependency)
+        return new_objs
+
+    def add_dependency(self, model, dependency, reverse_dependency=False):
+        if reverse_dependency:
+            model, dependency = dependency, model
+        self.dependencies[model._meta.concrete_model].add(dependency._meta.concrete_model)
+        self.data.setdefault(dependency, self.data.default_factory())
+
+    def add_field_update(self, field, value, objs):
+        """
+        Schedule a field update. 'objs' must be a homogeneous
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

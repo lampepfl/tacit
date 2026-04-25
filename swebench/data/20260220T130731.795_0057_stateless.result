@@ -1,0 +1,21 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = """GrepMatch(/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11964/repo/django/db/models/options.py,123,        # List of all lookups defined in ForeignKey 'limit_choices_to' options)
+GrepMatch(/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11964/repo/django/db/models/enums.py,9,    """A metaclass for creating a enum choices.""")
+GrepMatch(/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11964/repo/django/db/models/enums.py,32,        # label in the choices.)
+GrepMatch(/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11964/repo/django/db/models/enums.py,48,    def choices(cls):)
+GrepMatch(/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11964/repo/django/db/models/enums.py,54,        return [label for _, label in cls.choices])
+GrepMatch(/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11964/repo/django/db/models/enums.py,58,        return [value for value, _ in cls.choices])
+GrepMatch(/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11964/repo/django/db/models/enums.py,62,    """Class for creating enumerated choices.""")
+GrepMatch(/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11964/repo/django/db/models/enums.py,67,    """Class for creating enumerated integer choices.""")
+GrepMatch(/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11964/repo/django/db/models/enums.py,72,    """Class for creating enumerated string choices.""")
+GrepMatch(/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11964/repo/django/db/models/query.py,954,        This exists to support framework features such as 'limit_choices_to',)
+GrepMatch(/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11964/repo/django/db/models/fields/related.py,322,        if self.remote_field.limit_choices_to:)
+GrepMatch(/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11964/repo/django/db/models/fields/related.py,323,            kwargs['limit_choices_to'] = self.remote_field.limit_choices_to)
+GrepMatch(/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11964/repo/django/db/models/fields/related.py,390,    def get_limit_choices_to(self):)
+GrepMatch(/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11964/repo/django/db/models/fields/related.py,392,        Return ``limit_choices_to`` for this model field.)
+GrepMatch(/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11964/repo/django/db/models/fields/related.py,397,        if callable(self.remote_field.limit_choices_to):)
+GrepMatch(/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11964/repo/django/db/models/fields/related.py,398,            return self.remote_field.limit_choices_to())
+GrepMatch(/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11964/repo/django/db/models/fields/related.py,399,        return self.remote_field.limit_choices_to)
+GrepMatch(/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11964/repo/django/db/models/fields/related.py,403,        Pass ``limit_choices_to`` to the field being constructed.)
+GrepMatch(/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11964/repo/django/db/models/fields/related.py,414,            limit_choices_to = self.remote_fi...

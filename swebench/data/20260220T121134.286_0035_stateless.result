@@ -1,0 +1,24 @@
+status: success
+950: 
+951:     def __init__(self, *args, **kwargs):
+952:         super().__init__(*args, **kwargs)
+953:         self.validators.append(validators.MaxLengthValidator(self.max_length))
+954: 
+955:     def check(self, **kwargs):
+956:         return [
+957:             *super().check(**kwargs),
+958:             *self._check_max_length_choices(**kwargs),
+959:         ]
+960: 
+961:     def _check_max_length_attribute(self, **kwargs):
+962:         if self.max_length is None:
+963:             return [
+964:                 checks.Error(
+965:                     "CharFields must define a 'max_length' attribute.",
+966:                     obj=self,
+967:                     id='fields.E120',
+968:                 )
+969:             ]
+970:         elif (not isinstance(self.max_length, int) or isinstance(self.max_length, bool) or
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

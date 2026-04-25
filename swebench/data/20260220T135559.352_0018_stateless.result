@@ -1,0 +1,24 @@
+status: success
+1159: 
+1160: class ModelChoiceIteratorValue:
+1161:     def __init__(self, value, instance):
+1162:         self.value = value
+1163:         self.instance = instance
+1164: 
+1165:     def __str__(self):
+1166:         return str(self.value)
+1167: 
+1168:     def __eq__(self, other):
+1169:         if isinstance(other, ModelChoiceIteratorValue):
+1170:             other = other.value
+1171:         return self.value == other
+1172: 
+1173:     def __hash__(self):
+1174:         return hash(self.value)
+1175: 
+1176: 
+1177: class ModelChoiceIterator:
+1178:     def __init__(self, field):
+1179:         self.field = field
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

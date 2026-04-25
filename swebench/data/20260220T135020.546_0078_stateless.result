@@ -1,0 +1,18 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = ProcessResult(
+  exitCode = 1,
+  stdout = """--- ./django/db/models/sql/query.py.bak	2026-02-20 14:45:09
++++ ./django/db/models/sql/query.py	2026-02-20 14:49:26
+@@ -2086,7 +2086,8 @@
+             self.deferred_loading = existing.union(field_names), True
+         else:
+             # Remove names from the set of any existing "immediate load" names.
+-            self.deferred_loading = existing.difference(field_names), False
++            new_fields = existing.difference(field_names)
++            self.deferred_loading = (new_fields, not new_fields)
+ 
+     def add_immediate_loading(self, field_names):
+         """""",
+  stderr = ""
+)

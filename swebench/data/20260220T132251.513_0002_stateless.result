@@ -1,0 +1,6 @@
+status: failure
+-- [E008] Not Found Error: -----------------------------------------------------
+7 |    lines.slice(360, 420).foreachWithIndex((line, i) => println(s"${i + 360}: $line"))
+  |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |    value foreachWithIndex is not a member of List[String]
+1 error found

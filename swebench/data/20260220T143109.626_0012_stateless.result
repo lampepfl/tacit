@@ -1,0 +1,29 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = List(
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15388/repo/django/utils/autoreload.py",
+    lineNumber = 273,
+    line = "        self.directory_globs = defaultdict(set)"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15388/repo/django/utils/autoreload.py",
+    lineNumber = 288,
+    line = "        self.directory_globs[path].add(glob)"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15388/repo/django/utils/autoreload.py",
+    lineNumber = 298,
+    line = "            for directory, patterns in self.directory_globs.items():"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15388/repo/django/utils/autoreload.py",
+    lineNumber = 511,
+    line = "        extra_directories = self.directory_globs.keys()"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15388/repo/django/utils/autoreload.py",
+    lineNumber = 524,
+    line = "        for directory, patterns in self.directory_globs.items():"
+  )
+)

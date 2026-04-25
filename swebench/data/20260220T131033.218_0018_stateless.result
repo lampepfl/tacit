@@ -1,0 +1,6 @@
+status: success
+Line 380: self._delete_composed_index(model, fields, {'unique': True}, self.sql_delete_unique)
+Line 396: self._delete_composed_index(model, fields, {'index': True, 'unique': False}, self.sql_delete_index)
+Line 402: def _delete_composed_index(self, model, fields, constraint_kwargs, sql):
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

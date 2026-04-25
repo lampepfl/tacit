@@ -1,0 +1,54 @@
+status: success
+2010: 
+2011: 
+2012: class InlineModelAdmin(BaseModelAdmin):
+2013:     """
+2014:     Options for inline editing of ``model`` instances.
+2015: 
+2016:     Provide ``fk_name`` to specify the attribute name of the ``ForeignKey``
+2017:     from ``model`` to its parent. This is required if ``model`` has more than
+2018:     one ``ForeignKey`` to its parent.
+2019:     """
+2020:     model = None
+2021:     fk_name = None
+2022:     formset = BaseInlineFormSet
+2023:     extra = 3
+2024:     min_num = None
+2025:     max_num = None
+2026:     template = None
+2027:     verbose_name = None
+2028:     verbose_name_plural = None
+2029:     can_delete = True
+2030:     show_change_link = False
+2031:     checks_class = InlineModelAdminChecks
+2032:     classes = None
+2033: 
+2034:     def __init__(self, parent_model, admin_site):
+2035:         self.admin_site = admin_site
+2036:         self.parent_model = parent_model
+2037:         self.opts = self.model._meta
+2038:         self.has_registered_model = admin_site.is_registered(self.model)
+2039:         super().__init__()
+2040:         if self.verbose_name is None:
+2041:             self.verbose_name = self.model._meta.verbose_name
+2042:         if self.verbose_name_plural is None:
+2043:             self.verbose_name_plural = self.model._meta.verbose_name_plural
+2044: 
+2045:     @property
+2046:     def media(self):
+2047:         extra = '' if settings.DEBUG else '.min'
+2048:         js = ['vendor/jquery/jquery%s.js' % extra, 'jquery.init.js', 'inlines.js']
+2049:         if self.filter_vertical or self.filter_horizontal:
+2050:             js.extend(['SelectBox.js', 'SelectFilter2.js'])
+2051:         if self.classes and 'collapse' in self.classes:
+2052:             js.append('collapse.js')
+2053:         return forms.Media(js=['admin/js/%s' % url for url in js])
+2054: 
+2055:     def get_extra(self, request, obj=None, **kwargs):
+2056:         """Hook for customizing the number of extra inline forms."""
+2057:         return self.extra
+2058: 
+2059:     def get_min_num(self, request, obj=None, **kwargs):
+2060:         """Hook for customizing the min number of inline forms."""
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,13 @@
+status: success
+185:         model = self.model
+341:         app_label = self.model._meta.app_label
+344:             if router.allow_migrate(alias, app_label, model_name=self.model._meta.model_name):
+398:         if alias != self.model._meta.db_table or output_field != self:
+407:         return Col(self.model._meta.db_table, self)
+567:         return _load_field, (self.model._meta.app_label, self.model._meta.object_name,
+763:         self.model = cls
+785:         Return a dict that when passed as kwargs to self.model.filter(), would
+1311:                               (self.model.__name__, self.name, value),
+1364:                 name = '%s.%s' % (self.model.__name__, self.name)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

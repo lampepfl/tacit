@@ -1,0 +1,14 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = List(
+  "include",
+  "tests",
+  "__init__.py",
+  "docstrings.py",
+  "wcs.py",
+  "utils.py",
+  "_docutil.py",
+  "setup_package.py",
+  "wcslint.py",
+  "src"
+)

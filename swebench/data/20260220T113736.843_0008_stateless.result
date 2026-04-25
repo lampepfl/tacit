@@ -1,0 +1,53 @@
+status: success
+500:         tmp_dir = tempfile.mkdtemp(dir=self.storage.location)
+501:         self.storage.delete(tmp_dir)
+502:         self.assertFalse(os.path.exists(tmp_dir))
+503: 
+504:     @override_settings(
+505:         MEDIA_ROOT='media_root',
+506:         MEDIA_URL='media_url/',
+507:         FILE_UPLOAD_PERMISSIONS=0o777,
+508:         FILE_UPLOAD_DIRECTORY_PERMISSIONS=0o777,
+509:     )
+510:     def test_setting_changed(self):
+511:         """
+512:         Properties using settings values as defaults should be updated on
+513:         referenced settings change while specified values should be unchanged.
+514:         """
+515:         storage = self.storage_class(
+516:             location='explicit_location',
+517:             base_url='explicit_base_url/',
+518:             file_permissions_mode=0o666,
+519:             directory_permissions_mode=0o666,
+520:         )
+521:         defaults_storage = self.storage_class()
+522:         settings = {
+523:             'MEDIA_ROOT': 'overriden_media_root',
+524:             'MEDIA_URL': 'overriden_media_url/',
+525:             'FILE_UPLOAD_PERMISSIONS': 0o333,
+526:             'FILE_UPLOAD_DIRECTORY_PERMISSIONS': 0o333,
+527:         }
+528:         with self.settings(**settings):
+529:             self.assertEqual(storage.base_location, 'explicit_location')
+530:             self.assertIn('explicit_location', storage.location)
+531:             self.assertEqual(storage.base_url, 'explicit_base_url/')
+532:             self.assertEqual(storage.file_permissions_mode, 0o666)
+533:             self.assertEqual(storage.directory_permissions_mode, 0o666)
+534:             self.assertEqual(defaults_storage.base_location, settings['MEDIA_ROOT'])
+535:             self.assertIn(settings['MEDIA_ROOT'], defaults_storage.location)
+536:             self.assertEqual(defaults_storage.base_url, settings['MEDIA_URL'])
+537:             self.assertEqual(defaults_storage.file_permissions_mode, settings['FILE_UPLOAD_PERMISSIONS'])
+538:             self.assertEqual(
+539:                 defaults_storage.directory_permissions_mode, settings['FILE_UPLOAD_DIRECTORY_PERMISSIONS']
+540:             )
+541: 
+542: 
+543: class CustomStorage(FileSystemStorage):
+544:     def get_available_name(self, name, max_length=None):
+545:         """
+546:         Append numbers to duplicate files rather than underscores, like Trac.
+547:         """
+548:         basename, *ext = name.split('.')
+549:         number = 2
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

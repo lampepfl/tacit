@@ -1,0 +1,25 @@
+status: success
+Modified section:
+
+@Field.register_lookup
+class IsNull(BuiltinLookup):
+    lookup_name = 'isnull'
+    prepare_rhs = False
+        if not isinstance(rhs, bool):
+            raise ValueError(
+                'The QuerySet value for an isnull lookup must be a bool value.'
+            )
+
+    def as_sql(self, compiler, connection):
+        sql, params = compiler.compile(self.lhs)
+        if self.rhs:
+            return "%s IS NULL" % sql, params
+        else:
+            return "%s IS NOT NULL" % sql, params
+
+
+@Field.register_lookup
+class Regex(BuiltinLookup):
+    lookup_name = 'regex'
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

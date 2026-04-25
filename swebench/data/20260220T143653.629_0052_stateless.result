@@ -1,0 +1,52 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = """from django.core.exceptions import (
+    ImproperlyConfigured, SuspiciousFileOperation,
+)
+from django.template.utils import get_app_template_dirs
+from django.utils._os import safe_join
+from django.utils.functional import cached_property
+
+
+class BaseEngine:
+
+    # Core methods: engines have to provide their own implementation
+    #               (except for from_string which is optional).
+
+    def __init__(self, params):
+        """
+        Initialize the template engine.
+
+        `params` is a dict of configuration settings.
+        """
+        params = params.copy()
+        self.name = params.pop('NAME')
+        self.dirs = list(params.pop('DIRS'))
+        self.app_dirs = params.pop('APP_DIRS')
+        if params:
+            raise ImproperlyConfigured(
+                "Unknown parameters: {}".format(", ".join(params)))
+
+    @property
+    def app_dirname(self):
+        raise ImproperlyConfigured(
+            "{} doesn't support loading templates from installed "
+            "applications.".format(self.__class__.__name__))
+
+    def from_string(self, template_code):
+        """
+        Create and return a template for the given source code.
+
+        This method is optional.
+        """
+        raise NotImplementedError(
+            "subclasses of BaseEngine should provide a from_string() method"
+        )
+
+    def get_template(self, template_name):
+        """
+        Load and return a template for the given name.
+
+        Raise TemplateDoesNotExist if no such template exists.
+        """
+        raise NotImplementedError("""

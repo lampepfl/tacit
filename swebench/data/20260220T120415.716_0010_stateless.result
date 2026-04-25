@@ -1,0 +1,87 @@
+status: success
+947: class CharField(Field):
+948:     description = _("String (up to %(max_length)s)")
+949: 
+950:     def __init__(self, *args, **kwargs):
+951:         super().__init__(*args, **kwargs)
+952:         self.validators.append(validators.MaxLengthValidator(self.max_length))
+953: 
+954:     def check(self, **kwargs):
+955:         return [
+956:             *super().check(**kwargs),
+957:             *self._check_max_length_attribute(**kwargs),
+958:         ]
+959: 
+960:     def _check_max_length_attribute(self, **kwargs):
+961:         if self.max_length is None:
+962:             return [
+963:                 checks.Error(
+964:                     "CharFields must define a 'max_length' attribute.",
+965:                     obj=self,
+966:                     id='fields.E120',
+967:                 )
+968:             ]
+969:         elif (not isinstance(self.max_length, int) or isinstance(self.max_length, bool) or
+970:                 self.max_length <= 0):
+971:             return [
+972:                 checks.Error(
+973:                     "'max_length' must be a positive integer.",
+974:                     obj=self,
+975:                     id='fields.E121',
+976:                 )
+977:             ]
+978:         else:
+979:             return []
+980: 
+981:     def cast_db_type(self, connection):
+982:         if self.max_length is None:
+983:             return connection.ops.cast_char_field_without_max_length
+984:         return super().cast_db_type(connection)
+985: 
+986:     def get_internal_type(self):
+987:         return "CharField"
+988: 
+989:     def to_python(self, value):
+990:         if isinstance(value, str) or value is None:
+991:             return value
+992:         return str(value)
+993: 
+994:     def get_prep_value(self, value):
+995:         value = super().get_prep_value(value)
+996:         return self.to_python(value)
+997: 
+998:     def formfield(self, **kwargs):
+999:         # Passing max_length to forms.CharField means that the value's length
+1000:         # will be validated twice. This is considered acceptable since we want
+1001:         # the value in the form field (to pass into widget for example).
+1002:         defaults = {'max_length': self.max_length}
+1003:         # TODO: Handle multiple backends with different feature flags.
+1004:         if self.null and not connection.features.interprets_empty_strings_as_nulls:
+1005:             defaults['empty_value'] = None
+1006:         defaults.update(kwargs)
+1007:         return super().formfield(**defaults)
+1008: 
+1009: 
+1010: class CommaSeparatedIntegerField(CharField):
+1011:     default_validators = [validators.validate_comma_separated_integer_list]
+1012:     description = _("Comma-separated integers")
+1013:     system_check_removed_details = {
+1014:         'msg': (
+1015:             'CommaSeparatedIntegerField is removed except for support in '
+1016:             'historical migrations.'
+1017:         ),
+1018:         'hint': (
+1019:             'Use CharField(validators=[validate_comma_separated_integer_list]) '
+1020:             'instead.'
+1021:         ),
+1022:         'id': 'fields.E901',
+1023:     }
+1024: 
+1025: 
+1026: class DateTimeCheckMixin:
+1027: 
+1028:     def check(self, **kwargs):
+1029:         return [
+1030:             *super().check(**kwargs),
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

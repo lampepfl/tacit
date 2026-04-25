@@ -1,0 +1,21 @@
+status: success
+Line 785-800:
+784:         Return a dict that when passed as kwargs to self.model.filter(), would
+785:         yield all instances having the same value for this field as obj has.
+786:         """
+787:         return {self.name: getattr(obj, self.attname)}
+788: 
+789:     def get_attname(self):
+790:         return self.name
+791: 
+792:     def get_attname_column(self):
+793:         attname = self.get_attname()
+794:         column = self.db_column or attname
+795:         return attname, column
+796: 
+797:     def get_internal_type(self):
+798:         return self.__class__.__name__
+799: 
+800:     def pre_save(self, model_instance, add):
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,29 @@
+status: success
+519:     def alter_unique_together(self, model, old_unique_together, new_unique_together):
+520:         """
+521:         Deal with a model changing its unique_together. The input
+522:         unique_togethers must be doubly-nested, not the single-nested
+523:         ["foo", "bar"] format.
+524:         """
+525:         olds = {tuple(fields) for fields in old_unique_together}
+526:         news = {tuple(fields) for fields in new_unique_together}
+527:         # Deleted uniques
+528:         for fields in olds.difference(news):
+529:             self._delete_composed_index(
+530:                 model,
+531:                 fields,
+532:                 {"unique": True, "primary_key": False},
+533:                 self.sql_delete_unique,
+534:             )
+535:         # Created uniques
+536:         for field_names in news.difference(olds):
+537:             fields = [model._meta.get_field(field) for field in field_names]
+538:             self.execute(self._create_unique_sql(model, fields))
+539: 
+540:     def alter_index_together(self, model, old_index_together, new_index_together):
+541:         """
+542:         Deal with a model changing its index_together. The input
+543:         index_togethers must be doubly-nested, not the single-nested
+544:         ["foo", "bar"] format.
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

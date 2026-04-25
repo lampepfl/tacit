@@ -1,0 +1,4 @@
+status: success
+pack-b044683e26b2f772448d8b312896124008df453d.pack, pack-b044683e26b2f772448d8b312896124008df453d.idx
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

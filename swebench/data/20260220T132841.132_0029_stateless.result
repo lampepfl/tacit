@@ -1,0 +1,11 @@
+status: success
+After removing line 1191:
+1190:     default_error_messages = {
+1191:         'invalid_choice': _('Select a valid choice. That choice is not one of'
+1192:                             ' available choices.'),
+1193: 
+1194:     def __init__(self, queryset, *, empty_label="---------",
+1195:                  required=True, widget=None, label=None, initial=None,
+1196:                  help_text='', to_field_name=None, limit_choices_to=None,
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

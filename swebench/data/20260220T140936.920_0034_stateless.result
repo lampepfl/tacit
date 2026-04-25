@@ -1,0 +1,4 @@
+status: success
+Found test_fix.py files: 0
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

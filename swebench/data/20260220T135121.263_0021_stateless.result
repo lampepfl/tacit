@@ -1,0 +1,64 @@
+status: success
+121:         if include and deferrable:
+122:             raise ValueError(
+123:                 'UniqueConstraint with include fields cannot be deferred.'
+124:             )
+125:         if opclasses and deferrable:
+126:             raise ValueError(
+127:                 'UniqueConstraint with opclasses cannot be deferred.'
+128:             )
+129:         if expressions and deferrable:
+130:             raise ValueError(
+131:                 'UniqueConstraint with expressions cannot be deferred.'
+132:             )
+133:         if expressions and opclasses:
+134:             raise ValueError(
+135:                 'UniqueConstraint.opclasses cannot be used with expressions. '
+136:                 'Use django.contrib.postgres.indexes.OpClass() instead.'
+137:             )
+138:         if not isinstance(deferrable, (type(None), Deferrable)):
+139:             raise ValueError(
+140:                 'UniqueConstraint.deferrable must be a Deferrable instance.'
+141:             )
+142:         if not isinstance(include, (type(None), list, tuple)):
+143:             raise ValueError('UniqueConstraint.include must be a list or tuple.')
+144:         if not isinstance(opclasses, (list, tuple)):
+145:             raise ValueError('UniqueConstraint.opclasses must be a list or tuple.')
+146:         if opclasses and len(fields) != len(opclasses):
+147:             raise ValueError(
+148:                 'UniqueConstraint.fields and UniqueConstraint.opclasses must '
+149:                 'have the same number of elements.'
+150:             )
+151:         self.fields = tuple(fields)
+152:         self.condition = condition
+153:         self.deferrable = deferrable
+154:         self.include = tuple(include) if include else ()
+155:         self.opclasses = opclasses
+156:         self.expressions = tuple(
+157:             F(expression) if isinstance(expression, str) else expression
+158:             for expression in expressions
+159:         )
+160:         super().__init__(name)
+161: 
+162:     @property
+163:     def contains_expressions(self):
+164:         return bool(self.expressions)
+165: 
+166:     def _get_condition_sql(self, model, schema_editor):
+167:         if self.condition is None:
+168:             return None
+169:         query = Query(model=model, alias_cols=False)
+170:         where = query.build_where(self.condition)
+171:         compiler = query.get_compiler(connection=schema_editor.connection)
+172:         sql, params = where.as_sql(compiler, schema_editor.connection)
+173:         return sql % tuple(schema_editor.quote_value(p) for p in params)
+174: 
+175:     def _get_index_expressions(self, model, schema_editor):
+176:         if not self.expressions:
+177:             return None
+178:         index_expressions = []
+179:         for expression in self.expressions:
+180:             index_expression = IndexExpression(expression)
+181:             index_expression.set_wrapper_classes(schema_editor.connection)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

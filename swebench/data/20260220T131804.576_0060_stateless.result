@@ -1,0 +1,6 @@
+status: success
+Modification 1 NOT applied
+Modification 2 NOT applied
+File written
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,7 @@
+status: success
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13158/repo/django/db/models/sql/compiler.py:437:             for query in self.query.combined_queries if not query.is_empty()
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13158/repo/django/db/models/sql/compiler.py:1525:             is_empty = cursor is None
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13158/repo/django/db/models/sql/compiler.py:1531:             if is_empty and aux_rows:
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13158/repo/django/db/models/sql/compiler.py:1533:                 is_empty = False
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

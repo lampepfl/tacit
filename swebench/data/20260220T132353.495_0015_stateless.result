@@ -1,0 +1,5 @@
+status: success
+File size: 11649 characters
+File successfully read - no syntax errors detected
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,13 @@
+status: failure
+-- [E007] Type Mismatch Error: -------------------------------------------------
+3 |    requestFileSystem("/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/astropy__astropy-14182/repo") { (fs0: FileSystem) => 
+  |                                                                                                                                       ^
+  |                   Found:    library.FileSystem -> List[library.GrepMatch]
+  |                   Required: List[library.GrepMatch]
+  |
+4 |      given FileSystem = fs0
+5 |      val result = grep("/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/astropy__astropy-14182/repo/astropy/io/ascii", "class RST")
+6 |      result
+  |
+  | longer explanation available when compiling with `-explain`
+1 error found

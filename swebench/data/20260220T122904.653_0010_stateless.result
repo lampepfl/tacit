@@ -1,0 +1,64 @@
+status: success
+0: from django.conf import settings
+1: from django.utils.translation.trans_real import language_code_re
+2: 
+3: from . import Error, Tags, register
+4: 
+5: E001 = Error(
+6:     'You have provided an invalid value for the LANGUAGE_CODE setting: {!r}.',
+7:     id='translation.E001',
+8: )
+9: 
+10: E002 = Error(
+11:     'You have provided an invalid language code in the LANGUAGES setting: {!r}.',
+12:     id='translation.E002',
+13: )
+14: 
+15: E003 = Error(
+16:     'You have provided an invalid language code in the LANGUAGES_BIDI setting: {!r}.',
+17:     id='translation.E003',
+18: )
+19: 
+20: E004 = Error(
+21:     'You have provided a value for the LANGUAGE_CODE setting that is not in '
+22:     'the LANGUAGES setting.',
+23:     id='translation.E004',
+24: )
+25: 
+26: 
+27: @register(Tags.translation)
+28: def check_setting_language_code(app_configs, **kwargs):
+29:     """Error if LANGUAGE_CODE setting is invalid."""
+30:     tag = settings.LANGUAGE_CODE
+31:     if not isinstance(tag, str) or not language_code_re.match(tag):
+32:         return [Error(E001.msg.format(tag), id=E001.id)]
+33:     return []
+34: 
+35: 
+36: @register(Tags.translation)
+37: def check_setting_languages(app_configs, **kwargs):
+38:     """Error if LANGUAGES setting is invalid."""
+39:     return [
+40:         Error(E002.msg.format(tag), id=E002.id)
+41:         for tag, _ in settings.LANGUAGES if not isinstance(tag, str) or not language_code_re.match(tag)
+42:     ]
+43: 
+44: 
+45: @register(Tags.translation)
+46: def check_setting_languages_bidi(app_configs, **kwargs):
+47:     """Error if LANGUAGES_BIDI setting is invalid."""
+48:     return [
+49:         Error(E003.msg.format(tag), id=E003.id)
+50:         for tag in settings.LANGUAGES_BIDI if not isinstance(tag, str) or not language_code_re.match(tag)
+51:     ]
+52: 
+53: 
+54: @register(Tags.translation)
+55: def check_language_settings_consistent(app_configs, **kwargs):
+56:     """Error if language settings are not consistent with each other."""
+57:     available_tags = {i for i, _ in settings.LANGUAGES} | {'en-us'}
+58:     if settings.LANGUAGE_CODE not in available_tags:
+59:         return [E004]
+60:     return []
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

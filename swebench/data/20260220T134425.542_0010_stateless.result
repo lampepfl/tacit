@@ -1,0 +1,6 @@
+status: success
+Line 14: from django.utils.hashable import make_hashable
+Line 126:             make_hashable(self.limit_choices_to),
+Line 313:             make_hashable(self.through_fields),
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

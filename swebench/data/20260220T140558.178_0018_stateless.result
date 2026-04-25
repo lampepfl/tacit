@@ -1,0 +1,63 @@
+status: success
+576: 
+577:     # Tests for the Last-Modified header
+578: 
+579:     def test_if_modified_since_and_no_last_modified(self):
+580:         self.req.META["HTTP_IF_MODIFIED_SINCE"] = "Sat, 12 Feb 2011 17:38:44 GMT"
+581:         resp = ConditionalGetMiddleware(self.get_response)(self.req)
+582:         self.assertEqual(resp.status_code, 200)
+583: 
+584:     def test_no_if_modified_since_and_last_modified(self):
+585:         self.resp_headers["Last-Modified"] = "Sat, 12 Feb 2011 17:38:44 GMT"
+586:         resp = ConditionalGetMiddleware(self.get_response)(self.req)
+587:         self.assertEqual(resp.status_code, 200)
+588: 
+589:     def test_if_modified_since_and_same_last_modified(self):
+590:         self.req.META["HTTP_IF_MODIFIED_SINCE"] = "Sat, 12 Feb 2011 17:38:44 GMT"
+591:         self.resp_headers["Last-Modified"] = "Sat, 12 Feb 2011 17:38:44 GMT"
+592:         self.resp = ConditionalGetMiddleware(self.get_response)(self.req)
+593:         self.assertEqual(self.resp.status_code, 304)
+594: 
+595:     def test_if_modified_since_and_last_modified_in_the_past(self):
+596:         self.req.META["HTTP_IF_MODIFIED_SINCE"] = "Sat, 12 Feb 2011 17:38:44 GMT"
+597:         self.resp_headers["Last-Modified"] = "Sat, 12 Feb 2011 17:35:44 GMT"
+598:         resp = ConditionalGetMiddleware(self.get_response)(self.req)
+599:         self.assertEqual(resp.status_code, 304)
+600: 
+601:     def test_if_modified_since_and_last_modified_in_the_future(self):
+602:         self.req.META["HTTP_IF_MODIFIED_SINCE"] = "Sat, 12 Feb 2011 17:38:44 GMT"
+603:         self.resp_headers["Last-Modified"] = "Sat, 12 Feb 2011 17:41:44 GMT"
+604:         self.resp = ConditionalGetMiddleware(self.get_response)(self.req)
+605:         self.assertEqual(self.resp.status_code, 200)
+606: 
+607:     def test_if_modified_since_and_redirect(self):
+608:         def get_response(req):
+609:             resp = self.client.get(req.path_info)
+610:             resp["Last-Modified"] = "Sat, 12 Feb 2011 17:35:44 GMT"
+611:             resp["Location"] = "/"
+612:             resp.status_code = 301
+613:             return resp
+614: 
+615:         self.req.META["HTTP_IF_MODIFIED_SINCE"] = "Sat, 12 Feb 2011 17:38:44 GMT"
+616:         resp = ConditionalGetMiddleware(get_response)(self.req)
+617:         self.assertEqual(resp.status_code, 301)
+618: 
+619:     def test_if_modified_since_and_client_error(self):
+620:         def get_response(req):
+621:             resp = self.client.get(req.path_info)
+622:             resp["Last-Modified"] = "Sat, 12 Feb 2011 17:35:44 GMT"
+623:             resp.status_code = 400
+624:             return resp
+625: 
+626:         self.req.META["HTTP_IF_MODIFIED_SINCE"] = "Sat, 12 Feb 2011 17:38:44 GMT"
+627:         resp = ConditionalGetMiddleware(get_response)(self.req)
+628:         self.assertEqual(resp.status_code, 400)
+629: 
+630:     def test_not_modified_headers(self):
+631:         """
+632:         The 304 Not Modified response should include only the headers required
+633:         by section 4.1 of RFC 7232, Last-Modified, and the cookies.
+634:         """
+635: 
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

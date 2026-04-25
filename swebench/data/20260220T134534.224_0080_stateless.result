@@ -1,0 +1,52 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = ProcessResult(
+  exitCode = 0,
+  stdout = """Found partial in test file
+Line 2: LOGIN_URL = reverse_lazy('login')",
+        )
+
+    def test_lazy_in_settings(self):
+        out, err = self.run_manage(['check'])
+        self.assertNoOutput(err)
+
+
+@override_settings(ROOT_URLCONF='urlpatterns_reverse.urls')
+class ReverseShortcutTests(SimpleTestCase):
+
+    def test_redirect_to_object(self):
+        # We don't really need a model; just something with a get_absolute_url
+        class FakeObj:
+            def get_absolute_url(self):
+                return "/hi-there/"
+
+        res = redirect(FakeObj())
+        self.assertIsInstance(res, HttpResponseRedirect)
+        self.assertEqual(res.url, '/hi-there/')
+
+        res = redirect(FakeObj(), permanent=True)
+        self.assertIsInstance(res, HttpResponsePermanentRedirect)
+        self.assertEqual(res.url, '/hi-there/')
+
+    def test_redirect_to_view_name(self):
+        res = redirect('hardcoded2')
+        self.assertEqual(res.url, '/hardcoded/doc.pdf')
+        res = redirect('places', 1)
+        self.assertEqual(res.url, '/places/1/')
+        res = redirect('headlines', year='2008', month='02', day='17')
+        self.assertEqual(res.url, '/headlines/2008.02.17/')
+        with self.assertRaises(NoReverseMatch):
+            redirect('not-a-view')
+
+    def test_redirect_to_url(self):
+        res = redirect('/foo/')
+        self.assertEqual(res.url, '/foo/')
+        res = redirect('http://example.com/')
+        self.assertEqual(res.url, 'http://example.com/')
+        # Assert that we can redirect using UTF-8 strings
+        res = redirect('/æøå/abc/')
+        self.assertEqual(res.url, '/%C3%A6%C3%B8%C3%A5/abc/')
+        # Assert that no imports are attempted when dealing with a relative path
+        # (previously, the below would resolve in a UnicodeEncodeError from __import__ )
+        res = redirect('/æøå.abc/')
+...

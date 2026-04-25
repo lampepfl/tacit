@@ -1,0 +1,3 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = "requestFileSystem, grep, grepRecursive, grepRecursive$default$3$, grepRecursive$default$3, readClassified, writeClassified, requestExecPermission, exec$default$2$, exec$default$2, exec$default$3$, exec$default$3, exec$default$4$, exec$default$4, execOutput, execOutput$default$2$, execOutput$default$2, requestNetwork, httpGet, httpPost, httpPost$default$3$, httpPost$default$3, classify, chat, println, find, printf, access, print, exec"

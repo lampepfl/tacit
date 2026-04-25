@@ -1,0 +1,113 @@
+status: success
+590:     def can_reduce_through(self, operation, app_label):
+591:         return super().can_reduce_through(operation, app_label) or (
+592:             isinstance(operation, AlterTogetherOptionOperation)
+593:             and type(operation) is not type(self)
+594:         )
+595: 
+596: 
+597: class AlterUniqueTogether(AlterTogetherOptionOperation):
+598:     """
+599:     Change the value of unique_together to the target one.
+600:     Input value of unique_together must be a set of tuples.
+601:     """
+602: 
+603:     option_name = "unique_together"
+604: 
+605:     def __init__(self, name, unique_together):
+606:         super().__init__(name, unique_together)
+607: 
+608: 
+609: class AlterIndexTogether(AlterTogetherOptionOperation):
+610:     """
+611:     Change the value of index_together to the target one.
+612:     Input value of index_together must be a set of tuples.
+613:     """
+614: 
+615:     option_name = "index_together"
+616: 
+617:     def __init__(self, name, index_together):
+618:         super().__init__(name, index_together)
+619: 
+620: 
+621: class AlterOrderWithRespectTo(ModelOptionOperation):
+622:     """Represent a change with the order_with_respect_to option."""
+623: 
+624:     option_name = "order_with_respect_to"
+625: 
+626:     def __init__(self, name, order_with_respect_to):
+627:         self.order_with_respect_to = order_with_respect_to
+628:         super().__init__(name)
+629: 
+630:     def deconstruct(self):
+631:         kwargs = {
+632:             "name": self.name,
+633:             "order_with_respect_to": self.order_with_respect_to,
+634:         }
+635:         return (self.__class__.__qualname__, [], kwargs)
+636: 
+637:     def state_forwards(self, app_label, state):
+638:         state.alter_model_options(
+639:             app_label,
+640:             self.name_lower,
+641:             {self.option_name: self.order_with_respect_to},
+642:         )
+643: 
+644:     def database_forwards(self, app_label, schema_editor, from_state, to_state):
+645:         to_model = to_state.apps.get_model(app_label, self.name)
+646:         if self.allow_migrate_model(schema_editor.connection.alias, to_model):
+647:             from_model = from_state.apps.get_model(app_label, self.name)
+648:             # Remove a field if we need to
+649:             if (
+650:                 from_model._meta.order_with_respect_to
+651:                 and not to_model._meta.order_with_respect_to
+652:             ):
+653:                 schema_editor.remove_field(
+654:                     from_model, from_model._meta.get_field("_order")
+655:                 )
+656:             # Add a field if we need to (altering the column is untouched as
+657:             # it's likely a rename)
+658:             elif (
+659:                 to_model._meta.order_with_respect_to
+660:                 and not from_model._meta.order_with_respect_to
+661:             ):
+662:                 field = to_model._meta.get_field("_order")
+663:                 if not field.has_default():
+664:                     field.default = 0
+665:                 schema_editor.add_field(
+666:                     from_model,
+667:                     field,
+668:                 )
+669: 
+670:     def database_backwards(self, app_label, schema_editor, from_state, to_state):
+671:         self.database_forwards(app_label, schema_editor, from_state, to_state)
+672: 
+673:     def references_field(self, model_name, name, app_label):
+674:         return self.references_model(model_name, app_label) and (
+675:             self.order_with_respect_to is None or name == self.order_with_respect_to
+676:         )
+677: 
+678:     def describe(self):
+679:         return "Set order_with_respect_to on %s to %s" % (
+680:             self.name,
+681:             self.order_with_respect_to,
+682:         )
+683: 
+684:     @property
+685:     def migration_name_fragment(self):
+686:         return "alter_%s_order_with_respect_to" % self.name_lower
+687: 
+688: 
+689: class AlterModelOptions(ModelOptionOperation):
+690:     """
+691:     Set new model options that don't directly affect the database schema
+692:     (like verbose_name, permissions, ordering). Python code in migrations
+693:     may still need them.
+694:     """
+695: 
+696:     # Model options we want to compare and preserve in an AlterModelOptions op
+697:     ALTER_OPTION_KEYS = [
+698:         "base_manager_name",
+699:         "default_manager_name",
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,15 @@
+status: success
+Found 11 matches for header_rows in test_fixedwidth.py
+  564: def test_fixed_width_header_rows():
+  575:     header_rows = ["dtype", "name", "unit", "format", "description"]
+  576:     dat = ascii.read(tbl, format="fixed_width", delimiter="|", header_rows=header_rows)
+  578:     ascii.write(dat, out, format="fixed_width", delimiter="|", header_rows=header_rows)
+  582: def test_fixed_width_two_line_header_rows():
+  594:     header_rows = ["dtype", "unit", "format", "description", "name"]
+  595:     dat = ascii.read(tbl, format="fixed_width_two_line", header_rows=header_rows)
+  597:     ascii.write(dat, out, format="fixed_width_two_line", header_rows=header_rows)
+  601: def test_fixed_width_no_header_header_rows():
+  603:     with pytest.raises(TypeError, match=r"unexpected keyword argument 'header_rows'"):
+  604:         ascii.read(tbl, format="fixed_width_no_header", header_rows=["unit"])
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

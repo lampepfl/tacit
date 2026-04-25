@@ -1,0 +1,8 @@
+status: success
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15738/repo/django/db/backends/base/schema.py:587:                 "Found wrong number (%s) of constraints for %s(%s)"
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15738/repo/django/db/backends/base/schema.py:818:                     "Found wrong number (%s) of foreign key constraints for %s.%s"
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15738/repo/django/db/backends/base/schema.py:845:                     "Found wrong number (%s) of unique constraints for %s.%s"
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15738/repo/django/db/backends/base/schema.py:919:                     "Found wrong number (%s) of check constraints for %s.%s"
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15738/repo/django/db/backends/base/schema.py:1714:                 "Found wrong number (%s) of PK constraints for %s"
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

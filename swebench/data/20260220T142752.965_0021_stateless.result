@@ -1,0 +1,74 @@
+status: success
+190:         else:
+191:             new_class._meta.concrete_model = new_class
+192: 
+193:         # Collect the parent links for multi-table inheritance.
+194:         parent_links = {}
+195:         for base in reversed([new_class] + parents):
+196:             # Conceptually equivalent to `if base is Model`.
+197:             if not hasattr(base, '_meta'):
+198:                 continue
+199:             # Skip concrete parent classes.
+200:             if base != new_class and not base._meta.abstract:
+201:                 continue
+202:             # Locate OneToOneField instances.
+203:             for field in base._meta.local_fields:
+204:                 if isinstance(field, OneToOneField):
+205:                     related = resolve_relation(new_class, field.remote_field.model)
+206:                     parent_links[make_model_tuple(related)] = field
+207: 
+208:         # Track fields inherited from base models.
+209:         inherited_attributes = set()
+210:         # Do the appropriate setup for any model parents.
+211:         for base in new_class.mro():
+212:             if base not in parents or not hasattr(base, '_meta'):
+213:                 # Things without _meta aren't functional models, so they're
+214:                 # uninteresting parents.
+215:                 inherited_attributes.update(base.__dict__)
+216:                 continue
+217: 
+218:             parent_fields = base._meta.local_fields + base._meta.local_many_to_many
+219:             if not base._meta.abstract:
+220:                 # Check for clashes between locally declared fields and those
+221:                 # on the base classes.
+222:                 for field in parent_fields:
+223:                     if field.name in field_names:
+224:                         raise FieldError(
+225:                             'Local field %r in class %r clashes with field of '
+226:                             'the same name from base class %r.' % (
+227:                                 field.name,
+228:                                 name,
+229:                                 base.__name__,
+230:                             )
+231:                         )
+232:                     else:
+233:                         inherited_attributes.add(field.name)
+234: 
+235:                 # Concrete classes...
+236:                 base = base._meta.concrete_model
+237:                 base_key = make_model_tuple(base)
+238:                 if base_key in parent_links:
+239:                     field = parent_links[base_key]
+240:                 elif not is_proxy:
+241:                     attr_name = '%s_ptr' % base._meta.model_name
+242:                     field = OneToOneField(
+243:                         base,
+244:                         on_delete=CASCADE,
+245:                         name=attr_name,
+246:                         auto_created=True,
+247:                         parent_link=True,
+248:                     )
+249: 
+250:                     if attr_name in field_names:
+251:                         raise FieldError(
+252:                             "Auto-generated field '%s' in class %r for "
+253:                             "parent_link to base class %r clashes with "
+254:                             "declared field of the same name." % (
+255:                                 attr_name,
+256:                                 name,
+257:                                 base.__name__,
+258:                             )
+259:                         )
+260: 
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

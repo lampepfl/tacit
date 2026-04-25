@@ -1,0 +1,6 @@
+status: success
+Context: eld_name:
+                    to_field_rename_key = rename_key + (remote_field_name,)
+                    if to_field_rename_key in self.renamed_field
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

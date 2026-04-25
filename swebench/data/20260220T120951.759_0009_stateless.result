@@ -1,0 +1,53 @@
+status: success
+900:             ],
+901:         )
+902: 
+903:     def generate_altered_fields(self):
+904:         """
+905:         Make AlterField operations, or possibly RemovedField/AddField if alter
+906:         isn's possible.
+907:         """
+908:         for app_label, model_name, field_name in sorted(self.old_field_keys & self.new_field_keys):
+909:             # Did the field change?
+910:             old_model_name = self.renamed_models.get((app_label, model_name), model_name)
+911:             old_field_name = self.renamed_fields.get((app_label, model_name, field_name), field_name)
+912:             old_field = self.old_apps.get_model(app_label, old_model_name)._meta.get_field(old_field_name)
+913:             new_field = self.new_apps.get_model(app_label, model_name)._meta.get_field(field_name)
+914:             dependencies = []
+915:             # Implement any model renames on relations; these are handled by RenameModel
+916:             # so we need to exclude them from the comparison
+917:             if hasattr(new_field, "remote_field") and getattr(new_field.remote_field, "model", None):
+918:                 rename_key = (
+919:                     new_field.remote_field.model._meta.app_label,
+920:                     new_field.remote_field.model._meta.model_name,
+921:                 )
+922:                 if rename_key in self.renamed_models:
+923:                     new_field.remote_field.model = old_field.remote_field.model
+924:                 # Handle ForeignKey which can only have a single to_field.
+925:                 remote_field_name = getattr(new_field.remote_field, 'field_name', None)
+926:                 if remote_field_name:
+927:                     to_field_rename_key = rename_key + (remote_field_name,)
+928:                     if to_field_rename_key in self.renamed_fields:
+929:                         new_field.remote_field.field_name = old_field.remote_field.field_name
+930:                 # Handle ForeignObjects which can have multiple from_fields/to_fields.
+931:                 from_fields = getattr(new_field, 'from_fields', None)
+932:                 if from_fields:
+933:                     from_rename_key = (app_label, model_name)
+934:                     new_field.from_fields = tuple([
+935:                         self.renamed_fields.get(from_rename_key + (from_field,), from_field)
+936:                         for from_field in from_fields
+937:                     ])
+938:                     new_field.to_fields = tuple([
+939:                         self.renamed_fields.get(rename_key + (to_field,), to_field)
+940:                         for to_field in new_field.to_fields
+941:                     ])
+942:                 dependencies.extend(self._get_dependencies_for_foreign_key(new_field))
+943:             if hasattr(new_field, "remote_field") and getattr(new_field.remote_field, "through", None):
+944:                 rename_key = (
+945:                     new_field.remote_field.through._meta.app_label,
+946:                     new_field.remote_field.through._meta.model_name,
+947:                 )
+948:                 if rename_key in self.renamed_models:
+949:                     new_field.remote_field.through = old_field.remote_field.through
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,6 @@
+status: failure
+-- [E172] Type Error: ----------------------------------------------------------
+9 |  explorer.listFiles()
+  |                      ^
+  |No given instance of type library.FileSystem was found for parameter fs of method listFiles in class FileExplorer
+1 error found

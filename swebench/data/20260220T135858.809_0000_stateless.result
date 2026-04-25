@@ -1,0 +1,5 @@
+status: success
+-- Error: ----------------------------------------------------------------------
+2 |  requestFileSystem("/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15347/repo") { given fs: library.FileSystem ?=>
+  |                                                                                                                                                                ^^^
+  |                                 end of statement expected but '?=>' found

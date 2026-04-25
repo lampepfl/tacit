@@ -1,0 +1,40 @@
+status: success
+214:     def collect(self, objs, source=None, nullable=False, collect_related=True,
+215:                 source_attr=None, reverse_dependency=False, keep_parents=False,
+216:                 fail_on_restricted=True):
+217:         """
+218:         Add 'objs' to the collection of objects to be deleted as well as all
+219:         parent instances.  'objs' must be a homogeneous iterable collection of
+220:         model instances (e.g. a QuerySet).  If 'collect_related' is True,
+221:         related objects will be handled by their respective on_delete handler.
+222: 
+223:         If the call is the result of a cascade, 'source' should be the model
+224:         that caused it and 'nullable' should be set to True, if the relation
+225:         can be null.
+226: 
+227:         If 'reverse_dependency' is True, 'source' will be deleted before the
+228:         current model, rather than after. (Needed for cascading to parent
+229:         models, the one case in which the cascade follows the forwards
+230:         direction of an FK rather than the reverse direction.)
+231: 
+232:         If 'keep_parents' is True, data of parent model's will be not deleted.
+233: 
+234:         If 'fail_on_restricted' is False, error won't be raised even if it's
+235:         prohibited to delete such objects due to RESTRICT, that defers
+236:         restricted object checking in recursive calls where the top-level call
+237:         may need to collect more objects to determine whether restricted ones
+238:         can be deleted.
+239:         """
+240:         if self.can_fast_delete(objs):
+241:             self.fast_deletes.append(objs)
+242:             return
+243:         new_objs = self.add(objs, source, nullable,
+244:                             reverse_dependency=reverse_dependency)
+245:         if not new_objs:
+246:             return
+247: 
+248:         model = new_objs[0].__class__
+249: 
+250:         if not keep_parents:
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

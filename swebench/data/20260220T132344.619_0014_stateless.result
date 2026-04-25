@@ -1,0 +1,29 @@
+status: success
+200:           If any receiver raises an error (specifically any subclass of
+201:           Exception), return the error instance as the result for that receiver.
+202:           \"\"\"
+203:           if not self.receivers or self.sender_receivers_cache.get(sender) is NO_RECEIVERS:
+204:               return []
+205:   
+206:           # Call each receiver with whatever arguments it can accept.
+207:           # Return a list of tuple pairs [(receiver, response), ... ].
+208:           responses = []
+209:           for receiver in self._live_receivers(sender):
+210:               try:
+211:                   response = receiver(signal=self, sender=sender, **named)
+212:               except Exception as err:
+213:                   logger.exception('Error calling %s in signal %s', receiver, self)
+214:                   responses.append((receiver, err))
+215:               else:
+216:                   responses.append((receiver, response))
+217:           return responses
+218:   
+219:       def _clear_dead_receivers(self):
+220:           # Note: caller is assumed to hold self.lock.
+221:           if self._dead_receivers:
+222:               self._dead_receivers = False
+223:               self.receivers = [
+224:                   r for r in self.receivers
+225:                   if not(isinstance(r[1], weakref.ReferenceType) and r[1]() is None)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

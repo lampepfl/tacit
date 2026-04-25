@@ -1,0 +1,22 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = List(
+  "1708:         return str(value)",
+  "1709: ",
+  "1710:     def formfield(self, **kwargs):",
+  "1711:         return super().formfield(**{",
+  "1712:             'path': self.path() if callable(self.path) else self.path,",
+  "1713:             'match': self.match,",
+  "1714:             'recursive': self.recursive,",
+  "1715:             'form_class': forms.FilePathField,",
+  "1716:             'allow_files': self.allow_files,",
+  "1717:             'allow_folders': self.allow_folders,",
+  "1718:             **kwargs,",
+  "1719:         })",
+  "1720: ",
+  "1721:     def get_internal_type(self):",
+  "1722:         return \"FilePathField\"",
+  "1723: ",
+  "1724: ",
+  "1725: "
+)

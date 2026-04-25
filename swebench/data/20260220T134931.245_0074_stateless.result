@@ -1,0 +1,20 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = ProcessResult(
+  exitCode = 0,
+  stdout = """        # get_columns()).
+        existing, defer = self.deferred_loading
+        if defer:
+            # Add to existing deferred names.
+            self.deferred_loading = existing.union(field_names), True
+        else:
+            # Remove names from the set of any existing "immediate load" names.
+            new_fields = existing.difference(field_names)
+            self.deferred_loading = (new_fields, not new_fields)
+
+    def add_immediate_loading(self, field_names):
+        """
+        Add the given list of model field names to the set of fields to
+        retrieve when the SQL is executed ("immediate loading" fields). The""",
+  stderr = ""
+)

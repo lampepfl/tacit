@@ -1,0 +1,26 @@
+status: success
+Exit code: 1
+Stdout: 
+Stderr: Traceback (most recent call last):
+  File "<string>", line 10, in <module>
+    django.setup()
+    ~~~~~~~~~~~~^^
+  File "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14787/repo/django/__init__.py", line 16, in setup
+    from django.urls import set_script_prefix
+  File "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14787/repo/django/urls/__init__.py", line 1, in <module>
+    from .base import (
+    ...<3 lines>...
+    )
+  File "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14787/repo/django/urls/base.py", line 8, in <module>
+    from .exceptions import NoReverseMatch, Resolver404
+  File "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14787/repo/django/urls/exceptions.py", line 1, in <module>
+    from django.http import Http404
+  File "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14787/repo/django/http/__init__.py", line 2, in <module>
+    from django.http.request import (
+        HttpRequest, QueryDict, RawPostDataException, UnreadablePostError,
+    )
+  File "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14787/repo/django/http/request.py", line 1, in <module>
+    import cgi
+ModuleNotFoundError: No module named 'cgi'
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

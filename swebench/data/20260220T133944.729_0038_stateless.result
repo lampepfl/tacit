@@ -1,0 +1,27 @@
+status: success
+stdout: === Testing Q with non-pickleable objects ===
+Q(x__in={}.keys()) = (AND: ('x__in', dict_keys([])))
+Q(x__in={}.values()) = (AND: ('x__in', dict_values([])))
+
+=== Testing combinations with empty Q ===
+Q() | Q(x__in={}.keys()) = (AND: ('x__in', dict_keys([])))
+Q(x__in={}.keys()) | Q() = (AND: ('x__in', dict_keys([])))
+Q() & Q(x__in={}.keys()) = (AND: ('x__in', dict_keys([])))
+Q(x__in={}.keys()) & Q() = (AND: ('x__in', dict_keys([])))
+
+=== Testing regular Q combinations ===
+Q(x=1) | Q(y=2) = (OR: ('x', 1), ('y', 2))
+Q(x=1) & Q(y=2) = (AND: ('x', 1), ('y', 2))
+
+=== Testing originals are not modified ===
+q1.children after Q() | q1: [('x__in', dict_keys([]))], preserved: True
+q3.children after q3 | Q(): [('x', 1)], preserved: True
+
+=== Testing negation ===
+~Q(x__in={}.keys()) = (NOT (AND: ('x__in', dict_keys([]))))
+
+=== All tests passed! ===
+stderr: 
+exitCode: 0
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

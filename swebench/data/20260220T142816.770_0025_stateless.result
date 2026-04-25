@@ -1,0 +1,83 @@
+status: success
+1: from operator import attrgetter
+2: 
+3: from django.core.exceptions import ValidationError
+4: from django.db import models, router
+5: from django.db.models.sql import InsertQuery
+6: from django.test import TestCase, skipUnlessDBFeature
+7: from django.test.utils import isolate_apps
+8: from django.utils.timezone import get_fixed_timezone
+9: 
+10: from .models import (
+11:     Article, Department, Event, Model1, Model2, Model3, NonAutoPK, Party,
+12:     Worker,
+13: )
+14: 
+15: 
+16: class ModelTests(TestCase):
+17:     def test_model_init_too_many_args(self):
+18:         msg = "Number of args exceeds number of fields"
+19:         with self.assertRaisesMessage(IndexError, msg):
+20:             Worker(1, 2, 3, 4)
+21: 
+22:     # The bug is that the following queries would raise:
+23:     # "TypeError: Related Field has invalid lookup: gte"
+24:     def test_related_gte_lookup(self):
+25:         """
+26:         Regression test for #10153: foreign key __gte lookups.
+27:         """
+28:         Worker.objects.filter(department__gte=0)
+29: 
+30:     def test_related_lte_lookup(self):
+31:         """
+32:         Regression test for #10153: foreign key __lte lookups.
+33:         """
+34:         Worker.objects.filter(department__lte=0)
+35: 
+36:     def test_sql_insert_compiler_return_id_attribute(self):
+37:         """
+38:         Regression test for #14019: SQLInsertCompiler.as_sql() failure
+39:         """
+40:         db = router.db_for_write(Party)
+41:         query = InsertQuery(Party)
+42:         query.insert_values([Party._meta.fields[0]], [], raw=False)
+43:         # this line will raise an AttributeError without the accompanying fix
+44:         query.get_compiler(using=db).as_sql()
+45: 
+46:     def test_empty_choice(self):
+47:         # NOTE: Part of the regression test here is merely parsing the model
+48:         # declaration. The verbose_name, in particular, did not always work.
+49:         a = Article.objects.create(
+50:             headline="Look at me!", pub_date=datetime.datetime.now()
+51:         )
+52:         # An empty choice field should return None for the display name.
+53:         self.assertIs(a.get_status_display(), None)
+54: 
+55:         # Empty strings should be returned as string
+56:         a = Article.objects.get(pk=a.pk)
+57:         self.assertEqual(a.misc_data, '')
+58: 
+59:     def test_long_textfield(self):
+60:         # TextFields can hold more than 4000 characters (this was broken in
+61:         # Oracle).
+62:         a = Article.objects.create(
+63:             headline="Really, really big",
+64:             pub_date=datetime.datetime.now(),
+65:             article_text="ABCDE" * 1000
+66:         )
+67:         a = Article.objects.get(pk=a.pk)
+68:         self.assertEqual(len(a.article_text), 5000)
+69: 
+70:     def test_long_unicode_textfield(self):
+71:         # TextFields can hold more than 4000 bytes also when they are
+72:         # less than 4000 characters
+73:         a = Article.objects.create(
+74:             headline="Really, really big",
+75:             pub_date=datetime.datetime.now(),
+76:             article_text='\u05d0\u05d1\u05d2' * 1000
+77:         )
+78:         a = Article.objects.get(pk=a.pk)
+79:         self.assertEqual(len(a.article_text), 3000)
+80: 
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

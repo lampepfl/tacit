@@ -1,0 +1,23 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = List(
+  "1084:         with extra data or aggregations.",
+  "1085:         \"\"\"",
+  "1086:         self._not_support_combined_queries('annotate')",
+  "1087:         self._validate_values_are_expressions(args + tuple(kwargs.values()), method_name='annotate')",
+  "1088:         annotations = {}",
+  "1089:         for arg in args:",
+  "1090:             # The default_alias property may raise a TypeError.",
+  "1091:             try:",
+  "1092:                 if arg.default_alias in kwargs:",
+  "1093:                     raise ValueError(\"The named annotation '%s' conflicts with the \"",
+  "1094:                                      \"default name for another annotation.\"",
+  "1095:                                      % arg.default_alias)",
+  "1096:             except TypeError:",
+  "1097:                 raise TypeError(\"Complex annotations require an alias\")",
+  "1098:             annotations[arg.default_alias] = arg",
+  "1099:         annotations.update(kwargs)",
+  "1100: ",
+  "1101:         clone = self._chain()",
+  "1102:         names = self._fields"
+)

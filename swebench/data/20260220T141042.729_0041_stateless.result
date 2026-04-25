@@ -1,0 +1,36 @@
+status: success
+Exit code: 0
+stdout: === HELP TEXT ===
+usage: manage.py test_command [-h] [--version] [-v {0,1,2,3}]
+                              [--settings SETTINGS] [--pythonpath PYTHONPATH]
+                              [--traceback] [--no-color] [--force-color]
+                              [--skip-checks]
+
+    Import a contract from tzkt.
+    Example usage:
+        ./manage.py tzkt_import 'Tezos Mainnet' KT1HTDtMBRCKoNHjfWEEvXneGQpCfPAt6BRe
+    
+
+options:
+  -h, --help            show this help message and exit
+  --version             Show program's version number and exit.
+  -v, --verbosity {0,1,2,3}
+                        Verbosity level; 0=minimal output, 1=normal output,
+                        2=verbose output, 3=very verbose output
+  --settings SETTINGS   The Python path to a settings module, e.g.
+                        "myproject.settings.main". If this isn't provided, the
+                        DJANGO_SETTINGS_MODULE environment variable will be
+                        used.
+  --pythonpath PYTHONPATH
+                        A directory to add to the Python path, e.g.
+                        "/home/djangoprojects/myproject".
+  --traceback           Raise on CommandError exceptions.
+  --no-color            Don't colorize the command output.
+  --force-color         Force colorization of the command output.
+  --skip-checks         Skip system checks.
+
+=== END ===
+SUCCESS: Help text preserved
+stderr: 
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,7 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = List(
+  "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15202/repo/tests/auth_tests/test_validators.py",
+  "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15202/repo/tests/forms_tests/tests/test_validators.py",
+  "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15202/repo/tests/validation/test_validators.py"
+)

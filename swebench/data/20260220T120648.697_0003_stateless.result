@@ -1,0 +1,8 @@
+status: success
+177:         year = int(m.group('year'))
+178:         if year < 100:
+179:             if year < 70:
+180:                 year += 2000
+182:                 year += 1900
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

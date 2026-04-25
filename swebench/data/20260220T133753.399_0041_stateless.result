@@ -1,0 +1,16 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = List(
+  (437, "                _setattr(self, field.attname, val)"),
+  (444, "                _setattr(self, field.attname, val)"),
+  (488, "                    _setattr(self, field.attname, val)"),
+  (643, "            setattr(self, field.attname, getattr(db_instance, field.attname))"),
+  (799, "                setattr(self, field.attname, self._get_pk_val(parent._meta))"),
+  (871, "                    setattr(self, field.attname, value)"),
+  (939, "                    setattr(self, field.attname, obj.pk)"),
+  (940, "                # If the relationship's pk/to_field was changed, clear the"),
+  (
+    943,
+    "                    setattr(self, field.attname, getattr(obj, field.target_field.attname))"
+  )
+)

@@ -1,0 +1,13 @@
+status: success
+393:         news = {tuple(fields) for fields in new_index_together}
+394:         # Deleted indexes
+395:         for fields in olds.difference(news):
+396:             self._delete_composed_index(model, fields, {'index': True, 'unique': False}, self.sql_delete_index)
+397:         # Created indexes
+398:         for field_names in news.difference(olds):
+399:             fields = [model._meta.get_field(field) for field in field_names]
+400:             self.execute(self._create_index_sql(model, fields, suffix="_idx"))
+401: 
+402:     def _delete_composed_index(self, model, fields, constraint_kwargs, sql):
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

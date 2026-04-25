@@ -1,0 +1,5 @@
+status: success
+First line starts with: 'import ins'
+First line length: 14
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

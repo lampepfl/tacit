@@ -1,0 +1,8 @@
+status: success
+22:     'ModelChoiceField', 'ModelMultipleChoiceField', 'ALL_FIELDS',
+862:             form.fields[self._pk_field.name] = ModelChoiceField(qs, initial=pk_value, required=False, widget=widget)
+1186: class ModelChoiceField(ChoiceField):
+1299: class ModelMultipleChoiceField(ModelChoiceField):
+1330:         # Since this overrides the inherited ModelChoiceField.clean
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

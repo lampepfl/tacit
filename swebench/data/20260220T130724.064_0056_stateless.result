@@ -1,0 +1,27 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = """
+    @property
+    def labels(cls):
+        return [label for _, label in cls.choices]
+
+    @property
+    def values(cls):
+        return [value for value, _ in cls.choices]
+
+
+class Choices(enum.Enum, metaclass=ChoicesMeta):
+    """Class for creating enumerated choices."""
+    pass
+
+
+class IntegerChoices(int, Choices):
+    """Class for creating enumerated integer choices."""
+    pass
+
+
+class TextChoices(str, Choices):
+    """Class for creating enumerated string choices."""
+
+    def _generate_next_value_(name, start, count, last_values):
+        return name"""

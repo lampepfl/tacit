@@ -1,0 +1,8 @@
+status: success
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13551/repo/tests/auth_tests/test_templates.py:3: from django.contrib.auth.tokens import PasswordResetTokenGenerator
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13551/repo/tests/auth_tests/test_templates.py:48:         default_token_generator = PasswordResetTokenGenerator()
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13551/repo/tests/auth_tests/test_password_reset_timeout_days.py:9: from django.contrib.auth.tokens import PasswordResetTokenGenerator
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13551/repo/tests/auth_tests/test_password_reset_timeout_days.py:21:         # Uses a mocked version of PasswordResetTokenGenerator so we can change
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13551/repo/tests/auth_tests/test_password_reset_timeout_days.py:23:         class Mocked(PasswordResetTokenGenerator):
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

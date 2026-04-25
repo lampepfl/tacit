@@ -1,0 +1,19 @@
+status: success
+__init__ found at: 16562
+def __init__(self, *args, **kwargs):
+        # Alias some things as locals to avoid repeat global lookups
+        cls = self.__class__
+        opts = self._meta
+        _setattr = setattr
+        _DEFERRED = DEFERRED
+
+        pre_init.send(sender=cls, args=args, kwargs=kwargs)
+
+        # Set up the storage for instance state
+        self._state = ModelState()
+
+        # There is a rather weird disparity here; if kwargs, it's set, then args
+        # overrides it. It should be one or the other; don't duplicate the work
+        # The reason for the kwargs check is that standard iterator passes i
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

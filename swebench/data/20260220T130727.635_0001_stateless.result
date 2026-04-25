@@ -1,0 +1,56 @@
+status: success
+Total lines: 1200
+
+Lines 370 to 420:
+371:         """
+372:         Deal with a model changing its unique_together. The input
+373:         unique_togethers must be doubly-nested, not the single-nested
+374:         ["foo", "bar"] format.
+375:         """
+376:         olds = {tuple(fields) for fields in old_unique_together}
+377:         news = {tuple(fields) for fields in new_unique_together}
+378:         # Deleted uniques
+379:         for fields in olds.difference(news):
+380:             self._delete_composed_index(model, fields, {'unique': True}, self.sql_delete_unique)
+381:         # Created uniques
+382:         for fields in news.difference(olds):
+383:             columns = [model._meta.get_field(field).column for field in fields]
+384:             self.execute(self._create_unique_sql(model, columns))
+385: 
+386:     def alter_index_together(self, model, old_index_together, new_index_together):
+387:         """
+388:         Deal with a model changing its index_together. The input
+389:         index_togethers must be doubly-nested, not the single-nested
+390:         ["foo", "bar"] format.
+391:         """
+392:         olds = {tuple(fields) for fields in old_index_together}
+393:         news = {tuple(fields) for fields in new_index_together}
+394:         # Deleted indexes
+395:         for fields in olds.difference(news):
+396:             self._delete_composed_index(model, fields, {'index': True}, self.sql_delete_index)
+397:         # Created indexes
+398:         for field_names in news.difference(olds):
+399:             fields = [model._meta.get_field(field) for field in field_names]
+400:             self.execute(self._create_index_sql(model, fields, suffix="_idx"))
+401: 
+402:     def _delete_composed_index(self, model, fields, constraint_kwargs, sql):
+403:         meta_constraint_names = {constraint.name for constraint in model._meta.constraints}
+404:         meta_index_names = {constraint.name for constraint in model._meta.indexes}
+405:         columns = [model._meta.get_field(field).column for field in fields]
+406:         constraint_names = self._constraint_names(
+407:             model, columns, exclude=meta_constraint_names | meta_index_names,
+408:             **constraint_kwargs
+409:         )
+410:         if len(constraint_names) != 1:
+411:             raise ValueError("Found wrong number (%s) of constraints for %s(%s)" % (
+412:                 len(constraint_names),
+413:                 model._meta.db_table,
+414:                 ", ".join(columns),
+415:             ))
+416:         self.execute(self._delete_constraint_sql(sql, model, constraint_names[0]))
+417: 
+418:     def alter_db_table(self, model, old_db_table, new_db_table):
+419:         """Rename the table a model points to."""
+420:         if (old_db_table == new_db_table or
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

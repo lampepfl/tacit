@@ -1,0 +1,16 @@
+status: success
+2533:         return 'AutoField'
+2534: 
+2535:     def rel_db_type(self, connection):
+2536:         return IntegerField().db_type(connection=connection)
+2537: 
+2538: 
+2539: class BigAutoField(AutoFieldMixin, BigIntegerField):
+2540: 
+2541:     def get_internal_type(self):
+2542:         return 'BigAutoField'
+2543: 
+2544:     def rel_db_type(self, connection):
+2545:         return BigIntegerField().db_type(connection=connection)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

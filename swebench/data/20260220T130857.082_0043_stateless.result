@@ -1,0 +1,9 @@
+status: success
+New method at: 25915
+Found the fix!
+ def get_group_by_cols(self, alias=None):
+        return self.source.get_group_by_cols(alias=self.refs)
+
+    d
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

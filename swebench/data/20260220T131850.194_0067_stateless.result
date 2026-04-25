@@ -1,0 +1,12 @@
+status: success
+java.lang.SecurityException: Strict mode: command 'cat' is a file operation. Use requestFileSystem instead.
+  at library.CommandValidator$.validate(CommandValidator.scala:43)
+  at library.ProcessOps$.exec(ProcessOps.scala:14)
+  at library.ProcessOps$.execOutput(ProcessOps.scala:59)
+  at library.InterfaceImpl.execOutput(InterfaceImpl.scala:13)
+  at rs$line$2$.run$$anonfun$1$$anonfun$1(rs$line$2:8)
+  at library.InterfaceImpl.requestExecPermission(InterfaceImpl.scala:37)
+  at rs$line$2$.run$$anonfun$1(rs$line$2:9)
+  at library.InterfaceImpl.requestFileSystem(InterfaceImpl.scala:33)
+  at rs$line$2$.run(rs$line$2:10)
+  ... 53 elided

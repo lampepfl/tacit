@@ -1,0 +1,24 @@
+status: success
+match method starts at: 154
+0:     def match(self, path):
+1:         match = self.regex.search(path)
+2:         if match:
+3:             # If there are any named groups, use those as kwargs, ignoring
+4:             # non-named groups. Otherwise, pass all non-named arguments as
+5:             # positional arguments.
+6:             kwargs = {k: v for k, v in match.groupdict().items() if v is not None}
+7:             args = () if kwargs else match.groups()
+8:             return path[match.end():], args, kwargs
+9:         return None
+10: 
+11:     def check(self):
+12:         warnings = []
+13:         warnings.extend(self._check_pattern_startswith_slash())
+14:         if not self._is_endpoint:
+15:             warnings.extend(self._check_include_trailing_dollar())
+16:         return warnings
+17: 
+18:     def _check_include_trailing_dollar(self):
+19:         regex_pattern = self.regex.pattern
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

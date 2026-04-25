@@ -1,0 +1,19 @@
+status: success
+745:     def _raw_delete(self, using):
+746:         """
+747:         Delete objects found from the given queryset in single direct SQL
+748:         query. No signals are sent and there is no protection for cascades.
+749:         """
+750:         query = self.query.clone()
+751:         query.__class__ = sql.DeleteQuery
+752:         cursor = query.get_compiler(using).execute_sql(CURSOR)
+753:         if cursor:
+754:             with cursor:
+755:                 return cursor.rowcount
+756:         return 0
+757:     _raw_delete.alters_data = True
+758: 
+759:     def update(self, **kwargs):
+760:         """
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

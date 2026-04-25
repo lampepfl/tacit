@@ -1,0 +1,35 @@
+status: failure
+-- Error: ----------------------------------------------------------------------
+12 |      """Handle AutocompleteWidget's AJAX requests for data."""
+   |                                  ^
+   |                   end of statement expected but quoted identifier found
+-- Error: ----------------------------------------------------------------------
+18 |          Return a JsonResponse with search results of the form:
+   |                                ^^^^
+   |                              end of statement expected but 'with' found
+-- [E018] Syntax Error: --------------------------------------------------------
+41 |          Convert the provided model object to a dictionary that is added to the
+   |                                     ^^^^^^
+   |                                    expression expected but [31mobject[0m found
+   |
+   | longer explanation available when compiling with `-explain`
+-- [E018] Syntax Error: --------------------------------------------------------
+42 |          results list.
+   |                      ^
+   |                      expression expected but [31m'.'[0m found
+   |
+   | longer explanation available when compiling with `-explain`
+-- Error: ----------------------------------------------------------------------
+61 |          Validate request integrity, extract and return request parameters.
+   |                                    ^
+   |                                 end of statement expected but ',' found
+-- Error: ----------------------------------------------------------------------
+64 |          admin, which is determined here, raise PermissionDenied if the
+   |               ^
+   |               end of statement expected but ',' found
+-- [E018] Syntax Error: --------------------------------------------------------
+65 |          requested app, model or field are malformed.
+   |                       ^
+   |                       expression expected but [31m','[0m found
+   |
+   | longer explanation available when compiling with `-explain`

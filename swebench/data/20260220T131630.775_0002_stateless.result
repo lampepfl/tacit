@@ -1,0 +1,19 @@
+status: success
+syndication
+messages
+auth
+admin
+__init__.py
+staticfiles
+flatpages
+sites
+postgres
+redirects
+sessions
+sitemaps
+humanize
+contenttypes
+gis
+admindocs
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

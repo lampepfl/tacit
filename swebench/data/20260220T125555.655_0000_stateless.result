@@ -1,0 +1,7 @@
+status: failure
+-- [E103] Syntax Error: --------------------------------------------------------
+4 |    given fs: FileSystem^{this} = access("/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13158/repo")
+  |                          ^^^^
+  |                          Illegal start of declaration
+  |
+  | longer explanation available when compiling with `-explain`

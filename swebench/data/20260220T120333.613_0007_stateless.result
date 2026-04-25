@@ -1,0 +1,33 @@
+status: success
+55: # of most "choices" lists.
+139:                  unique_for_year=None, choices=None, help_text='', db_column=None,
+156:         if isinstance(choices, collections.abc.Iterator):
+157:             choices = list(choices)
+158:         self.choices = choices
+204:             *self._check_choices(),
+244:     def _check_choices(self):
+245:         if not self.choices:
+251:         if is_value(self.choices, accept_promise=False):
+254:                     "'choices' must be an iterable (e.g., a list or tuple).",
+261:         for choices_group in self.choices:
+263:                 group_name, group_choices = choices_group
+270:                     for value, human_name in group_choices
+274:                 # No groups, choices in the form [value, display]
+275:                 value, human_name = group_name, group_choices
+279:             # Special case: choices=['ab']
+280:             if isinstance(choices_group, str):
+287:                 "'choices' must be an iterable containing "
+448:             "choices": None,
+463:         equals_comparison = {"choices", "validators"}
+466:             # Unroll anything iterable for choices into a concrete list
+467:             if name == "choices" and isinstance(value, collections.abc.Iterable):
+603:         if self.choices is not None and value not in self.empty_values:
+604:             for option_key, option_value in self.choices:
+744:         if self.choices is not None:
+809:     def get_choices(self, include_blank=True, blank_choice=BLANK_CHOICE_DASH, limit_choices_to=None, ordering=()):
+811:         Return choices with a default blank choices included, for use
+812:         as <select> choices for this field.
+814:         if self.choices is not None:
+815:             choices = list(self.choices)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

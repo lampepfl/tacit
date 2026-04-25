@@ -1,0 +1,9 @@
+status: success
+Found at index 7604
+def select_format(self, compiler, sql, params):
+        # Wrap filters with a CASE WHEN expression if a database backend
+        # (e.g. Oracle) doesn't support boolean expression in SELECT or GROUP
+        # BY list.
+        if not compiler.connection.features.supports_boolean_expr_in_select_clause
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

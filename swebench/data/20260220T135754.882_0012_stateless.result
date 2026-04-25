@@ -1,0 +1,62 @@
+status: success
+esult_params)
+        template = template or self.template
+        return template % template_params, sql_params
+
+    def get_group_by_cols(self, alias=None):
+        # This is not a complete expression and cannot be used in GROUP BY.
+        cols = []
+        for source in self.get_source_expressions():
+            cols.extend(source.get_group_by_cols())
+        return cols
+
+
+@deconstructible(path='django.db.models.Case')
+class Case(SQLiteNumericMixin, Expression):
+    """
+    An SQL searched CASE expression:
+
+        CASE
+            WHEN n > 0
+                THEN 'positive'
+            WHEN n < 0
+                THEN 'negative'
+            ELSE 'zero'
+        END
+    """
+    template = 'CASE %(cases)s ELSE %(default)s END'
+    case_joiner = ' '
+
+    def __init__(self, *cases, default=None, output_field=None, **extra):
+        if not all(isinstance(case, When) for case in cases):
+            raise TypeError("Positional arguments must all be When objects.")
+        super().__init__(output_field)
+        self.cases = list(cases)
+        self.default = self._parse_expressions(default)[0]
+        self.extra = extra
+
+    def __str__(self):
+        return "CASE %s, ELSE %r" % (', '.join(str(c) for c in self.cases), self.default)
+
+    def __repr__(self):
+        return "<%s: %s>" % (self.__class__.__name__, self)
+
+    def get_source_expressions(self):
+        return self.cases + [self.default]
+
+    def set_source_expressions(self, exprs):
+        *self.cases, self.default = exprs
+
+    def resolve_expression(self, query=None, allow_joins=True, reuse=None, summarize=False, for_save=False):
+        c = self.copy()
+        c.is_summary = summarize
+        for pos, case in enumerate(c.cases):
+            c.cases[pos] = case.resolve_expression(query, allow_joins, reuse, summarize, for_save)
+        c.default = c.default.resolve_expression(query, allow_joins, reuse, summarize, for_save)
+        return c
+
+    def copy(self):
+        c = super().copy()
+        c.cases = c.cases[
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

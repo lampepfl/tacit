@@ -1,0 +1,23 @@
+status: success
+Gruntfile.js
+FUNDING.yml
+.tx
+js_tests
+INSTALL
+LICENSE
+CONTRIBUTING.rst
+AUTHORS
+.hgignore
+.eslintrc
+tests
+MANIFEST.in
+docs
+.editorconfig
+LICENSE.python
+setup.py
+.gitignore
+package.json
+scripts
+tox.ini
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

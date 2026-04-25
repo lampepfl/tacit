@@ -1,0 +1,17 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = """                elif getattr(self, field.attname) is None:
+                    # Use pk from related object if it has been saved after
+                    # an assignment.
+                    setattr(self, field.attname, obj.pk)
+                # If the relationship's pk/to_field was changed, clear the
+                # cached relationship.
+                if getattr(obj, field.target_field.attname) != getattr(self, field.attname):
+                    setattr(self, field.attname, getattr(obj, field.target_field.attname))
+                    field.delete_cached_value(self)
+
+    def delete(self, using=None, keep_parents=False):
+        using = using or router.db_for_write(self.__class__, instance=self)
+        assert self.pk is not None, (
+            "%s object can't be deleted because its %s attribute is set to None." %
+            (self._meta.object_name, self._meta.pk.attname)"""

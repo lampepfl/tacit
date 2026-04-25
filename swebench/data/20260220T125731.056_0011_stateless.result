@@ -1,0 +1,5 @@
+status: success
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13158/repo/django/db/models/query.py:1387:         return isinstance(instance, QuerySet) and instance.query.is_empty()
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13158/repo/django/db/models/sql/compiler.py:437:             for query in self.query.combined_queries if not query.is_empty()
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

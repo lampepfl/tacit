@@ -1,0 +1,35 @@
+status: success
+requestFileSystem: class java.lang.String, interface scala.Function1, class library.IOCapability
+grep: class java.lang.String, class java.lang.String, class library.FileSystem
+grepRecursive: class java.lang.String, class java.lang.String, class java.lang.String, class library.FileSystem
+grepRecursive$default$3$: interface library.Interface
+grepRecursive$default$3: 
+readClassified: class java.lang.String, class library.FileSystem
+writeClassified: class java.lang.String, interface library.Classified, class library.FileSystem
+requestExecPermission: interface scala.collection.immutable.Set, interface scala.Function1, class library.IOCapability
+exec$default$2$: interface library.Interface
+exec$default$2: 
+exec$default$3$: interface library.Interface
+exec$default$3: 
+exec$default$4$: interface library.Interface
+exec$default$4: 
+execOutput: class java.lang.String, class scala.collection.immutable.List, class library.ProcessPermission
+execOutput$default$2$: interface library.Interface
+execOutput$default$2: 
+requestNetwork: interface scala.collection.immutable.Set, interface scala.Function1, class library.IOCapability
+httpGet: class java.lang.String, class library.Network
+httpPost: class java.lang.String, class java.lang.String, class java.lang.String, class library.Network
+httpPost$default$3$: interface library.Interface
+httpPost$default$3: 
+classify: class java.lang.Object
+chat: class java.lang.String
+chat: interface library.Classified
+println: class library.IOCapability
+println: class java.lang.Object, class library.IOCapability
+find: class java.lang.String, class java.lang.String, class library.FileSystem
+printf: class java.lang.String, interface scala.collection.immutable.Seq, class library.IOCapability
+access: class java.lang.String, class library.FileSystem
+print: class java.lang.Object, class library.IOCapability
+exec: class java.lang.String, class scala.collection.immutable.List, class scala.Option, long, class library.ProcessPermission
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

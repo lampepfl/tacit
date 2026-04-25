@@ -1,0 +1,28 @@
+status: success
+416:             )
+417:         # order_with_respect_to being unset for a field
+418:         elif dependency[2] is not None and dependency[3] == "order_wrt_unset":
+419:             return (
+420:                 isinstance(operation, operations.AlterOrderWithRespectTo) and
+421:                 operation.name_lower == dependency[1].lower() and
+422:                 (operation.order_with_respect_to or "").lower() != dependency[2].lower()
+423:             )
+424:         # order_with_respect_to being set for a field
+425:         elif dependency[2] is not None and dependency[3] == "order_wrt_set":
+426:             return (
+427:                 isinstance(operation, operations.AlterOrderWithRespectTo) and
+428:                 operation.name_lower == dependency[1].lower() and
+429:                 operation.order_with_respect_to is not None and
+430:                 operation.order_with_respect_to.lower() == dependency[2].lower()
+431:             )
+432:         # Field is removed and part of an index/unique_together
+433:         elif dependency[2] is not None and dependency[3] == "foo_together_change":
+434:             return (
+435:                 isinstance(operation, (operations.AlterUniqueTogether,
+436:                                        operations.AlterIndexTogether)) and
+437:                 operation.name_lower == dependency[1].lower()
+438:             )
+439:         # Unknown dependency. Raise an error.
+440:         else:
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

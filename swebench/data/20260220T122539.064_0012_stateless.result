@@ -1,0 +1,52 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = """                result = result[:start] + [inner]
+            elif ch == '[':
+                # Replace ranges with the first character in the range.
+                ch, escaped = next(pattern_iter)
+                result.append(ch)
+                ch, escaped = next(pattern_iter)
+                while escaped or ch != ']':
+                    ch, escaped = next(pattern_iter)
+            elif ch == '(':
+                # Some kind of group.
+                ch, escaped = next(pattern_iter)
+                if ch != '?' or escaped:
+                    # A positional group
+                    name = "_%d" % num_args
+                    num_args += 1
+                    result.append(Group((("%%(%s)s" % name), name)))
+                    walk_to_end(ch, pattern_iter)
+                else:
+                    ch, escaped = next(pattern_iter)
+                    if ch in '!=<':
+                        # All of these are ignorable. Walk to the end of the
+                        # group.
+                        walk_to_end(ch, pattern_iter)
+                    elif ch == ':':
+                        # Non-capturing group
+                        non_capturing_groups.append(len(result))
+                    elif ch != 'P':
+                        # Anything else, other than a named group, is something
+                        # we cannot reverse.
+                        raise ValueError("Non-reversible reg-exp portion: '(?%s'" % ch)
+                    else:
+                        ch, escaped = next(pattern_iter)
+                        if ch not in ('<', '='):
+                            raise ValueError("Non-reversible reg-exp portion: '(?P%s'" % ch)
+                        # We are in a named capturing group. Extra the name and
+                        # then skip to the end.
+                        if ch == '<':
+                            terminal_char = '>'
+                        # We are in a named backreference.
+                        else:
+                            terminal_char = ')'
+                        name = []
+                        ch, escaped = next(pattern_iter)
+                        while ch != terminal_char:
+                            name.append(ch)
+                            ch, escaped = next(pattern_iter)
+                        param = ''.join(name)
+                        # Named backreferences have already consumed the
+                        # parenthesis.
+...

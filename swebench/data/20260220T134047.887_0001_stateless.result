@@ -1,0 +1,15 @@
+status: success
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14534/repo/tests/forms_tests/tests/test_forms.py:3164:             def id_for_label(self, id):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14534/repo/tests/forms_tests/tests/test_forms.py:3168:             def id_for_label(self, id):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14534/repo/django/forms/boundfield.py:218:     def id_for_label(self):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14534/repo/django/forms/boundfield.py:279:     def id_for_label(self):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14534/repo/django/forms/widgets.py:268:     def id_for_label(self, id_):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14534/repo/django/forms/widgets.py:645:     def id_for_label(self, id_, index='0'):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14534/repo/django/forms/widgets.py:765:     def id_for_label(self, id_, index=None):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14534/repo/django/forms/widgets.py:851:     def id_for_label(self, id_):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14534/repo/django/forms/widgets.py:1061:     def id_for_label(self, id_):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14534/repo/django/contrib/auth/forms.py:53:     def id_for_label(self, id_):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14534/repo/django/contrib/admin/widgets.py:307:     def id_for_label(self, id_):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14534/repo/django/contrib/postgres/forms/array.py:127:     def id_for_label(self, id_):
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

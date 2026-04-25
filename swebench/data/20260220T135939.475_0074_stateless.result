@@ -1,0 +1,44 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = List(
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14997/repo/tests/auth_tests/test_checks.py",
+    lineNumber = 7,
+    line = "from django.db.models import Q, UniqueConstraint"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14997/repo/tests/auth_tests/test_checks.py",
+    lineNumber = 97,
+    line = "                    UniqueConstraint("
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14997/repo/tests/auth_tests/test_checks.py",
+    lineNumber = 128,
+    line = "    @override_settings(AUTH_USER_MODEL='auth_tests.CustomUserUniqueConstraint')"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14997/repo/tests/auth_tests/test_checks.py",
+    lineNumber = 130,
+    line = "        class CustomUserUniqueConstraint(AbstractBaseUser):"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14997/repo/tests/auth_tests/test_checks.py",
+    lineNumber = 136,
+    line = "                    UniqueConstraint(fields=['username'], name='username_unique'),"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14997/repo/tests/migrations/test_operations.py",
+    lineNumber = 355,
+    line = "        partial_unique_constraint = models.UniqueConstraint("
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14997/repo/tests/migrations/test_operations.py",
+    lineNumber = 400,
+    line = "        deferred_unique_constraint = models.UniqueConstraint("
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14997/repo/tests/migrations/test_operations.py",
+    lineNumber = 455,
+    line = "        covering_unique_constraint = models.UniqueConstraint("
+  ),
+...

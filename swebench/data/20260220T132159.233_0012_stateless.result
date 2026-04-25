@@ -1,0 +1,8 @@
+status: success
+1823:             'module_name': str(opts.verbose_name_plural),
+1947:             'module_name': str(capfirst(opts.verbose_name_plural)),
+2028:     verbose_name_plural = None
+2042:         if self.verbose_name_plural is None:
+2043:             self.verbose_name_plural = self.model._meta.verbose_name_plural
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

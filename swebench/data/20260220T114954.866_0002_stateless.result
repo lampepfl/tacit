@@ -1,0 +1,5 @@
+status: success
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11049/repo/tests/model_fields/test_durationfield.py:78:             "It must be in [DD] [HH:[MM:]]ss[.uuuuuu] format."
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11049/repo/django/db/models/fields/__init__.py:1590:                      "[DD] [HH:[MM:]]ss[.uuuuuu] format.")
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

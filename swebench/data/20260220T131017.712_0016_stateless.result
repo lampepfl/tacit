@@ -1,0 +1,20 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = List(
+  "1375:     def _not_support_combined_queries(self, operation_name):",
+  "1376:         if self.query.combinator:",
+  "1377:             raise NotSupportedError(",
+  "1378:                 'Calling QuerySet.%s() after %s() is not supported.'",
+  "1379:                 % (operation_name, self.query.combinator)",
+  "1380:             )",
+  "1381: ",
+  "1382: ",
+  "1383: class InstanceCheckMeta(type):",
+  "1384:     def __instancecheck__(self, instance):",
+  "1385:         return isinstance(instance, QuerySet) and instance.query.is_empty()",
+  "1386: ",
+  "1387: ",
+  "1388: class EmptyQuerySet(metaclass=InstanceCheckMeta):",
+  "1389:     \"\"\"",
+  "1390:     Marker class to checking if a queryset is empty by .none():"
+)

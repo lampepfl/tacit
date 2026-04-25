@@ -1,0 +1,10 @@
+status: success
+418:          * The name of the field on the model, if contribute_to_class() has
+750:     def contribute_to_class(self, cls, name, private_only=False):
+1194:     def contribute_to_class(self, cls, name, **kwargs):
+1195:         super().contribute_to_class(cls, name, **kwargs)
+1344:     # contribute_to_class is inherited from DateField, it registers
+2375:     def contribute_to_class(self, cls, name, **kwargs):
+2380:         super().contribute_to_class(cls, name, **kwargs)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

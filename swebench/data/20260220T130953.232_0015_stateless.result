@@ -1,0 +1,5 @@
+status: success
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12708/repo/tests/migrations/test_operations.py:1488:         project_state = self.set_up_test_model("test_rnfl", unique_together=True, index_together=True)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12708/repo/tests/invalid_models_tests/test_models.py:136: # unique_together tests are very similar to index_together tests.
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

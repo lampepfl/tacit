@@ -1,0 +1,42 @@
+status: success
+2: from django.utils.deprecation import MiddlewareMixin
+3: from django.utils.http import parse_http_date_safe
+4: 
+5: 
+6: class ConditionalGetMiddleware(MiddlewareMixin):
+7:     """
+8:     Handle conditional GET operations. If the response has an ETag or
+9:     Last-Modified header and the request has If-None-Match or If-Modified-Since,
+10:     replace the response with HttpNotModified. Add an ETag header if needed.
+11:     """
+12: 
+13:     def process_response(self, request, response):
+14:         # It's too late to prevent an unsafe request with a 412 response, and
+15:         # for a HEAD request, the response body is always empty so computing
+16:         # an accurate ETag isn't possible.
+17:         if request.method != "GET":
+18:             return response
+19: 
+20:         if self.needs_etag(response) and not response.has_header("ETag"):
+21:             set_response_etag(response)
+22: 
+23:         etag = response.get("ETag")
+24:         last_modified = response.get("Last-Modified")
+25:         last_modified = last_modified and parse_http_date_safe(last_modified)
+26: 
+27:         if etag or last_modified:
+28:             return get_conditional_response(
+29:                 request,
+30:                 etag=etag,
+31:                 last_modified=last_modified,
+32:                 response=response,
+33:             )
+34: 
+35:         return response
+36: 
+37:     def needs_etag(self, response):
+38:         """Return True if an ETag header should be added to response."""
+39:         cache_control_headers = cc_delim_re.split(response.get("Cache-Control", ""))
+40:         return all(header.lower() != "no-store" for header in cache_control_headers)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

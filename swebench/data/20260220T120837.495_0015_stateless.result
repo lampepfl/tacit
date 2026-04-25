@@ -1,0 +1,6 @@
+status: success
+First char code: 121, char: 'y'
+Line 176 starts with: 32
+Line 176 equals expected: true
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

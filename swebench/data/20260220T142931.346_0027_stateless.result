@@ -1,0 +1,33 @@
+status: success
+218: class BaseReloader:
+219:     def __init__(self):
+220:         self.extra_files = set()
+221:         self.directory_globs = defaultdict(set)
+222:         self._stop_condition = threading.Event()
+223: 
+224:     def watch_dir(self, path, glob):
+225:         path = Path(path)
+226:         if not path.is_absolute():
+227:             raise ValueError('%s must be absolute.' % path)
+228:         logger.debug('Watching dir %s with glob %s.', path, glob)
+229:         self.directory_globs[path].add(glob)
+230: 
+231:     def watch_file(self, path):
+232:         path = Path(path)
+233:         if not path.is_absolute():
+234:             raise ValueError('%s must be absolute.' % path)
+235:         logger.debug('Watching file %s.', path)
+236:         self.extra_files.add(path)
+237: 
+238:     def watched_files(self, include_globs=True):
+239:         """
+240:         Yield all files that need to be watched, including module files and
+241:         files within globs.
+242:         """
+243:         yield from iter_all_python_module_files()
+244:         yield from self.extra_files
+245:         if include_globs:
+246:             for directory, patterns in self.directory_globs.items():
+247:                 for pattern in patterns:
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

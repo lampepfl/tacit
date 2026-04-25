@@ -1,0 +1,21 @@
+status: success
+174: 
+175:     def _get_index_expressions(self, model, schema_editor):
+176:         if not self.expressions:
+177:             return None
+178:         index_expressions = []
+179:         for expression in self.expressions:
+180:             index_expression = IndexExpression(expression)
+181:             index_expression.set_wrapper_classes(schema_editor.connection)
+182:             index_expressions.append(index_expression)
+183:         return ExpressionList(*index_expressions).resolve_expression(
+184:             Query(model, alias_cols=False),
+185:         )
+186: 
+187:     def constraint_sql(self, model, schema_editor):
+188:         fields = [model._meta.get_field(field_name) for field_name in self.fields]
+189:         include = [model._meta.get_field(field_name).column for field_name in self.include]
+190:         condition = self._get_condition_sql(model, schema_editor)
+191:         expressions = self._get_index_expressions(model, schema_editor)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

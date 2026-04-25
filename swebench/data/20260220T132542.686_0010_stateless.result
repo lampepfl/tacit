@@ -1,0 +1,73 @@
+status: success
+1181:             ModelChoiceIteratorValue(self.field.prepare_value(obj), obj),
+1182:             self.field.label_from_instance(obj),
+1183:         )
+1184: 
+1185: 
+1186: class ModelChoiceField(ChoiceField):
+1187:     """A ChoiceField whose choices are a model QuerySet."""
+1188:     # This class is a subclass of ChoiceField for purity, but it doesn't
+1189:     # actually use any of ChoiceField's implementation.
+1190:     default_error_messages = {
+1191:         'invalid_choice': _('Select a valid choice. That choice is not one of'
+1192:                             ' the available choices.'),
+1193:     }
+1194:     iterator = ModelChoiceIterator
+1195: 
+1196:     def __init__(self, queryset, *, empty_label="---------",
+1197:                  required=True, widget=None, label=None, initial=None,
+1198:                  help_text='', to_field_name=None, limit_choices_to=None,
+1199:                  blank=False, **kwargs):
+1200:         # Call Field instead of ChoiceField __init__() because we don't need
+1201:         # ChoiceField.__init__().
+1202:         Field.__init__(
+1203:             self, required=required, widget=widget, label=label,
+1204:             initial=initial, help_text=help_text, **kwargs
+1205:         )
+1206:         if (
+1207:             (required and initial is not None) or
+1208:             (isinstance(self.widget, RadioSelect) and not blank)
+1209:         ):
+1210:             self.empty_label = None
+1211:         else:
+1212:             self.empty_label = empty_label
+1213:         self.queryset = queryset
+1214:         self.limit_choices_to = limit_choices_to   # limit the queryset later.
+1215:         self.to_field_name = to_field_name
+1216: 
+1217:     def get_limit_choices_to(self):
+1218:         """
+1219:         Return ``limit_choices_to`` for this form field.
+1220: 
+1221:         If it is a callable, invoke it and return the result.
+1222:         """
+1223:         if callable(self.limit_choices_to):
+1224:             return self.limit_choices_to()
+1225:         return self.limit_choices_to
+1226: 
+1227:     def __deepcopy__(self, memo):
+1228:         result = super(ChoiceField, self).__deepcopy__(memo)
+1229:         # Need to force a new ModelChoiceIterator to be created, bug #11183
+1230:         if self.queryset is not None:
+1231:             result.queryset = self.queryset.all()
+1232:         return result
+1233: 
+1234:     def _get_queryset(self):
+1235:         return self._queryset
+1236: 
+1237:     def _set_queryset(self, queryset):
+1238:         self._queryset = None if queryset is None else queryset.all()
+1239:         self.widget.choices = self.choices
+1240: 
+1241:     queryset = property(_get_queryset, _set_queryset)
+1242: 
+1243:     # this method will be used to create object labels by the QuerySetIterator.
+1244:     # Override it to customize the label.
+1245:     def label_from_instance(self, obj):
+1246:         """
+1247:         Convert objects into strings and generate the labels for the choices
+1248:         presented by this object. Subclasses can override this method to
+1249:         customize the display of the choices.
+1250:         """
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

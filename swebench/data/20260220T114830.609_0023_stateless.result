@@ -1,0 +1,6 @@
+status: success
+Exit code: 1
+Stderr: Extension astropy.io.fits._tiled_compression._compression contains source files (astropy/io/fits/_tiled_compression/src/compression.c, astropy/io/fits/_tiled_compression/src/unquantize.c) that are specified using an absolute path, which will not be supported in future.
+invalid command name '2>&1'
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

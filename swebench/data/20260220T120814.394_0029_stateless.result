@@ -1,0 +1,8 @@
+status: success
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11797/repo/tests/queries/tests.py:307:         self.assertQuerysetEqual(Report.objects.filter(creator__id=1001), [])
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11797/repo/tests/queries/tests.py:3792:         self.assertSequenceEqual(SpecialCategory.objects.filter(categoryitem__id=c1.pk), [sc1])
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11797/repo/tests/custom_managers/tests.py:334:             FunPerson._base_manager.order_by('first_name').filter(favorite_thing_id=self.b1.pk), [
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11797/repo/tests/custom_managers/tests.py:344:             FunPerson._base_manager.order_by('first_name').filter(favorite_thing_id=self.b1.pk), [
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11797/repo/tests/custom_managers/tests.py:355:             FunPerson._base_manager.order_by('first_name').filter(favorite_thing_id=self.b1.pk), [
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

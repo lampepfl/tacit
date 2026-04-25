@@ -1,0 +1,73 @@
+status: success
+411:         elif dependency[2] is not None and dependency[3] == "alter":
+412:             return (
+413:                 isinstance(operation, operations.AlterField) and
+414:                 operation.model_name_lower == dependency[1].lower() and
+415:                 operation.name_lower == dependency[2].lower()
+416:             )
+417:         # order_with_respect_to being unset for a field
+418:         elif dependency[2] is not None and dependency[3] == "order_wrt_unset":
+419:             return (
+420:                 isinstance(operation, operations.AlterOrderWithRespectTo) and
+421:                 operation.name_lower == dependency[1].lower() and
+422:                 (operation.order_with_respect_to or "").lower() != dependency[2].lower()
+423:             )
+424:         # Field is removed and part of an index/unique_together
+425:         elif dependency[2] is not None and dependency[3] == "foo_together_change":
+426:             return (
+427:                 isinstance(operation, (operations.AlterUniqueTogether,
+428:                                        operations.AlterIndexTogether)) and
+429:                 operation.name_lower == dependency[1].lower()
+430:             )
+431:         # Unknown dependency. Raise an error.
+432:         else:
+433:             raise ValueError("Can't handle dependency %r" % (dependency,))
+434: 
+435:     def add_operation(self, app_label, operation, dependencies=None, beginning=False):
+436:         # Dependencies are (app_label, model_name, field_name, create/delete as True/False)
+437:         operation._auto_deps = dependencies or []
+438:         if beginning:
+439:             self.generated_operations.setdefault(app_label, []).insert(0, operation)
+440:         else:
+441:             self.generated_operations.setdefault(app_label, []).append(operation)
+442: 
+443:     def swappable_first_key(self, item):
+444:         """
+445:         Place potential swappable models first in lists of created models (only
+446:         real way to solve #22783).
+447:         """
+448:         try:
+449:             model = self.new_apps.get_model(item[0], item[1])
+450:             base_names = [base.__name__ for base in model.__bases__]
+451:             string_version = "%s.%s" % (item[0], item[1])
+452:             if (
+453:                 model._meta.swappable or
+454:                 "AbstractUser" in base_names or
+455:                 "AbstractBaseUser" in base_names or
+456:                 settings.AUTH_USER_MODEL.lower() == string_version.lower()
+457:             ):
+458:                 return ("___" + item[0], "___" + item[1])
+459:         except LookupError:
+460:             pass
+461:         return item
+462: 
+463:     def generate_renamed_models(self):
+464:         """
+465:         Find any renamed models, generate the operations for them, and remove
+466:         the old entry from the model lists. Must be run before other
+467:         model-level generation.
+468:         """
+469:         self.renamed_models = {}
+470:         self.renamed_models_rel = {}
+471:         added_models = self.new_model_keys - self.old_model_keys
+472:         for app_label, model_name in sorted(added_models):
+473:             model_state = self.to_state.models[app_label, model_name]
+474:             model_fields_def = self.only_relation_agnostic_fields(model_state.fields)
+475: 
+476:             removed_models = self.old_model_keys - self.new_model_keys
+477:             for rem_app_label, rem_model_name in removed_models:
+478:                 if rem_app_label == app_label:
+479:                     rem_model_state = self.from_state.models[rem_app_label, rem_model_name]
+480:                     rem_model_fields_def = self.only_relation_agnostic_fields(rem_model_state.fields)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

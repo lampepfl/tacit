@@ -1,0 +1,52 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = """            prefix = 'glob-parent-%s' % directory.name
+            patterns = ['%s/%s' % (directory.name, pattern) for pattern in patterns]
+            directory = directory.parent
+
+        expression = ['anyof']
+        for pattern in patterns:
+            expression.append(['match', pattern, 'wholename'])
+        self._subscribe(directory, '%s:%s' % (prefix, directory), expression)
+
+    def watched_roots(self, watched_files):
+        extra_directories = self.directory_globs.keys()
+        watched_file_dirs = [f.parent for f in watched_files]
+        sys_paths = list(sys_path_directories())
+        return frozenset((*extra_directories, *watched_file_dirs, *sys_paths))
+
+    def _update_watches(self):
+        watched_files = list(self.watched_files(include_globs=False))
+        found_roots = common_roots(self.watched_roots(watched_files))
+        logger.debug('Watching %s files', len(watched_files))
+        logger.debug('Found common roots: %s', found_roots)
+        # Setup initial roots for performance, shortest roots first.
+        for root in sorted(found_roots):
+            self._watch_root(root)
+        for directory, patterns in self.directory_globs.items():
+            self._watch_glob(directory, patterns)
+        # Group sorted watched_files by their parent directory.
+        sorted_files = sorted(watched_files, key=lambda p: p.parent)
+        for directory, group in itertools.groupby(sorted_files, key=lambda p: p.parent):
+            # These paths need to be relative to the parent directory.
+            self._subscribe_dir(directory, [str(p.relative_to(directory)) for p in group])
+
+    def update_watches(self):
+        try:
+            self._update_watches()
+        except Exception as ex:
+            # If the service is still available, raise the original exception.
+            if self.check_server_status(ex):
+                raise
+
+    def _check_subscription(self, sub):
+        subscription = self.client.getSubscription(sub)
+        if not subscription:
+            return
+        logger.debug('Watchman subscription %s has results.', sub)
+        for result in subscription:
+            # When using watch-project, it's not simple to get the relative
+            # directory without storing some specific state. Store the full
+            # path to the directory in the subscription name, prefixed by its
+            # type (glob, files).
+...

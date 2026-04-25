@@ -1,0 +1,19 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = List(
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/astropy__astropy-14995/repo/astropy/nddata/mixins/tests/test_ndarithmetic.py",
+    lineNumber = 268,
+    line = "def test_arithmetics_data_masks(mask1, mask2):"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/astropy__astropy-14995/repo/astropy/nddata/mixins/tests/test_ndarithmetic.py",
+    lineNumber = 303,
+    line = "def test_arithmetics_data_masks_invalid():"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/astropy__astropy-14995/repo/astropy/nddata/mixins/tests/test_ndarithmetic.py",
+    lineNumber = 1200,
+    line = "def test_arithmetics_mask_func():"
+  )
+)

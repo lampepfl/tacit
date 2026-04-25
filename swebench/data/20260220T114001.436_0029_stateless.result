@@ -1,0 +1,9 @@
+status: success
+Found at line 519:
+  Prev: [            return None]
+  Line: [        elif self.mask is None and operand is not None:]
+  Next: [            # Make a copy so there is no reference in the result.]
+  Next2: [            return deepcopy(operand.mask)]
+  Next3: [        elif operand is None:]
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

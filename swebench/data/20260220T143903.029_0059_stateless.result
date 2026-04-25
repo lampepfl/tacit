@@ -1,0 +1,20 @@
+status: success
+java.nio.file.NoSuchFileException: /Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15388/repo/tests/admin_scripts/project_template
+  at sun.nio.fs.UnixException.translateToIOException(UnixException.java:92)
+  at sun.nio.fs.UnixException.rethrowAsIOException(UnixException.java:106)
+  at sun.nio.fs.UnixException.rethrowAsIOException(UnixException.java:111)
+  at sun.nio.fs.UnixFileAttributeViews$Basic.readAttributes(UnixFileAttributeViews.java:55)
+  at sun.nio.fs.UnixFileSystemProvider.readAttributes(UnixFileSystemProvider.java:148)
+  at java.nio.file.Files.readAttributes(Files.java:1851)
+  at java.nio.file.FileTreeWalker.getAttributes(FileTreeWalker.java:220)
+  at java.nio.file.FileTreeWalker.visit(FileTreeWalker.java:277)
+  at java.nio.file.FileTreeWalker.walk(FileTreeWalker.java:323)
+  at java.nio.file.Files.walkFileTree(Files.java:2804)
+  at java.nio.file.Files.walkFileTree(Files.java:2882)
+  at library.RealFileSystem$FileEntryImpl.walk(RealFileSystem.scala:91)
+  at library.FileOps$.find(FileOps.scala:35)
+  at library.InterfaceImpl.find(InterfaceImpl.scala:12)
+  at rs$line$2$.run$$anonfun$1(rs$line$2:3)
+  at library.InterfaceImpl.requestFileSystem(InterfaceImpl.scala:33)
+  at rs$line$2$.run(rs$line$2:4)
+  ... 53 elided

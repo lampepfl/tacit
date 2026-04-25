@@ -1,0 +1,5 @@
+status: success
+Contains old code: true
+Contains 'year < 70': true
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

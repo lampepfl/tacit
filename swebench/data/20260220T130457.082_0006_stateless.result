@@ -1,0 +1,46 @@
+status: success
+34:         # Multiline ordering SQL clause may appear from RawSQL.
+35:         self.ordering_parts = re.compile(r'^(.*)\s(ASC|DESC)(.*)', re.MULTILINE | re.DOTALL)
+36:         self._meta_ordering = None
+275:             ordering = self.query.extra_order_by
+276:         elif not self.query.default_ordering:
+277:             ordering = self.query.order_by
+279:             ordering = self.query.order_by
+280:         elif self.query.get_meta().ordering:
+281:             ordering = self.query.get_meta().ordering
+282:             self._meta_ordering = ordering
+284:             ordering = []
+285:         if self.query.standard_ordering:
+291:         for field in ordering:
+298:                 if not self.query.standard_ordering:
+300:                     field.reverse_ordering()
+340:                 order_by.extend(self.find_ordering_name(
+381:             without_ordering = self.ordering_parts.search(sql).group(1)
+383:             if (without_ordering, params_hash) in seen:
+385:             seen.add((without_ordering, params_hash))
+394:                 without_ordering = self.ordering_parts.search(sql).group(1)
+395:                 if not is_ref and (without_ordering, params) not in select_sql:
+396:                     extra_select.append((expr, (without_ordering, params), None))
+430:         if not features.supports_slicing_ordering_in_compound:
+457:                     elif not features.supports_slicing_ordering_in_compound:
+471:         braces = '({})' if features.supports_slicing_ordering_in_compound else '{}'
+501:                 # This must come after 'select', 'ordering', and 'distinct'
+572:                     order_by = order_by or self.connection.ops.force_no_ordering()
+574:                     if self._meta_ordering:
+587:                 ordering = []
+589:                     ordering.append(o_sql)
+591:                 result.append('ORDER BY %s' % ', '.join(ordering))
+603:                 # of order_by() and distinct(), forcing the ordering expressions
+699:     def find_ordering_name(self, name, opts, alias=None, default_order='ASC',
+703:         not be) and column name for ordering by the given 'name' parameter.
+712:         # append the default ordering for that model unless the attribute name
+714:         if field.is_relation and opts.ordering and getattr(field, 'attname', None) != name:
+719:                 raise FieldError('Infinite loop caused by ordering.')
+723:             for item in opts.ordering:
+729:                 results.extend(self.find_ordering_name(item, opts, alias,
+739:         get_ordering() and get_distinct() must produce same target columns on
+740:         same input, as the prefixes of get_ordering() and get_distinct() must
+757:         ordering, and distinct must be done first.
+1530:         query.clear_ordering(True)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

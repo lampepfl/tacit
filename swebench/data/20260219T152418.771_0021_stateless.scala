@@ -1,0 +1,3 @@
+requestExecPermission(Set("python", "python3")) {
+  execOutput("python", List("-c", "from astropy.modeling import models as m; from astropy.modeling.separable import separability_matrix; import numpy as np; cm = m.Linear1D(10) & m.Linear1D(5); print('Test 1:'); print(separability_matrix(cm)); print('Test 2:'); result = separability_matrix(m.Pix2Sky_TAN() & cm); print(result); expected = np.array([[True, True, False, False], [True, True, False, False], [False, False, True, False], [False, False, False, True]]); print('Expected:'); print(expected); print('Passed:', str(np.array_equal(result, expected)))"))
+}

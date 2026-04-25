@@ -1,0 +1,8 @@
+status: success
+java.lang.StringIndexOutOfBoundsException: begin 39772, end 44772, length 44659
+  at java.lang.String.checkBoundsBeginEnd(String.java:4606)
+  at java.lang.String.substring(String.java:2709)
+  at rs$line$2$.run$$anonfun$1(rs$line$2:5)
+  at library.InterfaceImpl.requestFileSystem(InterfaceImpl.scala:33)
+  at rs$line$2$.run(rs$line$2:6)
+  ... 53 elided

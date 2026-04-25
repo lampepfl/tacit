@@ -1,0 +1,52 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = """s = cls._meta._property_names
+        related_field_accessors = (
+            f.get_attname() for f in cls._meta._get_fields(reverse=False)
+            if f.is_relation and f.related_model is not None
+        )
+        for accessor in related_field_accessors:
+            if accessor in property_names:
+                errors.append(
+                    checks.Error(
+                        "The property '%s' clashes with a related field "
+                        "accessor." % accessor,
+                        obj=cls,
+                        id='models.E025',
+                    )
+                )
+        return errors
+
+    @classmethod
+    def _check_single_primary_key(cls):
+        errors = []
+        if sum(1 for f in cls._meta.local_fields if f.primary_key) > 1:
+            errors.append(
+                checks.Error(
+                    "The model cannot have more than one field with "
+                    "'primary_key=True'.",
+                    obj=cls,
+                    id='models.E026',
+                )
+            )
+        return errors
+
+    @classmethod
+    def _check_index_together(cls):
+        """Check the value of "index_together" option."""
+        if not isinstance(cls._meta.index_together, (tuple, list)):
+            return [
+                checks.Error(
+                    "'index_together' must be a list or tuple.",
+                    obj=cls,
+                    id='models.E008',
+                )
+            ]
+
+        elif any(not isinstance(fields, (tuple, list)) for fields in cls._meta.index_together):
+            return [
+                checks.Error(
+                    "All 'index_together' elements must be lists or tuples.",
+                    obj=cls,
+                    id='models.E009',
+...

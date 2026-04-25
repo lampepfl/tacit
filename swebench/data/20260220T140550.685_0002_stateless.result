@@ -1,0 +1,6 @@
+status: failure
+-- [E008] Not Found Error: -----------------------------------------------------
+2 |  import scala.exec.{requestFileSystem, access, grep, grepRecursive, find, exec, requestExecPermission, ProcessResult, IOCapability, Interface}
+  |         ^^^^^^^^^^
+  |         value exec is not a member of scala
+1 error found

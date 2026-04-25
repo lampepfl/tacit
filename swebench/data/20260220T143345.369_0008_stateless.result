@@ -1,0 +1,19 @@
+status: success
+=== Verification: lines 843-858 ===
+843:                 widget_attrs['id'] = '%s_%s' % (id_, i)
+844:             else:
+845:                 widget_attrs = final_attrs
+846:             subwidgets.append(widget.get_context(widget_name, widget_value, widget_attrs)['widget'])
+847:         context['widget']['subwidgets'] = subwidgets
+848:         return context
+849:     def value_from_datadict(self, data, files, name):
+850:         return [
+851:             widget.value_from_datadict(data, files, name + widget_name)
+852:             for widget_name, widget in zip(self.widgets_names, self.widgets)
+853:         ]
+854: 
+855:     def value_omitted_from_data(self, data, files, name):
+856:         return all(
+857:             widget.value_omitted_from_data(data, files, name + widget_name)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

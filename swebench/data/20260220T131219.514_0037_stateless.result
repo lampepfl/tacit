@@ -1,0 +1,19 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = ProcessResult(
+  exitCode = 1,
+  stdout = "",
+  stderr = """Traceback (most recent call last):
+  File "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12908/repo/tests/runtests.py", line 14, in <module>
+    import django
+ModuleNotFoundError: No module named 'django'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12908/repo/tests/runtests.py", line 16, in <module>
+    raise RuntimeError(
+        'Django module not found, reference tests/README.rst for instructions.'
+    ) from e
+RuntimeError: Django module not found, reference tests/README.rst for instructions."""
+)

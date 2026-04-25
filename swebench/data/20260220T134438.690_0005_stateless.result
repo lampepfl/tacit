@@ -1,0 +1,4 @@
+status: success
+1145: class ManyToManyField(RelatedField):
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

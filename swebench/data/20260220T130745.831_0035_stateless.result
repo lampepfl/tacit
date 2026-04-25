@@ -1,0 +1,9 @@
+status: success
+Method starts at: 29243, next class at: 29307
+Old method:
+def get_group_by_cols(self, alias=None):
+        return [self]
+
+
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

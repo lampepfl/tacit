@@ -1,0 +1,9 @@
+status: failure
+-- [E007] Type Mismatch Error: -------------------------------------------------
+4 |    val result = access("/tmp")(using fs)
+  |                                      ^^
+  |                 Found:    (fs : library.FileSystem -> library.FileSystem)
+  |                 Required: library.FileSystem
+  |
+  | longer explanation available when compiling with `-explain`
+1 error found

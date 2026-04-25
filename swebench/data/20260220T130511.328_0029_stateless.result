@@ -1,0 +1,8 @@
+status: failure
+-- [E006] Not Found Error: -----------------------------------------------------
+7 |  requestFileSystem(".")(processFs)
+  |                         ^^^^^^^^^
+  |                         Not found: processFs - did you mean ProcessOps?
+  |
+  | longer explanation available when compiling with `-explain`
+1 error found

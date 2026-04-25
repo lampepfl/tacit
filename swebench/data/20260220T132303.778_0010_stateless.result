@@ -1,0 +1,54 @@
+status: success
+import logging
+  import threading
+  import warnings
+  import weakref
+  
+  from django.utils.deprecation import RemovedInDjango40Warning
+  from django.utils.inspect import func_accepts_kwargs
+  
+  
+  def _make_id(target):
+      if hasattr(target, '__func__'):
+          return (id(target.__self__), id(target.__func__))
+      return id(target)
+  
+  
+---
+180:           ]
+181:   
+182:       def send_robust(self, sender, **named):
+183:           \"\"\"
+184:           Send signal from sender to all connected receivers catching errors.
+185:   
+186:           Arguments:
+187:   
+188:               sender
+189:                   The sender of the signal. Can be any Python object (normally one
+190:                   registered with a connect if you actually want something to
+191:                   occur).
+192:   
+193:               named
+194:                   Named arguments which will be passed to receivers.
+195:   
+196:           Return a list of tuple pairs [(receiver, response), ... ].
+197:   
+198:           If any receiver raises an error (specifically any subclass of
+199:           Exception), return the error instance as the result for that receiver.
+200:           \"\"\"
+201:           if not self.receivers or self.sender_receivers_cache.get(sender) is NO_RECEIVERS:
+202:               return []
+203:   
+204:           # Call each receiver with whatever arguments it can accept.
+205:           # Return a list of tuple pairs [(receiver, response), ... ].
+206:           responses = []
+207:           for receiver in self._live_receivers(sender):
+208:               try:
+209:                   response = receiver(signal=self, sender=sender, **named)
+210:               except Exception as err:
+211:                   logger.exception('Error calling %s in signal %s', receiver, self)
+212:                   responses.append((receiver, err))
+213:               else:
+214:                   responses.append((receiver, response))
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,9 @@
+status: success
+Found at index: 18125
+gate', True)
+                )
+                if inner_query.default_cols and has_existing_aggregate_annotations:
+                    inner_query.group_by = (self.model._meta.pk.get_col(inner_query.get_initial_alias()),)
+                inner_query.
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,35 @@
+status: success
+180:             self.unique_together = normalize_together(self.unique_together)
+181:             self.index_together = normalize_together(self.index_together)
+182:             # App label/class name interpolation for names of constraints and
+183:             # indexes.
+184:             if not getattr(cls._meta, 'abstract', False):
+185:                 for attr_name in {'constraints', 'indexes'}:
+186:                     objs = getattr(self, attr_name, [])
+187:                     setattr(self, attr_name, self._format_names_with_class(cls, objs))
+188: 
+189:             # verbose_name_plural is a special case because it uses a 's'
+190:             # by default.
+191:             if self.verbose_name_plural is None:
+192:                 self.verbose_name_plural = format_lazy('{}s', self.verbose_name)
+193: 
+194:             # order_with_respect_and ordering are mutually exclusive.
+195:             self._ordering_clash = bool(self.ordering and self.order_with_respect_to)
+196: 
+197:             # Any leftover attributes must be invalid.
+198:             if meta_attrs != {}:
+199:                 raise TypeError("'class Meta' got invalid attribute(s): %s" % ','.join(meta_attrs))
+200:         else:
+201:             self.verbose_name_plural = format_lazy('{}s', self.verbose_name)
+202:         del self.meta
+203: 
+204:         # If the db_table wasn't provided, use the app_label + model_name.
+205:         if not self.db_table:
+206:             self.db_table = "%s_%s" % (self.app_label, self.model_name)
+207:             self.db_table = truncate_name(self.db_table, connection.ops.max_name_length())
+208: 
+209:     def _format_names_with_class(self, cls, objs):
+210:         """App label/class name interpolation for object names."""
+211:         new_objs = []
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

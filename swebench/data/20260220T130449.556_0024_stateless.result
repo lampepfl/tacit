@@ -1,0 +1,11 @@
+status: success
+1 warning found
+-- Warning: --------------------------------------------------------------------
+ 1 |def run()(using IOCapability): Any =
+   |^
+   |Infinite recursive call
+   |
+ 2 |  
+ 3 |...
+19 |run()
+def run()(using x$1: IOCapability): Any

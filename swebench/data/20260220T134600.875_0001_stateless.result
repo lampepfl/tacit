@@ -1,0 +1,33 @@
+status: success
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14787/repo/tests/generic_views/views.py:4: from django.utils.decorators import method_decorator
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14787/repo/tests/generic_views/views.py:131:     post = method_decorator(login_required)(AuthorCreate.post)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14787/repo/tests/middleware/views.py:2: from django.utils.decorators import method_decorator
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14787/repo/tests/middleware/views.py:16: @method_decorator(no_append_slash, name='dispatch')
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14787/repo/tests/decorators/tests.py:11: from django.utils.decorators import method_decorator
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14787/repo/tests/decorators/tests.py:155: # For testing method_decorator, a decorator that assumes a single argument.
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14787/repo/tests/decorators/tests.py:163: simple_dec_m = method_decorator(simple_dec)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14787/repo/tests/decorators/tests.py:166: # For testing method_decorator, two decorators that add an attribute to the function
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14787/repo/tests/decorators/tests.py:174: myattr_dec_m = method_decorator(myattr_dec)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14787/repo/tests/decorators/tests.py:184: myattr2_dec_m = method_decorator(myattr2_dec)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14787/repo/tests/decorators/tests.py:200:     Tests for method_decorator
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14787/repo/tests/decorators/tests.py:230:         # Decorate using method_decorator() on the method.
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14787/repo/tests/decorators/tests.py:238:         # Decorate using method_decorator() on both the class and the method.
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14787/repo/tests/decorators/tests.py:241:         @method_decorator(myattr_dec_m, "method")
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14787/repo/tests/decorators/tests.py:243:             @method_decorator(myattr2_dec_m)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14787/repo/tests/decorators/tests.py:249:         @method_decorator((myattr_dec, myattr2_dec), 'method')
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14787/repo/tests/decorators/tests.py:258:         @method_decorator(decorators, "method")
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14787/repo/tests/decorators/tests.py:281:             @method_decorator(decorate)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14787/repo/tests/decorators/tests.py:293:             @method_decorator(decorators, "method")
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14787/repo/tests/decorators/tests.py:302:             @method_decorator(ClsDec(False))
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14787/repo/tests/decorators/tests.py:316:         method_dec = method_decorator(original_dec)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14787/repo/tests/decorators/tests.py:347:         @method_decorator can be used to decorate a class and its methods.
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14787/repo/tests/decorators/tests.py:354:         @method_decorator(deco, name="method")
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14787/repo/tests/decorators/tests.py:363:         @method_decorator can accept a tuple of decorators.
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14787/repo/tests/decorators/tests.py:383:         @method_decorator(decorators, name="method")
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14787/repo/tests/decorators/tests.py:389:             @method_decorator(decorators)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14787/repo/tests/decorators/tests.py:398:         @method_decorator on a non-callable attribute raises an error.
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14787/repo/tests/decorators/tests.py:405:             @method_decorator(lambda: None, name="prop")
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14787/repo/tests/decorators/tests.py:415:         @method_decorator on a nonexistent method raises an error.
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14787/repo/tests/decorators/tests.py:422:             @method_decorator(lambda: None, name='nonexistent_method')
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

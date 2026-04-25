@@ -1,0 +1,8 @@
+status: success
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12284/repo/tests/model_forms/test_modelchoicefield.py
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12284/repo/tests/forms_tests/field_tests/test_typedchoicefield.py
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12284/repo/tests/forms_tests/field_tests/test_multiplechoicefield.py
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12284/repo/tests/forms_tests/field_tests/test_typedmultiplechoicefield.py
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12284/repo/tests/forms_tests/field_tests/test_choicefield.py
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

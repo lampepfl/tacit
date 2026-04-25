@@ -1,0 +1,5 @@
+requestFileSystem("/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13315/repo") { 
+  val matches = grepRecursive("/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13315/repo", "limit_choices_to", "*.py")
+  println(s"Found ${matches.length} matches")
+  matches.take(30).foreach(m => println(s"${m.file}:${m.lineNumber}: ${m.line.trim}"))
+}

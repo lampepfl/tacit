@@ -1,0 +1,11 @@
+status: success
+delete method starts at line 392
+452:             for (field, value), instances in instances_for_fieldvalues.items():
+453:                 for obj in instances:
+454:                     setattr(obj, field.attname, value)
+455:         for model, instances in self.data.items():
+456:             for instance in instances:
+457:                 setattr(instance, model._meta.pk.attname, None)
+458:         return sum(deleted_counter.values()), dict(deleted_counter)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,7 @@
+status: failure
+-- [E040] Syntax Error: --------------------------------------------------------
+5 |  import given scala.exec.IOCapability
+  |         ^^^^^
+  |         an identifier expected, but 'given' found
+  |
+  | longer explanation available when compiling with `-explain`

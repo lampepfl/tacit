@@ -1,0 +1,17 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = """    cwd = Path.cwd()
+    items = set()
+    for backend in engines.all():
+        if not isinstance(backend, DjangoTemplates):
+            continue
+
+        items.update(cwd / to_path(dir) for dir in backend.engine.dirs)
+
+        for loader in backend.engine.template_loaders:
+            if not hasattr(loader, 'get_dirs'):
+                continue
+            items.update(
+                cwd / to_path(directory)
+                for directory in loader.get_dirs()
+                if not is_django_path(directory)"""

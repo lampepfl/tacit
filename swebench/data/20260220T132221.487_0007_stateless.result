@@ -1,0 +1,13 @@
+status: success
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13768/repo/django/core/handlers/exception.py:99:         security_logger.error(
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13768/repo/django/core/handlers/asgi.py:196:             logger.warning(
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13768/repo/django/core/servers/basehttp.py:142:                 logger.error(
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13768/repo/django/core/servers/basehttp.py:153:                 level = logger.error
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13768/repo/django/core/servers/basehttp.py:155:                 level = logger.warning
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13768/repo/django/utils/autoreload.py:433:                 logger.warning('Unable to watch root dir %s as neither it or its parent exist.', root)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13768/repo/django/utils/autoreload.py:438:             logger.warning('Watchman warning: %s', result['warning'])
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13768/repo/django/utils/autoreload.py:469:                 logger.warning('Unable to watch directory %s as neither it or its parent exist.', directory)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13768/repo/django/utils/autoreload.py:492:                 logger.warning('Unable to watch directory %s as neither it or its parent exist.', directory)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13768/repo/django/utils/autoreload.py:564:                 logger.debug('Watchman error: %s, checking server status.', ex)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

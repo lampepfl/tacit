@@ -1,0 +1,12 @@
+status: success
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12700/repo/tests/view_tests/tests/test_debug.py:1229:     def test_cleanse_setting_basic(self):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12700/repo/tests/view_tests/tests/test_debug.py:1231:         self.assertEqual(reporter_filter.cleanse_setting('TEST', 'TEST'), 'TEST')
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12700/repo/tests/view_tests/tests/test_debug.py:1233:             reporter_filter.cleanse_setting('PASSWORD', 'super_secret'),
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12700/repo/tests/view_tests/tests/test_debug.py:1237:     def test_cleanse_setting_ignore_case(self):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12700/repo/tests/view_tests/tests/test_debug.py:1240:             reporter_filter.cleanse_setting('password', 'super_secret'),
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12700/repo/tests/view_tests/tests/test_debug.py:1244:     def test_cleanse_setting_recurses_in_dictionary(self):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12700/repo/tests/view_tests/tests/test_debug.py:1248:             reporter_filter.cleanse_setting('SETTING_NAME', initial),
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12700/repo/tests/view_tests/tests/test_debug.py:1296:             reporter_filter.cleanse_setting('password', 'super_secret'),
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12700/repo/tests/view_tests/tests/test_debug.py:1303:             reporter_filter.cleanse_setting('database_url', 'super_secret'),
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

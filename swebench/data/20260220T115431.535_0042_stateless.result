@@ -1,0 +1,6 @@
+status: failure
+-- [E008] Not Found Error: -----------------------------------------------------
+25 |        insertIndex += 1
+   |        ^^^^^^^^^^^^^^
+   |value += is not a member of Int - did you mean insertIndex.!=? or perhaps insertIndex.<=?
+1 error found

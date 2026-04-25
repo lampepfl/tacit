@@ -1,0 +1,11 @@
+status: success
+1107:         'invalid_choice': _('The inline value did not match the parent instance.'),
+1134:             raise ValidationError(self.error_messages['invalid_choice'], code='invalid_choice')
+1191:         'invalid_choice': _('Select a valid choice. That choice is not one of'
+1192:         'invalid_choice': _('Select a valid choice. %(value)s is not one of the'
+1286:             raise ValidationError(self.error_messages['invalid_choice'], code='invalid_choice', params={'value': value})
+1306:         'invalid_choice': _('Select a valid choice. %(value)s is not one of the'
+1367:                     self.error_messages['invalid_choice'],
+1368:                     code='invalid_choice',
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

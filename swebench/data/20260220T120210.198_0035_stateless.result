@@ -1,0 +1,7 @@
+status: success
+class starts at: 8764
+match starts at: 9099
+next method at: 9751
+File rewritten
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,19 @@
+status: success
+Current state around sys_path_directories:
+183:     exist.
+184:     """
+185:     for path in sys.path:
+186:         path = Path(path)
+187:         try:
+188:         except (FileNotFoundError, ValueError):
+189:         except FileNotFoundError:
+190:             continue
+191:         # If the path is a file (like a zip file), watch the parent directory.
+192:         if resolved_path.is_file():
+193:             yield resolved_path.parent
+194:         else:
+195:             yield resolved_path
+196: 
+197: 
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

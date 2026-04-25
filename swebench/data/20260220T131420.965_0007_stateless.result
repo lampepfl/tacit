@@ -1,0 +1,23 @@
+status: success
+133:     def _legacy_decode(self, session_data):
+134:         # RemovedInDjango40Warning: pre-Django 3.1 format will be invalid.
+135:         encoded_data = base64.b64decode(session_data.encode('ascii'))
+136:         try:
+137:             # could produce ValueError if there is no ':'
+138:             hash, serialized = encoded_data.split(b':', 1)
+139:             expected_hash = self._hash(serialized)
+140:             if not constant_time_compare(hash.decode(), expected_hash):
+141:                 raise SuspiciousSession("Session data corrupted")
+142:             else:
+143:                 return self.serializer().loads(serialized)
+144:         except Exception as e:
+145:             # ValueError, SuspiciousOperation, unpickling exceptions. If any of
+146:             # these happen, just return an empty dictionary (an empty session).
+147:             if isinstance(e, SuspiciousOperation):
+148:                 logger = logging.getLogger('django.security.%s' % e.__class__.__name__)
+149:                 logger.warning(str(e))
+150:             return {}
+151: 
+152:     def update(self, dict_):
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

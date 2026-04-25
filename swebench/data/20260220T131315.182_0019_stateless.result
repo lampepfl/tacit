@@ -1,0 +1,15 @@
+status: success
+729: class IndexOperation(Operation):
+730:     option_name = 'indexes'
+731: 
+732:     @cached_property
+733:     def model_name_lower(self):
+734:         return self.model_name.lower()
+735: 
+736: 
+737: class AddIndex(IndexOperation):
+738:     """Add an index on a model."""
+739: 
+740:     def __init__(self, model_name, index):
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,1 @@
+requestExecPermission(Set("ls", "find", "grep"))

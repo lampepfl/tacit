@@ -1,0 +1,29 @@
+status: success
+1005:         return super().cast_db_type(connection)
+1006: 
+1007:     def get_internal_type(self):
+1008:         return "CharField"
+1009: 
+1010:     def to_python(self, value):
+1011:         if isinstance(value, str) or value is None:
+1012:             return value
+1013:         return str(value)
+1014: 
+1015:     def get_prep_value(self, value):
+1016:         value = super().get_prep_value(value)
+1017:         return self.to_python(value)
+1018: 
+1019:     def formfield(self, **kwargs):
+1020:         # Passing max_length to forms.CharField means that the value's length
+1021:         # will be validated twice. This is considered acceptable since we want
+1022:         # the value in the form field (to pass into widget for example).
+1023:         defaults = {'max_length': self.max_length}
+1024:         # TODO: Handle multiple backends with different feature flags.
+1025:         if self.null and not connection.features.interprets_empty_strings_as_nulls:
+1026:             defaults['empty_value'] = None
+1027:         defaults.update(kwargs)
+1028:         return super().formfield(**defaults)
+1029: 
+1030: 
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

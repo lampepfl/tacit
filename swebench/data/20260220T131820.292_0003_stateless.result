@@ -1,0 +1,28 @@
+status: success
+131:     def __init__(self, verbose_name=None, name=None, primary_key=False,
+178:     def __str__(self):
+189:     def __repr__(self):
+516:     def __eq__(self, other):
+522:     def __lt__(self, other):
+528:     def __hash__(self):
+531:     def __deepcopy__(self, memodict):
+542:     def __copy__(self):
+550:     def __reduce__(self):
+985:     def __init__(self, *args, **kwargs):
+1103:     def __init__(self, verbose_name=None, name=None, auto_now=False,
+1399:     def __init__(self, verbose_name=None, name=None, max_digits=None,
+1591:     def __init__(self, *args, **kwargs):
+1614:     def __init__(self, verbose_name=None, name=None, path='', match=None,
+1829:     def __init__(self, *args, **kwargs):
+1853:     def __init__(self, verbose_name=None, name=None, protocol='both',
+1943:     def __init__(self, *args, **kwargs):
+2018:     def __init__(self, *args, max_length=50, db_index=True, allow_unicode=False, **kwargs):
+2090:     def __init__(self, verbose_name=None, name=None, auto_now=False,
+2216:     def __init__(self, verbose_name=None, name=None, **kwargs):
+2239:     def __init__(self, *args, **kwargs):
+2306:     def __init__(self, verbose_name=None, **kwargs):
+2355:     def __init__(self, *args, **kwargs):
+2425:     def __instancecheck__(self, instance):
+2428:     def __subclasscheck__(self, subclass):
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

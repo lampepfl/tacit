@@ -1,0 +1,8 @@
+status: success
+Fixed code:
+                # If the relationship's pk/to_field was changed, clear the
+                # cached relationship.
+                if getattr(obj, field.target_field.attname) != getattr(self, field.attname):
+           
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

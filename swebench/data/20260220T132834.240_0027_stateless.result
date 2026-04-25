@@ -1,0 +1,24 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = List(
+  "            if base != new_class and not base._meta.abstract:",
+  "                continue",
+  "            # Locate OneToOneField instances.",
+  "            for field in base._meta.local_fields:",
+  "                if isinstance(field, OneToOneField) and field.remote_field.parent_link:",
+  "                    related = resolve_relation(new_class, field.remote_field.model)",
+  "                    parent_links[make_model_tuple(related)] = field",
+  "",
+  "        # Track fields inherited from base models.",
+  "        inherited_attributes = set()",
+  "        # Do the appropriate setup for any model parents.",
+  "        for base in new_class.mro():",
+  "            if base not in parents or not hasattr(base, '_meta'):",
+  "                # Things without _meta aren't functional models, so they're",
+  "                # uninteresting parents.",
+  "                inherited_attributes.update(base.__dict__)",
+  "                continue",
+  "",
+  "            parent_fields = base._meta.local_fields + base._meta.local_many_to_many",
+  "            if not base._meta.abstract:"
+)

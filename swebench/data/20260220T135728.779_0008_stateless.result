@@ -1,0 +1,33 @@
+status: success
+1076:             return [self]
+1077:         return external_cols
+1078: 
+1079:     def as_sql(self, compiler, connection):
+1080:         # Some backends (e.g. Oracle) raise an error when a subquery contains
+1081:         # unnecessary ORDER BY clause.
+1082:         if (
+1083:             self.subquery and
+1084:             not connection.features.ignores_unnecessary_order_by_in_subqueries
+1085:         ):
+1086:             self.clear_ordering(force=False)
+1087:         sql, params = self.get_compiler(connection=connection).as_sql()
+1088:         if self.subquery:
+1089:             sql = '(%s)' % sql
+1090:         return sql, params
+1091: 
+1092:     def resolve_lookup_value(self, value, can_reuse, allow_joins):
+1093:         if hasattr(value, 'resolve_expression'):
+1094:             value = value.resolve_expression(
+1095:                 self, reuse=can_reuse, allow_joins=allow_joins,
+1096:             )
+1097:         elif isinstance(value, (list, tuple)):
+1098:             # The items of the iterable may be expressions and therefore need
+1099:             # to be resolved independently.
+1100:             values = (
+1101:                 self.resolve_lookup_value(sub_value, can_reuse, allow_joins)
+1102:                 for sub_value in value
+1103:             )
+1104:             type_ = type(value)
+1105:             if hasattr(type_, '_make'):  # namedtuple
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,33 @@
+status: failure
+-- [E018] Syntax Error: --------------------------------------------------------
+9 |      Escape all the HTML/XML special characters with their unicode escapes, so
+  |                                                 ^^^^
+  |                                        expression expected but [31mwith[0m found
+  |
+  | longer explanation available when compiling with `-explain`
+-- [E018] Syntax Error: --------------------------------------------------------
+10 |      value is safe to be output anywhere except for inside a tag attribute. Wrap
+   |                                                 ^^^
+   |                                       expression expected but [31mfor[0m found
+   |
+   | longer explanation available when compiling with `-explain`
+-- [E040] Syntax Error: --------------------------------------------------------
+12 |      """
+   |      ^
+   |      an identifier expected, but string literal found
+-- [E018] Syntax Error: --------------------------------------------------------
+26 |      Escape all the HTML/XML special characters with their unicode escapes, so
+   |                                                 ^^^^
+   |                                      expression expected but [31mwith[0m found
+   |
+   | longer explanation available when compiling with `-explain`
+-- [E018] Syntax Error: --------------------------------------------------------
+27 |      value is safe to be output anywhere except for inside a tag attribute. Wrap
+   |                                                 ^^^
+   |                                       expression expected but [31mfor[0m found
+   |
+   | longer explanation available when compiling with `-explain`
+-- [E040] Syntax Error: --------------------------------------------------------
+29 |      """
+   |      ^
+   |      an identifier expected, but string literal found

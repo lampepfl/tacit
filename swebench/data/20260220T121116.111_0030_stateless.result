@@ -1,0 +1,7 @@
+status: success
+stdout: Test year 75 (2076, exactly 50 years, stays 2076): 3313526400
+Test year 74 (2074, < 50 years, stays 2074): 3281990400
+stderr: 
+exit: 0
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

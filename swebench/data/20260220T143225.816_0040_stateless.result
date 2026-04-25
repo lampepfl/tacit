@@ -1,0 +1,6 @@
+status: success
+models.py
+  __init__.py
+  tests.py
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

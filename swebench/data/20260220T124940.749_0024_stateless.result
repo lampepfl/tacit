@@ -1,0 +1,35 @@
+status: success
+99:     def add(self, objs, source=None, nullable=False, reverse_dependency=False):
+100:         """
+101:         Add 'objs' to the collection of objects to be deleted.  If the call is
+102:         the result of a cascade, 'source' should be the model that caused it,
+103:         and 'nullable' should be set to True if the relation can be null.
+104: 
+105:         Return a list of all objects that were not already collected.
+106:         """
+107:         if not objs:
+108:             return []
+109:         new_objs = []
+110:         model = objs[0].__class__
+111:         instances = self.data[model]
+112:         for obj in objs:
+113:             if obj not in instances:
+114:                 new_objs.append(obj)
+115:         instances.update(new_objs)
+116:         # Nullable relationships can be ignored -- they are nulled out before
+117:         # deleting, and therefore do not affect the order in which objects have
+118:         # to be deleted.
+119:         if source is not None and not nullable:
+120:             self.add_dependency(source, model, reverse_dependency=reverse_dependency)
+121:         return new_objs
+122: 
+123:     def add_dependency(self, model, dependency, reverse_dependency=False):
+124:         if reverse_dependency:
+125:             model, dependency = dependency, model
+126:         self.dependencies[model._meta.concrete_model].add(dependency._meta.concrete_model)
+127:         self.data.setdefault(dependency, self.data.default_factory())
+128: 
+129:     def add_field_update(self, field, value, objs):
+130:         """
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,12 @@
+status: success
+1261: 
+1262:         # Replace exponent separator in floating point numbers
+1263:         if 'D' in format:
+1264:             output_field = output_field.replace(encode_ascii('E'), encode_ascii('D'))
+1265: 
+1266: 
+1267: def _get_recarray_field(array, key):
+1268:     """
+1269:     Compatibility function for using the recarray base class's field method.
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

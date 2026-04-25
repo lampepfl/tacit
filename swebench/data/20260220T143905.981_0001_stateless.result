@@ -1,0 +1,14 @@
+status: success
+741:             opts = orig_opts
+742:             for name in parts[:-1]:
+743:                 old_model = cur_model
+744:                 if name in self._filtered_relations:
+745:                     name = self._filtered_relations[name].relation_name
+746:                 source = opts.get_field(name)
+747:                 if is_reverse_o2o(source):
+748:                     cur_model = source.related_model
+749:                 else:
+750:                     cur_model = source.remote_field.model
+751:                 opts = cur_model._meta
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

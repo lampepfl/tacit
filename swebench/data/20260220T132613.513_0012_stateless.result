@@ -1,0 +1,88 @@
+status: success
+1296:         initial_value = initial if initial is not None else ''
+1297:         data_value = data if data is not None else ''
+1298:         return str(self.prepare_value(initial_value)) != str(data_value)
+1299: 
+1300: 
+1301: class ModelMultipleChoiceField(ModelChoiceField):
+1302:     """A MultipleChoiceField whose choices are a model QuerySet."""
+1303:     widget = SelectMultiple
+1304:     hidden_widget = MultipleHiddenInput
+1305:     default_error_messages = {
+1306:         'invalid_list': _('Enter a list of values.'),
+1307:         'invalid_choice': _('Select a valid choice. %(value)s is not one of the'
+1308:                             ' available choices.'),
+1309:         'invalid_pk_value': _('“%(pk)s” is not a valid value.')
+1310:     }
+1311: 
+1312:     def __init__(self, queryset, **kwargs):
+1313:         super().__init__(queryset, empty_label=None, **kwargs)
+1314: 
+1315:     def to_python(self, value):
+1316:         if not value:
+1317:             return []
+1318:         return list(self._check_values(value))
+1319: 
+1320:     def clean(self, value):
+1321:         value = self.prepare_value(value)
+1322:         if self.required and not value:
+1323:             raise ValidationError(self.error_messages['required'], code='required')
+1324:         elif not self.required and not value:
+1325:             return self.queryset.none()
+1326:         if not isinstance(value, (list, tuple)):
+1327:             raise ValidationError(
+1328:                 self.error_messages['invalid_list'],
+1329:                 code='invalid_list',
+1330:             )
+1331:         qs = self._check_values(value)
+1332:         # Since this overrides the inherited ModelChoiceField.clean
+1333:         # we run custom validators here
+1334:         self.run_validators(value)
+1335:         return qs
+1336: 
+1337:     def _check_values(self, value):
+1338:         """
+1339:         Given a list of possible PK values, return a QuerySet of the
+1340:         corresponding objects. Raise a ValidationError if a given value is
+1341:         invalid (not a valid PK, not in the queryset, etc.)
+1342:         """
+1343:         key = self.to_field_name or 'pk'
+1344:         # deduplicate given values to avoid creating many querysets or
+1345:         # requiring the database backend deduplicate efficiently.
+1346:         try:
+1347:             value = frozenset(value)
+1348:         except TypeError:
+1349:             # list of lists isn't hashable, for example
+1350:             raise ValidationError(
+1351:                 self.error_messages['invalid_list'],
+1352:                 code='invalid_list',
+1353:             )
+1354:         for pk in value:
+1355:             try:
+1356:                 self.queryset.filter(**{key: pk})
+1357:             except (ValueError, TypeError):
+1358:                 raise ValidationError(
+1359:                     self.error_messages['invalid_pk_value'],
+1360:                     code='invalid_pk_value',
+1361:                     params={'pk': pk},
+1362:                 )
+1363:         qs = self.queryset.filter(**{'%s__in' % key: value})
+1364:         pks = {str(getattr(o, key)) for o in qs}
+1365:         for val in value:
+1366:             if str(val) not in pks:
+1367:                 raise ValidationError(
+1368:                     self.error_messages['invalid_choice'],
+1369:                     code='invalid_choice',
+1370:                     params={'value': val},
+1371:                 )
+1372:         return qs
+1373: 
+1374:     def prepare_value(self, value):
+1375:         if (hasattr(value, '__iter__') and
+1376:                 not isinstance(value, str) and
+1377:                 not hasattr(value, '_meta')):
+1378:             prepare_value = super().prepare_value
+1379:             return [prepare_value(v) for v in value]
+1380:         return super().prepare_value(value)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

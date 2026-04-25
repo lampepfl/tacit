@@ -1,0 +1,13 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = List(
+  "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11099/repo/tests/auth_tests/test_validators.py",
+  "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11099/repo/tests/forms_tests/tests/test_validators.py",
+  "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11099/repo/tests/validation/test_validators.py",
+  "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11099/repo/docs/ref/contrib/postgres/validators.txt",
+  "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11099/repo/docs/ref/validators.txt",
+  "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11099/repo/django/core/validators.py",
+  "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11099/repo/django/contrib/auth/migrations/0007_alter_validators_add_error_messages.py",
+  "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11099/repo/django/contrib/auth/validators.py",
+  "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11099/repo/django/contrib/postgres/validators.py"
+)

@@ -1,0 +1,48 @@
+status: success
+Contains 'return [self]': true
+Found at: 11805
+Context: def get_group_by_cols(self, alias=None):
+        if not self
+Found at: 19982
+Context: def get_group_by_cols(self, alias=None):
+        return []
+
+
+Found at: 25042
+Context: def get_group_by_cols(self, alias=None):
+        return []
+
+
+Found at: 25866
+Context: def get_group_by_cols(self, alias=None):
+        return self
+Found at: 27946
+Context: def get_group_by_cols(self, alias=None):
+        return [sel
+Found at: 29243
+Context: def get_group_by_cols(self, alias=None):
+        return [sel
+Found at: 32989
+Context: def get_group_by_cols(self, alias=None):
+        # This is n
+Found at: 37496
+Context: def get_group_by_cols(self, alias=None):
+        if alias:
+ 
+Found at: 41573
+Context: def get_group_by_cols(self, alias=None):
+        cols = []
+ 
+Found at: 45717
+Context: def get_group_by_cols(self, alias=None):
+        return []
+
+
+Found at: 46921
+Context: def get_group_by_cols(self, alias=None):
+        return []
+
+
+Total: 11
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

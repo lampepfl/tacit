@@ -1,0 +1,13 @@
+status: success
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12284/repo/django/db/models/options.py:166:             meta_attrs = self.meta.__dict__.copy()
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12284/repo/django/db/models/options.py:167:             for name in self.meta.__dict__:
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12284/repo/django/db/models/options.py:710:             # Set the relation_tree using the internal __dict__. In this way
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12284/repo/django/db/models/options.py:712:             # __dict__ takes precedence over a data descriptor (such as
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12284/repo/django/db/models/options.py:714:             # only called if related_objects is not in __dict__.
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12284/repo/django/db/models/options.py:716:             model._meta.__dict__['_relation_tree'] = related_objects
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12284/repo/django/db/models/options.py:719:         return self.__dict__.get('_relation_tree', EMPTY_RELATION_TREE)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12284/repo/django/db/models/options.py:730:                 if cache_key in self.__dict__:
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12284/repo/django/db/models/options.py:734:                 if cache_key in self.__dict__:
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12284/repo/django/db/models/query.py:233:         for k, v in self.__dict__.items():
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

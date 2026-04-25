@@ -1,0 +1,5 @@
+status: success
+Original:                         '%s\n%s' % (combined_list[last_insert_index], combined_list[index]),
+Modified:                         '%s\n%s' % (combined_list[len(list_1)], combined_list[index]),
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,43 @@
+status: success
+201:             return filter_specs, bool(filter_specs), lookup_params, use_distinct
+202:         except FieldDoesNotExist as e:
+203:             raise IncorrectLookupParameters(e) from e
+204: 
+205:     def get_query_string(self, new_params=None, remove=None):
+206:         if new_params is None:
+207:             new_params = {}
+208:         if remove is None:
+209:             remove = []
+210:         p = self.params.copy()
+211:         for r in remove:
+212:             for k in list(p):
+213:                 if k.startswith(r):
+214:                     del p[k]
+215:         for k, v in new_params.items():
+216:             if v is None:
+217:                 if k in p:
+218:                     del p[k]
+219:             else:
+220:                 p[k] = v
+221:         return '?%s' % urlencode(sorted(p.items()))
+222: 
+223:     def get_results(self, request):
+224:         paginator = self.model_admin.get_paginator(request, self.queryset, self.list_per_page)
+225:         # Get the number of objects, with admin filters applied.
+226:         result_count = paginator.count
+227: 
+228:         # Get the total number of objects, with no admin filters applied.
+229:         if self.model_admin.show_full_result_count:
+230:             full_result_count = self.root_queryset.count()
+231:         else:
+232:             full_result_count = None
+233:         can_show_all = result_count <= self.list_max_show_all
+234:         multi_page = result_count > self.list_per_page
+235: 
+236:         # Get the list of objects to display on this page.
+237:         if (self.show_all and can_show_all) or not multi_page:
+238:             result_list = self.queryset._clone()
+239:         else:
+240:             try:
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

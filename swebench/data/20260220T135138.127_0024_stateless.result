@@ -1,0 +1,84 @@
+status: success
+1211:             return ' DEFERRABLE INITIALLY IMMEDIATE'
+1212: 
+1213:     def _unique_sql(
+1214:         self, model, fields, name, condition=None, deferrable=None,
+1215:         include=None, opclasses=None, expressions=None,
+1216:     ):
+1217:         if (
+1218:             deferrable and
+1219:             not self.connection.features.supports_deferrable_unique_constraints
+1220:         ):
+1221:             return None
+1222:         if condition or include or opclasses or expressions:
+1223:             # Databases support conditional, covering, and functional unique
+1224:             # constraints via a unique index.
+1225:             sql = self._create_unique_sql(
+1226:                 model,
+1227:                 fields,
+1228:                 name=name,
+1229:                 condition=condition,
+1230:                 include=include,
+1231:                 opclasses=opclasses,
+1232:                 expressions=expressions,
+1233:             )
+1234:             if sql:
+1235:                 self.deferred_sql.append(sql)
+1236:             return None
+1237:         constraint = self.sql_unique_constraint % {
+1238:             'columns': ', '.join([self.quote_name(field.column) for field in fields]),
+1239:             'deferrable': self._deferrable_constraint_sql(deferrable),
+1240:         }
+1241:         return self.sql_constraint % {
+1242:             'name': self.quote_name(name),
+1243:             'constraint': constraint,
+1244:         }
+1245: 
+1246:     def _create_unique_sql(
+1247:         self, model, fields, name=None, condition=None, deferrable=None,
+1248:         include=None, opclasses=None, expressions=None,
+1249:     ):
+1250:         if (
+1251:             (
+1252:                 deferrable and
+1253:                 not self.connection.features.supports_deferrable_unique_constraints
+1254:             ) or
+1255:             (condition and not self.connection.features.supports_partial_indexes) or
+1256:             (include and not self.connection.features.supports_covering_indexes) or
+1257:             (expressions and not self.connection.features.supports_expression_indexes)
+1258:         ):
+1259:             return None
+1260: 
+1261:         def create_unique_name(*args, **kwargs):
+1262:             return self.quote_name(self._create_index_name(*args, **kwargs))
+1263: 
+1264:         compiler = Query(model, alias_cols=False).get_compiler(connection=self.connection)
+1265:         table = model._meta.db_table
+1266:         columns = [field.column for field in fields]
+1267:         if name is None:
+1268:             name = IndexName(table, columns, '_uniq', create_unique_name)
+1269:         else:
+1270:             name = self.quote_name(name)
+1271:         if condition or include or opclasses or expressions:
+1272:             sql = self.sql_create_unique_index
+1273:         else:
+1274:             sql = self.sql_create_unique
+1275:         if columns:
+1276:             columns = self._index_columns(table, columns, col_suffixes=(), opclasses=opclasses)
+1277:         else:
+1278:             columns = Expressions(table, expressions, compiler, self.quote_value)
+1279:         return Statement(
+1280:             sql,
+1281:             table=Table(table, self.quote_name),
+1282:             name=name,
+1283:             columns=columns,
+1284:             condition=self._index_condition_sql(condition),
+1285:             deferrable=self._deferrable_constraint_sql(deferrable),
+1286:             include=self._index_include_sql(model, include),
+1287:         )
+1288: 
+1289:     def _delete_unique_sql(
+1290:         self, model, name, condition=None, deferrable=None, include=None,
+1291:         opclasses=None, expressions=None,
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

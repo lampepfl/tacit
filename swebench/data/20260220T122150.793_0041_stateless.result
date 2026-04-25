@@ -1,0 +1,51 @@
+status: success
+model_name=model_name,
+                        constraint=constraint,
+                    ),
+                    dependencies=related_dependencies,
+                )
+            if unique_together:
+                self.add_operation(
+                    app_label,
+                    operations.AlterUniqueTogether(
+                        name=model_name,
+                        unique_together=unique_together,
+                    ),
+                    dependencies=related_dependencies
+                )
+            if index_together:
+                self.add_operation(
+                    app_label,
+                    operations.AlterIndexTogether(
+                        name=model_name,
+                        index_together=index_together,
+                    ),
+                    dependencies=related_dependencies
+                )
+            if order_with_respect_to:
+                self.add_operation(
+                    app_label,
+                    operations.AlterOrderWithRespectTo(
+                        name=model_name,
+                        order_with_respect_to=order_with_respect_to,
+                    ),
+                    dependencies=[
+                        (app_label, model_name, order_with_respect_to, True),
+                        (app_label, model_name, None, True),
+                    ]
+                )
+
+            # Fix relationships if the model changed from a proxy model to a
+            # concrete model.
+            if (app_label, model_name) in self.old_proxy_keys:
+                for related_object in model_opts.related_objects:
+                    self.add_operation(
+                        related_object.related_model._meta.app_label,
+                        operations.AlterField(
+                            model_name=related_object.related_model._meta.object_name,
+                            name=related_object.field.name,
+                            field=related_object.field,
+                        ),
+          
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

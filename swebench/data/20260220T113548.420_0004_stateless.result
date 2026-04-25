@@ -1,0 +1,73 @@
+status: success
+480:             return self.uncertainty.propagate(
+481:                 operation, operand, result, correlation, **axis_kwarg
+482:             )
+483: 
+484:     def _arithmetic_mask(self, operation, operand, handle_mask, axis=None, **kwds):
+485:         """
+486:         Calculate the resulting mask.
+487: 
+488:         This is implemented as the piecewise ``or`` operation if both have a
+489:         mask.
+490: 
+491:         Parameters
+492:         ----------
+493:         operation : callable
+494:             see :meth:`NDArithmeticMixin._arithmetic` parameter description.
+495:             By default, the ``operation`` will be ignored.
+496: 
+497:         operand : `NDData`-like instance
+498:             The second operand wrapped in an instance of the same class as
+499:             self.
+500: 
+501:         handle_mask : callable
+502:             see :meth:`NDArithmeticMixin.add`
+503: 
+504:         kwds :
+505:             Additional parameters given to ``handle_mask``.
+506: 
+507:         Returns
+508:         -------
+509:         result_mask : any type
+510:             If only one mask was present this mask is returned.
+511:             If neither had a mask ``None`` is returned. Otherwise
+512:             ``handle_mask`` must create (and copy) the returned mask.
+513:         """
+514:         # If only one mask is present we need not bother about any type checks
+515:         if (
+516:             self.mask is None and operand is not None and operand.mask is None
+517:         ) or handle_mask is None:
+518:             return None
+519:         elif self.mask is None and operand is not None:
+520:             # Make a copy so there is no reference in the result.
+521:             return deepcopy(operand.mask)
+522:         elif operand is None:
+523:             return deepcopy(self.mask)
+524:         else:
+525:             # Now lets calculate the resulting mask (operation enforces copy)
+526:             return handle_mask(self.mask, operand.mask, **kwds)
+527: 
+528:     def _arithmetic_wcs(self, operation, operand, compare_wcs, **kwds):
+529:         """
+530:         Calculate the resulting wcs.
+531: 
+532:         There is actually no calculation involved but it is a good place to
+533:         compare wcs information of both operands. This is currently not working
+534:         properly with `~astropy.wcs.WCS` (which is the suggested class for
+535:         storing as wcs property) but it will not break it neither.
+536: 
+537:         Parameters
+538:         ----------
+539:         operation : callable
+540:             see :meth:`NDArithmeticMixin._arithmetic` parameter description.
+541:             By default, the ``operation`` will be ignored.
+542: 
+543:         operand : `NDData` instance or subclass
+544:             The second operand wrapped in an instance of the same class as
+545:             self.
+546: 
+547:         compare_wcs : callable
+548:             see :meth:`NDArithmeticMixin.add` parameter description.
+549: 
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

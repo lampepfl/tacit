@@ -1,0 +1,15 @@
+status: success
+923:                 if rename_key in self.renamed_models:
+924:                     new_field.remote_field.model = old_field.remote_field.model
+925:                 # Handle ForeignKey which can only have a single to_field.
+926:                 remote_field_name = getattr(new_field.remote_field, 'field_name', None)
+927:                 if remote_field_name:
+928:                     to_field_rename_key = rename_key + (remote_field_name,)
+929:                         new_field.remote_field.field_name = old_field.remote_field.field_name
+930:                 # Handle ForeignObjects which can have multiple from_fields/to_fields.
+931:                 from_fields = getattr(new_field, 'from_fields', None)
+932:                 if from_fields:
+933:                     from_rename_key = (app_label, model_name)
+934:                     new_field.from_fields = tuple([
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

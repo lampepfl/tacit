@@ -1,0 +1,10 @@
+status: success
+java.util.NoSuchElementException: None.get
+  at scala.None$.get(Option.scala:628)
+  at scala.None$.get(Option.scala:628)
+  at rs$line$2$.run$$anonfun$1(rs$line$2:6)
+  at scala.runtime.function.JProcedure1.apply(JProcedure1.java:15)
+  at scala.runtime.function.JProcedure1.apply(JProcedure1.java:10)
+  at library.InterfaceImpl.requestFileSystem(InterfaceImpl.scala:33)
+  at rs$line$2$.run(rs$line$2:9)
+  ... 53 elided

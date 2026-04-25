@@ -1,0 +1,23 @@
+status: success
+204:         self.annotation_select_mask = None
+205:         self._annotation_select_cache = None
+206: 
+207:         # Set combination attributes
+208:         self.combinator = None
+209:         self.combinator_all = False
+210:         self.combined_queries = ()
+211: 
+212:         # These are for extensions. The contents are more or less appended
+213:         # verbatim to the appropriate clause.
+214:         self.extra = {}  # Maps col_alias -> (col_sql, params).
+215:         self.extra_select_mask = None
+216:         self._extra_select_cache = None
+217: 
+218:         self.extra_tables = ()
+219:         self.extra_order_by = ()
+220: 
+221:         # A tuple that is a set of model field names and either True, if these
+222:         # are the fields to defer, or False if these are the only fields to
+223:         # load.
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

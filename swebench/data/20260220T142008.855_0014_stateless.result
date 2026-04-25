@@ -1,0 +1,9 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = """/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15790/repo/tests/check_framework/test_templates.py:8:     check_for_template_tags_with_the_same_name,
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15790/repo/tests/check_framework/test_templates.py:141:             check_for_template_tags_with_the_same_name(None),
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15790/repo/tests/check_framework/test_templates.py:157:                 check_for_template_tags_with_the_same_name(None),
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15790/repo/tests/check_framework/test_templates.py:174:                 check_for_template_tags_with_the_same_name(None),
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15790/repo/tests/check_framework/test_templates.py:200:             self.assertEqual(check_for_template_tags_with_the_same_name(None), [])
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15790/repo/tests/check_framework/test_templates.py:209:         self.assertEqual(check_for_template_tags_with_the_same_name(None), [])
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15790/repo/django/core/checks/templates.py:51: def check_for_template_tags_with_the_same_name(app_configs, **kwargs):"""

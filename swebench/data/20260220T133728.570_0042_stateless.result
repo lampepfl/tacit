@@ -1,0 +1,34 @@
+status: success
+=== ModelChoiceField default_error_messages ===
+1186: class ModelChoiceField(ChoiceField):
+1187:     """A ChoiceField whose choices are a model QuerySet."""
+1188:     # This class is a subclass of ChoiceField for purity, but it doesn't
+1189:     # actually use any of ChoiceField's implementation.
+1190:     default_error_messages = {
+1191:         'invalid_choice': _('Select a valid choice. %(value)s is not one of the'
+1192:                             ' available choices.'),
+1193:     }
+1194:                             ' available choices.'),
+1195: 
+1196:     def __init__
+1197:                  blank=False, **kwargs):
+1198:         # Call Field instead of ChoiceField __init__() because we don't need
+1199:         # ChoiceField.__init__().
+1200:         Field.__init__(
+
+=== ModelChoiceField.to_python ===
+to_python starts at line 1276
+1276:     def to_python(self, value):
+1277:         if value in self.empty_values:
+1278:             return None
+1279:         try:
+1280:             key = self.to_field_name or 'pk'
+1281:             if isinstance(value, self.queryset.model):
+1282:                 value = getattr(value, key)
+1283:             value = self.queryset.get(**{key: value})
+1284:         except (ValueError, TypeError, self.queryset.model.DoesNotExist):
+1285:             raise ValidationError(self.error_messages['invalid_choice'], code='invalid_choice', params={'value': value})
+1286:         return value
+1287: 
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

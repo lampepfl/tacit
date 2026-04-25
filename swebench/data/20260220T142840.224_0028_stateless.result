@@ -1,0 +1,7 @@
+status: success
+elf.attname, self.descriptor_class(self))
+        if self.choices is not None:
+            if not hasattr(cls, 'get_%s_display' % self.name):
+        
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

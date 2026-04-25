@@ -1,0 +1,21 @@
+status: success
+146:                 if not hasattr(meta, 'ordering'):
+147:                     new_class._meta.ordering = base_meta.ordering
+340:             # created and registered. If remote_field is None, we're ordering
+428:             # The ordering of the zip calls matter - zip throws StopIteration
+1279:                 *cls._check_ordering(),
+1666:     def _check_ordering(cls):
+1668:         Check "ordering" option -- is it a list of strings and do all fields
+1671:         if cls._meta._ordering_clash:
+1674:                     "'ordering' and 'order_with_respect_to' cannot be used together.",
+1680:         if cls._meta.order_with_respect_to or not cls._meta.ordering:
+1683:         if not isinstance(cls._meta.ordering, (list, tuple)):
+1686:                     "'ordering' must be a tuple or list (even if you want to order by only one field).",
+1693:         fields = cls._meta.ordering
+1730:                                 "'ordering' refers to the nonexistent field, "
+1737:         # Skip ordering on pk. This is always a valid order_by field
+1741:         # Check for invalid or nonexistent fields in ordering.
+1745:         # Also, ordering by m2m fields is not allowed.
+1757:                     "'ordering' refers to the nonexistent field, related "
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,23 @@
+status: success
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12470/repo/django/contrib/contenttypes/fields.py:448:                 if self._is_matching_generic_foreign_key(model._meta.order_with_respect_to):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12470/repo/django/db/migrations/autodetector.py:192:         self.generate_altered_order_with_respect_to()
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12470/repo/django/db/migrations/autodetector.py:419:         # order_with_respect_to being unset for a field
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12470/repo/django/db/migrations/autodetector.py:424:                 (operation.order_with_respect_to or "").lower() != dependency[2].lower()
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12470/repo/django/db/migrations/autodetector.py:553:             order_with_respect_to = model_state.options.pop('order_with_respect_to', None)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12470/repo/django/db/migrations/autodetector.py:646:             if order_with_respect_to:
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12470/repo/django/db/migrations/autodetector.py:651:                         order_with_respect_to=order_with_respect_to,
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12470/repo/django/db/migrations/autodetector.py:654:                         (app_label, model_name, order_with_respect_to, True),
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12470/repo/django/db/migrations/autodetector.py:896:             # order_with_respect_to or index/unique_together operation;
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12470/repo/django/db/migrations/autodetector.py:1182:     def generate_altered_order_with_respect_to(self):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12470/repo/django/db/migrations/autodetector.py:1187:             if (old_model_state.options.get("order_with_respect_to") !=
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12470/repo/django/db/migrations/autodetector.py:1188:                     new_model_state.options.get("order_with_respect_to")):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12470/repo/django/db/migrations/autodetector.py:1192:                 if new_model_state.options.get("order_with_respect_to"):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12470/repo/django/db/migrations/autodetector.py:1196:                         new_model_state.options["order_with_respect_to"],
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12470/repo/django/db/migrations/autodetector.py:1204:                         order_with_respect_to=new_model_state.options.get('order_with_respect_to'),
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12470/repo/django/db/migrations/operations/models.py:160:                     options={**self.options, 'order_with_respect_to': operation.order_with_respect_to},
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12470/repo/django/db/migrations/operations/models.py:199:                 order_with_respect_to = options.get('order_with_respect_to')
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12470/repo/django/db/migrations/operations/models.py:200:                 if order_with_respect_to == operation.name_lower:
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12470/repo/django/db/migrations/operations/models.py:201:                     del options['order_with_respect_to']
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12470/repo/django/db/migrations/operations/models.py:224:                 order_with_respect_to = options.get('order_with_respect_to')
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

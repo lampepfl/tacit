@@ -1,0 +1,15 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = ProcessResult(
+  exitCode = 0,
+  stdout = """has __name__: False
+__name__: N/A
+__class__.__name__: partial
+__class__.__module__: functools
+func: <function my_view at 0x1026cbab0>
+func.__name__: my_view
+func.__module__: __main__
+keywords: {}
+args: (1,)""",
+  stderr = ""
+)

@@ -1,0 +1,8 @@
+status: failure
+-- [E006] Not Found Error: -----------------------------------------------------
+3 |  inline def testFs(): String = summonFrom {
+  |                                ^^^^^^^^^^
+  |                                Not found: summonFrom
+  |
+  | longer explanation available when compiling with `-explain`
+1 error found

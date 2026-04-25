@@ -1,0 +1,97 @@
+status: success
+737: class AddIndex(IndexOperation):
+738:     """Add an index on a model."""
+739: 
+740:     def __init__(self, model_name, index):
+741:         self.model_name = model_name
+742:         if not index.name:
+743:             raise ValueError(
+744:                 "Indexes passed to AddIndex operations require a name "
+745:                 "argument. %r doesn't have one." % index
+746:             )
+747:         self.index = index
+748: 
+749:     def state_forwards(self, app_label, state):
+750:         model_state = state.models[app_label, self.model_name_lower]
+751:         model_state.options[self.option_name] = [*model_state.options[self.option_name], self.index.clone()]
+752:         state.reload_model(app_label, self.model_name_lower, delay=True)
+753: 
+754:     def database_forwards(self, app_label, schema_editor, from_state, to_state):
+755:         model = to_state.apps.get_model(app_label, self.model_name)
+756:         if self.allow_migrate_model(schema_editor.connection.alias, model):
+757:             schema_editor.add_index(model, self.index)
+758: 
+759:     def database_backwards(self, app_label, schema_editor, from_state, to_state):
+760:         model = from_state.apps.get_model(app_label, self.model_name)
+761:         if self.allow_migrate_model(schema_editor.connection.alias, model):
+762:             schema_editor.remove_index(model, self.index)
+763: 
+764:     def deconstruct(self):
+765:         kwargs = {
+766:             'model_name': self.model_name,
+767:             'index': self.index,
+768:         }
+769:         return (
+770:             self.__class__.__qualname__,
+771:             [],
+772:             kwargs,
+773:         )
+774: 
+775:     def describe(self):
+776:         return 'Create index %s on field(s) %s of model %s' % (
+777:             self.index.name,
+778:             ', '.join(self.index.fields),
+779:             self.model_name,
+780:         )
+781: 
+782:     @property
+783:     def migration_name_fragment(self):
+784:         return '%s_%s' % (self.model_name_lower, self.index.name.lower())
+785: 
+786: 
+787: class RemoveIndex(IndexOperation):
+788:     """Remove an index from a model."""
+789: 
+790:     def __init__(self, model_name, name):
+791:         self.model_name = model_name
+792:         self.name = name
+793: 
+794:     def state_forwards(self, app_label, state):
+795:         model_state = state.models[app_label, self.model_name_lower]
+796:         indexes = model_state.options[self.option_name]
+797:         model_state.options[self.option_name] = [idx for idx in indexes if idx.name != self.name]
+798:         state.reload_model(app_label, self.model_name_lower, delay=True)
+799: 
+800:     def database_forwards(self, app_label, schema_editor, from_state, to_state):
+801:         model = from_state.apps.get_model(app_label, self.model_name)
+802:         if self.allow_migrate_model(schema_editor.connection.alias, model):
+803:             from_model_state = from_state.models[app_label, self.model_name_lower]
+804:             index = from_model_state.get_index_by_name(self.name)
+805:             schema_editor.remove_index(model, index)
+806: 
+807:     def database_backwards(self, app_label, schema_editor, from_state, to_state):
+808:         model = to_state.apps.get_model(app_label, self.model_name)
+809:         if self.allow_migrate_model(schema_editor.connection.alias, model):
+810:             to_model_state = to_state.models[app_label, self.model_name_lower]
+811:             index = to_model_state.get_index_by_name(self.name)
+812:             schema_editor.add_index(model, index)
+813: 
+814:     def deconstruct(self):
+815:         kwargs = {
+816:             'model_name': self.model_name,
+817:             'name': self.name,
+818:         }
+819:         return (
+820:             self.__class__.__qualname__,
+821:             [],
+822:             kwargs,
+823:         )
+824: 
+825:     def describe(self):
+826:         return 'Remove index %s from %s' % (self.name, self.model_name)
+827: 
+828:     @property
+829:     def migration_name_fragment(self):
+830:         return 'remove_%s_%s' % (self.model_name_lower, self.name.lower())
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

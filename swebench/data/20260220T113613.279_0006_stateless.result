@@ -1,0 +1,103 @@
+status: success
+650:         )
+651: 
+652:     @sharedmethod
+653:     def _prepare_then_do_arithmetic(
+654:         self_or_cls, operation, operand=None, operand2=None, **kwargs
+655:     ):
+656:         """Intermediate method called by public arithmetic (i.e. ``add``)
+657:         before the processing method (``_arithmetic``) is invoked.
+658: 
+659:         .. warning::
+660:             Do not override this method in subclasses.
+661: 
+662:         This method checks if it was called as instance or as class method and
+663:         then wraps the operands and the result from ``_arithmetic`` in the
+664:         appropriate subclass.
+665: 
+666:         Parameters
+667:         ----------
+668:         self_or_cls : instance or class
+669:             ``sharedmethod`` behaves like a normal method if called on the
+670:             instance (then this parameter is ``self``) but like a classmethod
+671:             when called on the class (then this parameter is ``cls``).
+672: 
+673:         operations : callable
+674:             The operation (normally a numpy-ufunc) that represents the
+675:             appropriate action.
+676: 
+677:         operand, operand2, kwargs :
+678:             See for example ``add``.
+679: 
+680:         Result
+681:         ------
+682:         result : `~astropy.nddata.NDData`-like
+683:             Depending how this method was called either ``self_or_cls``
+684:             (called on class) or ``self_or_cls.__class__`` (called on instance)
+685:             is the NDData-subclass that is used as wrapper for the result.
+686:         """
+687:         # DO NOT OVERRIDE THIS METHOD IN SUBCLASSES.
+688: 
+689:         if isinstance(self_or_cls, NDArithmeticMixin):
+690:             # True means it was called on the instance, so self_or_cls is
+691:             # a reference to self
+692:             cls = self_or_cls.__class__
+693:             if operand2 is None:
+694:                 # Only one operand was given. Set operand2 to operand and
+695:                 # operand to self so that we call the appropriate method of the
+696:                 # operand.
+697:                 operand2 = operand
+698:                 operand = self_or_cls
+699:             else:
+700:                 # Convert the first operand to the class of this method.
+701:                 # This is important so that always the correct _arithmetics is
+702:                 # called later that method.
+703:                 operand = cls(operand)
+704: 
+705:         else:
+706:             # It was used as classmethod so self_or_cls represents the cls
+707:             cls = self_or_cls
+708: 
+709:             # It was called on the class so we expect two operands!
+710:             if operand2 is None:
+711:                 raise TypeError(
+712:                     "operand2 must be given when the method isn't "
+713:                     "called on an instance."
+714:                 )
+715: 
+716:             # Convert to this class. See above comment why.
+717:             operand = cls(operand)
+718: 
+719:         # At this point operand, operand2, kwargs and cls are determined.
+720:         if operand2 is not None and not issubclass(
+721:             operand2.__class__, NDArithmeticMixin
+722:         ):
+723:             # Let's try to convert operand2 to the class of operand to allow for
+724:             # arithmetic operations with numbers, lists, numpy arrays, numpy masked
+725:             # arrays, astropy quantities, masked quantities and of other subclasses
+726:             # of NDData.
+727:             operand2 = cls(operand2)
+728: 
+729:             # Now call the _arithmetics method to do the arithmetic.
+730:             result, init_kwds = operand._arithmetic(operation, operand2, **kwargs)
+731:         elif issubclass(operand2.__class__, NDArithmeticMixin):
+732:             # calling as class method:
+733:             result, init_kwds = cls._arithmetic(
+734:                 operand,
+735:                 operation,
+736:                 operand2,
+737:                 **kwargs,
+738:             )
+739:         else:
+740:             # otherwise call the _arithmetic method on self for a collapse operation:
+741:             # for collapse operations, use astropy.utils.masked rather than handle_mask
+742:             result, init_kwds = self_or_cls._arithmetic(
+743:                 operation,
+744:                 operand2,
+745:                 **kwargs,
+746:             )
+747: 
+748:         # Return a new class based on the result
+749:         return cls(result, **init_kwds)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

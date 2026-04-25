@@ -1,0 +1,5 @@
+status: success
+98: def iter_all_python_module_files():
+243:         yield from iter_all_python_module_files()
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

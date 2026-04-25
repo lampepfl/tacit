@@ -1,0 +1,23 @@
+status: success
+=== Updated default_error_messages (lines 1190-1193) ===
+1190:     default_error_messages = {
+1191:         'invalid_choice': _('Select a valid choice. That choice is not one of'
+1192:         'invalid_choice': _('Select a valid choice. %(value)s is not one of the'
+1193:     }
+
+=== Updated to_python method (lines 1278-1290) ===
+1278:     def to_python(self, value):
+1279:         if value in self.empty_values:
+1280:             return None
+1281:         try:
+1282:             key = self.to_field_name or 'pk'
+1283:             if isinstance(value, self.queryset.model):
+1284:                 value = getattr(value, key)
+1285:             value = self.queryset.get(**{key: value})
+1286:         except (ValueError, TypeError, self.queryset.model.DoesNotExist):
+1287:             raise ValidationError(self.error_messages['invalid_choice'], code='invalid_choice', params={'value': value})
+1288:         return value
+1289: 
+1290:     def validate(self, value):
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

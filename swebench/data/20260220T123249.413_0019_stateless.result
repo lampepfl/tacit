@@ -1,0 +1,6 @@
+status: success
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12470/repo/django/db/models/options.py:85:         self.ordering = []
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12470/repo/django/db/models/options.py:194:             self._ordering_clash = bool(self.ordering and self.order_with_respect_to)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12470/repo/django/db/models/options.py:233:             self.ordering = ('_order',)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

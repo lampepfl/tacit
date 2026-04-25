@@ -1,0 +1,31 @@
+status: success
+=== Lines 1-15 ===
+1: """
+2: Base classes for writing management commands (named commands which can
+3: be executed through ``django-admin`` or ``manage.py``).
+4: """
+5: import argparse
+6: import os
+7: import sys
+8: from argparse import ArgumentParser, RawDescriptionHelpFormatter
+9: from io import TextIOBase
+10: 
+11: import django
+12: from django.core import checks
+13: from django.core.exceptions import ImproperlyConfigured
+14: from django.core.management.color import color_style, no_style
+15: from django.db import DEFAULT_DB_ALIAS, connections
+=== Lines 100-110 ===
+100:         return res
+101: 
+102:     return wrapper
+103: 
+104: 
+105: class DjangoHelpFormatter(RawDescriptionHelpFormatter):
+106:     """
+107:     Customized formatter so that command-specific arguments appear in the
+108:     --help output before arguments common to all commands.
+109:     """
+110: 
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

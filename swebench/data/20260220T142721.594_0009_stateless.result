@@ -1,0 +1,5 @@
+status: success
+Found 1 matches
+1889:     def add_ordering(self, *ordering):
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

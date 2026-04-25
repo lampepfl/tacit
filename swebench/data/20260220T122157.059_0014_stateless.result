@@ -1,0 +1,5 @@
+status: failure
+
+Error: Code validation failed (1 violation):
+  [cast-escape] Line 5: .asInstanceOf is forbidden
+    > lambda.asInstanceOf[{def run(using IOCapability): Any}].run()

@@ -1,0 +1,44 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = List(
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12184/repo/tests/urlpatterns_reverse/test_localeregexdescriptor.py",
+    lineNumber = 7,
+    line = "from django.urls.resolvers import LocaleRegexDescriptor, RegexPattern"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12184/repo/tests/urlpatterns_reverse/test_localeregexdescriptor.py",
+    lineNumber = 22,
+    line = "        provider = RegexPattern(translation.gettext_lazy('^foo/$'))"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12184/repo/tests/urlpatterns_reverse/test_localeregexdescriptor.py",
+    lineNumber = 36,
+    line = "        provider = RegexPattern('^foo/$')"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12184/repo/tests/urlpatterns_reverse/test_localeregexdescriptor.py",
+    lineNumber = 49,
+    line = "        provider = RegexPattern('*')"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12184/repo/tests/urlpatterns_reverse/test_localeregexdescriptor.py",
+    lineNumber = 55,
+    line = "        self.assertIsInstance(RegexPattern.regex, LocaleRegexDescriptor)"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12184/repo/tests/urlpatterns_reverse/tests.py",
+    lineNumber = 23,
+    line = "from django.urls.resolvers import RegexPattern"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12184/repo/tests/urlpatterns_reverse/tests.py",
+    lineNumber = 267,
+    line = "        resolver = URLResolver(RegexPattern(r'^$'), settings.ROOT_URLCONF)"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12184/repo/tests/urlpatterns_reverse/tests.py",
+    lineNumber = 503,
+    line = "        resolver = URLResolver(RegexPattern(r'^/'), 'urlpatterns_reverse.urls')"
+  ),
+...

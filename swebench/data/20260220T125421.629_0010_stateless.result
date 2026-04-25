@@ -1,0 +1,13 @@
+status: success
+from urllib.parse import urlparse
+  from urllib.request import url2pathname
+  
+  from asgiref.sync import sync_to_async
+  
+  from django.conf import settings
+  from django.contrib.staticfiles import utils
+  from django.contrib.staticfiles.views import serve
+  from django.core.handlers.asgi import ASGIHandler
+  from django.core.handlers.exception import response_for_exception
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

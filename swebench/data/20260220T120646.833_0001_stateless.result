@@ -1,0 +1,14 @@
+status: failure
+-- [E007] Type Mismatch Error: -------------------------------------------------
+4 |    val hits = grepRecursive(fs, ".", "isnull", "*.py")
+  |                             ^^
+  |                   Found:    (fs : ((library.FileSystem^) ?=> Any) -> Any)
+  |                   Required: String
+  |
+  | longer explanation available when compiling with `-explain`
+-- Error: ----------------------------------------------------------------------
+4 |    val hits = grepRecursive(fs, ".", "isnull", "*.py")
+  |                                                ^^^^^^
+  |too many arguments for method grepRecursive in trait Interface: (dir: String, pattern: String, glob: String)
+  |  (using x$4: library.FileSystem): List[library.GrepMatch]
+2 errors found

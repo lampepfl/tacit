@@ -1,0 +1,11 @@
+status: success
+=== ModelMultipleChoiceField._check_values (invalid_choice) ===
+1356:                     code='invalid_pk_value',
+1357:                     params={'pk': pk},
+1358:                 )
+1359:         qs = self.queryset.filter(**{'%s__in' % key: value})
+1360:         pks = {str(getattr(o, key)) for o in qs}
+1361:         for val in value:
+1362:             if str(val) not in pks:
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

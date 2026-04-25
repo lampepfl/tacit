@@ -1,0 +1,4 @@
+status: success
+Added code in delete method to ensure _collected_models are in result
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

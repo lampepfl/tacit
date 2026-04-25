@@ -1,0 +1,56 @@
+status: success
+334:         """
+335:         self._errors = []
+336:         self._non_form_errors = self.error_class(error_class='nonform')
+337:         empty_forms_count = 0
+338: 
+339:         if not self.is_bound:  # Stop further processing.
+340:             return
+341: 
+342:         if not self.management_form.is_valid():
+343:             error = ValidationError(
+344:                 self.error_messages['missing_management_form'],
+345:                 params={
+346:                     'field_names': ', '.join(
+347:                         self.management_form.add_prefix(field_name)
+348:                         for field_name in self.management_form.errors
+349:                     ),
+350:                 },
+351:                 code='missing_management_form',
+352:             )
+353:             self._non_form_errors.append(error)
+354: 
+355:         for i, form in enumerate(self.forms):
+356:             # Empty forms are unchanged forms beyond those with initial data.
+357:             if not form.has_changed() and i >= self.initial_form_count():
+358:                 empty_forms_count += 1
+359:             # Accessing errors calls full_clean() if necessary.
+360:             # _should_delete_form() requires cleaned_data.
+361:             form_errors = form.errors
+362:             if self.can_delete and self._should_delete_form(form):
+363:                 continue
+364:             self._errors.append(form_errors)
+365:         try:
+366:             if (self.validate_max and
+367:                     self.total_form_count() - len(self.deleted_forms) > self.max_num) or \
+368:                     self.management_form.cleaned_data[TOTAL_FORM_COUNT] > self.absolute_max:
+369:                 raise ValidationError(ngettext(
+370:                     "Please submit at most %d form.",
+371:                     "Please submit at most %d forms.", self.max_num) % self.max_num,
+372:                     code='too_many_forms',
+373:                 )
+374:             if (self.validate_min and
+375:                     self.total_form_count() - len(self.deleted_forms) - empty_forms_count < self.min_num):
+376:                 raise ValidationError(ngettext(
+377:                     "Please submit at least %d form.",
+378:                     "Please submit at least %d forms.", self.min_num) % self.min_num,
+379:                     code='too_few_forms')
+380:             # Give self.clean() a chance to do cross-form validation.
+381:             self.clean()
+382:         except ValidationError as e:
+383:             self._non_form_errors = self.error_class(e.error_list, error_class='nonform')
+384: 
+385:     def clean(self):
+386:         """
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,11 @@
+status: success
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12708/repo/tests/migrations/test_operations.py:1730:     def test_alter_index_together(self):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12708/repo/tests/migrations/test_operations.py:1758:     def test_alter_index_together_remove(self):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12708/repo/tests/schema/tests.py:2144:             editor.alter_index_together(Tag, [], [("slug", "title")])
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12708/repo/tests/schema/tests.py:2158:             editor.alter_index_together(Tag, [("slug", "title")], [])
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12708/repo/tests/schema/tests.py:2182:             editor.alter_index_together(Book, [], [['author', 'title']])
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12708/repo/tests/schema/tests.py:2185:             editor.alter_index_together(Book, [['author', 'title']], [])
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12708/repo/tests/schema/tests.py:2225:             editor.alter_index_together(AuthorWithIndexedNameAndBirthday, index_together, [])
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12708/repo/tests/schema/tests.py:2235:             editor.alter_index_together(AuthorWithIndexedNameAndBirthday, [], index_together)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

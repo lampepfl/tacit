@@ -1,0 +1,33 @@
+status: success
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11815/repo/tests/auth_tests/test_basic.py:61:         for i, kwargs in enumerate(cases):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11815/repo/tests/auth_tests/test_basic.py:83:         for i, kwargs in enumerate(cases):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11815/repo/tests/migrations/test_writer.py:3: import enum
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11815/repo/tests/migrations/test_writer.py:255:     def test_serialize_enums(self):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11815/repo/tests/migrations/test_writer.py:256:         class TextEnum(enum.Enum):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11815/repo/tests/migrations/test_writer.py:260:         class BinaryEnum(enum.Enum):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11815/repo/tests/migrations/test_writer.py:264:         class IntEnum(enum.IntEnum):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11815/repo/tests/migrations/test_writer.py:693:         # an enumfield that takes the enum class as an argument.
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11815/repo/tests/migrations/test_state.py:1178:         for i, fk in enumerate(foreign_keys, 1):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11815/repo/tests/generic_inline_admin/tests.py:248:             "generic_inline_admin-phonenumber-content_type-object_id-TOTAL_FORMS": "1",
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11815/repo/tests/generic_inline_admin/tests.py:249:             "generic_inline_admin-phonenumber-content_type-object_id-INITIAL_FORMS": "0",
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11815/repo/tests/generic_inline_admin/tests.py:250:             "generic_inline_admin-phonenumber-content_type-object_id-MAX_NUM_FORMS": "0",
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11815/repo/tests/generic_inline_admin/tests.py:251:             "generic_inline_admin-phonenumber-content_type-object_id-0-id": "",
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11815/repo/tests/generic_inline_admin/tests.py:252:             "generic_inline_admin-phonenumber-content_type-object_id-0-phone_number": "555-555-5555",
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11815/repo/tests/generic_inline_admin/tests.py:253:             "generic_inline_admin-phonenumber-content_type-object_id-0-category": "%s" % category_id,
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11815/repo/tests/model_formsets_regress/tests.py:454:             for i, user in enumerate(User.objects.all())
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11815/repo/tests/model_formsets_regress/tests.py:471:             for i, user in enumerate(User.objects.all())
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11815/repo/tests/model_formsets_regress/tests.py:490:             for i, user in enumerate(User.objects.all())
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11815/repo/tests/raw_query/tests.py:62:         for index, item in enumerate(results):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11815/repo/tests/raw_query/tests.py:90:             for index, result in enumerate(results):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11815/repo/tests/raw_query/tests.py:269:         for index, raw_author in enumerate(raw_authors):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11815/repo/tests/raw_query/tests.py:275:         for index, raw_author in enumerate(raw_authors):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11815/repo/tests/template_tests/filter_tests/test_linenumbers.py:1: from django.template.defaultfilters import linenumbers
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11815/repo/tests/template_tests/filter_tests/test_linenumbers.py:8: class LinenumbersTests(SimpleTestCase):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11815/repo/tests/template_tests/filter_tests/test_linenumbers.py:10:     The contents of "linenumbers" is escaped according to the current
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11815/repo/tests/template_tests/filter_tests/test_linenumbers.py:14:     @setup({'linenumbers01': '{{ a|linenumbers }} {{ b|linenumbers }}'})
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11815/repo/tests/template_tests/filter_tests/test_linenumbers.py:15:     def test_linenumbers01(self):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11815/repo/tests/template_tests/filter_tests/test_linenumbers.py:17:             'linenumbers01',
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11815/repo/tests/template_tests/filter_tests/test_linenumbers.py:22:     @setup({'linenumbers02': '{% autoescape off %}{{ a|linenumbers }} {{ b|linenumbers }}{% endautoescape %}'})
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11815/repo/tests/template_tests/filter_tests/test_linenumbers.py:23:     def test_linenumbers02(self):
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

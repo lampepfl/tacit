@@ -1,0 +1,23 @@
+status: success
+366: class KeyTransformIsNull(lookups.IsNull):
+367:     # key__isnull=False is the same as has_key='key'
+368:     def as_oracle(self, compiler, connection):
+369:         if not self.rhs:
+370:             return HasKey(self.lhs.lhs, self.lhs.key_name).as_oracle(compiler, connection)
+371:         return HasKey(self.lhs.lhs, self.lhs.key_name).as_oracle(
+372:             compiler, connection, template="NOT JSON_EXISTS(%s, '%s')"
+373:         )
+374:         if not self.rhs:
+375:         return HasKey(self.lhs.lhs, self.lhs.key_name).as_sqlite(
+376:             compiler, connection, template='JSON_TYPE(%s, %s) IS NULL'
+377:         )
+378: 
+379: class KeyTransformIn(lookups.In):
+380:     def resolve_expression_parameter(self, compiler, connection, sql, param):
+381:         sql, params = super().resolve_expression_parameter(
+382:             compiler, connection, sql, param,
+383:         )
+384:         if (
+385:             not hasattr(param, 'as_sql') and
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,18 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = ProcessResult(
+  exitCode = 0,
+  stdout = """References to .func (not _func): 27
+ funct
+ funct
+.funct
+ func,
+.func 
+ func
+
+ funct
+(func,
+ funct
+ func """,
+  stderr = ""
+)

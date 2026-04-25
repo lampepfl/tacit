@@ -1,0 +1,25 @@
+status: success
+755:     def contribute_to_class(self, cls, name, private_only=False):
+756:         """
+757:         Register the field with the model class it belongs to.
+758: 
+759:         If private_only is True, create a separate instance of this field
+760:         for every subclass of cls, even if cls is not an abstract model.
+761:         """
+762:         self.set_attributes_from_name(name)
+763:         self.model = cls
+764:         cls._meta.add_field(self, private=private_only)
+765:         if self.column:
+766:             # Don't override classmethods with the descriptor. This means that
+767:             # if you have a classmethod and a field with the same name, then
+768:             # such fields can't be deferred (we don't have a check for this).
+769:             if not getattr(cls, self.attname, None):
+770:                 setattr(cls, self.attname, self.descriptor_class(self))
+771:         if self.choices is not None:
+772:             # Don't override a get_FOO_display() method defined explicitly on
+773:             # this class, but don't check methods derived from inheritance, to
+774:             # allow overriding inherited choices. For more complex inheritance
+775:             # structures users should override contribute_to_class().
+776:             if 'get_%s_display' % self.name not in cls.__dict__:
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

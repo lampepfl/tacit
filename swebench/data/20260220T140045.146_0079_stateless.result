@@ -1,0 +1,10 @@
+status: success
+def __str__(self):
+        expressions = self.expressions
+        if self.table and self.expressions:
+            expressions = expressions.relabeled_clone({self.table: None})
+        sql, params = self.compiler.compile(expressions)
+        params = map(self.quote_value, params)
+        return sql % tuple(params)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

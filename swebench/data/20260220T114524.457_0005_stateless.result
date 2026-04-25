@@ -1,0 +1,55 @@
+status: success
+341:         elif handle_meta in ["ff", "first_found"]:
+342:             if not self.meta:
+343:                 kwargs["meta"] = deepcopy(operand.meta)
+344:             else:
+345:                 kwargs["meta"] = deepcopy(self.meta)
+346:         else:
+347:             kwargs["meta"] = self._arithmetic_meta(
+348:                 operation, operand, handle_meta, **kwds2["meta"]
+349:             )
+350: 
+351:         # Wrap the individual results into a new instance of the same class.
+352:         return result, kwargs
+353: 
+354:     def _arithmetic_data(self, operation, operand, **kwds):
+355:         """
+356:         Calculate the resulting data.
+357: 
+358:         Parameters
+359:         ----------
+360:         operation : callable
+361:             see `NDArithmeticMixin._arithmetic` parameter description.
+362: 
+363:         operand : `NDData`-like instance
+364:             The second operand wrapped in an instance of the same class as
+365:             self.
+366: 
+367:         kwds :
+368:             Additional parameters.
+369: 
+370:         Returns
+371:         -------
+372:         result_data : ndarray or `~astropy.units.Quantity`
+373:             If both operands had no unit the resulting data is a simple numpy
+374:             array, but if any of the operands had a unit the return is a
+375:             Quantity.
+376:         """
+377:         # Do the calculation with or without units
+378:         if self.unit is None:
+379:             if operand.unit is None:
+380:                 result = operation(self.data, operand.data)
+381:             else:
+382:                 result = operation(
+383:                     self.data << dimensionless_unscaled, operand.data << operand.unit
+384:                 )
+385:         elif hasattr(operand, "unit"):
+386:             if operand.unit is not None:
+387:                 result = operation(self.data << self.unit, operand.data << operand.unit)
+388:             else:
+389:                 result = operation(
+390:                     self.data << self.unit, operand.data << dimensionless_unscaled
+391:                 )
+485:     def _arithmetic_mask(self, operation, operand, handle_mask, axis=None, **kwds):
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

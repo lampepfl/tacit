@@ -1,0 +1,8 @@
+status: success
+124: 'class FloatSerializer(BaseSimpleSerializer):'
+125: '    def serialize(self):'
+126: '        if math.isnan(self.value) or math.isinf(self.value):'
+127: '            return 'float("{}")'.format(self.value), set()'
+128: '        return super().serialize()'
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

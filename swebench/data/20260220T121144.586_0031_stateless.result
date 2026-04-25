@@ -1,0 +1,7 @@
+status: success
+stdout: 1976-01-01: 1976-01-01 00:00:00
+2076-01-01: 2076-01-01 00:00:00
+timestamp 1976: 189298800
+timestamp 2076: 3345058800
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

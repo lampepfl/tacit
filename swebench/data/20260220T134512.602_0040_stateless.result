@@ -1,0 +1,7 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = ProcessResult(
+  exitCode = 0,
+  stdout = "2090:            self.deferred_loading = existing.difference(field_names), True",
+  stderr = ""
+)

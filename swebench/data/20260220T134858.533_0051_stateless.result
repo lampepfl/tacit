@@ -1,0 +1,5 @@
+status: success
+Line 1262: '        if from_model is not None and self.has_related_name and self.remote_field.symmetrical:'
+Starts with 8 spaces: true
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

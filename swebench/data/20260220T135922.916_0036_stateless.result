@@ -1,0 +1,6 @@
+status: failure
+-- [E008] Not Found Error: -----------------------------------------------------
+7 |    val f0 = scala.Function0[Unit]
+  |             ^^^^^^^^^^^^^^^
+  |             value Function0 is not a member of scala
+1 error found

@@ -1,0 +1,9 @@
+status: failure
+-- [E007] Type Mismatch Error: -------------------------------------------------
+5 |    result
+  |    ^^^^^^
+  |    Found:    (result : library.FileSystem => Boolean)
+  |    Required: Boolean
+  |
+  | longer explanation available when compiling with `-explain`
+1 error found

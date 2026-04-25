@@ -1,0 +1,32 @@
+status: success
+Exit code: 0
+Stdout: Found _arithmetic_mask method:
+def _arithmetic_mask(self, operation, operand, handle_mask, axis=None, **kwds):
+        """
+        Calculate the resulting mask.
+
+        This is implemented as the piecewise ``or`` operation if both have a
+        mask.
+
+        Parameters
+        ----------
+        operation : callable
+            see :meth:`NDArithmeticMixin._arithmetic` parameter description.
+            By default, the ``operation`` will be ignored.
+
+        operand : `NDData`-like instance
+            The second operand wrapped in an instance of the same class as
+            self.
+
+        handle_mask : callable
+            see :meth:`NDArithmeticMixin.add`
+
+        kwds :
+            Additional parameters given to ``handle_mask``.
+
+        Returns
+        -------
+        result_mask : any type
+            If only o
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

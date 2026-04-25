@@ -1,0 +1,23 @@
+status: success
+241:         can be deleted.
+242:         """
+243:         # Track the model when objs is empty to ensure consistent return value
+244:         if not objs and source is None:
+245:             if hasattr(objs, '_meta'):
+246:                 model = objs._meta.model
+247:             elif hasattr(objs, 'model'):
+248:                 model = objs.model
+249:             else:
+250:                 model = None
+251:             if model is not None:
+252:                 self._collected_models.add(model)
+253:         if self.can_fast_delete(objs):
+254:             self.fast_deletes.append(objs)
+255:             return
+256:         new_objs = self.add(objs, source, nullable,
+257:                             reverse_dependency=reverse_dependency)
+258:         if not new_objs:
+259:             return
+260: 
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,14 @@
+status: success
+Ref class at: 28294
+get_group_by_cols at: 29243
+Context:
+uote_name(self.refs), []
+
+    def get_group_by_cols(self, alias=None):
+        return [self]
+
+
+class ExpressionList(Func):
+    """
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

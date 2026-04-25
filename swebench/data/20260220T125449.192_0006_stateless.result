@@ -1,0 +1,15 @@
+status: success
+155:     # aggregate specific fields
+156:     is_summary = False
+157:     _output_field_resolved_to_none = False
+158:     # Can the expression be used in a WHERE clause?
+159:     filterable = True
+160:     # Can the expression can be used as a source expression in Window?
+161:     window_compatible = False
+162: 
+163:     def __init__(self, output_field=None):
+164:         if output_field is not None:
+165:             self.output_field = output_field
+166: 
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

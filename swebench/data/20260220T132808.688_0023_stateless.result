@@ -1,0 +1,43 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = List(
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13925/repo/django/db/models/options.py",
+    lineNumber = 653,
+    line = "            parent_link = parent._meta.get_ancestor_link(ancestor)"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13925/repo/django/db/models/options.py",
+    lineNumber = 654,
+    line = "            if parent_link:"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13925/repo/django/db/models/options.py",
+    lineNumber = 658,
+    line = "                return self.parents[parent] or parent_link"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13925/repo/django/db/models/options.py",
+    lineNumber = 832,
+    line = "                    if not getattr(obj, 'parent_link', False) or obj.model == self.concrete_model:"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13925/repo/django/db/models/fields/related_descriptors.py",
+    lineNumber = 291,
+    line = "        if self.field.remote_field.parent_link:"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13925/repo/django/db/models/fields/related_descriptors.py",
+    lineNumber = 313,
+    line = "        if self.field.primary_key and self.field.remote_field.parent_link:"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13925/repo/django/db/models/fields/related.py",
+    lineNumber = 461,
+    line = "                 related_query_name=None, limit_choices_to=None, parent_link=False,"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13925/repo/django/db/models/fields/related.py",
+    lineNumber = 470,
+    line = "                parent_link=parent_link,"
+...

@@ -1,0 +1,9 @@
+status: success
+1104:             constraint_name = self._create_index_name(
+1259:     def _create_index_name(self, table_name, column_names, suffix=""):
+1350:                 name = self._create_index_name(*args, **kwargs)
+1477:             return self.quote_name(self._create_index_name(*args, **kwargs))
+1564:             return self.quote_name(self._create_index_name(*args, **kwargs))
+1706:                 self._create_index_name(
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

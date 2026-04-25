@@ -1,0 +1,4 @@
+status: success
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15252/repo/tests/migrations/test_commands.py:1157:                 allow_migrate.assert_any_call('other', 'migrations', model_name='UnicodeModel')
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

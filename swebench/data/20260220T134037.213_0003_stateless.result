@@ -1,0 +1,8 @@
+status: failure
+-- [E086] Syntax Error: --------------------------------------------------------
+4 |    files.filter(_.contains("widget") || _.contains("password")).foreach(println)
+  |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |                 Wrong number of parameters, expected: 1
+  |
+  | longer explanation available when compiling with `-explain`
+1 error found

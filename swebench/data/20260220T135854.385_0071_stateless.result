@@ -1,0 +1,31 @@
+status: success
+914: 
+915: class ExpressionList(Func):
+916:     """
+917:     An expression containing multiple expressions. Can be used to provide a
+918:     list of expressions as an argument to another expression, like an
+919:     ordering clause.
+920:     """
+921:     template = '%(expressions)s'
+922: 
+923:     def __init__(self, *expressions, **extra):
+924:         if not expressions:
+925:             raise ValueError('%s requires at least one expression.' % self.__class__.__name__)
+926:         super().__init__(*expressions, **extra)
+927: 
+928:     def __str__(self):
+929:         return self.arg_joiner.join(str(arg) for arg in self.source_expressions)
+930: 
+931:     def as_sqlite(self, compiler, connection, **extra_context):
+932:         # Casting to numeric is unnecessary.
+933:         return self.as_sql(compiler, connection, **extra_context)
+934: 
+935: 
+936: class ExpressionWrapper(Expression):
+937:     """
+938:     An expression that can wrap another expression so that it can provide
+939:     extra context to the inner expression, such as the output_field.
+940:     """
+941: 
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

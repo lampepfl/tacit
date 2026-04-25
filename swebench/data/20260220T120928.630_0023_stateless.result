@@ -1,0 +1,23 @@
+status: success
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11905/repo/django/contrib/admin/options.py:998:                     if prev_field and prev_field.get_lookup(path_part):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11905/repo/django/contrib/contenttypes/fields.py:471:         lookup = field.get_lookup('exact')(field.get_col(remote_alias), contenttype_pk)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11905/repo/django/db/models/expressions.py:329:     def get_lookup(self, lookup):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11905/repo/django/db/models/expressions.py:330:         return self.output_field.get_lookup(lookup)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11905/repo/django/db/models/lookups.py:145:     RegisterLookupMixin() is first so that get_lookup() and get_transform()
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11905/repo/django/db/models/fields/reverse_related.py:100:     def get_lookup(self, lookup_name):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11905/repo/django/db/models/fields/reverse_related.py:101:         return self.field.get_lookup(lookup_name)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11905/repo/django/db/models/fields/related_lookups.py:22:     def get_lookup(self, lookup):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11905/repo/django/db/models/fields/related_lookups.py:23:         return self.output_field.get_lookup(lookup)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11905/repo/django/db/models/fields/related_lookups.py:75:                         lookup_class = target.get_lookup('exact')
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11905/repo/django/db/models/fields/related_lookups.py:126:                 lookup_class = target.get_lookup(self.lookup_name)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11905/repo/django/db/models/query_utils.py:157:     def _get_lookup(cls, lookup_name):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11905/repo/django/db/models/query_utils.py:166:     def get_lookup(self, lookup_name):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11905/repo/django/db/models/query_utils.py:168:         found = self._get_lookup(lookup_name)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11905/repo/django/db/models/query_utils.py:170:             return self.output_field.get_lookup(lookup_name)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11905/repo/django/db/models/query_utils.py:177:         found = self._get_lookup(lookup_name)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11905/repo/django/db/models/sql/query.py:1145:         The lookups is a list of names to extract using get_lookup()
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11905/repo/django/db/models/sql/query.py:1152:         # First try get_lookup() so that the lookup takes precedence if the lhs
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11905/repo/django/db/models/sql/query.py:1154:         lookup_class = lhs.get_lookup(lookup_name)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11905/repo/django/db/models/sql/query.py:1162:             lookup_class = lhs.get_lookup(lookup_name)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

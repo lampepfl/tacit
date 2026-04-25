@@ -1,0 +1,41 @@
+status: success
+0: import functools
+1: import itertools
+2: import logging
+3: import os
+4: import pathlib
+5: import signal
+6: import subprocess
+7: import sys
+8: import threading
+9: import time
+10: import traceback
+11: import weakref
+12: from collections import defaultdict
+13: from pathlib import Path
+14: from types import ModuleType
+15: from zipimport import zipimporter
+16: 
+17: from django.apps import apps
+18: from django.core.signals import request_finished
+19: from django.dispatch import Signal
+20: from django.utils.functional import cached_property
+21: from django.utils.version import get_version_tuple
+22: 
+23: autoreload_started = Signal()
+24: file_changed = Signal(providing_args=['file_path', 'kind'])
+25: 
+26: DJANGO_AUTORELOAD_ENV = 'RUN_MAIN'
+27: 
+28: logger = logging.getLogger('django.utils.autoreload')
+29: 
+217: 
+218: class BaseReloader:
+219:     def __init__(self):
+220:         self.extra_files = set()
+221:         self.directory_globs = defaultdict(set)
+222:         self._stop_condition = threading.Event()
+223: 
+224:     def watch_dir(self, path, glob):
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

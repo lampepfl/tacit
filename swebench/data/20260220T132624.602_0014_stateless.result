@@ -1,0 +1,28 @@
+status: success
+1276:         return super().prepare_value(value)
+1277: 
+1278:     def to_python(self, value):
+1279:         if value in self.empty_values:
+1280:             return None
+1281:         try:
+1282:             key = self.to_field_name or 'pk'
+1283:             if isinstance(value, self.queryset.model):
+1284:                 value = getattr(value, key)
+1285:             value = self.queryset.get(**{key: value})
+1286:         except (ValueError, TypeError, self.queryset.model.DoesNotExist):
+1287:             raise ValidationError(self.error_messages['invalid_choice'], code='invalid_choice')
+1288:         return value
+1289: 
+1290:     def validate(self, value):
+1291:         return Field.validate(self, value)
+1292: 
+1293:     def has_changed(self, initial, data):
+1294:         if self.disabled:
+1295:             return False
+1296:         initial_value = initial if initial is not None else ''
+1297:         data_value = data if data is not None else ''
+1298:         return str(self.prepare_value(initial_value)) != str(data_value)
+1299: 
+1300: 
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,63 @@
+status: success
+1245:                     'ManyToManyField does not support validators.',
+1246:                     obj=self,
+1247:                     id='fields.W341',
+1248:                 )
+1249:             )
+1250:         if (self.remote_field.limit_choices_to and self.remote_field.through and
+1251:                 not self.remote_field.through._meta.auto_created):
+1252:             warnings.append(
+1253:                 checks.Warning(
+1254:                     'limit_choices_to has no effect on ManyToManyField '
+1255:                     'with a through model.',
+1256:                     obj=self,
+1257:                     id='fields.W343',
+1258:                 )
+1259:             )
+1260: 
+1261:         return warnings
+1262: 
+1263:     def _check_relationship_model(self, from_model=None, **kwargs):
+1264:         if hasattr(self.remote_field.through, '_meta'):
+1265:             qualified_model_name = "%s.%s" % (
+1266:                 self.remote_field.through._meta.app_label, self.remote_field.through.__name__)
+1267:         else:
+1268:             qualified_model_name = self.remote_field.through
+1269: 
+1270:         errors = []
+1271: 
+1272:         if self.remote_field.through not in self.opts.apps.get_models(include_auto_created=True):
+1273:             # The relationship model is not installed.
+1274:             errors.append(
+1275:                 checks.Error(
+1276:                     "Field specifies a many-to-many relation through model "
+1277:                     "'%s', which has not been installed." % qualified_model_name,
+1278:                     obj=self,
+1279:                     id='fields.E331',
+1280:                 )
+1281:             )
+1282: 
+1283:         else:
+1284:             assert from_model is not None, (
+1285:                 "ManyToManyField with intermediate "
+1286:                 "tables cannot be checked if you don't pass the model "
+1287:                 "where the field is attached to."
+1288:             )
+1289:             # Set some useful local variables
+1290:             to_model = resolve_relation(from_model, self.remote_field.model)
+1291:             from_model_name = from_model._meta.object_name
+1292:             if isinstance(to_model, str):
+1293:                 to_model_name = to_model
+1294:             else:
+1295:                 to_model_name = to_model._meta.object_name
+1296:             relationship_model_name = self.remote_field.through._meta.object_name
+1297:             self_referential = from_model == to_model
+1298:             # Count foreign keys in intermediate model
+1299:             if self_referential:
+1300:                 seen_self = sum(
+1301:                     from_model == getattr(field.remote_field, 'model', None)
+1302:                     for field in self.remote_field.through._meta.fields
+1303:                 )
+1304: 
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

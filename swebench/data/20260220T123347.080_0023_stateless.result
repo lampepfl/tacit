@@ -1,0 +1,63 @@
+status: success
+0: import collections
+1: import re
+2: from functools import partial
+3: from itertools import chain
+4: 
+5: from django.core.exceptions import EmptyResultSet, FieldError
+6: from django.db import DatabaseError, NotSupportedError
+7: from django.db.models.constants import LOOKUP_SEP
+8: from django.db.models.expressions import OrderBy, Random, RawSQL, Ref, Value
+9: from django.db.models.functions import Cast
+10: from django.db.models.query_utils import Q, select_related_descend
+11: from django.db.models.sql.constants import (
+12:     CURSOR, GET_ITERATOR_CHUNK_SIZE, MULTI, NO_RESULTS, ORDER_DIR, SINGLE,
+13: )
+14: from django.db.models.sql.query import Query, get_order_dir
+15: from django.db.transaction import TransactionManagementError
+16: from django.utils.functional import cached_property
+17: from django.utils.hashable import make_hashable
+18: 
+19: 
+20: class SQLCompiler:
+21:     def __init__(self, query, connection, using):
+22:         self.query = query
+23:         self.connection = connection
+24:         self.using = using
+25:         self.quote_cache = {'*': '*'}
+26:         # The select, klass_info, and annotations are needed by QuerySet.iterator()
+27:         # these are set as a side-effect of executing the query. Note that we calculate
+28:         # separately a list of extra select columns needed for grammatical correctness
+29:         # of the query, but these columns are not included in self.select.
+30:         self.select = None
+31:         self.annotation_col_map = None
+32:         self.klass_info = None
+33:         # Multiline ordering SQL clause may appear from RawSQL.
+34:         self.ordering_parts = re.compile(r'^(.*)\s(ASC|DESC)(.*)', re.MULTILINE | re.DOTALL)
+35:         self._meta_ordering = None
+36: 
+37:     def setup_query(self):
+38:         if all(self.query.alias_refcount[a] == 0 for a in self.query.alias_map):
+39:             self.query.get_initial_alias()
+40:         self.select, self.klass_info, self.annotation_col_map = self.get_select()
+41:         self.col_count = len(self.select)
+42: 
+43:     def pre_sql_setup(self):
+44:         """
+45:         Do any necessary class setup immediately prior to producing SQL. This
+46:         is for things that can't necessarily be done in __init__ because we
+47:         might not have all the pieces in place at that time.
+48:         """
+49:         self.setup_query()
+50:         order_by = self.get_order_by()
+51:         self.where, self.having = self.query.where.split_having()
+52:         extra_select = self.get_extra_select(order_by, self.select)
+53:         self.has_extra_select = bool(extra_select)
+54:         group_by = self.get_group_by(self.select + extra_select, order_by)
+55:         return extra_select, order_by, group_by
+56: 
+57:     def get_group_by(self, select, order_by):
+58:         """
+59:         Return a list of 2-tuples of form (sql, params).
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

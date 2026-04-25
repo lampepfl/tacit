@@ -1,0 +1,5 @@
+status: success
+47:     capfirst, format_lazy, get_text_list, smart_split, unescape_string_literal,
+282:             form_field.help_text = format_lazy('{} {}', help_text, msg) if help_text else msg
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

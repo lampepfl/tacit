@@ -1,0 +1,79 @@
+status: success
+=== __init__ modification ===
+1196:             db_constraint=db_constraint,
+1197:         )
+1198:         self.has_null_arg = 'null' in kwargs
+1199:         self.has_related_name = related_name is not None
+1200: 
+1201:         super().__init__(
+1202:             related_name=related_name,
+1203:             related_query_name=related_query_name,
+1204:             limit_choices_to=limit_choices_to,
+1205:             **kwargs,
+1206:         )
+1207: 
+1208:         self.db_table = db_table
+1209:         self.swappable = swappable
+1210: 
+1211:     def check(self, **kwargs):
+1212:         return [
+1213:             *super().check(**kwargs),
+
+=== _check_ignored_options modification ===
+1229:         return []
+1230: 
+1231:     def _check_ignored_options(self, from_model=None, **kwargs):
+1232:         warnings = []
+1233: 
+1234:         if self.has_null_arg:
+1235:             warnings.append(
+1236:                 checks.Warning(
+1237:                     'null has no effect on ManyToManyField.',
+1238:                     obj=self,
+1239:                     id='fields.W340',
+1240:                 )
+1241:             )
+1242: 
+1243:         if self._validators:
+1244:             warnings.append(
+1245:                 checks.Warning(
+1246:                     'ManyToManyField does not support validators.',
+1247:                     obj=self,
+1248:                     id='fields.W341',
+1249:                 )
+1250:             )
+1251:         if (self.remote_field.limit_choices_to and self.remote_field.through and
+1252:                 not self.remote_field.through._meta.auto_created):
+1253:             warnings.append(
+1254:                 checks.Warning(
+1255:                     'limit_choices_to has no effect on ManyToManyField '
+1256:                     'with a through model.',
+1257:                     obj=self,
+1258:                     id='fields.W343',
+1259:                 )
+1260:             )
+1261: 
+1262:         if from_model is not None and self.has_related_name and self.remote_field.symmetrical:
+1263:             if (
+1264:                 self.remote_field.model == RECURSIVE_RELATIONSHIP_CONSTANT or
+1265:                 self.remote_field.model == from_model._meta.object_name
+1266:             ):
+1267:                 warnings.append(
+1268:                     checks.Error(
+1269:                         'related_name is not allowed for ManyToManyField '
+1270:                         'with symmetrical=True (e.g., self-referential fields).',
+1271:                         obj=self,
+1272:                         id='fields.E332',
+1273:                     )
+1274:                 )
+1275:         return warnings
+1276: 
+1277:     def _check_relationship_model(self, from_model=None, **kwargs):
+1278:         if hasattr(self.remote_field.through, '_meta'):
+1279:             qualified_model_name = "%s.%s" % (
+1280:                 self.remote_field.through._meta.app_label, self.remote_field.through.__name__)
+1281:         else:
+1282:             qualified_model_name = self.remote_field.through
+1283: 
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,24 @@
+status: success
+1125:     def check_filterable(self, expression):
+1126:         """Raise an error if expression cannot be used in a WHERE clause."""
+1127:         if not getattr(expression, 'filterable', True):
+1128:             raise NotSupportedError(
+1129:                 expression.__class__.__name__ + ' is disallowed in the filter '
+1130:                 'clause.'
+1131:             )
+1132:         if hasattr(expression, 'get_source_expressions'):
+1133:             for expr in expression.get_source_expressions():
+1134:                 self.check_filterable(expr)
+1135: 
+1136:     def build_lookup(self, lookups, lhs, rhs):
+1137:         """
+1138:         Try to extract transforms and lookup from given lhs.
+1139: 
+1140:         The lhs value is something that works like SQLExpression.
+1141:         The rhs value is what the lookup is going to compare against.
+1142:         The lookups is a list of names to extract using get_lookup()
+1143:         and get_transform().
+1144:         """
+1145:         # __exact is the default lookup if one isn't given.
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

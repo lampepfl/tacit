@@ -1,0 +1,52 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = """related_value
+        instances_dict = {instance_attr(inst): inst for inst in instances}
+        related_field = self.field.foreign_related_fields[0]
+        remote_field = self.field.remote_field
+
+        # FIXME: This will need to be revisited when we introduce support for
+        # composite fields. In the meantime we take this practical approach to
+        # solve a regression on 1.6 when the reverse manager in hidden
+        # (related_name ends with a '+'). Refs #21410.
+        # The check for len(...) == 1 is a special case that allows the query
+        # to be join-less and smaller. Refs #21760.
+        if remote_field.is_hidden() or len(self.field.foreign_related_fields) == 1:
+            query = {'%s__in' % related_field.name: {instance_attr(inst)[0] for inst in instances}}
+        else:
+            query = {'%s__in' % self.field.related_query_name(): instances}
+        queryset = queryset.filter(**query)
+
+        # Since we're going to assign directly in the cache,
+        # we must manage the reverse relation cache manually.
+        if not remote_field.multiple:
+            for rel_obj in queryset:
+                instance = instances_dict[rel_obj_attr(rel_obj)]
+                remote_field.set_cached_value(rel_obj, instance)
+        return queryset, rel_obj_attr, instance_attr, True, self.field.get_cache_name(), False
+
+    def get_object(self, instance):
+        qs = self.get_queryset(instance=instance)
+        # Assuming the database enforces foreign keys, this won't fail.
+        return qs.get(self.field.get_reverse_related_filter(instance))
+
+    def __get__(self, instance, cls=None):
+        """
+        Get the related instance through the forward relation.
+
+        With the example above, when getting ``child.parent``:
+
+        - ``self`` is the descriptor managing the ``parent`` attribute
+        - ``instance`` is the ``child`` instance
+        - ``cls`` is the ``Child`` class (we don't need it)
+        """
+        if instance is None:
+            return self
+
+        # The related instance is loaded from the database and then cached
+        # by the field on the model instance state. It can also be pre-cached
+        # by the reverse accessor (ReverseOneToOneDescriptor).
+        try:
+            rel_obj = self.field.get_cached_value(instance)
+        except KeyError:
+...

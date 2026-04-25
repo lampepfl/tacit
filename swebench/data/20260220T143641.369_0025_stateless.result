@@ -1,0 +1,55 @@
+status: success
+Found at line: 1241
+1241:     def _alter_many_to_many(self, model, old_field, new_field, strict):
+1242:         """Alter M2Ms to repoint their to= endpoints."""
+1243:         # Rename the through table
+1244:         if (
+1245:             old_field.remote_field.through._meta.db_table
+1246:             != new_field.remote_field.through._meta.db_table
+1247:         ):
+1248:             self.alter_db_table(
+1249:                 old_field.remote_field.through,
+1250:                 old_field.remote_field.through._meta.db_table,
+1251:                 new_field.remote_field.through._meta.db_table,
+1252:             )
+1253:         # Repoint the FK to the other side
+1254:         self.alter_field(
+1255:             new_field.remote_field.through,
+1256:             # The field that points to the target model is needed, so we can
+1257:             # tell alter_field to change it - this is m2m_reverse_field_name()
+1258:             # (as opposed to m2m_field_name(), which points to our model).
+1259:             old_field.remote_field.through._meta.get_field(
+1260:                 old_field.m2m_reverse_field_name()
+1261:             ),
+1262:             new_field.remote_field.through._meta.get_field(
+1263:                 new_field.m2m_reverse_field_name()
+1264:             ),
+1265:         )
+1266:         self.alter_field(
+1267:             new_field.remote_field.through,
+1268:             # for self-referential models we need to alter field from the other end too
+1269:             old_field.remote_field.through._meta.get_field(old_field.m2m_field_name()),
+1270:             new_field.remote_field.through._meta.get_field(new_field.m2m_field_name()),
+1271:         )
+1272: 
+1273:     def _create_index_name(self, table_name, column_names, suffix=""):
+1274:         """
+1275:         Generate a unique name for an index/unique constraint.
+1276: 
+1277:         The name is divided into 3 parts: the table name, the column names,
+1278:         and a unique digest and suffix.
+1279:         """
+1280:         _, table_name = split_identifier(table_name)
+1281:         hash_suffix_part = "%s%s" % (
+1282:             names_digest(table_name, *column_names, length=8),
+1283:             suffix,
+1284:         )
+1285:         max_length = self.connection.ops.max_name_length() or 200
+1286:         # If everything fits into max_length, use that name.
+1287:         index_name = "%s_%s_%s" % (table_name, "_".join(column_names), hash_suffix_part)
+1288:         if len(index_name) <= max_length:
+1289:             return index_name
+1290:         # Shorten a long suffix.
+1291:         if len(hash_suffix_part) > max_length / 3:
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

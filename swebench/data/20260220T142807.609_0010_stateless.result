@@ -1,0 +1,67 @@
+status: success
+Line 1889-1950:
+1888:     def add_ordering(self, *ordering):
+1889:         """
+1890:         Add items from the 'ordering' sequence to the query's "order by"
+1891:         clause. These items are either field names (not column names) --
+1892:         possibly with a direction prefix ('-' or '?') -- or OrderBy
+1893:         expressions.
+1894: 
+1895:         If 'ordering' is empty, clear all ordering from the query.
+1896:         """
+1897:         errors = []
+1898:         for item in ordering:
+1899:             if isinstance(item, str):
+1900:                 if '.' in item:
+1901:                     warnings.warn(
+1902:                         'Passing column raw column aliases to order_by() is '
+1903:                         'deprecated. Wrap %r in a RawSQL expression before '
+1904:                         'passing it to order_by().' % item,
+1905:                         category=RemovedInDjango40Warning,
+1906:                         stacklevel=3,
+1907:                     )
+1908:                     continue
+1909:                 if item == '?':
+1910:                     continue
+1911:                 if item.startswith('-'):
+1912:                     item = item[1:]
+1913:                 if item in self.annotations:
+1914:                     continue
+1915:                 if self.extra and item in self.extra:
+1916:                     continue
+1917:                 # names_to_path() validates the lookup. A descriptive
+1918:                 # FieldError will be raise if it's not.
+1919:                 self.names_to_path(item.split(LOOKUP_SEP), self.model._meta)
+1920:             elif not hasattr(item, 'resolve_expression'):
+1921:                 errors.append(item)
+1922:             if getattr(item, 'contains_aggregate', False):
+1923:                 raise FieldError(
+1924:                     'Using an aggregate in order_by() without also including '
+1925:                     'it in annotate() is not allowed: %s' % item
+1926:                 )
+1927:         if errors:
+1928:             raise FieldError('Invalid order_by arguments: %s' % errors)
+1929:         if ordering:
+1930:             self.order_by += ordering
+1931:         else:
+1932:             self.default_ordering = False
+1933: 
+1934:     def clear_ordering(self, force_empty):
+1935:         """
+1936:         Remove any ordering settings. If 'force_empty' is True, there will be
+1937:         no ordering in the resulting query (not even the model's default).
+1938:         """
+1939:         self.order_by = ()
+1940:         self.extra_order_by = ()
+1941:         if force_empty:
+1942:             self.default_ordering = False
+1943: 
+1944:     def set_group_by(self, allow_aliases=True):
+1945:         """
+1946:         Expand the GROUP BY clause required by the query.
+1947: 
+1948:         This will usually be the set of all non-aggregate fields in the
+1949:         return data. If the database backend supports grouping by the
+1950:         primary key, and the query would be equivalent, the optimization
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

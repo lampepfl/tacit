@@ -1,0 +1,56 @@
+status: success
+8: class Index:
+9:     suffix = 'idx'
+10:     # The max length of the name of the index (restricted to 30 for
+11:     # cross-database compatibility with Oracle)
+12:     max_name_length = 30
+13: 
+14:     def __init__(
+15:         self,
+16:         *,
+17:         fields=(),
+18:         name=None,
+19:         db_tablespace=None,
+20:         opclasses=(),
+21:         condition=None,
+22:         include=None,
+23:     ):
+24:         if opclasses and not name:
+25:             raise ValueError('An index must be named to use opclasses.')
+26:         if not isinstance(condition, (type(None), Q)):
+27:             raise ValueError('Index.condition must be a Q instance.')
+28:         if condition and not name:
+29:             raise ValueError('An index must be named to use condition.')
+30:         if not isinstance(fields, (list, tuple)):
+31:             raise ValueError('Index.fields must be a list or tuple.')
+32:         if not isinstance(opclasses, (list, tuple)):
+33:             raise ValueError('Index.opclasses must be a list or tuple.')
+34:         if opclasses and len(fields) != len(opclasses):
+35:             raise ValueError('Index.fields and Index.opclasses must have the same number of elements.')
+36:         if not fields:
+37:             raise ValueError('At least one field is required to define an index.')
+38:         if include and not name:
+39:             raise ValueError('A covering index must be named.')
+40:         if not isinstance(include, (type(None), list, tuple)):
+41:             raise ValueError('Index.include must be a list or tuple.')
+42:         self.fields = list(fields)
+43:         # A list of 2-tuple with the field name and ordering ('' or 'DESC').
+44:         self.fields_orders = [
+45:             (field_name[1:], 'DESC') if field_name.startswith('-') else (field_name, '')
+46:             for field_name in self.fields
+47:         ]
+48:         self.name = name or ''
+49:         self.db_tablespace = db_tablespace
+50:         self.opclasses = opclasses
+51:         self.condition = condition
+52:         self.include = tuple(include) if include else ()
+53: 
+54:     def _get_condition_sql(self, model, schema_editor):
+55:         if self.condition is None:
+56:             return None
+57:         query = Query(model=model, alias_cols=False)
+58:         where = query.build_where(self.condition)
+59:         compiler = query.get_compiler(connection=schema_editor.connection)
+60:         sql, params = where.as_sql(compiler, schema_editor.connection)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

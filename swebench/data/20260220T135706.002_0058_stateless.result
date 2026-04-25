@@ -1,0 +1,11 @@
+status: success
+229:                 col.target.column = new_column
+230:             self.columns.append(col.target.column)
+231:         self.expressions = expressions
+232: 
+233:     def __str__(self):
+234:         sql, params = self.compiler.compile(self.expressions)
+235:         params = map(self.quote_value, params)
+236:         return sql % tuple(params)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

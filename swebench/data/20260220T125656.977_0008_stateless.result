@@ -1,0 +1,23 @@
+status: success
+1776:         return condition, needed_inner
+1777: 
+1778:     def set_empty(self):
+1779:         self.where.add(NothingNode(), AND)
+1780: 
+1781:     def is_empty(self):
+1782:         return any(isinstance(c, NothingNode) for c in self.where.children)
+1783: 
+1784:     def set_limits(self, low=None, high=None):
+1785:         """
+1786:         Adjust the limits on the rows retrieved. Use low/high to set these,
+1787:         as it makes it more Pythonic to read and write. When the SQL query is
+1788:         created, convert them to the appropriate offset and limit values.
+1789: 
+1790:         Apply any limits passed in here to the existing constraints. Add low
+1791:         to the current low value and clamp both to any existing high value.
+1792:         """
+1793:         if high is not None:
+1794:             if self.high_mark is not None:
+1795:                 self.high_mark = min(self.high_mark, self.low_mark + high)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

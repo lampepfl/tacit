@@ -1,0 +1,6 @@
+status: failure
+-- [E008] Not Found Error: -----------------------------------------------------
+4 |    val files = root.find("*.py")
+  |                ^^^^^^^^^
+  |            value find is not a member of library.FileEntry^{contextual$1}
+1 error found

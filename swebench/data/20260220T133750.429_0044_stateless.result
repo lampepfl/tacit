@@ -1,0 +1,5 @@
+status: success
+Line 1195 now: '                 blank=False, **kwargs):'
+Line 1196 now: '        # Call Field instead of ChoiceField __init__() because we don't need'
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

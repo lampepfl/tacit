@@ -1,0 +1,4 @@
+status: success
+stdout: Test year 77 (should be 1977 > 50 years): 220924800
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

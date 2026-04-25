@@ -1,0 +1,59 @@
+status: success
+144: class RegexPattern(CheckURLMixin):
+145:     regex = LocaleRegexDescriptor('_regex')
+146: 
+147:     def __init__(self, regex, name=None, is_endpoint=False):
+148:         self._regex = regex
+149:         self._regex_dict = {}
+150:         self._is_endpoint = is_endpoint
+151:         self.name = name
+152:         self.converters = {}
+153: 
+154:     def match(self, path):
+155:         match = self.regex.search(path)
+156:         if match:
+157:             # If there are any named groups, use those as kwargs, ignoring
+158:             # non-named groups. Otherwise, pass all non-named arguments as
+159:             # positional arguments.
+160:             kwargs = {k: v for k, v in match.groupdict().items() if v is not None}
+161:             args = () if kwargs else match.groups()
+162:             return path[match.end():], args, kwargs
+163:         return None
+164: 
+165:     def check(self):
+166:         warnings = []
+167:         warnings.extend(self._check_pattern_startswith_slash())
+168:         if not self._is_endpoint:
+169:             warnings.extend(self._check_include_trailing_dollar())
+170:         return warnings
+171: 
+172:     def _check_include_trailing_dollar(self):
+173:         regex_pattern = self.regex.pattern
+174:         if regex_pattern.endswith('$') and not regex_pattern.endswith(r'\$'):
+175:             return [Warning(
+176:                 "Your URL pattern {} uses include with a route ending with a '$'. "
+177:                 "Remove the dollar from the route to avoid problems including "
+178:                 "URLs.".format(self.describe()),
+179:                 id='urls.W001',
+180:             )]
+181:         else:
+182:             return []
+183: 
+184:     def _compile(self, regex):
+185:         """Compile and return the given regular expression."""
+186:         try:
+187:             return re.compile(regex)
+188:         except re.error as e:
+189:             raise ImproperlyConfigured(
+190:                 '"%s" is not a valid regular expression: %s' % (regex, e)
+191:             )
+192: 
+193:     def __str__(self):
+194:         return str(self._regex)
+195: 
+196: 
+197: _PATH_PARAMETER_COMPONENT_RE = _lazy_re_compile(
+198:     r'<(?:(?P<converter>[^>:]+):)?(?P<parameter>\w+)>'
+199: )
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

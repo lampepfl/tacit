@@ -1,0 +1,53 @@
+status: success
+166:     # Only return conditional responses on successful requests.
+167:     if response and not (200 <= response.status_code < 300):
+168:         return response
+169: 
+170:     # Get HTTP request headers.
+171:     if_match_etags = parse_etags(request.META.get("HTTP_IF_MATCH", ""))
+172:     if_unmodified_since = request.META.get("HTTP_IF_UNMODIFIED_SINCE")
+173:     if_unmodified_since = if_unmodified_since and parse_http_date_safe(
+174:         if_unmodified_since
+175:     )
+176:     if_none_match_etags = parse_etags(request.META.get("HTTP_IF_NONE_MATCH", ""))
+177:     if_modified_since = request.META.get("HTTP_IF_MODIFIED_SINCE")
+178:     if_modified_since = if_modified_since and parse_http_date_safe(if_modified_since)
+179: 
+180:     # Step 1 of section 6 of RFC 7232: Test the If-Match precondition.
+181:     if if_match_etags and not _if_match_passes(etag, if_match_etags):
+182:         return _precondition_failed(request)
+183: 
+184:     # Step 2: Test the If-Unmodified-Since precondition.
+185:     if (
+186:         not if_match_etags
+187:         and if_unmodified_since
+188:         and not _if_unmodified_since_passes(last_modified, if_unmodified_since)
+189:     ):
+190:         return _precondition_failed(request)
+191: 
+192:     # Step 3: Test the If-None-Match precondition.
+193:     if if_none_match_etags and not _if_none_match_passes(etag, if_none_match_etags):
+194:         if request.method in ("GET", "HEAD"):
+195:             return _not_modified(request, response)
+196:         else:
+197:             return _precondition_failed(request)
+198: 
+199:     # Step 4: Test the If-Modified-Since precondition.
+200:     if (
+201:         not if_none_match_etags
+202:         and if_modified_since
+203:         and not _if_modified_since_passes(last_modified, if_modified_since)
+204:         and request.method in ("GET", "HEAD")
+205:     ):
+206:         return _not_modified(request, response)
+207: 
+208:     # Step 5: Test the If-Range precondition (not supported).
+209:     # Step 6: Return original response since there isn't a conditional response.
+210:     return response
+211: 
+212: 
+213: def _if_match_passes(target_etag, etags):
+214:     """
+215:     Test the If-Match comparison as defined in section 3.1 of RFC 7232.
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,20 @@
+status: success
+99: def iter_all_python_module_files():
+100:     # This is a hot path during reloading. Create a stable sorted list of
+101:     # modules based on the module name and pass it to iter_modules_and_files().
+102:     # This ensures cached results are returned in the usual case that modules
+103:     # aren't loaded on the fly.
+104:     keys = sorted(sys.modules)
+105:     modules = tuple(m for m in map(sys.modules.__getitem__, keys) if not isinstance(m, weakref.ProxyTypes))
+106:     return iter_modules_and_files(modules, frozenset(_error_files))
+107: 
+108: 
+109: @functools.lru_cache(maxsize=1)
+110: def iter_modules_and_files(modules, extra_files):
+111:     """Iterate through all modules needed to be watched."""
+112:     sys_file_paths = []
+113:     for module in modules:
+114:         # During debugging (with PyDev) the 'typing.io' and 'typing.re' objects
+115:         # are added to sys.modules, however they are types not modules and so
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

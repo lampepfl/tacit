@@ -1,0 +1,31 @@
+status: success
+Modified merge method (lines 138-165):
+138:                 combined_list.insert(last_insert_index, path)
+139:             else:
+140:                 if index > last_insert_index:
+141:                     # Find the element from list_1 that's at the highest position < index
+142:                     list_1_elem = None
+143:                     for elem in reversed(list_1):
+144:                         if elem in combined_list:
+145:                             elem_index = combined_list.index(elem)
+146:                             if elem_index < index:
+147:                                 list_1_elem = elem
+148:                                 break
+149:                     if list_1_elem is None:
+150:                         list_1_elem = combined_list[last_insert_index]
+151:                     warnings.warn(
+152:                         'Detected duplicate Media files in an opposite order:\n'
+153:                         '%s\n%s' % (list_1_elem, combined_list[index]),
+154:                         MediaOrderConflictWarning,
+155:                     )
+156:                 # path already exists in the list. Update last_insert_index so
+157:                 # that the following elements are inserted in front of this one.
+158:                 last_insert_index = index
+159:         return combined_list
+160: 
+161:     def __add__(self, other):
+162:         combined = Media()
+163:         combined._css_lists = self._css_lists + other._css_lists
+164:         combined._js_lists = self._js_lists + other._js_lists
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

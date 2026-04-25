@@ -1,0 +1,156 @@
+status: success
+0: from enum import Enum
+1: 
+2: from django.db.models.query_utils import Q
+3: from django.db.models.sql.query import Query
+4: 
+5: __all__ = ['CheckConstraint', 'Deferrable', 'UniqueConstraint']
+6: 
+7: 
+8: class BaseConstraint:
+9:     def __init__(self, name):
+10:         self.name = name
+11: 
+12:     def constraint_sql(self, model, schema_editor):
+13:         raise NotImplementedError('This method must be implemented by a subclass.')
+14: 
+15:     def create_sql(self, model, schema_editor):
+16:         raise NotImplementedError('This method must be implemented by a subclass.')
+17: 
+18:     def remove_sql(self, model, schema_editor):
+19:         raise NotImplementedError('This method must be implemented by a subclass.')
+20: 
+21:     def deconstruct(self):
+22:         path = '%s.%s' % (self.__class__.__module__, self.__class__.__name__)
+23:         path = path.replace('django.db.models.constraints', 'django.db.models')
+24:         return (path, (), {'name': self.name})
+25: 
+26:     def clone(self):
+27:         _, args, kwargs = self.deconstruct()
+28:         return self.__class__(*args, **kwargs)
+29: 
+30: 
+31: class CheckConstraint(BaseConstraint):
+32:     def __init__(self, *, check, name):
+33:         self.check = check
+34:         if not getattr(check, 'conditional', False):
+35:             raise TypeError(
+36:                 'CheckConstraint.check must be a Q instance or boolean '
+37:                 'expression.'
+38:             )
+39:         super().__init__(name)
+40: 
+41:     def _get_check_sql(self, model, schema_editor):
+42:         query = Query(model=model, alias_cols=False)
+43:         where = query.build_where(self.check)
+44:         compiler = query.get_compiler(connection=schema_editor.connection)
+45:         sql, params = where.as_sql(compiler, schema_editor.connection)
+46:         return sql % tuple(schema_editor.quote_value(p) for p in params)
+47: 
+48:     def constraint_sql(self, model, schema_editor):
+49:         check = self._get_check_sql(model, schema_editor)
+50:         return schema_editor._check_sql(self.name, check)
+51: 
+52:     def create_sql(self, model, schema_editor):
+53:         check = self._get_check_sql(model, schema_editor)
+54:         return schema_editor._create_check_sql(model, self.name, check)
+55: 
+56:     def remove_sql(self, model, schema_editor):
+57:         return schema_editor._delete_check_sql(model, self.name)
+58: 
+59:     def __repr__(self):
+60:         return "<%s: check='%s' name=%r>" % (self.__class__.__name__, self.check, self.name)
+61: 
+62:     def __eq__(self, other):
+63:         if isinstance(other, CheckConstraint):
+64:             return self.name == other.name and self.check == other.check
+65:         return super().__eq__(other)
+66: 
+67:     def deconstruct(self):
+68:         path, args, kwargs = super().deconstruct()
+69:         kwargs['check'] = self.check
+70:         return path, args, kwargs
+71: 
+72: 
+73: class Deferrable(Enum):
+74:     DEFERRED = 'deferred'
+75:     IMMEDIATE = 'immediate'
+76: 
+77: 
+78: class UniqueConstraint(BaseConstraint):
+79:     def __init__(self, *, fields, name, condition=None, deferrable=None):
+80:         if not fields:
+81:             raise ValueError('At least one field is required to define a unique constraint.')
+82:         if not isinstance(condition, (type(None), Q)):
+83:             raise ValueError('UniqueConstraint.condition must be a Q instance.')
+84:         if condition and deferrable:
+85:             raise ValueError(
+86:                 'UniqueConstraint with conditions cannot be deferred.'
+87:             )
+88:         if not isinstance(deferrable, (type(None), Deferrable)):
+89:             raise ValueError(
+90:                 'UniqueConstraint.deferrable must be a Deferrable instance.'
+91:             )
+92:         self.fields = tuple(fields)
+93:         self.condition = condition
+94:         self.deferrable = deferrable
+95:         super().__init__(name)
+96: 
+97:     def _get_condition_sql(self, model, schema_editor):
+98:         if self.condition is None:
+99:             return None
+100:         query = Query(model=model, alias_cols=False)
+101:         where = query.build_where(self.condition)
+102:         compiler = query.get_compiler(connection=schema_editor.connection)
+103:         sql, params = where.as_sql(compiler, schema_editor.connection)
+104:         return sql % tuple(schema_editor.quote_value(p) for p in params)
+105: 
+106:     def constraint_sql(self, model, schema_editor):
+107:         fields = [model._meta.get_field(field_name).column for field_name in self.fields]
+108:         condition = self._get_condition_sql(model, schema_editor)
+109:         return schema_editor._unique_sql(
+110:             model, fields, self.name, condition=condition,
+111:             deferrable=self.deferrable,
+112:         )
+113: 
+114:     def create_sql(self, model, schema_editor):
+115:         fields = [model._meta.get_field(field_name).column for field_name in self.fields]
+116:         condition = self._get_condition_sql(model, schema_editor)
+117:         return schema_editor._create_unique_sql(
+118:             model, fields, self.name, condition=condition,
+119:             deferrable=self.deferrable,
+120:         )
+121: 
+122:     def remove_sql(self, model, schema_editor):
+123:         condition = self._get_condition_sql(model, schema_editor)
+124:         return schema_editor._delete_unique_sql(
+125:             model, self.name, condition=condition, deferrable=self.deferrable,
+126:         )
+127: 
+128:     def __repr__(self):
+129:         return '<%s: fields=%r name=%r%s%s>' % (
+130:             self.__class__.__name__, self.fields, self.name,
+131:             '' if self.condition is None else ' condition=%s' % self.condition,
+132:             '' if self.deferrable is None else ' deferrable=%s' % self.deferrable,
+133:         )
+134: 
+135:     def __eq__(self, other):
+136:         if isinstance(other, UniqueConstraint):
+137:             return (
+138:                 self.name == other.name and
+139:                 self.fields == other.fields and
+140:                 self.condition == other.condition and
+141:                 self.deferrable == other.deferrable
+142:             )
+143:         return super().__eq__(other)
+144: 
+145:     def deconstruct(self):
+146:         path, args, kwargs = super().deconstruct()
+147:         kwargs['fields'] = self.fields
+148:         if self.condition:
+149:             kwargs['condition'] = self.condition
+150:         if self.deferrable:
+151:             kwargs['deferrable'] = self.deferrable
+152:         return path, args, kwargs
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,84 @@
+status: success
+950: 
+951:     def __init__(self, *args, **kwargs):
+952:         super().__init__(*args, **kwargs)
+953:         self.validators.append(validators.MaxLengthValidator(self.max_length))
+954: 
+955:     def check(self, **kwargs):
+956:         return [
+957:             *super().check(**kwargs),
+958:             *self._check_max_length_attribute(**kwargs),
+959:         ]
+960: 
+961:     def _check_max_length_attribute(self, **kwargs):
+962:         if self.max_length is None:
+963:             return [
+964:                 checks.Error(
+965:                     "CharFields must define a 'max_length' attribute.",
+966:                     obj=self,
+967:                     id='fields.E120',
+968:                 )
+969:             ]
+970:         elif (not isinstance(self.max_length, int) or isinstance(self.max_length, bool) or
+971:                 self.max_length <= 0):
+972:             return [
+973:                 checks.Error(
+974:                     "'max_length' must be a positive integer.",
+975:                     obj=self,
+976:                     id='fields.E121',
+977:                 )
+978:             ]
+979:         else:
+980:             return []
+981: 
+982:     def _check_max_length_choices(self):
+983:         if not self.choices:
+984:             return []
+985: 
+986:         if self.max_length is None:
+987:             return []
+988: 
+989:         if not isinstance(self.max_length, int) or isinstance(self.max_length, bool) or self.max_length <= 0:
+990:             return []
+991: 
+992:         max_choice_length = 0
+993:         for choice in self.choices:
+994:             try:
+995:                 group_name, group_choices = choice
+996:                 if isinstance(group_choices, (list, tuple)):
+997:                     for value, _ in group_choices:
+998:                         if value is None:
+999:                             continue
+1000:                         value_str = str(value) if isinstance(value, Promise) else str(value)
+1001:                         max_choice_length = max(max_choice_length, len(value_str))
+1002:                 else:
+1003:                     value = group_name
+1004:                     value_str = str(value) if isinstance(value, Promise) else str(value)
+1005:                     max_choice_length = max(max_choice_length, len(value_str))
+1006:             except (TypeError, ValueError):
+1007:                 value, _ = choice
+1008:                 if value is None:
+1009:                     continue
+1010:                 value_str = str(value) if isinstance(value, Promise) else str(value)
+1011:                 max_choice_length = max(max_choice_length, len(value_str))
+1012: 
+1013:         if max_choice_length > self.max_length:
+1014:             return [
+1015:                 checks.Error(
+1016:                     "max_length must be at least %d to accommodate the longest choice value (%d)." % (max_choice_length, max_choice_length),
+1017:                     obj=self,
+1018:                     id='fields.E122',
+1019:                 )
+1020:             ]
+1021:         return []
+1022: 
+1023: 
+1024:     def cast_db_type(self, connection):
+1025:         if self.max_length is None:
+1026:             return connection.ops.cast_char_field_without_max_length
+1027:         return super().cast_db_type(connection)
+1028: 
+1029:     def get_internal_type(self):
+1030:         return "CharField"
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

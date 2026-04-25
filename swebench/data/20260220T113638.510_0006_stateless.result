@@ -1,0 +1,6 @@
+status: failure
+-- [E008] Not Found Error: -----------------------------------------------------
+6 |    lines.zipWithIndex.filter(_._1.contains("Nested") || _._1.contains("nested")).foreach(println)
+  |                              ^^^^
+  |                              value _1 is not a member of String
+1 error found

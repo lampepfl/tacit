@@ -1,0 +1,8 @@
+status: success
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13768/repo/django/middleware/csrf.py:21: logger = logging.getLogger('django.security.csrf')
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13768/repo/django/core/handlers/exception.py:98:         security_logger = logging.getLogger('django.security.%s' % exc.__class__.__name__)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13768/repo/django/core/handlers/asgi.py:19: logger = logging.getLogger('django.request')
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13768/repo/django/core/handlers/base.py:17: logger = logging.getLogger('django.request')
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13768/repo/django/core/servers/basehttp.py:23: logger = logging.getLogger('django.server')
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

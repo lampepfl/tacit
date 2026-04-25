@@ -1,0 +1,8 @@
+status: success
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15498/repo/django/template/defaultfilters.py:539:                 except (AttributeError, IndexError, KeyError, TypeError, ValueError):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15498/repo/django/template/base.py:883:                 except (TypeError, AttributeError, KeyError, ValueError, IndexError):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15498/repo/django/contrib/admin/helpers.py:274:         except (AttributeError, ValueError, ObjectDoesNotExist):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15498/repo/django/db/models/fields/__init__.py:2622:             except (AttributeError, ValueError):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15498/repo/django/views/static.py:138:     except (AttributeError, ValueError, OverflowError, TypeError):
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

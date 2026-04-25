@@ -1,0 +1,5 @@
+status: success
+807:     def values(self, *fields, **expressions):
+813:     def values_list(self, *fields, flat=False, named=False):
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

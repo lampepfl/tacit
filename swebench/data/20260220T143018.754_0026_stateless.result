@@ -1,0 +1,66 @@
+status: success
+Line 1600-1660:
+1599:             else:
+1600:                 filtered_relation = None
+1601:                 table_alias = None
+1602:             opts = join.to_opts
+1603:             if join.direct:
+1604:                 nullable = self.is_nullable(join.join_field)
+1605:             else:
+1606:                 nullable = True
+1607:             connection = Join(
+1608:                 opts.db_table, alias, table_alias, INNER, join.join_field,
+1609:                 nullable, filtered_relation=filtered_relation,
+1610:             )
+1611:             reuse = can_reuse if join.m2m or reuse_with_filtered_relation else None
+1612:             alias = self.join(
+1613:                 connection, reuse=reuse,
+1614:                 reuse_with_filtered_relation=reuse_with_filtered_relation,
+1615:             )
+1616:             joins.append(alias)
+1617:             if filtered_relation:
+1618:                 filtered_relation.path = joins[:]
+1619:         return JoinInfo(final_field, targets, opts, joins, path, final_transformer)
+1620: 
+1621:     def trim_joins(self, targets, joins, path):
+1622:         """
+1623:         The 'target' parameter is the final field being joined to, 'joins'
+1624:         is the full list of join aliases. The 'path' contain the PathInfos
+1625:         used to create the joins.
+1626: 
+1627:         Return the final target field and table alias and the new active
+1628:         joins.
+1629: 
+1630:         Always trim any direct join if the target column is already in the
+1631:         previous table. Can't trim reverse joins as it's unknown if there's
+1632:         anything on the other side of the join.
+1633:         """
+1634:         joins = joins[:]
+1635:         for pos, info in enumerate(reversed(path)):
+1636:             if len(joins) == 1 or not info.direct:
+1637:                 break
+1638:             if info.filtered_relation:
+1639:                 break
+1640:             join_targets = {t.column for t in info.join_field.foreign_related_fields}
+1641:             cur_targets = {t.column for t in targets}
+1642:             if not cur_targets.issubset(join_targets):
+1643:                 break
+1644:             targets_dict = {r[1].column: r[0] for r in info.join_field.related_fields if r[1].column in cur_targets}
+1645:             targets = tuple(targets_dict[t.column] for t in targets)
+1646:             self.unref_alias(joins.pop())
+1647:         return targets, joins[-1], joins
+1648: 
+1649:     @classmethod
+1650:     def _gen_cols(cls, exprs):
+1651:         for expr in exprs:
+1652:             if isinstance(expr, Col):
+1653:                 yield expr
+1654:             else:
+1655:                 yield from cls._gen_cols(expr.get_source_expressions())
+1656: 
+1657:     @classmethod
+1658:     def _gen_col_aliases(cls, exprs):
+1659:         yield from (expr.alias for expr in cls._gen_cols(exprs))
+1660: 
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

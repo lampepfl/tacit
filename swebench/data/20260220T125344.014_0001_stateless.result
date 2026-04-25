@@ -1,0 +1,5 @@
+status: success
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12983/repo/django/template/defaultfilters.py:212: def slugify(value):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12983/repo/django/utils/text.py:394: def slugify(value, allow_unicode=False):
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,19 @@
+status: success
+Found 16 matches for header_rows in fixedwidth.py
+  97:         header_rows = getattr(self, "header_rows", ["name"])
+  163:             line = self.get_line(lines, start_line + header_rows.index("name"))
+  168:         for ii, attr in enumerate(header_rows):
+  262:         default_header_rows = [] if self.header.start_line is None else ["name"]
+  263:         header_rows = getattr(self, "header_rows", default_header_rows)
+  273:         for col_attr in header_rows:
+  345:         header_rows=None,
+  347:         if header_rows is None:
+  348:             header_rows = ["name"]
+  354:         self.header.header_rows = header_rows
+  355:         self.data.header_rows = header_rows
+  357:             self.data.start_line = len(header_rows)
+  411:             header_rows=[],
+  477:         header_rows=None,
+  484:             delimiter_pad=delimiter_pad, bookend=bookend, header_rows=header_rows
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

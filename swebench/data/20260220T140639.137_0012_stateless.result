@@ -1,0 +1,9 @@
+status: success
+models.py
+management
+__init__.py
+eggs
+tests.py
+urls.py
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

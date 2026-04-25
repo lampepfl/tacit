@@ -1,0 +1,15 @@
+status: success
+117: ''
+118: 'class EnumSerializer(BaseSerializer):'
+119: '      def serialize(self):'
+120: '          enum_class = self.value.__class__'
+121: '          module = enum_class.__module__'
+122: '          return "%s.%s[%r]" % (module, enum_class.__name__, self.value.name), {'import %s' % module}'
+123: ''
+124: 'class FloatSerializer(BaseSimpleSerializer):'
+125: '    def serialize(self):'
+126: '        if math.isnan(self.value) or math.isinf(self.value):'
+127: '            return 'float("{}")'.format(self.value), set()'
+128: '        return super().serialize()'
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

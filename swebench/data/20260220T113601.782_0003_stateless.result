@@ -1,0 +1,48 @@
+status: success
+185: 
+186:     def _clear_cached_properties(self, setting, **kwargs):
+187:         """Reset setting based property values."""
+188:         if setting == 'MEDIA_ROOT':
+189:             self.__dict__.pop('base_location', None)
+190:             self.__dict__.pop('location', None)
+191:         elif setting == 'MEDIA_URL':
+192:             self.__dict__.pop('base_url', None)
+193:         elif setting == 'FILE_UPLOAD_PERMISSIONS':
+194:             self.__dict__.pop('file_permissions_mode', None)
+195:         elif setting == 'FILE_UPLOAD_DIRECTORY_PERMISSIONS':
+196:             self.__dict__.pop('directory_permissions_mode', None)
+197: 
+198:     def _value_or_setting(self, value, setting):
+199:         return setting if value is None else value
+200: 
+201:     @cached_property
+202:     def base_location(self):
+203:         return self._value_or_setting(self._location, settings.MEDIA_ROOT)
+204: 
+205:     @cached_property
+206:     def location(self):
+207:         return os.path.abspath(self.base_location)
+208: 
+209:     @cached_property
+210:     def base_url(self):
+211:         if self._base_url is not None and not self._base_url.endswith('/'):
+212:             self._base_url += '/'
+213:         return self._value_or_setting(self._base_url, settings.MEDIA_URL)
+214: 
+215:     @cached_property
+216:     def file_permissions_mode(self):
+217:         return self._value_or_setting(self._file_permissions_mode, settings.FILE_UPLOAD_PERMISSIONS)
+218: 
+219:     @cached_property
+220:     def directory_permissions_mode(self):
+221:         return self._value_or_setting(self._directory_permissions_mode, settings.FILE_UPLOAD_DIRECTORY_PERMISSIONS)
+222: 
+223:     def _open(self, name, mode='rb'):
+224:         return File(open(self.path(name), mode))
+225: 
+226:     def _save(self, name, content):
+227:         full_path = self.path(name)
+228: 
+229:         # Create any intermediate directories that do not exist.
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

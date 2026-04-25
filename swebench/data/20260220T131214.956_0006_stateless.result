@@ -1,0 +1,6 @@
+status: failure
+-- [E008] Not Found Error: -----------------------------------------------------
+10 |    lines.drop(571).take(60).foreachWithIndex((line, i) => println(s"${572 + i}: $line"))
+   |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |    value foreachWithIndex is not a member of List[String]
+1 error found

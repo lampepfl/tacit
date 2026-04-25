@@ -1,0 +1,5 @@
+status: success
+196:         for base in reversed([new_class] + parents):
+212:         for base in new_class.mro():
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

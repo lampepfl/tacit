@@ -1,0 +1,49 @@
+status: success
+700:                            already_seen=None):
+701:         """
+702:         Return the table alias (the name might be ambiguous, the alias will
+703:         not be) and column name for ordering by the given 'name' parameter.
+704:         The 'name' is of the form 'field1__field2__...__fieldN'.
+705:         """
+706:         name, order = get_order_dir(name, default_order)
+707:         descending = order == 'DESC'
+708:         pieces = name.split(LOOKUP_SEP)
+709:         field, targets, alias, joins, path, opts, transform_function = self._setup_joins(pieces, opts, alias)
+710: 
+711:         # If we get to this point and the field is a relation to another model,
+712:         # append the default ordering for that model unless the attribute name
+713:         # of the field is specified.
+714:         if field.is_relation and opts.ordering and getattr(field, 'attname', None) != name:
+715:             # Firstly, avoid infinite loops.
+716:             already_seen = already_seen or set()
+717:             join_tuple = tuple(getattr(self.query.alias_map[j], 'join_cols', None) for j in joins)
+718:             if join_tuple in already_seen:
+719:                 raise FieldError('Infinite loop caused by ordering.')
+720:             already_seen.add(join_tuple)
+721: 
+722:             results = []
+723:             for item in opts.ordering:
+724:                 if hasattr(item, 'resolve_expression') and not isinstance(item, OrderBy):
+725:                     item = item.desc() if descending else item.asc()
+726:                 if isinstance(item, OrderBy):
+727:                     results.append((item, False))
+728:                     continue
+729:                 results.extend(self.find_ordering_name(item, opts, alias,
+730:                                                        order, already_seen))
+731:             return results
+732:         targets, alias, _ = self.query.trim_joins(targets, joins, path)
+733:         return [(OrderBy(transform_function(t, alias), descending=descending), False) for t in targets]
+734: 
+735:     def _setup_joins(self, pieces, opts, alias):
+736:         """
+737:         Helper method for get_order_by() and get_distinct().
+738: 
+739:         get_ordering() and get_distinct() must produce same target columns on
+740:         same input, as the prefixes of get_ordering() and get_distinct() must
+741:         match. Executing SQL where this is not true is an error.
+742:         """
+743:         alias = alias or self.query.get_initial_alias()
+744:         field, targets, opts, joins, path, transform_function = self.query.setup_joins(pieces, opts, alias)
+745:         alias = joins[-1]
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,21 @@
+status: success
+import logging
+  import threading
+  import warnings
+  import weakref
+  
+  from django.utils.deprecation import RemovedInDjango40Warning
+  from django.utils.inspect import func_accepts_kwargs
+  
+  logger = logging.getLogger('django.dispatch')
+  
+  
+  def _make_id(target):
+      if hasattr(target, '__func__'):
+          return (id(target.__self__), id(target.__func__))
+      return id(target)
+---
+8:   logger = logging.getLogger('django.dispatch')
+213:                   logger.exception('Error calling %s in signal %s', receiver, self)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

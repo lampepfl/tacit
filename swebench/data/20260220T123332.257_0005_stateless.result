@@ -1,0 +1,18 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = """ which is ambiguous. You must specify "
+                             "which foreign key Django should use via the "
+                             "through_fields keyword argument.") % (self, from_model_name),
+                            hint=(
+                                'If you want to create a recursive relationship, '
+                                'use ForeignKey("%s", symmetrical=False, through="%s").'
+                            ) % (
+                                RECURSIVE_RELATIONSHIP_CONSTANT,
+                                relationship_model_name,
+                            ),
+                            obj=self,
+                            id='fields.E334',
+                        )
+                    )
+
+                if seen_to > 1 and not self.remote_field.through_"""

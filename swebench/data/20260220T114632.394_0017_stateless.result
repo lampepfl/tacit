@@ -1,0 +1,44 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = List(
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/astropy__astropy-7746/repo/astropy/wcs/tests/test_wcs.py",
+    lineNumber = 50,
+    line = "            world = wcsobj.wcs_pix2world([[97, 97]], 1)"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/astropy__astropy-7746/repo/astropy/wcs/tests/test_wcs.py",
+    lineNumber = 119,
+    line = "    assert np.all(np.isnan(w.wcs_pix2world([[100., 500.]], 0)))  # outside sky"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/astropy__astropy-7746/repo/astropy/wcs/tests/test_wcs.py",
+    lineNumber = 120,
+    line = "    assert np.all(np.isnan(w.wcs_pix2world([[200., 200.]], 0)))  # outside sky"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/astropy__astropy-7746/repo/astropy/wcs/tests/test_wcs.py",
+    lineNumber = 121,
+    line = "    assert not np.any(np.isnan(w.wcs_pix2world([[1000., 1000.]], 0)))"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/astropy__astropy-7746/repo/astropy/wcs/tests/test_wcs.py",
+    lineNumber = 124,
+    line = "def test_pix2world():"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/astropy__astropy-7746/repo/astropy/wcs/tests/test_wcs.py",
+    lineNumber = 128,
+    line = "    # TODO: write this to test the expected output behavior of pix2world,"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/astropy__astropy-7746/repo/astropy/wcs/tests/test_wcs.py",
+    lineNumber = 132,
+    line = "        # this raises a warning unimportant for this testing the pix2world"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/astropy__astropy-7746/repo/astropy/wcs/tests/test_wcs.py",
+    lineNumber = 142,
+    line = "    result = ww.wcs_pix2world(pixels, 0, ra_dec_order=True)"
+  ),
+...

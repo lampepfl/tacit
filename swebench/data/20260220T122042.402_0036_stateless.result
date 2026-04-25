@@ -1,0 +1,12 @@
+status: success
+924 [len=74]: |                # Handle ForeignKey which can only have a single to_field.|
+925 [len=87]: |                remote_field_name = getattr(new_field.remote_field, 'field_name', None)|
+926 [len=37]: |                if remote_field_name:|
+927 [len=75]: |                    to_field_rename_key = rename_key + (remote_field_name,)|
+928 [len=0]: ||
+929 [len=93]: |                        new_field.remote_field.field_name = old_field.remote_field.field_name|
+930 [len=86]: |                # Handle ForeignObjects which can have multiple from_fields/to_fields.|
+931 [len=69]: |                from_fields = getattr(new_field, 'from_fields', None)|
+932 [len=31]: |                if from_fields:|
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

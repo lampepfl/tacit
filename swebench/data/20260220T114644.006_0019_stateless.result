@@ -1,0 +1,21 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = """        def _return_list_of_arrays(axes, origin):
+            try:
+                axes = np.broadcast_arrays(*axes)
+            except ValueError:
+                raise ValueError(
+                    "Coordinate arrays are not broadcastable to each other")
+
+            xy = np.hstack([x.reshape((x.size, 1)) for x in axes])
+
+            if ra_dec_order and sky == 'input':
+                xy = self._denormalize_sky(xy)
+            output = func(xy, origin)
+            if ra_dec_order and sky == 'output':
+                output = self._normalize_sky(output)
+                return (output[:, 0].reshape(axes[0].shape),
+                        output[:, 1].reshape(axes[0].shape))
+            return [output[:, i].reshape(axes[0].shape)
+                    for i in range(output.shape[1])]
+"""

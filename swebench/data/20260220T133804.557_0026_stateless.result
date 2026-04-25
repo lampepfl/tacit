@@ -1,0 +1,21 @@
+status: success
+stdout: Test 1: Q(x__in={}.keys())
+(AND: ('x__in', dict_keys([])))
+
+Test 2: Q() | Q(x__in={}.keys())
+(AND: ('x__in', dict_keys([])))
+
+Test 3: Q(x__in={}.keys()) | Q()
+(AND: ('x__in', dict_keys([])))
+
+Test 4: Q() & Q(x__in={}.keys())
+(AND: ('x__in', dict_keys([])))
+
+Test 5: Q(x__in={}.keys()) & Q()
+(AND: ('x__in', dict_keys([])))
+
+All tests passed!
+stderr: 
+exitCode: 0
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

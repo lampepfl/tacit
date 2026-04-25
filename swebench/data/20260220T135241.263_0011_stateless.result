@@ -1,0 +1,13 @@
+status: failure
+-- [E008] Not Found Error: -----------------------------------------------------
+10 |      if line.contains("class ExpressionWrapper") then
+   |         ^^^^^^^^^^^^^
+   |         value contains is not a member of Int
+-- [E007] Type Mismatch Error: -------------------------------------------------
+11 |        startLine = i
+   |                    ^
+   |                    Found:    (i : (String)?)
+   |                    Required: Int
+   |
+   | longer explanation available when compiling with `-explain`
+2 errors found

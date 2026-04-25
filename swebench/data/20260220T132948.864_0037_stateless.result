@@ -1,0 +1,29 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = List(
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13925/repo/django/db/models/options.py",
+    lineNumber = 225,
+    line = "            settings.DEFAULT_AUTO_FIELD,"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13925/repo/django/db/models/options.py",
+    lineNumber = 234,
+    line = "            source = 'DEFAULT_AUTO_FIELD'"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13925/repo/django/db/models/base.py",
+    lineNumber = 1302,
+    line = "            not settings.is_overridden('DEFAULT_AUTO_FIELD') and"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13925/repo/django/db/models/base.py",
+    lineNumber = 1309,
+    line = "                    f\"'{settings.DEFAULT_AUTO_FIELD}'.\","
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13925/repo/django/db/models/base.py",
+    lineNumber = 1311,
+    line = "                        f\"Configure the DEFAULT_AUTO_FIELD setting or the \""
+  )
+)

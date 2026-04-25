@@ -1,0 +1,23 @@
+status: success
+generic_views
+mutually_referential
+signed_cookies_tests
+expressions_case
+model_forms
+fixtures_regress
+aggregation
+middleware
+test_runner
+admin_utils
+asgi
+unmanaged_models
+flatpages_tests
+pagination
+auth_tests
+transaction_hooks
+migrations
+migrate_signals
+m2m_multiple
+bulk_create
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

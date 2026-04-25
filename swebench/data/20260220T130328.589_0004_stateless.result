@@ -1,0 +1,16 @@
+status: success
+662:         obj.query.clear_ordering(force_empty=True)
+663:         obj.query.add_ordering(*order_by)
+729:         del_query.query.clear_ordering(force_empty=True)
+971:         # Clear limits and ordering so they can be reapplied
+972:         clone.query.clear_ordering(True)
+1109:         """Return a new QuerySet instance with the ordering changed."""
+1113:         obj.query.clear_ordering(force_empty=False)
+1114:         obj.query.add_ordering(*field_names)
+1138:         """Reverse the ordering of the QuerySet."""
+1142:         clone.query.standard_ordering = not clone.query.standard_ordering
+1197:         clause or a default ordering on the model (or is empty).
+1203:         elif self.query.default_ordering and self.query.get_meta().ordering:
+1627:                                  "You may need to adjust the ordering of your lookups." % lookup.prefetch_to)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,52 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = """        """
+        joins = [alias]
+        # The transform can't be applied yet, as joins must be trimmed later.
+        # To avoid making every caller of this method look up transforms
+        # directly, compute transforms here and create a partial that converts
+        # fields to the appropriate wrapped version.
+
+        def final_transformer(field, alias):
+            return field.get_col(alias)
+
+        # Try resolving all the names as fields first. If there's an error,
+        # treat trailing names as lookups until a field can be resolved.
+        last_field_exception = None
+        for pivot in range(len(names), 0, -1):
+            try:
+                path, final_field, targets, rest = self.names_to_path(
+                    names[:pivot], opts, allow_many, fail_on_missing=True,
+                )
+            except FieldError as exc:
+                if pivot == 1:
+                    # The first item cannot be a lookup, so it's safe
+                    # to raise the field error here.
+                    raise
+                else:
+                    last_field_exception = exc
+            else:
+                # The transforms are the remaining items that couldn't be
+                # resolved into fields.
+                transforms = names[pivot:]
+                break
+        for name in transforms:
+            def transform(field, alias, *, name, previous):
+                try:
+                    wrapped = previous(field, alias)
+                    return self.try_transform(wrapped, name)
+                except FieldError:
+                    # FieldError is raised if the transform doesn't exist.
+                    if isinstance(final_field, Field) and last_field_exception:
+                        raise last_field_exception
+                    else:
+                        raise
+            final_transformer = functools.partial(transform, name=name, previous=final_transformer)
+        # Then, add the path to the query's joins. Note that we can't trim
+        # joins at this stage - we will need the information about join type
+        # of the trimmed joins.
+        for join in path:
+            if join.filtered_relation:
+                filtered_relation = join.filtered_relation.clone()
+                table_alias = filtered_relation.alias
+...

@@ -1,0 +1,7 @@
+status: success
+32: class ReadOnlyPasswordHashWidget(forms.Widget):
+53: class ReadOnlyPasswordHashField(forms.Field):
+54:     widget = ReadOnlyPasswordHashWidget
+135:     password = ReadOnlyPasswordHashField(
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

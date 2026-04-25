@@ -1,0 +1,104 @@
+status: success
+find_ordering_name at line 698
+698:     def find_ordering_name(self, name, opts, alias=None, default_order='ASC',
+699:                            already_seen=None):
+700:         """
+701:         Return the table alias (the name might be ambiguous, the alias will
+702:         not be) and column name for ordering by the given 'name' parameter.
+703:         The 'name' is of the form 'field1__field2__...__fieldN'.
+704:         """
+705:         name, order = get_order_dir(name, default_order)
+706:         descending = order == 'DESC'
+707:         pieces = name.split(LOOKUP_SEP)
+708:         field, targets, alias, joins, path, opts, transform_function = self._setup_joins(pieces, opts, alias)
+709: 
+710:         # If we get to this point and the field is a relation to another model,
+711:         # append the default ordering for that model unless the attribute name
+712:         # of the field is specified.
+713:         if field.is_relation and opts.ordering and getattr(field, 'attname', None) != name:
+714:             # Firstly, avoid infinite loops.
+715:             already_seen = already_seen or set()
+716:             join_tuple = tuple(getattr(self.query.alias_map[j], 'join_cols', None) for j in joins)
+717:             if join_tuple in already_seen:
+718:                 raise FieldError('Infinite loop caused by ordering.')
+719:             already_seen.add(join_tuple)
+720: 
+721:             results = []
+722:             for item in opts.ordering:
+723:                 if hasattr(item, 'resolve_expression') and not isinstance(item, OrderBy):
+724:                     item = item.desc() if descending else item.asc()
+725:                 if isinstance(item, OrderBy):
+726:                     results.append((item, False))
+727:                     continue
+728:                 results.extend(self.find_ordering_name(item, opts, alias,
+729:                                                        order, already_seen))
+730:             return results
+731:         targets, alias, _ = self.query.trim_joins(targets, joins, path)
+732:         return [(OrderBy(transform_function(t, alias), descending=descending), False) for t in targets]
+733: 
+734:     def _setup_joins(self, pieces, opts, alias):
+735:         """
+736:         Helper method for get_order_by() and get_distinct().
+737: 
+738:         get_ordering() and get_distinct() must produce same target columns on
+739:         same input, as the prefixes of get_ordering() and get_distinct() must
+740:         match. Executing SQL where this is not true is an error.
+741:         """
+742:         alias = alias or self.query.get_initial_alias()
+743:         field, targets, opts, joins, path, transform_function = self.query.setup_joins(pieces, opts, alias)
+744:         alias = joins[-1]
+745:         return field, targets, alias, joins, path, opts, transform_function
+746: 
+747:     def get_from_clause(self):
+748:         """
+749:         Return a list of strings that are joined together to go after the
+750:         "FROM" part of the query, as well as a list any extra parameters that
+751:         need to be included. Subclasses, can override this to create a
+752:         from-clause via a "select".
+753: 
+754:         This should only be called after any SQL construction methods that
+755:         might change the tables that are needed. This means the select columns,
+756:         ordering, and distinct must be done first.
+757:         """
+758:         result = []
+759:         params = []
+760:         for alias in tuple(self.query.alias_map):
+761:             if not self.query.alias_refcount[alias]:
+762:                 continue
+763:             try:
+764:                 from_clause = self.query.alias_map[alias]
+765:             except KeyError:
+766:                 # Extra tables can end up in self.tables, but not in the
+767:                 # alias_map if they aren't in a join. That's OK. We skip them.
+768:                 continue
+769:             clause_sql, clause_params = self.compile(from_clause)
+770:             result.append(clause_sql)
+771:             params.extend(clause_params)
+772:         for t in self.query.extra_tables:
+773:             alias, _ = self.query.table_alias(t)
+774:             # Only add the alias if it's not already present (the table_alias()
+775:             # call increments the refcount, so an alias refcount of one means
+776:             # this is the only reference).
+777:             if alias not in self.query.alias_map or self.query.alias_refcount[alias] == 1:
+778:                 result.append(', %s' % self.quote_name_unless_alias(alias))
+779:         return result, params
+780: 
+781:     def get_related_selections(self, select, opts=None, root_alias=None, cur_depth=1,
+782:                                requested=None, restricted=None):
+783:         """
+784:         Fill in the information needed for a select_related query. The current
+785:         depth is measured as the number of connections away from the root model
+786:         (for example, cur_depth=1 means we are looking at models with direct
+787:         connections to the root model).
+788:         """
+789:         def _get_field_choices():
+790:             direct_choices = (f.name for f in opts.fields if f.is_relation)
+791:             reverse_choices = (
+792:                 f.field.related_query_name()
+793:                 for f in opts.related_objects if f.field.unique
+794:             )
+795:             return chain(direct_choices, reverse_choices, self.query._filtered_relations)
+796: 
+797:         related_klass_infos = []
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

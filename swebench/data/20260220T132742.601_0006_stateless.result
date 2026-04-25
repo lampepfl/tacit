@@ -1,0 +1,52 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = """"""
+Accessors for related objects.
+
+When a field defines a relation between two models, each model class provides
+an attribute to access related instances of the other model class (unless the
+reverse accessor has been disabled with related_name='+').
+
+Accessors are implemented as descriptors in order to customize access and
+assignment. This module defines the descriptor classes.
+
+Forward accessors follow foreign keys. Reverse accessors trace them back. For
+example, with the following models::
+
+    class Parent(Model):
+        pass
+
+    class Child(Model):
+        parent = ForeignKey(Parent, related_name='children')
+
+ ``child.parent`` is a forward many-to-one relation. ``parent.children`` is a
+reverse many-to-one relation.
+
+There are three types of relations (many-to-one, one-to-one, and many-to-many)
+and two directions (forward and reverse) for a total of six combinations.
+
+1. Related instance on the forward side of a many-to-one relation:
+   ``ForwardManyToOneDescriptor``.
+
+   Uniqueness of foreign key values is irrelevant to accessing the related
+   instance, making the many-to-one and one-to-one cases identical as far as
+   the descriptor is concerned. The constraint is checked upstream (unicity
+   validation in forms) or downstream (unique indexes in the database).
+
+2. Related instance on the forward side of a one-to-one
+   relation: ``ForwardOneToOneDescriptor``.
+
+   It avoids querying the database when accessing the parent link field in
+   a multi-table inheritance scenario.
+
+3. Related instance on the reverse side of a one-to-one relation:
+   ``ReverseOneToOneDescriptor``.
+
+   One-to-one relations are asymmetrical, despite the apparent symmetry of the
+   name, because they're implemented in the database with a foreign key from
+   one table to another. As a consequence ``ReverseOneToOneDescriptor`` is
+   slightly different from ``ForwardManyToOneDescriptor``.
+
+4. Related objects manager for related instances on the reverse side of a
+   many-to-one relation: ``ReverseManyToOneDescriptor``.
+...

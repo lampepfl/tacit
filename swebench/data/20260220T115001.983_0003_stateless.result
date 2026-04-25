@@ -1,0 +1,9 @@
+status: failure
+-- [E007] Type Mismatch Error: -------------------------------------------------
+8 |    lines(1585 to 1595).foreach((line, i) => println(s"${1585 + i}: $line"))
+  |          ^^^^^^^^^^^^
+  |          Found:    scala.collection.immutable.Range.Inclusive
+  |          Required: Int
+  |
+  | longer explanation available when compiling with `-explain`
+1 error found

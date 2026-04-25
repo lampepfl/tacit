@@ -1,0 +1,59 @@
+status: success
+1145:             return [self]
+1146:         return external_cols
+1147: 
+1148: 
+1149: class Exists(Subquery):
+1150:     template = 'EXISTS(%(subquery)s)'
+1151:     output_field = fields.BooleanField()
+1152: 
+1153:     def __init__(self, queryset, negated=False, **kwargs):
+1154:         self.negated = negated
+1155:         super().__init__(queryset, **kwargs)
+1156: 
+1157:     def __invert__(self):
+1158:         clone = self.copy()
+1159:         clone.negated = not self.negated
+1160:         return clone
+1161: 
+1162:     def as_sql(self, compiler, connection, template=None, **extra_context):
+1163:         query = self.query.exists(using=connection.alias)
+1164:         sql, params = super().as_sql(
+1165:             compiler,
+1166:             connection,
+1167:             template=template,
+1168:             query=query,
+1169:             **extra_context,
+1170:         )
+1171:         if self.negated:
+1172:             sql = 'NOT {}'.format(sql)
+1173:         return sql, params
+1174: 
+1175:     def select_format(self, compiler, sql, params):
+1176:         # Wrap EXISTS() with a CASE WHEN expression if a database backend
+1177:         # (e.g. Oracle) doesn't support boolean expression in SELECT or GROUP
+1178:         # BY list.
+1179:         if not compiler.connection.features.supports_boolean_expr_in_select_clause:
+1180:             sql = 'CASE WHEN {} THEN 1 ELSE 0 END'.format(sql)
+1181:         return sql, params
+1182: 
+1183: 
+1184: class OrderBy(BaseExpression):
+1185:     template = '%(expression)s %(ordering)s'
+1186:     conditional = False
+1187: 
+1188:     def __init__(self, expression, descending=False, nulls_first=False, nulls_last=False):
+1189:         if nulls_first and nulls_last:
+1190:             raise ValueError('nulls_first and nulls_last are mutually exclusive')
+1191:         self.nulls_first = nulls_first
+1192:         self.nulls_last = nulls_last
+1193:         self.descending = descending
+1194:         if not hasattr(expression, 'resolve_expression'):
+1195:             raise ValueError('expression must be an expression type')
+1196:         self.expression = expression
+1197: 
+1198:     def __repr__(self):
+1199:         return "{}({}, descending={})".format(
+1200:             self.__class__.__name__, self.expression, self.descending)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,6 @@
+status: success
+155:     def match(self, path):
+253:     def match(self, path):
+304:     def match(self, path):
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

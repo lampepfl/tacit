@@ -1,0 +1,65 @@
+status: failure
+-- Error: ----------------------------------------------------------------------
+31 |          Class method to parse prefix node and return a Node.
+   |                                                ^^^^^^
+   |                            end of statement expected but 'return' found
+-- [E018] Syntax Error: --------------------------------------------------------
+65 |      Populate a template variable with the static prefix,
+   |                                   ^^^^
+   |                                   expression expected but [31mwith[0m found
+   |
+   | longer explanation available when compiling with `-explain`
+-- Error: ----------------------------------------------------------------------
+66 |      ``settings.STATIC_URL``.
+   |      ^
+   |      empty quoted identifier
+-- Error: ----------------------------------------------------------------------
+66 |      ``settings.STATIC_URL``.
+   |                           ^
+   |                           empty quoted identifier
+-- [E018] Syntax Error: --------------------------------------------------------
+70 |          {% get_static_prefix [as varname] %}
+   |                               ^
+   |                               expression expected but [31m'['[0m found
+   |
+   | longer explanation available when compiling with `-explain`
+-- [E018] Syntax Error: --------------------------------------------------------
+72 |      Examples::
+   |                ^
+   |                expression expected but [31mend of statement[0m found
+   |
+   | longer explanation available when compiling with `-explain`
+-- Error: ----------------------------------------------------------------------
+75 |          {% get_static_prefix as static_prefix %}
+   |          ^
+   |          end of statement expected but '{' found
+-- [E018] Syntax Error: --------------------------------------------------------
+83 |      Populate a template variable with the media prefix,
+   |                                   ^^^^
+   |                                   expression expected but [31mwith[0m found
+   |
+   | longer explanation available when compiling with `-explain`
+-- Error: ----------------------------------------------------------------------
+84 |      ``settings.MEDIA_URL``.
+   |      ^
+   |      empty quoted identifier
+-- Error: ----------------------------------------------------------------------
+84 |      ``settings.MEDIA_URL``.
+   |                          ^
+   |                          empty quoted identifier
+-- [E018] Syntax Error: --------------------------------------------------------
+88 |          {% get_media_prefix [as varname] %}
+   |                              ^
+   |                              expression expected but [31m'['[0m found
+   |
+   | longer explanation available when compiling with `-explain`
+-- [E018] Syntax Error: --------------------------------------------------------
+90 |      Examples::
+   |                ^
+   |                expression expected but [31mend of statement[0m found
+   |
+   | longer explanation available when compiling with `-explain`
+-- Error: ----------------------------------------------------------------------
+93 |          {% get_media_prefix as media_prefix %}
+   |          ^
+   |          end of statement expected but '{' found

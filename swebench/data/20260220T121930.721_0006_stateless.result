@@ -1,0 +1,11 @@
+status: failure
+-- [E007] Type Mismatch Error: -------------------------------------------------
+2 |  given ProcessPermission = null
+  |                            ^^^^
+  |Found:    Null
+  |Required: library.ProcessPermission
+  |Note that implicit conversions were not tried because the result of an implicit conversion
+  |must be more specific than library.ProcessPermission
+  |
+  | longer explanation available when compiling with `-explain`
+1 error found

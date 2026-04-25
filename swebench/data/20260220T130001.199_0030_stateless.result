@@ -1,0 +1,31 @@
+status: success
+289:     def test_unsupported_operations_on_combined_qs(self):
+290:         qs = Number.objects.all()
+291:         msg = 'Calling QuerySet.%s() after %s() is not supported.'
+292:         combinators = ['union']
+293:         if connection.features.supports_select_difference:
+294:             combinators.append('difference')
+295:         if connection.features.supports_select_intersection:
+296:             combinators.append('intersection')
+297:         for combinator in combinators:
+298:             for operation in (
+299:                 'annotate',
+300:                 'defer',
+301:                 'delete',
+302:                 'distinct',
+303:                 'exclude',
+304:                 'extra',
+305:                 'filter',
+306:                 'only',
+307:                 'prefetch_related',
+308:                 'select_related',
+309:                 'update',
+310:             ):
+311:                 with self.subTest(combinator=combinator, operation=operation):
+312:                     with self.assertRaisesMessage(
+313:                         NotSupportedError,
+314:                         msg % (operation, combinator),
+315:                     ):
+316:                         getattr(getattr(qs, combinator)(qs), operation)()
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

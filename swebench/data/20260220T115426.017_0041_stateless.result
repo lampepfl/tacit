@@ -1,0 +1,13 @@
+status: failure
+-- [E040] Syntax Error: --------------------------------------------------------
+58 |      (126 until 160).foreach(i => println(s"${i+1}: ${lines(i))}")
+   |                                                               ^
+   |                                             '}' expected, but ')' found
+-- [E040] Syntax Error: --------------------------------------------------------
+58 |      (126 until 160).foreach(i => println(s"${i+1}: ${lines(i))}")
+   |                                                                ^
+   |                                             ')' expected, but '}' found
+-- Error: ----------------------------------------------------------------------
+58 |      (126 until 160).foreach(i => println(s"${i+1}: ${lines(i))}")
+   |                                                                 ^
+   |                      end of statement expected but string literal found

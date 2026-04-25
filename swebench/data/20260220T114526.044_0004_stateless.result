@@ -1,0 +1,4 @@
+status: success
+Found 0 matches for header_rows in rst.py
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

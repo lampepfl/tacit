@@ -1,0 +1,13 @@
+status: success
+fields
+  related_descriptors.py
+  files.py
+  mixins.py
+  related.py
+  proxy.py
+  __init__.py
+  reverse_related.py
+  related_lookups.py
+  json.py
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

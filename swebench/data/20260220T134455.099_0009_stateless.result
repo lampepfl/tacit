@@ -1,0 +1,33 @@
+status: success
+1626:         return getattr(self, cache_attr)
+1627: 
+1628:     def contribute_to_class(self, cls, name, **kwargs):
+1629:         # To support multiple relations to self, it's useful to have a non-None
+1630:         # related name on symmetrical relations for internal reasons. The
+1631:         # concept doesn't make a lot of sense externally ("you want me to
+1632:         # specify *what* on my non-reversible relation?!"), so we set it up
+1633:         # automatically. The funky name reduces the chance of an accidental
+1634:         # clash.
+1635:         if self.remote_field.symmetrical and (
+1636:             self.remote_field.model == RECURSIVE_RELATIONSHIP_CONSTANT or
+1637:             self.remote_field.model == cls._meta.object_name
+1638:         ):
+1639:             self.remote_field.related_name = "%s_rel_+" % name
+1640:         elif self.remote_field.is_hidden():
+1641:             # If the backwards relation is disabled, replace the original
+1642:             # related_name with one generated from the m2m field name. Django
+1643:             # still uses backwards relations internally and we need to avoid
+1644:             # clashes between multiple m2m fields with related_name == '+'.
+1645:             self.remote_field.related_name = '_%s_%s_%s_+' % (
+1646:                 cls._meta.app_label,
+1647:                 cls.__name__.lower(),
+1648:                 name,
+1649:             )
+1650: 
+1651:         super().contribute_to_class(cls, name, **kwargs)
+1652: 
+1653:         # The intermediate m2m model is not auto created if:
+1654:         #  1) There is a manually specified intermediate, or
+1655:         #  2) The class owning the m2m field is abstract.
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

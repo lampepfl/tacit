@@ -1,0 +1,39 @@
+status: success
+201:         return self.template % self.parts
+202: 
+203: 
+204: class Expressions(TableColumns):
+205:     def __init__(self, table, expressions, compiler, quote_value):
+206:         self.compiler = compiler
+207:         self.expressions = expressions
+208:         self.quote_value = quote_value
+209:         columns = [col.target.column for col in self.compiler.query._gen_cols([self.expressions])]
+210:         super().__init__(table, columns)
+211: 
+212:     def rename_table_references(self, old_table, new_table):
+213:         if self.table != old_table:
+214:             return
+215:         expressions = deepcopy(self.expressions)
+216:         self.columns = []
+217:         for col in self.compiler.query._gen_cols([expressions]):
+218:             col.alias = new_table
+219:         self.expressions = expressions
+220:         super().rename_table_references(old_table, new_table)
+221: 
+222:     def rename_column_references(self, table, old_column, new_column):
+223:         if self.table != table:
+224:             return
+225:         expressions = deepcopy(self.expressions)
+226:         self.columns = []
+227:         for col in self.compiler.query._gen_cols([expressions]):
+228:             if col.target.column == old_column:
+229:                 col.target.column = new_column
+230:             self.columns.append(col.target.column)
+231:         self.expressions = expressions
+232: 
+233:     def __str__(self):
+234:         sql, params = self.compiler.compile(self.expressions)
+235:         params = map(self.quote_value, params)
+236:         return sql % tuple(params)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

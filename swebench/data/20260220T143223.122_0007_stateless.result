@@ -1,0 +1,25 @@
+status: success
+=== Current state of lines 845-865 ===
+844:             else:
+845:                 widget_attrs = final_attrs
+846:             subwidgets.append(widget.get_context(widget_name, widget_value, widget_attrs)['widget'])
+847:         context['widget']['subwidgets'] = subwidgets
+848:         return context
+849:         return id_
+850: 
+851:     def value_from_datadict(self, data, files, name):
+852:         return [
+853:             widget.value_from_datadict(data, files, name + widget_name)
+854:             for widget_name, widget in zip(self.widgets_names, self.widgets)
+855:         ]
+856: 
+857:     def value_omitted_from_data(self, data, files, name):
+858:         return all(
+859:             widget.value_omitted_from_data(data, files, name + widget_name)
+860:             for widget_name, widget in zip(self.widgets_names, self.widgets)
+861:         )
+862: 
+863:     def decompress(self, value):
+864:         """
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,13 @@
+status: success
+67: def _has_contribute_to_class(value):
+68:     # Only call contribute_to_class() if it's bound.
+69:     return not inspect.isclass(value) and hasattr(value, 'contribute_to_class')
+90:         # Pass all attrs without a (Django-specific) contribute_to_class()
+95:             if _has_contribute_to_class(obj):
+158:         # Add remaining attributes (those with a contribute_to_class() method)
+325:         if _has_contribute_to_class(value):
+326:             value.contribute_to_class(cls, name)
+343:             # contribute_to_class().
+368:         # Options.contribute_to_class() because fields haven't been added to
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

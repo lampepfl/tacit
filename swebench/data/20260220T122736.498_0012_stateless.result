@@ -1,0 +1,29 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = List(
+  "257: class TypeSerializer(BaseSerializer):",
+  "258:     def serialize(self):",
+  "259:         special_cases = [",
+  "260:             (models.Model, \"models.Model\", []),",
+  "261:             (type(None), 'type(None)', []),",
+  "262:         ]",
+  "263:         for case, string, imports in special_cases:",
+  "264:             if case is self.value:",
+  "265:                 return string, set(imports)",
+  "266:         if hasattr(self.value, \"__module__\"):",
+  "267:             module = self.value.__module__",
+  "268:             if module == builtins.__name__:",
+  "269:                 return self.value.__name__, set()",
+  "270:             else:",
+  "271:                 return \"%s.%s\" % (module, self.value.__name__), {\"import %s\" % module}",
+  "272: ",
+  "273: ",
+  "274: class UUIDSerializer(BaseSerializer):",
+  "275:     def serialize(self):",
+  "276:         return \"uuid.%s\" % repr(self.value), {\"import uuid\"}",
+  "277: ",
+  "278: ",
+  "279: class Serializer:",
+  "280:     _registry = {",
+  "281:         # Some of these are order-dependent."
+)

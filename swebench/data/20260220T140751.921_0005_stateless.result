@@ -1,0 +1,15 @@
+status: success
+84: @register.filter(is_safe=True)
+85: def json_script(value, element_id=None):
+86:     """
+87:     Output value JSON-encoded, wrapped in a <script type="application/json">
+88:     tag (with an optional id).
+89:     """
+90:     return _json_script(value, element_id)
+91: 
+92: 
+93: @register.filter(is_safe=True)
+94: def floatformat(text, arg=-1):
+95:     """
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,9 @@
+status: success
+1166:                  limit_choices_to=None, symmetrical=None, through=None,
+1180:         if symmetrical is None:
+1181:             symmetrical = (to == RECURSIVE_RELATIONSHIP_CONSTANT)
+1193:             symmetrical=symmetrical,
+1630:         # related name on symmetrical relations for internal reasons. The
+1635:         if self.remote_field.symmetrical and (
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

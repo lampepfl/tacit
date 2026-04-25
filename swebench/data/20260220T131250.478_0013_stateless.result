@@ -1,0 +1,69 @@
+status: success
+335:     def _sort_migrations(self):
+336:         """
+337:         Reorder to make things possible. Reordering may be needed so FKs work
+338:         nicely inside the same app.
+339:         """
+340:         for app_label, ops in sorted(self.generated_operations.items()):
+341:             # construct a dependency graph for intra-app dependencies
+342:             dependency_graph = {op: set() for op in ops}
+343:             for op in ops:
+344:                 for dep in op._auto_deps:
+345:                     # Resolve intra-app dependencies to handle circular
+346:                     # references involving a swappable model.
+347:                     dep = self._resolve_dependency(dep)[0]
+348:                     if dep[0] == app_label:
+349:                         for op2 in ops:
+350:                             if self.check_dependency(op2, dep):
+351:                                 dependency_graph[op].add(op2)
+352: 
+353:             # we use a stable sort for deterministic tests & general behavior
+354:             self.generated_operations[app_label] = stable_topological_sort(ops, dependency_graph)
+355: 
+356:     def _optimize_migrations(self):
+357:         # Add in internal dependencies among the migrations
+358:         for app_label, migrations in self.migrations.items():
+359:             for m1, m2 in zip(migrations, migrations[1:]):
+360:                 m2.dependencies.append((app_label, m1.name))
+361: 
+362:         # De-dupe dependencies
+363:         for migrations in self.migrations.values():
+364:             for migration in migrations:
+365:                 migration.dependencies = list(set(migration.dependencies))
+366: 
+367:         # Optimize migrations
+368:         for app_label, migrations in self.migrations.items():
+369:             for migration in migrations:
+370:                 migration.operations = MigrationOptimizer().optimize(migration.operations, app_label)
+371: 
+372:     def check_dependency(self, operation, dependency):
+373:         """
+374:         Return True if the given operation depends on the given dependency,
+375:         False otherwise.
+376:         """
+377:         # Created model
+378:         if dependency[2] is None and dependency[3] is True:
+379:             return (
+380:                 isinstance(operation, operations.CreateModel) and
+381:                 operation.name_lower == dependency[1].lower()
+382:             )
+383:         # Created field
+384:         elif dependency[2] is not None and dependency[3] is True:
+385:             return (
+386:                 (
+387:                     isinstance(operation, operations.CreateModel) and
+388:                     operation.name_lower == dependency[1].lower() and
+389:                     any(dependency[2] == x for x, y in operation.fields)
+390:                 ) or
+391:                 (
+392:                     isinstance(operation, operations.AddField) and
+393:                     operation.model_name_lower == dependency[1].lower() and
+394:                     operation.name_lower == dependency[2].lower()
+395:                 )
+396:             )
+397:         # Removed field
+398:         elif dependency[2] is not None and dependency[3] is False:
+399:             return (
+400:                 isinstance(operation, operations.RemoveField) and
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

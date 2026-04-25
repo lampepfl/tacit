@@ -1,0 +1,8 @@
+status: success
+stdout: 
+stderr:   File "<string>", line 2
+    print('Test 1 - year 80:', h.parse_http_date('Thu, 01 Jan 80 00:00:00 GMT'))
+IndentationError: unexpected indent
+exit: 1
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

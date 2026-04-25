@@ -1,0 +1,56 @@
+status: success
+744:         new_type = new_db_params["type"]
+745:         if (old_type is None and old_field.remote_field is None) or (
+746:             new_type is None and new_field.remote_field is None
+747:         ):
+748:             raise ValueError(
+749:                 "Cannot alter field %s into %s - they do not properly define "
+750:                 "db_type (are you using a badly-written custom field?)"
+751:                 % (old_field, new_field),
+752:             )
+753:         elif (
+754:             old_type is None
+755:             and new_type is None
+756:             and (
+757:                 old_field.remote_field.through
+758:                 and new_field.remote_field.through
+759:                 and old_field.remote_field.through._meta.auto_created
+760:                 and new_field.remote_field.through._meta.auto_created
+761:             )
+762:         ):
+763:             return self._alter_many_to_many(model, old_field, new_field, strict)
+764:         elif (
+765:             old_type is None
+766:             and new_type is None
+767:             and (
+768:                 old_field.remote_field.through
+769:                 and new_field.remote_field.through
+770:                 and not old_field.remote_field.through._meta.auto_created
+771:                 and not new_field.remote_field.through._meta.auto_created
+772:             )
+773:         ):
+774:             # Both sides have through models; this is a no-op.
+775:             return
+776:         elif old_type is None or new_type is None:
+777:             raise ValueError(
+778:                 "Cannot alter field %s into %s - they are not compatible types "
+779:                 "(you cannot alter to or from M2M fields, or add or remove "
+780:                 "through= on M2M fields)" % (old_field, new_field)
+781:             )
+782: 
+783:         self._alter_field(
+784:             model,
+785:             old_field,
+786:             new_field,
+787:             old_type,
+788:             new_type,
+789:             old_db_params,
+790:             new_db_params,
+791:             strict,
+792:         )
+793: 
+794:     def _alter_field(
+795:         self,
+796:         model,
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

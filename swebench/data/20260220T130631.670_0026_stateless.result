@@ -1,0 +1,13 @@
+status: success
+def as_sql(self, compiler, connection):
+        return connection.ops.quote_name(self.refs), []
+
+    def get_group_by_cols(self, alias=None):
+        return [self]
+
+
+class ExpressionList(Func):
+    """
+    An expression containing multiple expressions. Can be used to provide a
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

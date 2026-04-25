@@ -1,0 +1,18 @@
+status: success
+questioner.py: 9918 bytes
+graph.py: 12841 bytes
+recorder.py: 3425 bytes
+__init__.py: 97 bytes
+autodetector.py: 0 bytes
+operations: 256 bytes
+utils.py: 388 bytes
+loader.py: 15027 bytes
+optimizer.py: 3283 bytes
+serializer.py: 12346 bytes
+exceptions.py: 1204 bytes
+writer.py: 11293 bytes
+migration.py: 8242 bytes
+executor.py: 17797 bytes
+state.py: 25613 bytes
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

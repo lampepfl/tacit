@@ -1,0 +1,13 @@
+status: success
+43:     author_empty = ModelState("testapp", "Author", [("id", models.AutoField(primary_key=True))])
+45:         ("id", models.AutoField(primary_key=True)),
+49:         ("id", models.AutoField(primary_key=True)),
+53:         ("id", models.AutoField(primary_key=True)),
+57:         ("id", models.AutoField(primary_key=True)),
+61:         ("id", models.AutoField(primary_key=True)),
+65:         ("id", models.AutoField(primary_key=True)),
+71:         ("id", models.AutoField(primary_key=True)),
+77:         ("id", models.AutoField(primary_key=True)),
+83:         ("id", models.AutoField(primary_key=True)),
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,37 @@
+status: failure
+-- [E018] Syntax Error: --------------------------------------------------------
+21 |      Common methods used by WSGI and ASGI handlers.
+   |                                                   ^
+   |                                       expression expected but [31m'.'[0m found
+   |
+   | longer explanation available when compiling with `-explain`
+-- Error: ----------------------------------------------------------------------
+38 |          Check if the path should be handled. Ignore the path if:
+   |                ^^
+   |                end of statement expected but 'if' found
+-- [E018] Syntax Error: --------------------------------------------------------
+46 |          Return the relative path to the media file on disk for the given URL.
+   |                                                             ^^^
+   |                                       expression expected but [31mfor[0m found
+   |
+   | longer explanation available when compiling with `-explain`
+-- [E018] Syntax Error: --------------------------------------------------------
+70 |      WSGI middleware that intercepts calls to the static files directory, as
+   |                                                                         ^
+   |                                       expression expected but [31m','[0m found
+   |
+   | longer explanation available when compiling with `-explain`
+-- Error: ----------------------------------------------------------------------
+71 |      defined by the STATIC_URL setting, and serves those files.
+   |                                       ^
+   |                                 end of statement expected but ',' found
+-- [E018] Syntax Error: --------------------------------------------------------
+86 |      ASGI application which wraps another and intercepts requests for static
+   |                                                                   ^^^
+   |                                       expression expected but [31mfor[0m found
+   |
+   | longer explanation available when compiling with `-explain`
+-- Error: ----------------------------------------------------------------------
+87 |      files, passing them off to Django's static file serving.
+   |           ^
+   |           end of statement expected but ',' found

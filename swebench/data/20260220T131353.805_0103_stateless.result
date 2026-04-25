@@ -1,0 +1,14 @@
+status: failure
+-- [E006] Not Found Error: -----------------------------------------------------
+4 |  val lines = fs.access("django/db/models/fields/__init__.py").readLines()
+  |              ^^
+  |              Not found: fs
+  |
+  | longer explanation available when compiling with `-explain`
+-- [E006] Not Found Error: -----------------------------------------------------
+38 |  fs.access("django/db/models/fields/__init__.py").write(modifiedContent)
+   |  ^^
+   |  Not found: fs
+   |
+   | longer explanation available when compiling with `-explain`
+2 errors found

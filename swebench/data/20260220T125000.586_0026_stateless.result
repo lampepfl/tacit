@@ -1,0 +1,23 @@
+status: success
+79: class Collector:
+80:     def __init__(self, using):
+81:         self.using = using
+82:         # Initially, {model: {instances}}, later values become lists.
+83:         self.data = defaultdict(set)
+84:         # {model: {(field, value): {instances}}}
+85:         self.field_updates = defaultdict(partial(defaultdict, set))
+86:         # {model: {field: {instances}}}
+87:         self.restricted_objects = defaultdict(partial(defaultdict, set))
+88:         # fast_deletes is a list of queryset-likes that can be deleted without
+89:         # fetching the objects into memory.
+90:         self.fast_deletes = []
+91: 
+92:         # Tracks deletion-order dependency for databases without transactions
+93:         # or ability to defer constraint checks. Only concrete model classes
+94:         # should be included, as the dependencies exist only between actual
+95:         # database tables; proxy models are represented here by their concrete
+96:         # parent.
+97:         self.dependencies = defaultdict(set)  # {model: {models}}
+98: 
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

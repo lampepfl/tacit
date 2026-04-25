@@ -1,0 +1,11 @@
+status: success
+java.lang.ArrayIndexOutOfBoundsException: Index 16561 out of bounds for length 1909
+  at rs$line$2$.run$$anonfun$1$$anonfun$1(rs$line$2:8)
+  at scala.runtime.java8.JFunction1$mcVI$sp.apply(JFunction1$mcVI$sp.scala:20)
+  at scala.collection.immutable.Range.foreach(Range.scala:256)
+  at rs$line$2$.run$$anonfun$1(rs$line$2:7)
+  at scala.runtime.function.JProcedure1.apply(JProcedure1.java:15)
+  at scala.runtime.function.JProcedure1.apply(JProcedure1.java:10)
+  at library.InterfaceImpl.requestFileSystem(InterfaceImpl.scala:33)
+  at rs$line$2$.run(rs$line$2:10)
+  ... 53 elided

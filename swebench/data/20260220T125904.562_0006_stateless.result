@@ -1,0 +1,44 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = List(
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13033/repo/django/db/models/sql/query.py",
+    lineNumber = 184,
+    line = "        self.order_by = ()"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13033/repo/django/db/models/sql/query.py",
+    lineNumber = 219,
+    line = "        self.extra_order_by = ()"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13033/repo/django/db/models/sql/query.py",
+    lineNumber = 644,
+    line = "        self.order_by = rhs.order_by or self.order_by"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13033/repo/django/db/models/sql/query.py",
+    lineNumber = 645,
+    line = "        self.extra_order_by = rhs.extra_order_by or self.extra_order_by"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13033/repo/django/db/models/sql/query.py",
+    lineNumber = 1903,
+    line = "                        'Passing column raw column aliases to order_by() is '"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13033/repo/django/db/models/sql/query.py",
+    lineNumber = 1905,
+    line = "                        'passing it to order_by().' % item,"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13033/repo/django/db/models/sql/query.py",
+    lineNumber = 1925,
+    line = "                    'Using an aggregate in order_by() without also including '"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13033/repo/django/db/models/sql/query.py",
+    lineNumber = 1929,
+    line = "            raise FieldError('Invalid order_by arguments: %s' % errors)"
+  ),
+...

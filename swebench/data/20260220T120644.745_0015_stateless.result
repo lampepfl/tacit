@@ -1,0 +1,34 @@
+status: success
+2080:     def set_values(self, fields):
+2081:         self.select_related = False
+2082:         self.clear_deferred_loading()
+2083:         self.clear_select_fields()
+2084: 
+2085:         if self.group_by is True:
+2086:             self.add_fields((f.attname for f in self.model._meta.concrete_fields), False)
+2087:             self.set_group_by()
+2088:             self.clear_select_fields()
+2089: 
+2090:         if fields:
+2091:             field_names = []
+2092:             extra_names = []
+2093:             annotation_names = []
+2094:             if not self.extra and not self.annotations:
+2095:                 # Shortcut - if there are no extra or annotations, then
+2096:                 # the values() clause must be just field names.
+2097:                 field_names = list(fields)
+2098:             else:
+2099:                 self.default_cols = False
+2100:                 for f in fields:
+2101:                     if f in self.extra_select:
+2102:                         extra_names.append(f)
+2103:                     elif f in self.annotation_select:
+2104:                         annotation_names.append(f)
+2105:                     else:
+2106:                         field_names.append(f)
+2107:             self.set_extra_mask(extra_names)
+2108:             self.set_annotation_mask(annotation_names)
+2109:         else:
+2110:             field_names = [f.attname for f in self.model._meta.concrete_fields]
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

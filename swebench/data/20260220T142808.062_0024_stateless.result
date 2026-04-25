@@ -1,0 +1,29 @@
+status: success
+76:         #    SomeModel.objects.values('name', 'pk').annotate(Count('somecol')).values('pk')
+77:         #    GROUP BY: name, pk
+79:         #    SomeModel.objects.values('name').annotate(Count('somecol')).values('pk')
+80:         #    GROUP BY: name, pk
+148:         if self.connection.features.allows_group_by_pk:
+150:             pk = None
+154:                 if (getattr(expr, 'target', None) == self.query.model._meta.pk and
+156:                     pk = expr
+161:             if pk:
+162:                 pk_aliases = {
+166:                 expressions = [pk] + [
+169:                         getattr(expr, 'alias', None) is not None and expr.alias not in pk_aliases
+172:         elif self.connection.features.allows_group_by_selected_pks:
+179:             pks = {
+184:                     self.connection.features.allows_group_by_selected_pks_on_model(expr.target.model)
+187:             aliases = {expr.alias for expr in pks}
+189:                 expr for expr in expressions if expr in pks or getattr(expr, 'alias', None) not in aliases
+1319:         fields = self.query.fields or [opts.pk]
+1329:             value_rows = [[self.connection.ops.pk_default_value()] for _ in self.query.objs]
+1390:                 cursor, self.query.get_meta().db_table, self.query.get_meta().pk.column
+1418:         pk = self.query.model._meta.pk
+1420:             pk.get_col(self.query.get_initial_alias())
+1424:         outerq.add_q(Q(pk__in=innerq))
+1533:         query.add_fields([query.get_meta().pk.name])
+1548:             self.query.add_filter(('pk__in', idents))
+1552:             self.query.add_filter(('pk__in', query))
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

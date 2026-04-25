@@ -1,0 +1,8 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = """@receiver(file_changed, dispatch_uid='template_loaders_file_changed')
+def template_changed(sender, file_path, **kwargs):
+    for template_dir in get_template_directories():
+        if template_dir in file_path.parents:
+            reset_loaders()
+            return True"""

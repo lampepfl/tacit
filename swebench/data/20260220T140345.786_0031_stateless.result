@@ -1,0 +1,5 @@
+status: failure
+
+Error: Code validation failed (1 violation):
+  [file-io-java] Line 1: Direct java.io access is forbidden; use requestFileSystem
+    > import java.io.File

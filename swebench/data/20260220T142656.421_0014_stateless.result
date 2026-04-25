@@ -1,0 +1,16 @@
+status: success
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12284/repo/django/db/models/functions/datetime.py:65:         field = copy.lhs.output_field
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12284/repo/django/db/models/functions/datetime.py:74:                 "Cannot extract time component '%s' from DateField '%s'. " % (copy.lookup_name, field.name)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12284/repo/django/db/models/functions/datetime.py:82:                 % (copy.lookup_name, field.name)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12284/repo/django/db/models/functions/datetime.py:207:         field = copy.lhs.output_field
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12284/repo/django/db/models/functions/datetime.py:214:         if not isinstance(copy.output_field, (DateField, DateTimeField, TimeField)):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12284/repo/django/db/models/functions/datetime.py:219:         output_field = class_output_field or copy.output_field
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12284/repo/django/db/models/functions/datetime.py:220:         has_explicit_output_field = class_output_field or field.__class__ is not copy.output_field.__class__
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12284/repo/django/db/models/fields/files.py:198:             file_copy = self.field.attr_class(instance, self.field, file.name)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12284/repo/django/db/models/fields/__init__.py:531:             obj.remote_field = copy.copy(self.remote_field)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12284/repo/django/db/models/fields/__init__.py:548:         not a new copy of that field. So, use the app registry to load the
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12284/repo/django/db/models/base.py:277:                         new_field = copy.deepcopy(field)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12284/repo/django/db/models/base.py:303:                     field = copy.deepcopy(field)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12284/repo/django/db/models/sql/query.py:324:             # Use deepcopy because select_related stores fields in nested
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

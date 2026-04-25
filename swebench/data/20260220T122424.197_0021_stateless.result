@@ -1,0 +1,7 @@
+status: success
+Field class at: 2741
+749:     def contribute_to_class(self, cls, name, private_only=False):
+1189:     def contribute_to_class(self, cls, name, **kwargs):
+2357:     def contribute_to_class(self, cls, name, **kwargs):
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

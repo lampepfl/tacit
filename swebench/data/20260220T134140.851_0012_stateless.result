@@ -1,0 +1,8 @@
+status: failure
+-- [E006] Not Found Error: -----------------------------------------------------
+2 |  request/tacit/Work/SafeExecMCPFileSystem("/Users/bench/swebench_runs/20260220_122941/workspace/django__django-14411/repo") { 
+  |  ^^^^^^^
+  |  Not found: request - did you mean reflect? or perhaps require?
+  |
+  | longer explanation available when compiling with `-explain`
+1 error found

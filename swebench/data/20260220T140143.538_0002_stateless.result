@@ -1,0 +1,22 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = List(
+  "templatetags",
+  "middleware",
+  "forms",
+  "core",
+  "test",
+  "shortcuts.py",
+  "dispatch",
+  "template",
+  "__init__.py",
+  "utils",
+  "contrib",
+  "http",
+  "urls",
+  "db",
+  "views",
+  "conf",
+  "apps",
+  "__main__.py"
+)

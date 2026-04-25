@@ -1,0 +1,42 @@
+status: success
+967: 
+968:     def database_backwards(self, app_label, schema_editor, from_state, to_state):
+969:         if self.old_fields:
+970:             from_model = from_state.apps.get_model(app_label, self.model_name)
+971:             columns = [
+972:                 from_model._meta.get_field(field).column for field in self.old_fields
+973:             ]
+974:             matching_index_name = schema_editor._constraint_names(
+975:                 from_model, column_names=columns, index=True
+976:             )
+977:             if len(matching_index_name) != 1:
+978:                 raise ValueError(
+979:                     "Found wrong number (%s) of indexes for %s(%s)."
+980:                     % (
+981:                         len(matching_index_name),
+982:                         from_model._meta.db_table,
+983:                         ", ".join(columns),
+984:                     )
+985:                 )
+986:             old_index = models.Index(
+987:                 fields=self.old_fields,
+988:                 name=schema_editor._create_index_name(
+989:                     from_model._meta.db_table, columns
+990:                 ),
+991:             )
+992:             new_index = models.Index(
+993:                 fields=self.old_fields,
+994:                 name=matching_index_name[0],
+995:             )
+996:             schema_editor.rename_index(from_model, old_index, new_index)
+997:             return
+998: 
+999: 
+1000:         self.new_name_lower, self.old_name_lower = (
+1001:             self.old_name_lower,
+1002:             self.new_name_lower,
+1003:         )
+1004:         self.new_name, self.old_name = self.old_name, self.new_name
+1005: 
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

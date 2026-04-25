@@ -1,0 +1,83 @@
+status: success
+1860:                         )
+1861:                     )
+1862: 
+1863:         return errors
+1864: 
+1865: 
+1866:       @classmethod
+1867:       def _check_constraints(cls, databases):
+1868:           errors = []
+1869:           # Validate fields in UniqueConstraint
+1870:           from django.db import models
+1871:           for constraint in cls._meta.constraints:
+1872:               if isinstance(constraint, UniqueConstraint):
+1873:                   for field_name in constraint.fields:
+1874:                       if field_name not in cls._meta._forward_fields_map:
+1875:                           errors.append(
+1876:                               checks.Error(
+1877:                                   "'%s' refers to the nonexistent field '%s'." % (
+1878:                                       'constraints', field_name,
+1879:                                   ),
+1880:                                   obj=cls,
+1881:                                   id='models.E012',
+1882:                               )
+1883:                           )
+1884:                       else:
+1885:                           field = cls._meta._forward_fields_map[field_name]
+1886:                           if isinstance(field.remote_field, models.ManyToManyRel):
+1887:                               errors.append(
+1888:                                   checks.Error(
+1889:                                       "'%s' refers to a ManyToManyField '%s', but "
+1890:                                       "ManyToManyFields are not permitted in '%s'." % (
+1891:                                           'constraints', field_name, 'constraints',
+1892:                                       ),
+1893:                                       obj=cls,
+1894:                                       id='models.E013',
+1895:                                   )
+1896:                               )
+1897:   
+1898:         errors = []
+1899:         for db in databases:
+1900:             if not router.allow_migrate_model(db, cls):
+1901:                 continue
+1902:             connection = connections[db]
+1903:             if not (
+1904:                 connection.features.supports_table_check_constraints or
+1905:                 'supports_table_check_constraints' in cls._meta.required_db_features
+1906:             ) and any(
+1907:                 isinstance(constraint, CheckConstraint)
+1908:                 for constraint in cls._meta.constraints
+1909:             ):
+1910:                 errors.append(
+1911:                     checks.Warning(
+1912:                         '%s does not support check constraints.' % connection.display_name,
+1913:                         hint=(
+1914:                             "A constraint won't be created. Silence this "
+1915:                             "warning if you don't care about it."
+1916:                         ),
+1917:                         obj=cls,
+1918:                         id='models.W027',
+1919:                     )
+1920:                 )
+1921:             if not (
+1922:                 connection.features.supports_partial_indexes or
+1923:                 'supports_partial_indexes' in cls._meta.required_db_features
+1924:             ) and any(
+1925:                 isinstance(constraint, UniqueConstraint) and constraint.condition is not None
+1926:                 for constraint in cls._meta.constraints
+1927:             ):
+1928:                 errors.append(
+1929:                     checks.Warning(
+1930:                         '%s does not support unique constraints with '
+1931:                         'conditions.' % connection.display_name,
+1932:                         hint=(
+1933:                             "A constraint won't be created. Silence this "
+1934:                             "warning if you don't care about it."
+1935:                         ),
+1936:                         obj=cls,
+1937:                         id='models.W036',
+1938:                     )
+1939:                 )
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

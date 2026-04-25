@@ -1,0 +1,25 @@
+status: success
+-- Error: ----------------------------------------------------------------------
+3 |    exec("python", List("-c", "
+  |                              ^
+  |                              unclosed string literal
+-- Error: ----------------------------------------------------------------------
+9 |  print('Linear1D & Linear1D:')
+  |                             ^
+  |                             unclosed character literal
+-- Error: ----------------------------------------------------------------------
+13 |  print('Pix2Sky_TAN & (Linear1D & Linear1D):')
+   |                                             ^
+   |                                             unclosed character literal
+-- Error: ----------------------------------------------------------------------
+18 |  print('Expected:')
+   |                  ^
+   |                  unclosed character literal
+-- Error: ----------------------------------------------------------------------
+26 |  print('Test passed:', np.array_equal(result, expected))
+   |                     ^
+   |                     unclosed character literal
+-- Error: ----------------------------------------------------------------------
+27 |  "))
+   |  ^
+   |  unclosed string literal

@@ -1,0 +1,29 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = List(
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14997/repo/tests/schema/tests.py",
+    lineNumber = 1287,
+    line = "    def test_alter_field_o2o_keeps_unique(self):"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14997/repo/tests/schema/tests.py",
+    lineNumber = 3307,
+    line = "            editor.alter_field(model, get_field(unique=True), field, strict=True)"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14997/repo/tests/schema/tests.py",
+    lineNumber = 3558,
+    line = "    def test_alter_field_add_unique_to_charfield(self):"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14997/repo/tests/schema/tests.py",
+    lineNumber = 3600,
+    line = "    def test_alter_field_add_unique_to_charfield_with_db_index(self):"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14997/repo/tests/schema/tests.py",
+    lineNumber = 3629,
+    line = "    def test_alter_field_remove_unique_and_db_index_from_charfield(self):"
+  )
+)

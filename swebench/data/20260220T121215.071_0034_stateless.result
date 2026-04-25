@@ -1,0 +1,4 @@
+status: success
+stdout: 220924800: 1977-01-01 00:00:00
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

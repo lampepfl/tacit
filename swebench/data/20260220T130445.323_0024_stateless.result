@@ -1,0 +1,5 @@
+status: failure
+
+Error: Code validation failed (1 violation):
+  [cast-escape] Line 2: .asInstanceOf is forbidden
+    > val fs = requestFileSystem("/tmp") { (fs: FileSystem) => fs.asInstanceOf[Object] }

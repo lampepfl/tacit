@@ -1,0 +1,44 @@
+status: success
+1196:     with pytest.raises(KeyError):
+1197:         nd1.add(nd2, compare_wcs=wcs_comp_func, tolerance=1)
+1198: 
+1199: 
+1200: def test_arithmetics_mask_func():
+1201:     def mask_sad_func(mask1, mask2, fun=0):
+1202:         if fun > 0.5:
+1203:             return mask2
+1204:         else:
+1205:             return mask1
+1206: 
+1207:     meta1 = {"a": 1}
+1208:     meta2 = {"a": 3, "b": 2}
+1209:     mask1 = [True, False, True]
+1210:     mask2 = [True, False, False]
+1211:     uncertainty1 = StdDevUncertainty([1, 2, 3])
+1212:     uncertainty2 = StdDevUncertainty([1, 2, 3])
+1213:     data1 = [1, 1, 1]
+1214:     data2 = [1, 1, 1]
+1215: 
+1216:     nd1 = NDDataArithmetic(data1, meta=meta1, mask=mask1, uncertainty=uncertainty1)
+1217:     nd2 = NDDataArithmetic(data2, meta=meta2, mask=mask2, uncertainty=uncertainty2)
+1218: 
+1219:     nd3 = nd1.add(nd2, handle_mask=mask_sad_func)
+1220:     assert_array_equal(nd3.mask, nd1.mask)
+1221: 
+1222:     nd4 = nd1.add(nd2, handle_mask=mask_sad_func, mask_fun=1)
+1223:     assert_array_equal(nd4.mask, nd2.mask)
+1224: 
+1225:     with pytest.raises(KeyError):
+1226:         nd1.add(nd2, handle_mask=mask_sad_func, fun=1)
+1227: 
+1228: 
+1229: @pytest.mark.parametrize("meth", ["add", "subtract", "divide", "multiply"])
+1230: def test_two_argument_useage(meth):
+1231:     ndd1 = NDDataArithmetic(np.ones((3, 3)))
+1232:     ndd2 = NDDataArithmetic(np.ones((3, 3)))
+1233: 
+1234:     # Call add on the class (not the instance) and compare it with already
+1235:     # tested usage:
+1236:     ndd3 = getattr(NDDataArithmetic, meth)(ndd1, ndd2)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

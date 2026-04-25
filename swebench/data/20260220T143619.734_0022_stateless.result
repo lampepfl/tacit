@@ -1,0 +1,87 @@
+status: success
+198: class AlterField(FieldOperation):
+199:     """
+200:     Alter a field's database column (e.g. null, max_length) to the provided
+201:     new field.
+202:     """
+203: 
+204:     def __init__(self, model_name, name, field, preserve_default=True):
+205:         self.preserve_default = preserve_default
+206:         super().__init__(model_name, name, field)
+207: 
+208:     def deconstruct(self):
+209:         kwargs = {
+210:             "model_name": self.model_name,
+211:             "name": self.name,
+212:             "field": self.field,
+213:         }
+214:         if self.preserve_default is not True:
+215:             kwargs["preserve_default"] = self.preserve_default
+216:         return (self.__class__.__name__, [], kwargs)
+217: 
+218:     def state_forwards(self, app_label, state):
+219:         state.alter_field(
+220:             app_label,
+221:             self.model_name_lower,
+222:             self.name,
+223:             self.field,
+224:             self.preserve_default,
+225:         )
+226: 
+227:     def database_forwards(self, app_label, schema_editor, from_state, to_state):
+228:         to_model = to_state.apps.get_model(app_label, self.model_name)
+229:         if self.allow_migrate_model(schema_editor.connection.alias, to_model):
+230:             from_model = from_state.apps.get_model(app_label, self.model_name)
+231:             from_field = from_model._meta.get_field(self.name)
+232:             to_field = to_model._meta.get_field(self.name)
+233:             if not self.preserve_default:
+234:                 to_field.default = self.field.default
+235:             schema_editor.alter_field(from_model, from_field, to_field)
+236:             if not self.preserve_default:
+237:                 to_field.default = NOT_PROVIDED
+238: 
+239:     def database_backwards(self, app_label, schema_editor, from_state, to_state):
+240:         self.database_forwards(app_label, schema_editor, from_state, to_state)
+241: 
+242:     def describe(self):
+243:         return "Alter field %s on %s" % (self.name, self.model_name)
+244: 
+245:     @property
+246:     def migration_name_fragment(self):
+247:         return "alter_%s_%s" % (self.model_name_lower, self.name_lower)
+248: 
+249:     def reduce(self, operation, app_label):
+250:         if isinstance(operation, RemoveField) and self.is_same_field_operation(
+251:             operation
+252:         ):
+253:             return [operation]
+254:         elif (
+255:             isinstance(operation, RenameField)
+256:             and self.is_same_field_operation(operation)
+257:             and self.field.db_column is None
+258:         ):
+259:             return [
+260:                 operation,
+261:                 AlterField(
+262:                     model_name=self.model_name,
+263:                     name=operation.new_name,
+264:                     field=self.field,
+265:                 ),
+266:             ]
+267:         return super().reduce(operation, app_label)
+268: 
+269: 
+270: class RenameField(FieldOperation):
+271:     """Rename a field on the model. Might affect db_column too."""
+272: 
+273:     def __init__(self, model_name, old_name, new_name):
+274:         self.old_name = old_name
+275:         self.new_name = new_name
+276:         super().__init__(model_name, old_name)
+277: 
+278:     @cached_property
+279:     def old_name_lower(self):
+280:         return self.old_name.lower()
+281: 
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

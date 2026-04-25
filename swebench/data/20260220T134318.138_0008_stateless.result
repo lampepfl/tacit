@@ -1,0 +1,39 @@
+status: success
+65: 
+66:     #############
+67:     # OPERATORS #
+68:     #############
+69: 
+70:     def __neg__(self):
+71:         return self._combine(-1, self.MUL, False)
+72: 
+73:     def __add__(self, other):
+74:         return self._combine(other, self.ADD, False)
+75: 
+76:     def __sub__(self, other):
+77:         return self._combine(other, self.SUB, False)
+78: 
+79:     def __mul__(self, other):
+80:         return self._combine(other, self.MUL, False)
+81: 
+82:     def __truediv__(self, other):
+83:         return self._combine(other, self.DIV, False)
+84: 
+85:     def __mod__(self, other):
+86:         return self._combine(other, self.MOD, False)
+87: 
+88:     def __pow__(self, other):
+89:         return self._combine(other, self.POW, False)
+90: 
+91:     def __and__(self, other):
+92:         if getattr(self, 'conditional', False) and getattr(other, 'conditional', False):
+93:             return Q(self) & Q(other)
+94:         raise NotImplementedError(
+95:             "Use .bitand() and .bitor() for bitwise logical operations."
+96:         )
+97: 
+98:     def bitand(self, other):
+99:         return self._combine(other, self.BITAND, False)
+100: 
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

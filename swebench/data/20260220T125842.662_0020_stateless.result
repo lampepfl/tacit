@@ -1,0 +1,33 @@
+status: success
+1: import collections
+2: import re
+3: from functools import partial
+4: from itertools import chain
+5: 
+6: from django.core.exceptions import EmptyResultSet, FieldError
+7: from django.db import DatabaseError, NotSupportedError
+8: from django.db.models.constants import LOOKUP_SEP
+9: from django.db.models.expressions import F, OrderBy, Random, RawSQL, Ref, Value
+10: from django.db.models.functions import Cast
+11: from django.db.models.query_utils import Q, select_related_descend
+12: from django.db.models.sql.constants import (
+13:     CURSOR, GET_ITERATOR_CHUNK_SIZE, MULTI, NO_RESULTS, ORDER_DIR, SINGLE,
+14: )
+15: from django.db.models.sql.query import Query, get_order_dir
+16: from django.db.transaction import TransactionManagementError
+17: from django.utils.functional import cached_property
+18: from django.utils.hashable import make_hashable
+19: from django.utils.regex_helper import _lazy_re_compile
+20: 
+21: 
+22: class SQLCompiler:
+23:     # Multiline ordering SQL clause may appear from RawSQL.
+24:     ordering_parts = _lazy_re_compile(
+25:         r'^(.*)\s(?:ASC|DESC).*',
+26:         re.MULTILINE | re.DOTALL,
+27:     )
+28: 
+29:     def __init__(self, query, connection, using):
+30:         self.query = query
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

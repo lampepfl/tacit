@@ -1,0 +1,7 @@
+status: success
+Import line: 8: from django.db import router
+Method definition: 123:     def deserialize_db_from_string(self, data):
+Deserialize call: 129:         for obj in serializers.deserialize("json", data, using=self.connection.alias):
+Save call: 130:             obj.save()
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

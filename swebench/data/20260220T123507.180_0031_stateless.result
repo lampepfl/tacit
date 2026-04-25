@@ -1,0 +1,25 @@
+status: success
+460:             attrgetter('headline')
+461:         )
+462: 
+463:     def test_order_by_ptr_field_with_default_ordering_by_expression(self):
+464:         ca1 = ChildArticle.objects.create(
+465:             headline='h2',
+466:             pub_date=datetime(2005, 7, 27),
+467:             author=self.author_2,
+468:         )
+469:         ca2 = ChildArticle.objects.create(
+470:             headline='h2',
+471:             pub_date=datetime(2005, 7, 27),
+472:             author=self.author_1,
+473:         )
+474:         ca3 = ChildArticle.objects.create(
+475:             headline='h3',
+476:             pub_date=datetime(2005, 7, 27),
+477:             author=self.author_1,
+478:         )
+479:         ca4 = ChildArticle.objects.create(headline='h1', pub_date=datetime(2005, 7, 28))
+480:         articles = ChildArticle.objects.order_by('article_ptr')
+481:         self.assertSequenceEqual(articles, [ca4, ca2, ca1, ca3])
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

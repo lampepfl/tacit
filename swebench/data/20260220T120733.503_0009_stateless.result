@@ -1,0 +1,11 @@
+status: success
+Line 176: '        year = int(m.group('year'))'
+Line 177: '        if year < 100:'
+Line 178: '            if year < 70:'
+Line 179: '                year += 2000'
+Line 180: '            else:'
+Line 181: '                year += 1900'
+Line 182: '        month = MONTHS.index(m.group('mon').lower()) + 1'
+Line 183: '        day = int(m.group('day'))'
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

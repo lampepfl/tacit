@@ -1,0 +1,20 @@
+status: success
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12286/repo/tests/check_framework/test_translation.py:85:                 Error(msg, id='translation.E004'),
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12286/repo/tests/check_framework/test_urls.py:45:         self.assertEqual(warning.id, 'urls.E004')
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12286/repo/tests/check_framework/test_urls.py:56:         self.assertEqual(warning.id, 'urls.E004')
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12286/repo/tests/invalid_models_tests/test_ordinary_fields.py:175:                 id='fields.E004',
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12286/repo/tests/invalid_models_tests/test_models.py:636:                 id='models.E004',
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12286/repo/tests/contenttypes_tests/test_checks.py:65:                 id='contenttypes.E004',
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12286/repo/tests/contenttypes_tests/test_checks.py:173:                 id='contenttypes.E004',
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12286/repo/tests/modeladmin/test_checks.py:214:             'admin.E004',
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12286/repo/django/core/checks/translation.py:21: E004 = Error(
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12286/repo/django/core/checks/translation.py:24:     id='translation.E004',
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12286/repo/django/core/checks/translation.py:60:         return [E004]
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12286/repo/django/core/checks/urls.py:92:         id="urls.E004",
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12286/repo/django/contrib/admin/checks.py:238:             return must_be('a list or tuple', option='fields', obj=obj, id='admin.E004')
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12286/repo/django/contrib/contenttypes/fields.py:155:                         id='contenttypes.E004',
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12286/repo/django/contrib/contenttypes/fields.py:347:                         id='contenttypes.E004',
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12286/repo/django/db/models/fields/__init__.py:253:                     id='fields.E004',
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12286/repo/django/db/models/base.py:1383:                     id='models.E004',
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

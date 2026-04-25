@@ -1,0 +1,23 @@
+status: success
+def relabeled_clone(self, relabels):
+        return self
+
+    def get_group_by_cols(self, alias=None):
+        return []
+
+
+class OuterRef(F):
+    def resolve_expression(self, *args, **kwargs):
+        if isinstance(self.name, self.__class__):
+            return self.name
+        return ResolvedOuterRef(self.name)
+
+
+class Func(SQLiteNumericMixin, Expression):
+    """An SQL function call."""
+    function = None
+    template = '%(function)s(%(expressions)s)'
+    arg_joiner = ', '
+    arity = None  # The number of arguments the function accepts.
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

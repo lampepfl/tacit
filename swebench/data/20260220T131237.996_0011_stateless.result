@@ -1,0 +1,28 @@
+status: success
+186:         self.generate_altered_index_together()
+187:         self.generate_added_indexes()
+188:         self.generate_added_constraints()
+189:         self.generate_altered_db_table()
+190:         self.generate_altered_order_with_respect_to()
+191: 
+192:         self._sort_migrations()
+193:         self._build_migration_list(graph)
+194:         self._optimize_migrations()
+195: 
+196:         return self.migrations
+197: 
+198:     def _prepare_field_lists(self):
+199:         """
+200:         Prepare field lists and a list of the fields that used through models
+201:         in the old state so dependencies can be made from the through model
+202:         deletion to the field that uses it.
+203:         """
+204:         self.kept_model_keys = self.old_model_keys & self.new_model_keys
+205:         self.kept_proxy_keys = self.old_proxy_keys & self.new_proxy_keys
+206:         self.kept_unmanaged_keys = self.old_unmanaged_keys & self.new_unmanaged_keys
+207:         self.through_users = {}
+208:         self.old_field_keys = {
+209:             (app_label, model_name, field_name)
+210:             for app_label, model_name in self.kept_model_keys
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

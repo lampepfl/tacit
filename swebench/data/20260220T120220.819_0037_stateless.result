@@ -1,0 +1,34 @@
+status: success
+RoutePattern at: 8764
+0: class RoutePattern(CheckURLMixin):
+1:       regex = LocaleRegexDescriptor('_route')
+2:   
+3:       def __init__(self, route, name=None, is_endpoint=False):
+4:           self._route = route
+5:           self._regex_dict = {}
+6:           self._is_endpoint = is_endpoint
+7:           self.name = name
+8:           self.converters = _route_to_regex(str(route), is_endpoint)[1]
+9:   
+10:       def match(self, path):
+11:           match = self.regex.search(path)
+12:           if match:
+13:               # RoutePattern doesn't allow non-named groups so args are ignored.
+14:               kwargs = match.groupdict()
+15:               for key, value in kwargs.items():
+16:                   converter = self.converters[key]
+17:                   try:
+18:                       kwargs[key] = converter.to_python(value)
+19:                   except ValueError:
+20:                       return None
+21:                   except Http404:
+22:                       raise Resolver404()
+23:               return path[match.end():], (), kwargs
+24:           return None
+25:   
+26:       def check(self):    def check(self):
+27:         warnings = self._check_pattern_startswith_slash()
+28:         route = self._route
+29:         if '(?P<' in route or route.startswith('^') or route.endswith('$'):
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

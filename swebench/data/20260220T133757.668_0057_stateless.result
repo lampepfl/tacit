@@ -1,0 +1,5 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = """1292:                 *cls._check_default_pk(),
+1298:     def _check_default_pk(cls):
+1320:         return []"""

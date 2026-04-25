@@ -1,0 +1,7 @@
+status: success
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13710/repo/tests/admin_inlines/tests.py:1019:             verbose_name = 'Non-verbose childs - name'
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13710/repo/tests/admin_inlines/tests.py:1024:             verbose_name = 'Childs with verbose name - name'
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13710/repo/tests/admin_inlines/tests.py:1029:             verbose_name = 'Childs with verbose name plural - name'
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13710/repo/tests/admin_inlines/tests.py:1034:             verbose_name = 'Childs with both - name'
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

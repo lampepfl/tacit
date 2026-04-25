@@ -1,0 +1,73 @@
+status: success
+1295: class ModelMultipleChoiceField(ModelChoiceField):
+1296:     """A MultipleChoiceField whose choices are a model QuerySet."""
+1297:     widget = SelectMultiple
+1298:     hidden_widget = MultipleHiddenInput
+1299:     default_error_messages = {
+1300:         'invalid_list': _('Enter a list of values.'),
+1301:         'invalid_choice': _('Select a valid choice. %(value)s is not one of the'
+1302:                             ' available choices.'),
+1303:         'invalid_pk_value': _('“%(pk)s” is not a valid value.')
+1304:     }
+1305: 
+1306:     def __init__(self, queryset, **kwargs):
+1307:         super().__init__(queryset, empty_label=None, **kwargs)
+1308:         if self.error_messages.get('list') is not None:
+1309:             warnings.warn(
+1310:                 "The 'list' error message key is deprecated in favor of "
+1311:                 "'invalid_list'.",
+1312:                 RemovedInDjango40Warning, stacklevel=2,
+1313:             )
+1314:             self.error_messages['invalid_list'] = self.error_messages['list']
+1315: 
+1316:     def to_python(self, value):
+1317:         if not value:
+1318:             return []
+1319:         return list(self._check_values(value))
+1320: 
+1321:     def clean(self, value):
+1322:         value = self.prepare_value(value)
+1323:         if self.required and not value:
+1324:             raise ValidationError(self.error_messages['required'], code='required')
+1325:         elif not self.required and not value:
+1326:             return self.queryset.none()
+1327:         if not isinstance(value, (list, tuple)):
+1328:             raise ValidationError(
+1329:                 self.error_messages['invalid_list'],
+1330:                 code='invalid_list',
+1331:             )
+1332:         qs = self._check_values(value)
+1333:         # Since this overrides the inherited ModelChoiceField.clean
+1334:         # we run custom validators here
+1335:         self.run_validators(value)
+1336:         return qs
+1337: 
+1338:     def _check_values(self, value):
+1339:         """
+1340:         Given a list of possible PK values, return a QuerySet of the
+1341:         corresponding objects. Raise a ValidationError if a given value is
+1342:         invalid (not a valid PK, not in the queryset, etc.)
+1343:         """
+1344:         key = self.to_field_name or 'pk'
+1345:         # deduplicate given values to avoid creating many querysets or
+1346:         # requiring the database backend deduplicate efficiently.
+1347:         try:
+1348:             value = frozenset(value)
+1349:         except TypeError:
+1350:             # list of lists isn't hashable, for example
+1351:             raise ValidationError(
+1352:                 self.error_messages['invalid_list'],
+1353:                 code='invalid_list',
+1354:             )
+1355:         for pk in value:
+1356:             try:
+1357:                 self.queryset.filter(**{key: pk})
+1358:             except (ValueError, TypeError):
+1359:                 raise ValidationError(
+1360:                     self.error_messages['invalid_pk_value'],
+1361:                     code='invalid_pk_value',
+1362:                     params={'pk': pk},
+1363:                 )
+1364:         qs = self.queryset.filter(**{'%s__in' % key: value})
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

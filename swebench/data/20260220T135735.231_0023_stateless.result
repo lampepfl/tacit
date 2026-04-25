@@ -1,0 +1,5 @@
+status: success
+Starting...
+Got step1: rs$line$2$$$Lambda$3039/0x00000005022aa888@a3321c4
+def run()(using x$1: IOCapability): Any
+val res0: Any = Lambda$3045/0x00000005022acf90@6366e11

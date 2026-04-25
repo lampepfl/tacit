@@ -1,0 +1,11 @@
+status: success
+Lines to modify:
+140:             else:
+141:                 if index > last_insert_index:
+142:                     warnings.warn(
+143:                         'Detected duplicate Media files in an opposite order:\n'
+144:                         '%s\n%s' % (combined_list[last_insert_index], combined_list[index]),
+145:                         MediaOrderConflictWarning,
+146:                     )
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,14 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = List(
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13265/repo/django/db/migrations/operations/models.py",
+    lineNumber = 159,
+    line = "        elif isinstance(operation, AlterOrderWithRespectTo) and self.name_lower == operation.name_lower:"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13265/repo/django/db/migrations/operations/models.py",
+    lineNumber = 572,
+    line = "class AlterOrderWithRespectTo(ModelOptionOperation):"
+  )
+)

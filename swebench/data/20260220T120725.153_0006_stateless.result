@@ -1,0 +1,63 @@
+status: success
+201:             if self.get_db_prep_lookup_value_is_iterable else
+202:             [get_db_prep_value(value, connection, prepared=True)]
+203:         )
+204: 
+205: 
+206: class FieldGetDbPrepValueIterableMixin(FieldGetDbPrepValueMixin):
+207:     """
+208:     Some lookups require Field.get_db_prep_value() to be called on each value
+209:     in an iterable.
+210:     """
+211:     get_db_prep_lookup_value_is_iterable = True
+212: 
+213:     def get_prep_lookup(self):
+214:         if hasattr(self.rhs, 'resolve_expression'):
+215:             return self.rhs
+216:         prepared_values = []
+217:         for rhs_value in self.rhs:
+218:             if hasattr(rhs_value, 'resolve_expression'):
+219:                 # An expression will be handled by the database but can coexist
+220:                 # alongside real values.
+221:                 pass
+222:             elif self.prepare_rhs and hasattr(self.lhs.output_field, 'get_prep_value'):
+223:                 rhs_value = self.lhs.output_field.get_prep_value(rhs_value)
+224:             prepared_values.append(rhs_value)
+225:         return prepared_values
+226: 
+227:     def process_rhs(self, compiler, connection):
+228:         if self.rhs_is_direct_value():
+229:             # rhs should be an iterable of values. Use batch_process_rhs()
+230:             # to prepare/transform those values.
+231:             return self.batch_process_rhs(compiler, connection)
+232:         else:
+233:             return super().process_rhs(compiler, connection)
+234: 
+235:     def resolve_expression_parameter(self, compiler, connection, sql, param):
+236:         params = [param]
+237:         if hasattr(param, 'resolve_expression'):
+238:             param = param.resolve_expression(compiler.query)
+239:         if hasattr(param, 'as_sql'):
+240:             sql, params = param.as_sql(compiler, connection)
+241:         return sql, params
+242: 
+243:     def batch_process_rhs(self, compiler, connection, rhs=None):
+244:         pre_processed = super().batch_process_rhs(compiler, connection, rhs)
+245:         # The params list may contain expressions which compile to a
+246:         # sql/param pair. Zip them to get sql and param pairs that refer to the
+247:         # same argument and attempt to replace them with the result of
+248:         # compiling the param step.
+249:         sql, params = zip(*(
+250:             self.resolve_expression_parameter(compiler, connection, sql, param)
+251:             for sql, param in zip(*pre_processed)
+252:         ))
+253:         params = itertools.chain.from_iterable(params)
+254:         return sql, tuple(params)
+255: 
+256: 
+257: @Field.register_lookup
+258: class Exact(FieldGetDbPrepValueMixin, BuiltinLookup):
+259:     lookup_name = 'exact'
+260: 
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,64 @@
+status: success
+260: 
+261:                     # Only add the ptr field if it's not already present;
+262:                     # e.g. migrations will already have it specified
+263:                     if not hasattr(new_class, attr_name):
+264:                         new_class.add_to_class(attr_name, field)
+265:                 else:
+266:                     field = None
+267:                 new_class._meta.parents[base] = field
+268:             else:
+269:                 base_parents = base._meta.parents.copy()
+270: 
+271:                 # Add fields from abstract base class if it wasn't overridden.
+272:                 for field in parent_fields:
+273:                     if (field.name not in field_names and
+274:                             field.name not in new_class.__dict__ and
+275:                             field.name not in inherited_attributes):
+276:                         new_field = copy.deepcopy(field)
+277:                         new_class.add_to_class(field.name, new_field)
+278:                         # Replace parent links defined on this base by the new
+279:                         # field. It will be appropriately resolved if required.
+280:                         if field.one_to_one:
+281:                             for parent, parent_link in base_parents.items():
+282:                                 if field == parent_link:
+283:                                     base_parents[parent] = new_field
+284: 
+285:                 # Pass any non-abstract parent classes onto child.
+286:                 new_class._meta.parents.update(base_parents)
+287: 
+288:             # Inherit private fields (like GenericForeignKey) from the parent
+289:             # class
+290:             for field in base._meta.private_fields:
+291:                 if field.name in field_names:
+292:                     if not base._meta.abstract:
+293:                         raise FieldError(
+294:                             'Local field %r in class %r clashes with field of '
+295:                             'the same name from base class %r.' % (
+296:                                 field.name,
+297:                                 name,
+298:                                 base.__name__,
+299:                             )
+300:                         )
+301:                 else:
+302:                     field = copy.deepcopy(field)
+303:                     if not base._meta.abstract:
+304:                         field.mti_inherited = True
+305:                     new_class.add_to_class(field.name, field)
+306: 
+307:         # Copy indexes so that index names are unique when models extend an
+308:         # abstract model.
+309:         new_class._meta.indexes = [copy.deepcopy(idx) for idx in new_class._meta.indexes]
+310: 
+311:         if abstract:
+312:             # Abstract base models can't be instantiated and don't appear in
+313:             # the list of models for an app. We do the final setup for them a
+314:             # little differently from normal models.
+315:             attr_meta.abstract = False
+316:             new_class.Meta = attr_meta
+317:             return new_class
+318: 
+319:         new_class._prepare()
+320:         new_class._meta.apps.register_model(new_class._meta.app_label, new_class)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

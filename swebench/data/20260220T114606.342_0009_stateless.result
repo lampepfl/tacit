@@ -1,0 +1,13 @@
+status: success
+Fix NOT applied, need to try again
+Found 'elif operand is None:' at index 20569
+Content around that area:
+ke a copy so there is no reference in the result.
+            return deepcopy(operand.mask)
+        elif operand is None:
+            return deepcopy(self.mask)
+        else:
+            # Now lets calculate the resulting mask (operation enforces copy)
+            return handle_mask(self.mask, opera
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

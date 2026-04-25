@@ -1,0 +1,73 @@
+status: success
+530: 
+531: 
+532: class AlterTogetherOptionOperation(ModelOptionOperation):
+533:     option_name = None
+534: 
+535:     def __init__(self, name, option_value):
+536:         if option_value:
+537:             option_value = set(normalize_together(option_value))
+538:         setattr(self, self.option_name, option_value)
+539:         super().__init__(name)
+540: 
+541:     @cached_property
+542:     def option_value(self):
+543:         return getattr(self, self.option_name)
+544: 
+545:     def deconstruct(self):
+546:         kwargs = {
+547:             "name": self.name,
+548:             self.option_name: self.option_value,
+549:         }
+550:         return (self.__class__.__qualname__, [], kwargs)
+551: 
+552:     def state_forwards(self, app_label, state):
+553:         state.alter_model_options(
+554:             app_label,
+555:             self.name_lower,
+556:             {self.option_name: self.option_value},
+557:         )
+558: 
+559:     def database_forwards(self, app_label, schema_editor, from_state, to_state):
+560:         new_model = to_state.apps.get_model(app_label, self.name)
+561:         if self.allow_migrate_model(schema_editor.connection.alias, new_model):
+562:             old_model = from_state.apps.get_model(app_label, self.name)
+563:             alter_together = getattr(schema_editor, "alter_%s" % self.option_name)
+564:             alter_together(
+565:                 new_model,
+566:                 getattr(old_model._meta, self.option_name, set()),
+567:                 getattr(new_model._meta, self.option_name, set()),
+568:             )
+569: 
+570:     def database_backwards(self, app_label, schema_editor, from_state, to_state):
+571:         return self.database_forwards(app_label, schema_editor, from_state, to_state)
+572: 
+573:     def references_field(self, model_name, name, app_label):
+574:         return self.references_model(model_name, app_label) and (
+575:             not self.option_value
+576:             or any((name in fields) for fields in self.option_value)
+577:         )
+578: 
+579:     def describe(self):
+580:         return "Alter %s for %s (%s constraint(s))" % (
+581:             self.option_name,
+582:             self.name,
+583:             len(self.option_value or ""),
+584:         )
+585: 
+586:     @property
+587:     def migration_name_fragment(self):
+588:         return "alter_%s_%s" % (self.name_lower, self.option_name)
+589: 
+590:     def can_reduce_through(self, operation, app_label):
+591:         return super().can_reduce_through(operation, app_label) or (
+592:             isinstance(operation, AlterTogetherOptionOperation)
+593:             and type(operation) is not type(self)
+594:         )
+595: 
+596: 
+597: class AlterUniqueTogether(AlterTogetherOptionOperation):
+598:     """
+599:     Change the value of unique_together to the target one.
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

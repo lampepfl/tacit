@@ -1,0 +1,4 @@
+status: success
+74 65 72 0a 0a 45 30 30 31 20 3d 20 45 72 72 6f 72 28 0a 20 20 20 20 27 59 6f 75 20 68 61 
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

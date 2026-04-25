@@ -1,8 +1,8 @@
 [submodule "agentdojo-stock/tacit"]
-	path = papers/cais2026-artifact/agentdojo-stock/tacit
+	path = agentdojo-stock/tacit
 	url = https://github.com/lampepfl/tacit.git
 	branch = agentdojo-exps
 [submodule "tau2-bench/tacit"]
-	path = papers/cais2026-artifact/tau2-bench/tacit
+	path = tau2-bench/tacit
 	url = https://github.com/lampepfl/tacit.git
 	branch = tau2-bench-exp

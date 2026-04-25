@@ -1,0 +1,6 @@
+status: failure
+-- [E172] Type Error: ----------------------------------------------------------
+4 |    val gitDiff = exec("git", List("diff", "--stat", "django/db/models/fields/__init__.py"))
+  |                                                                                            ^
+  |No given instance of type library.ProcessPermission was found for parameter pp of method exec in trait Interface
+1 error found

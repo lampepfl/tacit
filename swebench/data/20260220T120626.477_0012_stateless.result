@@ -1,0 +1,4 @@
+status: success
+799:     def _values(self, *fields, **expressions):
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,13 @@
+status: success
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15213/repo/django/db/models/sql/compiler.py:71:         group_by = self.get_group_by(self.select + extra_select, order_by)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15213/repo/django/db/models/sql/compiler.py:74:     def get_group_by(self, select, order_by):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15213/repo/django/db/models/sql/compiler.py:136:             cols = expr.get_group_by_cols()
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15213/repo/django/db/models/sql/compiler.py:144:                     expressions.extend(expr.get_group_by_cols())
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15213/repo/django/db/models/sql/compiler.py:145:         having_group_by = self.having.get_group_by_cols() if self.having else ()
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15213/repo/django/db/models/sql/query.py:191:         # See compiler.get_group_by() for details.
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15213/repo/django/db/models/sql/query.py:1071:     def get_group_by_cols(self, alias=None):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15213/repo/django/db/models/sql/query.py:2039:                 group_by_cols = annotation.get_group_by_cols(alias=alias)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15213/repo/django/db/models/sql/where.py:117:     def get_group_by_cols(self, alias=None):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15213/repo/django/db/models/sql/where.py:120:             cols.extend(child.get_group_by_cols())
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

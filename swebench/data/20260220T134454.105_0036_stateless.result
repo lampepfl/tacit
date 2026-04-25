@@ -1,0 +1,4 @@
+status: success
+ProcessResult(0,            # Remove names from the set of any existing "immediate load" names.,)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

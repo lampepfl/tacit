@@ -1,0 +1,6 @@
+status: success
+167: class HasKeyLookup(PostgresOperatorLookup):
+219: class HasKey(HasKeyLookup):
+225: class HasKeys(HasKeyLookup):
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

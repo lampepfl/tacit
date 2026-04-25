@@ -1,0 +1,4 @@
+status: success
+Line 77:                 self.validate_name(os.path.basename(target.rstrip(os.sep)), 'directory')
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,10 @@
+status: failure
+-- [E081] Type Error: ----------------------------------------------------------
+19 |  val fsResult = requestFileSystem(".")(fs0 => fs0.access(".").children.map(x => x.name).mkString(", "))
+   |                                        ^^^
+   |                         Missing parameter type
+   |
+   |                         I could not infer the type of the parameter fs0
+   |                         Expected type for the whole anonymous function:
+   |                           Any
+1 error found

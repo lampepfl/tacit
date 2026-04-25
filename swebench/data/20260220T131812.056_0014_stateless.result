@@ -1,0 +1,10 @@
+status: success
+462: |            model_dict = {|
+463: |                'name': capfirst(model._meta.verbose_name_plural),|
+464: |                'object_name': model._meta.object_name,|
+465: |                'perms': perms,|
+466: |                'admin_url': None,|
+467: |                'add_url': None,|
+468: |            }|
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

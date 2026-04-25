@@ -1,0 +1,5 @@
+status: failure
+
+Error: Code validation failed (1 violation):
+  [cast-escape] Line 4: .asInstanceOf is forbidden
+    > r.asInstanceOf[Function0[Any]].apply()

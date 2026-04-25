@@ -1,0 +1,30 @@
+status: success
+=== Lines 195-220 ===
+            combined=ExpressionWrapper(F('pages') + F('rating'), output_field=IntegerField())
+        ).get(isbn=test.isbn)
+        combined = int(test.pages + test.rating)
+        self.assertEqual(b.combined, combined)
+
+    def test_empty_expression_annotation(self):
+        books = Book.objects.annotate(
+            selected=ExpressionWrapper(Q(pk__in=[]), output_field=BooleanField())
+        )
+        self.assertEqual(len(books), Book.objects.count())
+        self.assertTrue(all(not book.selected for book in books))
+
+        books = Book.objects.annotate(
+            selected=ExpressionWrapper(Q(pk__in=Book.objects.none()), output_field=BooleanField())
+        )
+        self.assertEqual(len(books), Book.objects.count())
+        self.assertTrue(all(not book.selected for book in books))
+
+    def test_empty_queryset_annotation(self):
+        qs = Author.objects.annotate(
+            empty=Subquery(Author.objects.values('id').none())
+        )
+        self.assertIsNone(qs.first().empty)
+
+    def test_annotate_with_aggregation(self):
+        books = Book.objects.annotate(is_book=Value(1), rating_count=Count('rating'))
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

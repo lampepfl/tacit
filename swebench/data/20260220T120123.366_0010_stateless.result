@@ -1,0 +1,4 @@
+status: success
+273:     db_for_write = _router_func('db_for_write')
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

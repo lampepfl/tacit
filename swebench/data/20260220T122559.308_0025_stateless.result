@@ -1,0 +1,25 @@
+status: success
+Found at: 4158
+   system_check_removed_details = None
+
+    # Field flags
+    hidden = False
+
+    many_to_many = None
+    many_to_one = None
+    one_to_many = None
+    one_to_one = None
+    related_model = None
+
+    descriptor_class = DeferredAttribute
+
+    # Generic field type description, usually overridden by subclasses
+    def _description(self):
+        return _('Field of type: %(field_type)s') % {
+            'field_type': self.__class__.__name__
+        }
+    description = property(_description)
+
+    def
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

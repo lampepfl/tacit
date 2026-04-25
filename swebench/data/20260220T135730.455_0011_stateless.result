@@ -1,0 +1,99 @@
+status: success
+1: from django.apps.registry import Apps
+2: from django.db import DatabaseError, models
+3: from django.utils.functional import classproperty
+4: from django.utils.timezone import now
+5: 
+6: from .exceptions import MigrationSchemaMissing
+7: 
+8: 
+9: class MigrationRecorder:
+10:     """
+11:     Deal with storing migration records in the database.
+12: 
+13:     Because this table is actually itself used for dealing with model
+14:     creation, it's the one thing we can't do normally via migrations.
+15:     We manually handle table creation/schema updating (using schema backend)
+16:     and then have a floating model to do queries with.
+17: 
+18:     If a migration is unapplied its row is removed from the table. Having
+19:     a row in the table always means a migration is applied.
+20:     """
+21:     _migration_class = None
+22: 
+23:     @classproperty
+24:     def Migration(cls):
+25:         """
+26:         Lazy load to avoid AppRegistryNotReady if installed apps import
+27:         MigrationRecorder.
+28:         """
+29:         if cls._migration_class is None:
+30:             class Migration(models.Model):
+31:                 app = models.CharField(max_length=255)
+32:                 name = models.CharField(max_length=255)
+33:                 applied = models.DateTimeField(default=now)
+34: 
+35:                 class Meta:
+36:                     apps = Apps()
+37:                     app_label = 'migrations'
+38:                     db_table = 'django_migrations'
+39: 
+40:                 def __str__(self):
+41:                     return 'Migration %s for %s' % (self.name, self.app)
+42: 
+43:             cls._migration_class = Migration
+44:         return cls._migration_class
+45: 
+46:     def __init__(self, connection):
+47:         self.connection = connection
+48: 
+49:     @property
+50:     def migration_qs(self):
+51:         return self.Migration.objects.using(self.connection.alias)
+52: 
+53:     def has_table(self):
+54:         """Return True if the django_migrations table exists."""
+55:         with self.connection.cursor() as cursor:
+56:             tables = self.connection.introspection.table_names(cursor)
+57:         return self.Migration._meta.db_table in tables
+58: 
+59:     def ensure_schema(self):
+60:         """Ensure the table exists and has the correct schema."""
+61:         # If the table's there, that's fine - we've never changed its schema
+62:         # in the codebase.
+63:         if self.has_table():
+64:             return
+65:         # Make the table
+66:         try:
+67:             with self.connection.schema_editor() as editor:
+68:                 editor.create_model(self.Migration)
+69:         except DatabaseError as exc:
+70:             raise MigrationSchemaMissing("Unable to create the django_migrations table (%s)" % exc)
+71: 
+72:     def applied_migrations(self):
+73:         """
+74:         Return a dict mapping (app_name, migration_name) to Migration instances
+75:         for all applied migrations.
+76:         """
+77:         if self.has_table():
+78:             return {(migration.app, migration.name): migration for migration in self.migration_qs}
+79:         else:
+80:             # If the django_migrations table doesn't exist, then no migrations
+81:             # are applied.
+82:             return {}
+83: 
+84:     def record_applied(self, app, name):
+85:         """Record that a migration was applied."""
+86:         self.ensure_schema()
+87:         self.migration_qs.create(app=app, name=name)
+88: 
+89:     def record_unapplied(self, app, name):
+90:         """Record that a migration was unapplied."""
+91:         self.ensure_schema()
+92:         self.migration_qs.filter(app=app, name=name).delete()
+93: 
+94:     def flush(self):
+95:         """Delete all migration records. Useful for testing migrations."""
+96:         self.migration_qs.all().delete()
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,13 @@
+status: failure
+-- [E007] Type Mismatch Error: -------------------------------------------------
+5 |    requestFileSystem(root)(fs => op(fs))
+  |                            ^^^^^^^^^^^^
+  |                            Found:    library.FileSystem -> T
+  |                            Required: T
+  |
+  | longer explanation available when compiling with `-explain`
+-- [E172] Type Error: ----------------------------------------------------------
+8 |  runWithFileSystem(".")(fs => access(".").children.map(f => f.name).mkString(", "))
+  |                                          ^
+  |No given instance of type library.FileSystem was found for parameter fs of method access in trait Interface
+2 errors found

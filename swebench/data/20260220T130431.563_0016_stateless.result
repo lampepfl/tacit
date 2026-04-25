@@ -1,0 +1,11 @@
+status: success
+java.lang.SecurityException: Access denied: /Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12589/repo/django/db/models/expressions.py is outside root /Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django_12589/repo
+  at library.RealFileSystem.resolvePath(RealFileSystem.scala:21)
+  at library.RealFileSystem.access(RealFileSystem.scala:117)
+  at library.InterfaceImpl.access(InterfaceImpl.scala:46)
+  at rs$line$2$.run$$anonfun$1(rs$line$2:4)
+  at scala.runtime.function.JProcedure1.apply(JProcedure1.java:15)
+  at scala.runtime.function.JProcedure1.apply(JProcedure1.java:10)
+  at library.InterfaceImpl.requestFileSystem(InterfaceImpl.scala:33)
+  at rs$line$2$.run(rs$line$2:7)
+  ... 53 elided

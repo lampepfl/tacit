@@ -1,0 +1,6 @@
+status: success
+Target line index: 321
+Target line:             old_model = from_state.apps.get_model(app_label, self.old_name)
+File updated successfully
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

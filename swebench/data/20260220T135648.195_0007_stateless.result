@@ -1,0 +1,19 @@
+status: success
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15252/repo/django/db/migrations/recorder.py:2: from django.db import DatabaseError, models
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15252/repo/django/db/migrations/autodetector.py:6: from django.db import models
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15252/repo/django/db/migrations/operations/models.py:1: from django.db import models
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15252/repo/django/db/migrations/operations/special.py:1: from django.db import router
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15252/repo/django/db/migrations/operations/base.py:1: from django.db import router
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15252/repo/django/db/migrations/serializer.py:15: from django.db import models
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15252/repo/django/db/migrations/serializer.py:97:             imports = {"from django.db import models"}
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15252/repo/django/db/migrations/serializer.py:276:             (models.Model, "models.Model", ['from django.db import models']),
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15252/repo/django/db/migrations/exceptions.py:1: from django.db import DatabaseError
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15252/repo/django/db/migrations/writer.py:10: from django.db import migrations
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15252/repo/django/db/migrations/writer.py:167:         if "from django.db import models" in imports:
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15252/repo/django/db/migrations/writer.py:168:             imports.discard("from django.db import models")
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15252/repo/django/db/migrations/writer.py:169:             imports.add("from django.db import migrations, models")
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15252/repo/django/db/migrations/writer.py:171:             imports.add("from django.db import migrations")
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15252/repo/django/db/migrations/executor.py:2: from django.db import migrations, router
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15252/repo/django/db/migrations/state.py:10: from django.db import models
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

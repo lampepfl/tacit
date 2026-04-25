@@ -1,0 +1,31 @@
+status: success
+Ref.get_group_by_cols:
+def get_group_by_cols(self, alias=None):
+        return self.source.get_group_by_cols(alias=self.refs)
+
+
+class ExpressionList(Func):
+    """
+    An expression containing multiple expressions. Can be used to provide a
+    list of expressions as an argument to another expression, like an
+    ordering clause.
+    """
+    template = '%(expressions)s'
+
+
+Subquery.get_group_by_cols:
+def get_group_by_cols(self, alias=None):
+        if alias:
+            return [self]
+        external_cols = self.query.get_external_cols()
+        if any(col.possibly_multivalued for col in external_cols):
+            return [self]
+        return external_cols
+
+
+class Exists(Subquery):
+    template = 'EXISTS(%(subquery)s)'
+    output_field = fields.BooleanField()
+
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

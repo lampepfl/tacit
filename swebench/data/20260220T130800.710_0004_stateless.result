@@ -1,0 +1,17 @@
+status: success
+Line 403: meta_constraint_names = {constraint.name for constraint in model._meta.constraints}
+Line 406: constraint_names = self._constraint_names(
+Line 407: model, columns, exclude=meta_constraint_names | meta_index_names,
+Line 509: fk_names = self._constraint_names(model, [field.column], foreign_key=True)
+Line 577: fk_names = self._constraint_names(model, [old_field.column], foreign_key=True)
+Line 590: meta_constraint_names = {constraint.name for constraint in model._meta.constraints}
+Line 591: constraint_names = self._constraint_names(
+Line 593: exclude=meta_constraint_names,
+Line 615: rel_fk_names = self._constraint_names(
+Line 635: index_names = self._constraint_names(
+Line 646: meta_constraint_names = {constraint.name for constraint in model._meta.constraints}
+Line 647: constraint_names = self._constraint_names(
+Line 649: exclude=meta_constraint_names,
+Line 1173: constraint_names = self._constraint_names(model, primary_key=True)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

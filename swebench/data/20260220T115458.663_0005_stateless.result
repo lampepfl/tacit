@@ -1,0 +1,11 @@
+status: success
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11283/repo/tests/auth_tests/test_migrations.py:43:         update_proxy_permissions.update_proxy_model_permissions(apps, None)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11283/repo/tests/auth_tests/test_migrations.py:56:         update_proxy_permissions.update_proxy_model_permissions(apps, None)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11283/repo/tests/auth_tests/test_migrations.py:64:         update_proxy_permissions.update_proxy_model_permissions(apps, None)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11283/repo/tests/auth_tests/test_migrations.py:78:         update_proxy_permissions.update_proxy_model_permissions(apps, None)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11283/repo/tests/auth_tests/test_migrations.py:117:         update_proxy_permissions.update_proxy_model_permissions(apps, None)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11283/repo/tests/auth_tests/test_migrations.py:129:         update_proxy_permissions.update_proxy_model_permissions(apps, None)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11283/repo/tests/auth_tests/test_migrations.py:136:         update_proxy_permissions.update_proxy_model_permissions(apps, None)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11283/repo/tests/auth_tests/test_migrations.py:149:         update_proxy_permissions.update_proxy_model_permissions(apps, None)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

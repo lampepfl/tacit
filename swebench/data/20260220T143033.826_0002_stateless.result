@@ -1,0 +1,73 @@
+status: success
+790: 
+791: 
+792: class MultiWidget(Widget):
+793:     """
+794:     A widget that is composed of multiple widgets.
+795: 
+796:     In addition to the values added by Widget.get_context(), this widget
+797:     adds a list of subwidgets to the context as widget['subwidgets'].
+798:     These can be looped over and rendered like normal widgets.
+799: 
+800:     You'll probably want to use this class with MultiValueField.
+801:     """
+802:     template_name = 'django/forms/widgets/multiwidget.html'
+803: 
+804:     def __init__(self, widgets, attrs=None):
+805:         if isinstance(widgets, dict):
+806:             self.widgets_names = [
+807:                 ('_%s' % name) if name else '' for name in widgets
+808:             ]
+809:             widgets = widgets.values()
+810:         else:
+811:             self.widgets_names = ['_%s' % i for i in range(len(widgets))]
+812:         self.widgets = [w() if isinstance(w, type) else w for w in widgets]
+813:         super().__init__(attrs)
+814: 
+815:     @property
+816:     def is_hidden(self):
+817:         return all(w.is_hidden for w in self.widgets)
+818: 
+819:     def get_context(self, name, value, attrs):
+820:         context = super().get_context(name, value, attrs)
+821:         if self.is_localized:
+822:             for widget in self.widgets:
+823:                 widget.is_localized = self.is_localized
+824:         # value is a list of values, each corresponding to a widget
+825:         # in self.widgets.
+826:         if not isinstance(value, list):
+827:             value = self.decompress(value)
+828: 
+829:         final_attrs = context['widget']['attrs']
+830:         input_type = final_attrs.pop('type', None)
+831:         id_ = final_attrs.get('id')
+832:         subwidgets = []
+833:         for i, (widget_name, widget) in enumerate(zip(self.widgets_names, self.widgets)):
+834:             if input_type is not None:
+835:                 widget.input_type = input_type
+836:             widget_name = name + widget_name
+837:             try:
+838:                 widget_value = value[i]
+839:             except IndexError:
+840:                 widget_value = None
+841:             if id_:
+842:                 widget_attrs = final_attrs.copy()
+843:                 widget_attrs['id'] = '%s_%s' % (id_, i)
+844:             else:
+845:                 widget_attrs = final_attrs
+846:             subwidgets.append(widget.get_context(widget_name, widget_value, widget_attrs)['widget'])
+847:         context['widget']['subwidgets'] = subwidgets
+848:         return context
+849: 
+850:     def id_for_label(self, id_):
+851:         if id_:
+852:             id_ += '_0'
+853:         return id_
+854: 
+855:     def value_from_datadict(self, data, files, name):
+856:         return [
+857:             widget.value_from_datadict(data, files, name + widget_name)
+858:             for widget_name, widget in zip(self.widgets_names, self.widgets)
+859:         ]
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

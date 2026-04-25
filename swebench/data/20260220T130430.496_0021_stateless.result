@@ -1,0 +1,6 @@
+status: failure
+-- [E172] Type Error: ----------------------------------------------------------
+3 |  val f: FileSystem => String = (fs: FileSystem) => access(".").children.map(x => x.name).mkString(", ")
+  |                                                               ^
+  |No given instance of type library.FileSystem was found for parameter fs of method access in trait Interface
+1 error found

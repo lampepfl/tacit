@@ -1,0 +1,23 @@
+status: success
+1070: 
+1071:     def resolve_lookup_value(self, value, can_reuse, allow_joins):
+1072:         if hasattr(value, 'resolve_expression'):
+1073:             value = value.resolve_expression(
+1074:                 self, reuse=can_reuse, allow_joins=allow_joins,
+1075:             )
+1076:         elif isinstance(value, (list, tuple)):
+1077:             # The items of the iterable may be expressions and therefore need
+1078:             # to be resolved independently.
+1079:             return type(value)(*(
+1080:                 self.resolve_lookup_value(sub_value, can_reuse, allow_joins)
+1081:                 for sub_value in value
+1082:             ))
+1083:         return value
+1084: 
+1085:     def solve_lookup_type(self, lookup):
+1086:         """
+1087:         Solve the lookup type from the lookup (e.g.: 'foobar__id__icontains').
+1088:         """
+1089:         lookup_splitted = lookup.split(LOOKUP_SEP)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

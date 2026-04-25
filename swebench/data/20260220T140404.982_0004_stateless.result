@@ -1,0 +1,18 @@
+status: success
+2908:         self.assertIndexNameNotExists(table_name, "new_pony_test_idx")
+2910:             "Pony", new_name="new_pony_test_idx", old_name="pony_pink_idx"
+2914:             "Rename index pony_pink_idx on Pony to new_pony_test_idx",
+2918:             "rename_pony_pink_idx_new_pony_test_idx",
+2930:         self.assertIndexNameExists(table_name, "new_pony_test_idx")
+2937:         self.assertIndexNameNotExists(table_name, "new_pony_test_idx")
+2947:                 "new_name": "new_pony_test_idx",
+2968:         self.assertIndexNameNotExists(table_name, "new_pony_test_idx")
+2970:             "Pony", new_name="new_pony_test_idx", old_fields=("weight", "pink")
+2974:             "Rename unnamed index for ('weight', 'pink') on Pony to new_pony_test_idx",
+2978:             "rename_pony_weight_pink_new_pony_test_idx",
+2986:         self.assertIndexNameExists(table_name, "new_pony_test_idx")
+2990:         self.assertIndexNameExists(table_name, "new_pony_test_idx")
+2999:                 "new_name": "new_pony_test_idx",
+3008:             "Pony", new_name="new_pony_test_idx", old_fields=("weight", "pink")
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

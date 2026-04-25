@@ -1,0 +1,9 @@
+status: failure
+-- [E007] Type Mismatch Error: -------------------------------------------------
+8 |  val result: FileSystem => List[String] = requestFileSystem(".")(fs => Runner.run)
+  |                                                                        ^^^^^^^^^^
+  |                              Found:    library.FileSystem -> List[String]
+  |                              Required: List[String]
+  |
+  | longer explanation available when compiling with `-explain`
+1 error found

@@ -1,0 +1,10 @@
+status: failure
+-- [E172] Type Error: ----------------------------------------------------------
+3 |    val pp = summon[ProcessPermission]
+  |                                      ^
+  |No given instance of type library.ProcessPermission was found for parameter x of method summon in object Predef
+-- [E172] Type Error: ----------------------------------------------------------
+4 |    val result = exec("python", List("test_fix.py"), Some("/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15781/repo"))
+  |                                                                                                                                                                       ^
+  |No given instance of type library.ProcessPermission was found for parameter pp of method exec in trait Interface
+2 errors found

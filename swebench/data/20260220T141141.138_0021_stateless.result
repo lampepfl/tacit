@@ -1,0 +1,19 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = List(
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15738/repo/django/db/migrations/autodetector.py",
+    lineNumber = 1505,
+    line = "    def _generate_altered_foo_together(self, operation):"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15738/repo/django/db/migrations/autodetector.py",
+    lineNumber = 1522,
+    line = "        self._generate_altered_foo_together(operations.AlterUniqueTogether)"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15738/repo/django/db/migrations/autodetector.py",
+    lineNumber = 1525,
+    line = "        self._generate_altered_foo_together(operations.AlterIndexTogether)"
+  )
+)

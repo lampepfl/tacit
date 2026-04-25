@@ -1,0 +1,55 @@
+status: success
+Found at line: 562
+562:     def _delete_composed_index(self, model, fields, constraint_kwargs, sql):
+563:         meta_constraint_names = {
+564:             constraint.name for constraint in model._meta.constraints
+565:         }
+566:         meta_index_names = {constraint.name for constraint in model._meta.indexes}
+567:         columns = [model._meta.get_field(field).column for field in fields]
+568:         constraint_names = self._constraint_names(
+569:             model,
+570:             columns,
+571:             exclude=meta_constraint_names | meta_index_names,
+572:             **constraint_kwargs,
+573:         )
+574:         if (
+575:             constraint_kwargs.get("unique") is True
+576:             and constraint_names
+577:             and self.connection.features.allows_multiple_constraints_on_same_fields
+578:         ):
+579:             # Constraint matching the unique_together name.
+580:             default_name = str(
+581:                 self._unique_constraint_name(model._meta.db_table, columns, quote=False)
+582:             )
+583:             if default_name in constraint_names:
+584:                 constraint_names = [default_name]
+585:         if len(constraint_names) != 1:
+586:             raise ValueError(
+587:                 "Found wrong number (%s) of constraints for %s(%s)"
+588:                 % (
+589:                     len(constraint_names),
+590:                     model._meta.db_table,
+591:                     ", ".join(columns),
+592:                 )
+593:             )
+594:         self.execute(self._delete_constraint_sql(sql, model, constraint_names[0]))
+595: 
+596:     def alter_db_table(self, model, old_db_table, new_db_table):
+597:         """Rename the table a model points to."""
+598:         if old_db_table == new_db_table or (
+599:             self.connection.features.ignores_table_name_case
+600:             and old_db_table.lower() == new_db_table.lower()
+601:         ):
+602:             return
+603:         self.execute(
+604:             self.sql_rename_table
+605:             % {
+606:                 "old_table": self.quote_name(old_db_table),
+607:                 "new_table": self.quote_name(new_db_table),
+608:             }
+609:         )
+610:         # Rename all references to the old table name.
+611:         for sql in self.deferred_sql:
+612:             if isinstance(sql, Statement):
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

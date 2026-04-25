@@ -1,0 +1,36 @@
+status: success
+=== iter_modules_and_files section ===
+        path = Path(filename)
+        try:
+            resolved_path = path.resolve(strict=True).absolute()
+        except (FileNotFoundError, ValueError):
+            # The module could have been removed, don't fail loudly if this
+            # is the case.
+            continue
+        results.add(resolved_path)
+    return frozenset(results)
+
+
+@functools.lru_cache(maxsize=1)
+
+=== sys_path_directories section ===
+def sys_path_directories():
+    """
+    Yield absolute directories from sys.path, ignoring entries that don't
+    exist.
+    """
+    for path in sys.path:
+        path = Path(path)
+        try:
+            resolved_path = path.resolve(strict=True).absolute()
+        except (FileNotFoundError, ValueError):
+            continue
+        # If the path is a file (like a zip file), watch the parent directory.
+        if resolved_path.is_file():
+            yield resolved_path.parent
+        else:
+            yield resolved_path
+
+
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,5 @@
+status: success
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15498/repo/django/utils/http.py:104: def parse_http_date(date):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15498/repo/django/utils/http.py:145: def parse_http_date_safe(date):
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

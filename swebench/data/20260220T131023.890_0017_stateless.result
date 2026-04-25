@@ -1,0 +1,20 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = List(
+  "1135:         return obj",
+  "1136: ",
+  "1137:     def distinct(self, *field_names):",
+  "1138:         \"\"\"",
+  "1139:         Return a new QuerySet instance that will select only distinct results.",
+  "1140:         \"\"\"",
+  "1141:         assert not self.query.is_sliced, \\",
+  "1142:             \"Cannot create distinct fields once a slice has been taken.\"",
+  "1143:         obj = self._chain()",
+  "1144:         obj.query.add_distinct_fields(*field_names)",
+  "1145:         return obj",
+  "1146: ",
+  "1147:     def extra(self, select=None, where=None, params=None, tables=None,",
+  "1148:               order_by=None, select_params=None):",
+  "1149:         \"\"\"Add extra SQL fragments to the query.\"\"\"",
+  "1150:         self._not_support_combined_queries('extra')"
+)

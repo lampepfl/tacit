@@ -1,0 +1,4 @@
+status: success
+Index of 'if to_field_rename_key': -1
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

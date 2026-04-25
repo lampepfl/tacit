@@ -1,0 +1,26 @@
+status: success
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15252/repo/tests/migrations/test_multidb.py:10:     A router that doesn't have an opinion regarding migrating.
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15252/repo/tests/migrations/test_multidb.py:18:     A router that doesn't allow migrating.
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15252/repo/tests/migrations/test_multidb.py:26:     A router that always allows migrating.
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15252/repo/tests/migrations/test_multidb.py:34:     A router that allows migrating depending on a hint.
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15252/repo/tests/migrations/test_multidb.py:71:         Test when router doesn't have an opinion (i.e. CreateModel should run).
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15252/repo/tests/migrations/test_multidb.py:78:         Test when router returns False (i.e. CreateModel shouldn't run).
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15252/repo/tests/migrations/test_multidb.py:85:         Test when router returns True (i.e. CreateModel should run).
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15252/repo/tests/migrations/test_multidb.py:91:         Test multiple routers.
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15252/repo/tests/migrations/test_multidb.py:125:     def test_run_sql_migrate_nothing_router(self):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15252/repo/tests/migrations/test_multidb.py:129:     def test_run_sql_migrate_foo_router_without_hints(self):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15252/repo/tests/migrations/test_multidb.py:133:     def test_run_sql_migrate_foo_router_with_hints(self):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15252/repo/tests/migrations/test_multidb.py:162:     def test_run_python_migrate_nothing_router(self):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15252/repo/tests/migrations/test_multidb.py:166:     def test_run_python_migrate_foo_router_without_hints(self):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15252/repo/tests/migrations/test_multidb.py:170:     def test_run_python_migrate_foo_router_with_hints(self):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15252/repo/tests/migrations/test_commands.py:24: from .routers import TestRouter
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15252/repo/tests/migrations/test_commands.py:131:         DATABASE_ROUTERS=['migrations.routers.TestRouter'],
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15252/repo/tests/migrations/test_commands.py:136:         migration of an app exists. Database routers must be obeyed when doing
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15252/repo/tests/migrations/test_commands.py:1117:     def test_makemigrations_consistency_checks_respect_routers(self):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15252/repo/tests/migrations/test_commands.py:1141:                 with self.settings(DATABASE_ROUTERS=['migrations.routers.TestRouter']):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15252/repo/tests/migrations/test_commands.py:1145:                 # With a router that doesn't prohibit migrating 'other',
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15252/repo/tests/migrations/test_commands.py:1147:                 with self.settings(DATABASE_ROUTERS=['migrations.routers.DefaultOtherRouter']):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15252/repo/tests/migrations/test_commands.py:1152:                 # With a router that doesn't allow migrating on any database,
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15252/repo/tests/migrations/test_commands.py:1154:                 with self.settings(DATABASE_ROUTERS=['migrations.routers.TestRouter']):
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

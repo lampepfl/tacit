@@ -1,0 +1,103 @@
+status: success
+1145: class ManyToManyField(RelatedField):
+1146:     """
+1147:     Provide a many-to-many relation by using an intermediary model that
+1148:     holds two ForeignKey fields pointed at the two sides of the relation.
+1149: 
+1150:     Unless a ``through`` model was provided, ManyToManyField will use the
+1151:     create_many_to_many_intermediary_model factory to automatically generate
+1152:     the intermediary model.
+1153:     """
+1154: 
+1155:     # Field flags
+1156:     many_to_many = True
+1157:     many_to_one = False
+1158:     one_to_many = False
+1159:     one_to_one = False
+1160: 
+1161:     rel_class = ManyToManyRel
+1162: 
+1163:     description = _("Many-to-many relationship")
+1164: 
+1165:     def __init__(self, to, related_name=None, related_query_name=None,
+1166:                  limit_choices_to=None, symmetrical=None, through=None,
+1167:                  through_fields=None, db_constraint=True, db_table=None,
+1168:                  swappable=True, **kwargs):
+1169:         try:
+1170:             to._meta
+1171:         except AttributeError:
+1172:             if not isinstance(to, str):
+1173:                 raise TypeError(
+1174:                     '%s(%r) is invalid. First parameter to ManyToManyField '
+1175:                     'must be either a model, a model name, or the string %r' % (
+1176:                         self.__class__.__name__, to, RECURSIVE_RELATIONSHIP_CONSTANT,
+1177:                     )
+1178:                 )
+1179: 
+1180:         if symmetrical is None:
+1181:             symmetrical = (to == RECURSIVE_RELATIONSHIP_CONSTANT)
+1182: 
+1183:         if through is not None and db_table is not None:
+1184:             raise ValueError(
+1185:                 'Cannot specify a db_table if an intermediary model is used.'
+1186:             )
+1187: 
+1188:         kwargs['rel'] = self.rel_class(
+1189:             self, to,
+1190:             related_name=related_name,
+1191:             related_query_name=related_query_name,
+1192:             limit_choices_to=limit_choices_to,
+1193:             symmetrical=symmetrical,
+1194:             through=through,
+1195:             through_fields=through_fields,
+1196:             db_constraint=db_constraint,
+1197:         )
+1198:         self.has_null_arg = 'null' in kwargs
+1199: 
+1200:         super().__init__(
+1201:             related_name=related_name,
+1202:             related_query_name=related_query_name,
+1203:             limit_choices_to=limit_choices_to,
+1204:             **kwargs,
+1205:         )
+1206: 
+1207:         self.db_table = db_table
+1208:         self.swappable = swappable
+1209: 
+1210:     def check(self, **kwargs):
+1211:         return [
+1212:             *super().check(**kwargs),
+1213:             *self._check_unique(**kwargs),
+1214:             *self._check_relationship_model(**kwargs),
+1215:             *self._check_ignored_options(**kwargs),
+1216:             *self._check_table_uniqueness(**kwargs),
+1217:         ]
+1218: 
+1219:     def _check_unique(self, **kwargs):
+1220:         if self.unique:
+1221:             return [
+1222:                 checks.Error(
+1223:                     'ManyToManyFields cannot be unique.',
+1224:                     obj=self,
+1225:                     id='fields.E330',
+1226:                 )
+1227:             ]
+1228:         return []
+1229: 
+1230:     def _check_ignored_options(self, **kwargs):
+1231:         warnings = []
+1232: 
+1233:         if self.has_null_arg:
+1234:             warnings.append(
+1235:                 checks.Warning(
+1236:                     'null has no effect on ManyToManyField.',
+1237:                     obj=self,
+1238:                     id='fields.W340',
+1239:                 )
+1240:             )
+1241: 
+1242:         if self._validators:
+1243:             warnings.append(
+1244:                 checks.Warning(
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

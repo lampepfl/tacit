@@ -1,0 +1,10 @@
+status: success
+compiler.py (dir=false)
+query.py (dir=false)
+subqueries.py (dir=false)
+where.py (dir=false)
+constants.py (dir=false)
+__init__.py (dir=false)
+datastructures.py (dir=false)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,4 @@
+status: success
+2256: def get_order_dir(field, default='ASC'):
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

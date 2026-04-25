@@ -1,0 +1,31 @@
+status: failure
+-- [E008] Not Found Error: -----------------------------------------------------
+10 |      if line.contains("class TypeSerializer") then startLine = i
+   |         ^^^^^^^^^^^^^
+   |         value contains is not a member of Int
+-- [E007] Type Mismatch Error: -------------------------------------------------
+10 |      if line.contains("class TypeSerializer") then startLine = i
+   |                                                                ^
+   |                                               Found:    (i : (String)?)
+   |                                               Required: Int
+   |
+   | longer explanation available when compiling with `-explain`
+-- [E008] Not Found Error: -----------------------------------------------------
+11 |      if startLine != -1 && endLine == -1 && line.trim.startsWith("class ") && i > startLine then endLine = i
+   |                                             ^^^^^^^^^
+   |                                       value trim is not a member of Int
+-- [E007] Type Mismatch Error: -------------------------------------------------
+11 |      if startLine != -1 && endLine == -1 && line.trim.startsWith("class ") && i > startLine then endLine = i
+   |                                                                                                            ^
+   |                                               Found:    (i : (String)?)
+   |                                               Required: Int
+   |
+   | longer explanation available when compiling with `-explain`
+-- [E007] Type Mismatch Error: -------------------------------------------------
+15 |      if i >= startLine && i < endLine then println(s"$i: $line")
+   |              ^^^^^^^^^
+   |              Found:    (startLine : Int)
+   |              Required: String
+   |
+   | longer explanation available when compiling with `-explain`
+5 errors found

@@ -1,0 +1,9 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = """.db.models.constraints import CheckConstraint, UniqueConstraint
+from django.db.models.deletion import CASCADE, Collector
+from django.db.models.fields.related import (
+    ForeignObjectRel, OneToOneField, lazy_related_operation, resolve_relation,
+)
+from django.db.models.functions import Coalesce
+from django.db.models.manager impo"""

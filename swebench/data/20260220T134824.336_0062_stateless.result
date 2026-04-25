@@ -1,0 +1,17 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = ProcessResult(
+  exitCode = 0,
+  stdout = """Test 1: only('name').defer('name')
+After only: ({'name'}, False)
+After defer: (set(), True)
+\nTest 3: only('name', 'country').defer('name')
+After only: ({'name', 'country'}, False)
+After defer: ({'country'}, True)
+\n---
+So the simple fix works for Test 1 but breaks Test 3
+We need a smarter fix that:
+- Changes to defer=True ONLY when the result becomes empty
+- Stays defer=False when there are still fields to load""",
+  stderr = ""
+)

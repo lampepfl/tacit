@@ -1,0 +1,16 @@
+status: success
+416: [            )]
+417: [        # order_with_respect_to being unset for a field]
+418: [        elif dependency[2] is not None and dependency[3] == "order_wrt_unset":]
+419: [            return (]
+420: [                isinstance(operation, operations.AlterOrderWithRespectTo) and]
+421: [                operation.name_lower == dependency[1].lower() and]
+422: [                (operation.order_with_respect_to or "").lower() != dependency[2].lower()]
+423: [            )]
+424: [        # Field is removed and part of an index/unique_together]
+425: [        elif dependency[2] is not None and dependency[3] == "foo_together_change":]
+426: [            return (]
+427: [                isinstance(operation, (operations.AlterUniqueTogether,]
+428: [                                       operations.AlterIndexTogether)) and]
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

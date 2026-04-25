@@ -1,0 +1,4 @@
+status: success
+(        kwargs.update({'check_same_thread': False, 'uri': True}),198)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

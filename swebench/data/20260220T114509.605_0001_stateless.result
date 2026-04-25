@@ -1,0 +1,14 @@
+status: success
+Found 2548 Python files
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11001/repo/tests/generic_views/test_list.py
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11001/repo/tests/generic_views/test_detail.py
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11001/repo/tests/generic_views/models.py
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11001/repo/tests/generic_views/test_dates.py
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11001/repo/tests/generic_views/test_edit.py
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11001/repo/tests/generic_views/__init__.py
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11001/repo/tests/generic_views/forms.py
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11001/repo/tests/generic_views/urls.py
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11001/repo/tests/generic_views/test_base.py
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11001/repo/tests/generic_views/views.py
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

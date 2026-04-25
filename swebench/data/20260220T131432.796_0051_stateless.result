@@ -1,0 +1,10 @@
+status: failure
+-- [E081] Type Error: ----------------------------------------------------------
+2 |  requestFileSystem("/tmp")((fs) => fs.access("/tmp").exists)
+  |                             ^^
+  |                           Missing parameter type
+  |
+  |                           I could not infer the type of the parameter fs
+  |                           Expected type for the whole anonymous function:
+  |                             Any
+1 error found

@@ -1,0 +1,10 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = ProcessResult(
+  exitCode = 0,
+  stdout = """not {'country'}: False
+not set(): True
+bool({'country'}): True
+bool(set()): False""",
+  stderr = ""
+)

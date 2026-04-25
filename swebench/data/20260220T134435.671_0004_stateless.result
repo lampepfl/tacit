@@ -1,0 +1,12 @@
+status: success
+related_descriptors.py (dir=false)
+files.py (dir=false)
+mixins.py (dir=false)
+related.py (dir=false)
+proxy.py (dir=false)
+__init__.py (dir=false)
+reverse_related.py (dir=false)
+related_lookups.py (dir=false)
+json.py (dir=false)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

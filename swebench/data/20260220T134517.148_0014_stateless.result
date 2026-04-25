@@ -1,0 +1,12 @@
+status: success
+django.db.migrations is always used, but models import may not be.
+        # If models import exists, merge it with migrations import.
+        if "from django.db import models" in imports:
+            imports.discard("from django.db import models")
+            imports.add("from django.db import migrations, models")
+        else:
+            imports.add("from django.db import migrations")
+
+        
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,15 @@
+status: success
+246:     help = ""
+291:             description=self.help or None,
+302:             help="Show program's version number and exit.",
+311:             help=(
+319:             help=(
+328:             help=(
+337:             help="Raise on CommandError exceptions.",
+343:             help="Don't colorize the command output.",
+349:             help="Force colorization of the command output.",
+355:                 help="Skip system checks.",
+373:                 kwargs["help"] = argparse.SUPPRESS
+615:             help="One or more application label.",
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

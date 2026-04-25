@@ -1,0 +1,24 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = """        if not isinstance(other, Q):
+            raise TypeError(other)
+
+# If the other Q() is empty, ignore it and just use a copy of `self`.
+        if not other:
+            obj = type(self)()
+            obj.connector = self.connector
+            obj.negated = self.negated
+            obj.children = self.children[:]
+            return obj
+# Or if this Q is empty, ignore it and just use a copy of `other`.
+        elif not self:
+            obj = type(other)()
+            obj.connector = other.connector
+            obj.negated = other.negated
+            obj.children = other.children[:]
+            return obj
+
+        obj = type(self)()
+        obj.connector = conn
+        obj.add(self, conn)
+        obj.add(other, conn)"""

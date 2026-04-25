@@ -1,0 +1,32 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = """            model_init_names, model_init_pos, annotation_fields = self.resolve_model_init_order()
+            if self.model._meta.pk.attname not in model_init_names:
+                raise InvalidQuery('Raw query must include the primary key')
+            model_cls = self.model
+            fields = [self.model_fields.get(c) for c in self.columns]
+            converters = compiler.get_converters([
+                f.get_col(f.model._meta.db_table) if f else None for f in fields
+            ])
+            if converters:
+                query = compiler.apply_converters(query, converters)
+            for values in query:
+                # Associate fields to values
+                model_init_values = [values[pos] for pos in model_init_pos]
+                instance = model_cls.from_db(db, model_init_names, model_init_values)
+                if annotation_fields:
+                    for column, pos in annotation_fields:
+                        setattr(instance, column, values[pos])
+                yield instance
+        finally:
+            # Done iterating the Query. If it has its own cursor, close it.
+            if hasattr(self.query, 'cursor') and self.query.cursor:
+                self.query.cursor.close()
+
+    def __repr__(self):
+        return "<%s: %s>" % (self.__class__.__name__, self.query)
+
+    def __getitem__(self, k):
+        return list(self)[k]
+
+    @property"""

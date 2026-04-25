@@ -1,0 +1,83 @@
+status: success
+1: import pickle
+2: 
+3: from django import forms
+4: from django.core.exceptions import ValidationError
+5: from django.db import models
+6: from django.test import SimpleTestCase, TestCase
+7: from django.utils.functional import lazy
+8: 
+9: from .models import (
+10:     Bar, Choiceful, Foo, RenamedField, VerboseNameField, Whiz, WhizDelayed,
+11:     WhizIter, WhizIterEmpty,
+12: )
+13: 
+14: 
+15: class Nested:
+16:     class Field(models.Field):
+17:         pass
+18: 
+19: 
+20: class BasicFieldTests(SimpleTestCase):
+21: 
+22:     def test_show_hidden_initial(self):
+23:         """
+24:         Fields with choices respect show_hidden_initial as a kwarg to
+25:         formfield().
+26:         """
+27:         choices = [(0, 0), (1, 1)]
+28:         model_field = models.Field(choices=choices)
+29:         form_field = model_field.formfield(show_hidden_initial=True)
+30:         self.assertTrue(form_field.show_hidden_initial)
+31: 
+32:         form_field = model_field.formfield(show_hidden_initial=False)
+33:         self.assertFalse(form_field.show_hidden_initial)
+34: 
+35:     def test_field_repr(self):
+36:         """
+37:         __repr__() of a field displays its name.
+38:         """
+39:         f = Foo._meta.get_field('a')
+40:         self.assertEqual(repr(f), '<django.db.models.fields.CharField: a>')
+41:         f = models.fields.CharField()
+42:         self.assertEqual(repr(f), '<django.db.models.fields.CharField>')
+43: 
+44:     def test_field_repr_nested(self):
+45:         """__repr__() uses __qualname__ for nested class support."""
+46:         self.assertEqual(repr(Nested.Field()), '<model_fields.tests.Nested.Field>')
+47: 
+48:     def test_field_name(self):
+49:         """
+50:         A defined field name (name="fieldname") is used instead of the model
+51:         model's attribute name (modelname).
+52:         """
+53:         instance = RenamedField()
+54:         self.assertTrue(hasattr(instance, 'get_fieldname_display'))
+55:         self.assertFalse(hasattr(instance, 'get_modelname_display'))
+56: 
+57:     def test_field_verbose_name(self):
+58:         m = VerboseNameField
+59:         for i in range(1, 22):
+60:             self.assertEqual(m._meta.get_field('field%d' % i).verbose_name, 'verbose field%d' % i)
+61: 
+62:         self.assertEqual(m._meta.get_field('id').verbose_name, 'verbose pk')
+63: 
+64:     def test_choices_form_class(self):
+65:         """Can supply a custom choices form class to Field.formfield()"""
+66:         choices = [('a', 'a')]
+67:         field = models.CharField(choices=choices)
+68:         klass = forms.TypedMultipleChoiceField
+69:         self.assertIsInstance(field.formfield(choices_form_class=klass), klass)
+70: 
+71:     def test_formfield_disabled(self):
+72:         """Field.formfield() sets disabled for fields with choices."""
+73:         field = models.CharField(choices=[('a', 'b')])
+74:         form_field = field.formfield(disabled=True)
+75:         self.assertIs(form_field.disabled, True)
+76: 
+77:     def test_field_str(self):
+78:         f = models.Field()
+79:         self.assertEqual(str(f), '<django.db.models.fields.Field>')
+80:         f = Foo._meta.get_field('a')
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

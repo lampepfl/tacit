@@ -1,0 +1,49 @@
+status: success
+84:     def _get_response(self, request):
+85:         """
+86:         Resolve and call the view, then apply view, exception, and
+87:         template_response middleware. This method is everything that happens
+88:         inside the request/response middleware.
+89:         """
+90:         response = None
+91: 
+92:         if hasattr(request, 'urlconf'):
+93:             urlconf = request.urlconf
+94:             set_urlconf(urlconf)
+95:             resolver = get_resolver(urlconf)
+96:         else:
+97:             resolver = get_resolver()
+98: 
+99:         resolver_match = resolver.resolve(request.path_info)
+100:         callback, callback_args, callback_kwargs = resolver_match
+101:         request.resolver_match = resolver_match
+102: 
+103:         # Apply view middleware
+104:         for middleware_method in self._view_middleware:
+105:             response = middleware_method(request, callback, callback_args, callback_kwargs)
+106:             if response:
+107:                 break
+108: 
+109:         if response is None:
+110:             wrapped_callback = self.make_view_atomic(callback)
+111:             try:
+112:                 response = wrapped_callback(request, *callback_args, **callback_kwargs)
+113:             except Exception as e:
+114:                 response = self.process_exception_by_middleware(e, request)
+115: 
+116:         # Complain if the view returned None (a common error).
+117:         if response is None:
+118:             if isinstance(callback, types.FunctionType):    # FBV
+119:                 view_name = callback.__name__
+120:             else:                                           # CBV
+121:                 view_name = callback.__class__.__name__ + '.__call__'
+122: 
+123:             raise ValueError(
+124:                 "The view %s.%s didn't return an HttpResponse object. It "
+125:                 "returned None instead." % (callback.__module__, view_name)
+126:             )
+127: 
+128:         # If the response supports deferred rendering, apply template
+129:         # response middleware and then render the response
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

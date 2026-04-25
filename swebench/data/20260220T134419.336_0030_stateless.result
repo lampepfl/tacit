@@ -1,0 +1,12 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = ProcessResult(
+  exitCode = 0,
+  stdout = """./tests/queries/test_qs_combinators.py:class QuerySetSetOperationTests(TestCase):
+./tests/queries/tests.py:class QuerySetBitwiseOperationTests(TestCase):
+./tests/queries/tests.py:class QuerySetSupportsPythonIdioms(TestCase):
+./tests/queries/tests.py:class QuerySetExceptionTests(SimpleTestCase):
+./tests/queries/test_iterator.py:class QuerySetIteratorTests(TestCase):
+./django/db/models/query.py:class QuerySet:""",
+  stderr = ""
+)

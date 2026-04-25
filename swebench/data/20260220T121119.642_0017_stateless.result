@@ -1,0 +1,15 @@
+status: success
+933:                     from_rename_key = (app_label, model_name)
+934:                     new_field.from_fields = tuple([
+935:                         self.renamed_fields.get(from_rename_key + (from_field,), from_field)
+936:                         for from_field in from_fields
+937:                     ])
+938:                     new_field.to_fields = tuple([
+939:                         self.renamed_fields.get(rename_key + (to_field,), to_field)
+940:                         for to_field in new_field.to_fields
+941:                     ])
+942:                 dependencies.extend(self._get_dependencies_for_foreign_key(new_field))
+943:             if hasattr(new_field, "remote_field") and getattr(new_field.remote_field, "through", None):
+944:                 rename_key = (
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

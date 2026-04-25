@@ -1,0 +1,15 @@
+status: failure
+-- [E173] Reference Error: -----------------------------------------------------
+2 |  given IO: IOCapability = new IOCapability
+  |                               ^^^^^^^^^^^^
+  |constructor IOCapability cannot be accessed as a member of library.IOCapability from object rs$line$2.
+  |  private constructor IOCapability can only be accessed from class IOCapability in package library.
+-- [E081] Type Error: ----------------------------------------------------------
+3 |  requestFileSystem[String]("/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15400/repo")(fs =>
+  |                                                                                                                                         ^^
+  |                           Missing parameter type
+  |
+  |                           I could not infer the type of the parameter fs
+  |                           Expected type for the whole anonymous function:
+  |                             String
+2 errors found

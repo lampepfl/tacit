@@ -1,0 +1,15 @@
+status: success
+576: def run_with_reloader(main_func, *args, **kwargs):
+577:     signal.signal(signal.SIGTERM, lambda *args: sys.exit(0))
+578:     try:
+579:         if os.environ.get(DJANGO_AUTORELOAD_ENV) == 'true':
+580:             reloader = get_reloader()
+581:             logger.info('Watching for file changes with %s', reloader.__class__.__name__)
+582:             start_django(reloader, main_func, *args, **kwargs)
+583:         else:
+584:             exit_code = restart_with_reloader()
+585:             sys.exit(exit_code)
+586:     except KeyboardInterrupt:
+587:         pass
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

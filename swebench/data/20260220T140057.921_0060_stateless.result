@@ -1,0 +1,23 @@
+status: success
+diff --git a/django/db/models/sql/where.py b/django/db/models/sql/where.py
+index 50ff13be75..72e74f2a9c 100644
+--- a/django/db/models/sql/where.py
++++ b/django/db/models/sql/where.py
+@@ -214,6 +214,8 @@ class WhereNode(tree.Node):
+         # Wrap filters with a CASE WHEN expression if a database backend
+         # (e.g. Oracle) doesn't support boolean expression in SELECT or GROUP
+         # BY list.
++        if not sql:
++            sql = '1'
+         if not compiler.connection.features.supports_boolean_expr_in_select_clause:
+             sql = f'CASE WHEN {sql} THEN 1 ELSE 0 END'
+         return sql, params
+@@ -262,4 +264,4 @@ class SubqueryConstraint:
+         query = self.query_object
+         query.set_values(self.targets)
+         query_compiler = query.get_compiler(connection=connection)
+-        return query_compiler.as_subquery_condition(self.alias, self.columns, compiler)
++        return query_compiler.as_subquery_condition(self.alias, self.columns, compiler)
+\ No newline at end of file
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

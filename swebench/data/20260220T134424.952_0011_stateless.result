@@ -1,0 +1,7 @@
+status: success
+677:                 migrations.CreateModel("MyModel", tuple(fields.items()), options, (models.Model,)),
+678:                 migrations.CreateModel("MyModel2", tuple(fields.items()), bases=(models.Model,)),
+680:                     name="MyModel3", fields=tuple(fields.items()), options=options, bases=(models.Model,)
+715:                 migrations.CreateModel("MyModel", (), {}, (models.Model,)),
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

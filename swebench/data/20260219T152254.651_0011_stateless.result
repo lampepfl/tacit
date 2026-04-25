@@ -1,0 +1,20 @@
+status: success
+Total lines: 317
+236:     if isinstance(left, Model):
+237:         cleft = _coord_matrix(left, 'left', noutp)
+238:     else:
+239:         cleft = np.zeros((noutp, left.shape[1]))
+240:         cleft[: left.shape[0], : left.shape[1]] = left
+241:     if isinstance(right, Model):
+242:         cright = _coord_matrix(right, 'right', noutp)
+243:     else:
+244:         cright = np.zeros((noutp, right.shape[1]))
+245:         cright[-right.shape[0]:, -right.shape[1]:] = 1
+246: 
+247:     return np.hstack([cleft, cright])
+248: 
+249: 
+250: def _cdot(left, right):
+251:     """
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

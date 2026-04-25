@@ -1,0 +1,53 @@
+status: success
+1: from math import ceil
+2: 
+3: from django.db import connection, models
+4: from django.db.models import ProtectedError, RestrictedError
+5: from django.db.models.deletion import Collector
+6: from django.db.models.sql.constants import GET_ITERATOR_CHUNK_SIZE
+7: from django.test import TestCase, skipIfDBFeature, skipUnlessDBFeature
+8: 
+9: from .models import (
+10:     B1, B2, B3, MR, A, Avatar, B, Base, Child, DeleteBottom, DeleteTop,
+11:     GenericB1, GenericB2, GenericDeleteBottom, HiddenUser, HiddenUserProfile,
+12:     M, M2MFrom, M2MTo, MRNull, Origin, P, Parent, R, RChild, RChildChild,
+13:     Referrer, S, T, User, create_a, get_default_r,
+14: )
+15: 
+16: 
+17: class OnDeleteTests(TestCase):
+18:     def setUp(self):
+19:         self.DEFAULT = get_default_r()
+20: 
+21:     def test_auto(self):
+22:         a = create_a('auto')
+23:         a.auto.delete()
+24:         self.assertFalse(A.objects.filter(name='auto').exists())
+25: 
+26:     def test_non_callable(self):
+27:         msg = 'on_delete must be callable.'
+28:         with self.assertRaisesMessage(TypeError, msg):
+29:             models.ForeignKey('self', on_delete=None)
+30:         with self.assertRaisesMessage(TypeError, msg):
+31:             models.OneToOneField('self', on_delete=None)
+32: 
+33:     def test_auto_nullable(self):
+34:         a = create_a('auto_nullable')
+35:         a.auto_nullable.delete()
+36:         self.assertFalse(A.objects.filter(name='auto_nullable').exists())
+37: 
+38:     def test_setvalue(self):
+39:         a = create_a('setvalue')
+40:         a.setvalue.delete()
+41:         a = A.objects.get(pk=a.pk)
+42:         self.assertEqual(self.DEFAULT, a.setvalue.pk)
+43: 
+44:     def test_setnull(self):
+45:         a = create_a('setnull')
+46:         a.setnull.delete()
+47:         a = A.objects.get(pk=a.pk)
+48:         self.assertIsNone(a.setnull)
+49: 
+50:     def test_setdefault(self):
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

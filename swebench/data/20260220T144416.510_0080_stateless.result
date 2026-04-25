@@ -1,0 +1,15 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = """        ticker = self.tick()
+        while not self.should_stop:
+            try:
+                next(ticker)
+            except StopIteration:
+                break
+        self.stop()
+
+    def tick(self):
+        """
+        This generator is called in a loop from run_loop. It's important that
+        the method takes care of pausing or otherwise waiting for a period of
+        time. This split between run_loop() and tick() is to improve the"""

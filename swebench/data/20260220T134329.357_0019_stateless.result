@@ -1,0 +1,10 @@
+status: failure
+-- [E081] Type Error: ----------------------------------------------------------
+8 |  requestFileSystem(".")(fs => 
+  |                         ^^
+  |                         Missing parameter type
+  |
+  |                         I could not infer the type of the parameter fs
+  |                         Expected type for the whole anonymous function:
+  |                           Any
+1 error found

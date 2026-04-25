@@ -1,0 +1,23 @@
+status: success
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12284/repo/django/contrib/admin/templatetags/admin_list.py:229:         empty_value_display = cl.model_admin.get_empty_value_display()
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12284/repo/django/contrib/admin/options.py:297:     def get_empty_value_display(self):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12284/repo/django/contrib/admin/options.py:366:         return self.sortable_by if self.sortable_by is not None else self.get_list_display(request)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12284/repo/django/contrib/admin/options.py:721:         list_display = self.get_list_display(request)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12284/repo/django/contrib/admin/options.py:722:         list_display_links = self.get_list_display_links(request, list_display)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12284/repo/django/contrib/admin/options.py:933:     def get_list_display(self, request):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12284/repo/django/contrib/admin/options.py:940:     def get_list_display_links(self, request, list_display):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12284/repo/django/contrib/admin/options.py:944:         returned by get_list_display().
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12284/repo/django/contrib/admin/checks.py:761:         # Check only if ModelAdmin.get_list_display() isn't overridden.
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12284/repo/django/contrib/admin/checks.py:762:         elif obj.get_list_display.__func__ is ModelAdmin.get_list_display:
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12284/repo/django/contrib/admin/helpers.py:183:         self.empty_value_display = model_admin.get_empty_value_display()
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12284/repo/django/contrib/admin/filters.py:176:         self.empty_value_display = model_admin.get_empty_value_display()
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12284/repo/django/contrib/admin/filters.py:384:         self.empty_value_display = model_admin.get_empty_value_display()
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12284/repo/django/db/backends/postgresql/creation.py:71:                             self._get_database_display_str(verbosity, target_database_name),
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12284/repo/django/db/backends/sqlite3/creation.py:32:                     self._get_database_display_str(verbosity, test_database_name),
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12284/repo/django/db/backends/sqlite3/creation.py:71:                         self._get_database_display_str(verbosity, target_database_name),
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12284/repo/django/db/backends/mysql/creation.py:48:                             self._get_database_display_str(verbosity, target_database_name),
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12284/repo/django/db/backends/base/creation.py:50:                 self._get_database_display_str(verbosity, test_database_name),
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12284/repo/django/db/backends/base/creation.py:136:     def _get_database_display_str(self, verbosity, database_name):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12284/repo/django/db/backends/base/creation.py:187:                                 self._get_database_display_str(verbosity, test_database_name),
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

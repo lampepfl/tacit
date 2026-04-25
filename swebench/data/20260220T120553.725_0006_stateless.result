@@ -1,0 +1,22 @@
+status: success
+183:         # The group_by attribute can have one of the following forms:
+188:         # See compiler.get_group_by() for details.
+189:         self.group_by = None
+432:         if (isinstance(self.group_by, tuple) or self.is_sliced or existing_annotations or
+456:                     inner_query.group_by = (self.model._meta.pk.get_col(inner_query.get_initial_alias()),)
+522:             if q.group_by is True:
+524:                 q.set_group_by()
+832:         if isinstance(self.group_by, tuple):
+833:             self.group_by = tuple([col.relabeled_clone(change_map) for col in self.group_by])
+1911:     def set_group_by(self):
+1920:         group_by = list(self.select)
+1924:                     inspect.getcallargs(annotation.get_group_by_cols, alias=alias)
+1929:                         '%s.%s.get_group_by_cols().'
+1932:                     group_by_cols = annotation.get_group_by_cols()
+1934:                     group_by_cols = annotation.get_group_by_cols(alias=alias)
+1935:                 group_by.extend(group_by_cols)
+1936:         self.group_by = tuple(group_by)
+2085:         if self.group_by is True:
+2087:             self.set_group_by()
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

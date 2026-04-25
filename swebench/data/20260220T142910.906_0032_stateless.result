@@ -1,0 +1,15 @@
+status: success
+16: CURSOR = 'cursor'
+17: NO_RESULTS = 'no results'
+18: 
+19: ORDER_PATTERN = _lazy_re_compile(r'\?|[-+]?[.\w]+$')
+20: ORDER_DIR = {
+21:     'ASC': ('ASC', 'DESC'),
+22:     'DESC': ('DESC', 'ASC'),
+23: }
+24: 
+25: # SQL join types.
+26: INNER = 'INNER JOIN'
+27: LOUTER = 'LEFT OUTER JOIN'
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

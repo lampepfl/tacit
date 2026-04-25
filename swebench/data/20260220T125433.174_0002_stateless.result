@@ -1,0 +1,34 @@
+status: success
+390:     return s[1:-1].replace(r'\%s' % quote, quote).replace(r'\\', '\\')
+391: 
+392: 
+393: @keep_lazy_text
+394: def slugify(value, allow_unicode=False):
+395:     """
+396:     Convert to ASCII if 'allow_unicode' is False. Convert spaces to hyphens.
+397:     Remove characters that aren't alphanumerics, underscores, or hyphens.
+398:     Convert to lowercase. Also strip leading and trailing whitespace.
+399:     """
+400:     value = str(value)
+401:     if allow_unicode:
+402:         value = unicodedata.normalize('NFKC', value)
+403:     else:
+404:         value = unicodedata.normalize('NFKD', value).encode('ascii', 'ignore').decode('ascii')
+405:     value = re.sub(r'[^\w\s-]', '', value.lower()).strip()
+406:     return re.sub(r'[-\s]+', '-', value)
+407: 
+408: 
+409: def camel_case_to_spaces(value):
+410:     """
+411:     Split CamelCase and convert to lowercase. Strip surrounding whitespace.
+412:     """
+413:     return re_camel_case.sub(r' \1', value).strip().lower()
+414: 
+415: 
+416: def _format_lazy(format_string, *args, **kwargs):
+417:     """
+418:     Apply str.format() on 'format_string' where format_string, args,
+419:     and/or kwargs might be lazy.
+420:     """
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

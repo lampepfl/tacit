@@ -1,0 +1,11 @@
+status: success
+538: 
+539:     def test_merge_warning(self):
+540:         msg = 'Detected duplicate Media files in an opposite order:\n1\n2'
+541:         with self.assertWarnsMessage(RuntimeWarning, msg):
+542:             self.assertEqual(Media.merge([1, 2], [2, 1]), [1, 2])
+543: 
+544:     def test_merge_js_three_way(self):
+545:         """
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

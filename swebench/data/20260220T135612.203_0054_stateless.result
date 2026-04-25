@@ -1,0 +1,49 @@
+status: success
+36:         return '<%s %r>' % (self.__class__.__name__, str(self))
+37: 
+38:     def __str__(self):
+39:         raise NotImplementedError('Subclasses must define how they should be converted to string.')
+40: 
+41: 
+42: class Table(Reference):
+43:     """Hold a reference to a table."""
+44: 
+45:     def __init__(self, table, quote_name):
+46:         self.table = table
+47:         self.quote_name = quote_name
+48: 
+49:     def references_table(self, table):
+50:         return self.table == table
+51: 
+52:     def rename_table_references(self, old_table, new_table):
+53:         if self.table == old_table:
+54:             self.table = new_table
+55: 
+56:     def __str__(self):
+57:         return self.quote_name(self.table)
+58: 
+59: 
+60: class TableColumns(Table):
+61:     """Base class for references to multiple columns of a table."""
+62: 
+63:     def __init__(self, table, columns):
+64:         self.table = table
+65:         self.columns = columns
+66: 
+67:     def references_column(self, table, column):
+68:         return self.table == table and column in self.columns
+69: 
+70:     def rename_column_references(self, table, old_column, new_column):
+71:         if self.table == table:
+72:             for index, column in enumerate(self.columns):
+73:                 if column == old_column:
+74:                     self.columns[index] = new_column
+75: 
+76: 
+77: class Columns(TableColumns):
+78:     """Hold a reference to one or many columns."""
+79: 
+80:     def __init__(self, table, columns, quote_name, col_suffixes=()):
+81:         self.quote_name = quote_name
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

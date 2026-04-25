@@ -1,0 +1,5 @@
+status: success
+Line 1588:         'invalid': _("'%(value)s' value has an invalid format. It must be in "
+Line 1589:                      "[DD] [HH:[MM:]]ss[.uuuuuu] format.")
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

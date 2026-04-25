@@ -1,0 +1,20 @@
+status: success
+560:     def database_forwards(self, app_label, schema_editor, from_state, to_state):
+561:         new_model = to_state.apps.get_model(app_label, self.name)
+562:         if self.allow_migrate_model(schema_editor.connection.alias, new_model):
+563:             old_model = from_state.apps.get_model(app_label, self.name)
+564:             alter_together = getattr(schema_editor, "alter_%s" % self.option_name)
+565:             alter_together(
+566:                 new_model,
+567:                 getattr(old_model._meta, self.option_name, set()),
+568:                 getattr(new_model._meta, self.option_name, set()),
+569:             )
+570: 
+571:     def database_backwards(self, app_label, schema_editor, from_state, to_state):
+572:         return self.database_forwards(app_label, schema_editor, from_state, to_state)
+573: 
+574:     def references_field(self, model_name, name, app_label):
+575:         return self.references_model(model_name, app_label) and (
+576:             not self.option_value
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

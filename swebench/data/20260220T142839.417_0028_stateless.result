@@ -1,0 +1,6 @@
+status: success
+13:     CURSOR, GET_ITERATOR_CHUNK_SIZE, MULTI, NO_RESULTS, ORDER_DIR, SINGLE,
+286:             asc, desc = ORDER_DIR['ASC']
+288:             asc, desc = ORDER_DIR['DESC']
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

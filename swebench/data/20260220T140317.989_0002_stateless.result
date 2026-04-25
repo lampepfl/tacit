@@ -1,0 +1,48 @@
+status: success
+256:         target_etag = target_etag.strip("W/")
+257:         etags = (etag.strip("W/") for etag in etags)
+258:         return target_etag not in etags
+259: 
+260: 
+261: def _if_modified_since_passes(last_modified, if_modified_since):
+262:     """
+263:     Test the If-Modified-Since comparison as defined in section 3.3 of RFC 7232.
+264:     """
+265:     return not last_modified or last_modified > if_modified_since
+266: 
+267: 
+268: def patch_response_headers(response, cache_timeout=None):
+269:     """
+270:     Add HTTP caching headers to the given HttpResponse: Expires and
+271:     Cache-Control.
+272: 
+273:     Each header is only added if it isn't already set.
+274: 
+275:     cache_timeout is in seconds. The CACHE_MIDDLEWARE_SECONDS setting is used
+276:     by default.
+277:     """
+278:     if cache_timeout is None:
+279:         cache_timeout = settings.CACHE_MIDDLEWARE_SECONDS
+280:     if cache_timeout < 0:
+281:         cache_timeout = 0  # Can't have max-age negative
+282:     if not response.has_header("Expires"):
+283:         response.headers["Expires"] = http_date(time.time() + cache_timeout)
+284:     patch_cache_control(response, max_age=cache_timeout)
+285: 
+286: 
+287: def add_never_cache_headers(response):
+288:     """
+289:     Add headers to a response to indicate that a page should never be cached.
+290:     """
+291:     patch_response_headers(response, cache_timeout=-1)
+292:     patch_cache_control(
+293:         response, no_cache=True, no_store=True, must_revalidate=True, private=True
+294:     )
+295: 
+296: 
+297: def patch_vary_headers(response, newheaders):
+298:     """
+299:     Add (or update) the "Vary" header in the given HttpResponse object.
+300:     newheaders is a list of header names that should be in "Vary". If headers
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,9 @@
+status: success
+28:     'verbose_name', 'verbose_name_plural', 'db_table', 'ordering',
+84:         self.verbose_name_plural = None
+189:             # verbose_name_plural is a special case because it uses a 's'
+191:             if self.verbose_name_plural is None:
+192:                 self.verbose_name_plural = format_lazy('{}s', self.verbose_name)
+201:             self.verbose_name_plural = format_lazy('{}s', self.verbose_name)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

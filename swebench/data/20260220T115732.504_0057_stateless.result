@@ -1,0 +1,5 @@
+status: success
+Found line: 141 ->                     # Find the element from list_1 that's at the highest position <= index
+Fixed comment!
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

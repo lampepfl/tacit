@@ -1,0 +1,10 @@
+status: success
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12470/repo/tests/ordering/models.py:56: class ChildArticle(Article):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12470/repo/tests/ordering/tests.py:11: from .models import Article, Author, ChildArticle, OrderedByFArticle, Reference
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12470/repo/tests/ordering/tests.py:465:         ca1 = ChildArticle.objects.create(
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12470/repo/tests/ordering/tests.py:470:         ca2 = ChildArticle.objects.create(
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12470/repo/tests/ordering/tests.py:475:         ca3 = ChildArticle.objects.create(
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12470/repo/tests/ordering/tests.py:480:         ca4 = ChildArticle.objects.create(headline='h1', pub_date=datetime(2005, 7, 28))
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12470/repo/tests/ordering/tests.py:481:         articles = ChildArticle.objects.order_by('article_ptr')
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

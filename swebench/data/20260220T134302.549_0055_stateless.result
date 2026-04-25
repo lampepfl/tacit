@@ -1,0 +1,16 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = ProcessResult(
+  exitCode = 0,
+  stdout = """/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14155/repo/tests/urlpatterns_reverse//tests.py:    def test_current_app_no_partial_match(self):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14155/repo/tests/urlpatterns_reverse//urls.py:    absolute_kwargs_view, defaults_view, empty_view, empty_view_nested_partial,
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14155/repo/tests/urlpatterns_reverse//urls.py:    empty_view_partial, empty_view_wrapped, nested_view,
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14155/repo/tests/urlpatterns_reverse//urls.py:    path('partial/', empty_view_partial, name='partial'),
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14155/repo/tests/urlpatterns_reverse//urls.py:    path('partial_nested/', empty_view_nested_partial, name='partial_nested'),
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14155/repo/tests/urlpatterns_reverse//urls.py:    path('partial_wrapped/', empty_view_wrapped, name='partial_wrapped'),
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14155/repo/tests/urlpatterns_reverse//views.py:from functools import partial, update_wrapper
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14155/repo/tests/urlpatterns_reverse//views.py:empty_view_partial = partial(empty_view, template_name="template.html")
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14155/repo/tests/urlpatterns_reverse//views.py:empty_view_nested_partial = partial(empty_view_partial, template_name="nested_partial.html")
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14155/repo/tests/urlpatt""",
+  stderr = ""
+)

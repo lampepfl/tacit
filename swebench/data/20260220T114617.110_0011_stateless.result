@@ -1,0 +1,11 @@
+status: success
+Text between elif conditions:
+elif self.mask is None and operand is not None:
+            # Make a copy so there is no reference in the result.
+            return deepcopy(operand.mask)
+        elif operand is None:
+            return deepcopy(self.mask)
+        else:
+     
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

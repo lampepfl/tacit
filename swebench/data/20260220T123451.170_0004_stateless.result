@@ -1,0 +1,9 @@
+status: failure
+-- Error: ----------------------------------------------------------------------
+11 |      catch case e: Exception => List(s"Error: ${e.getMessage}")
+   |      ^^^^^
+   |      end of statement expected but 'catch' found
+-- [E040] Syntax Error: --------------------------------------------------------
+15 |run()
+   |     ^
+   |     '}' expected, but eof found

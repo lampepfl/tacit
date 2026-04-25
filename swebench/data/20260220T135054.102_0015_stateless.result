@@ -1,0 +1,29 @@
+status: success
+135:     def __rpow__(self, other):
+136:         return self._combine(other, self.POW, True)
+137: 
+138:     def __rand__(self, other):
+139:           if getattr(self, 'conditional', False) and getattr(other, 'conditional', False):
+140:               return Q(other) & Q(self)
+141:           raise NotImplementedError(
+142:               "Use .bitand() and .bitor() for bitwise logical operations."
+143:           )
+144:   
+145:       def __ror__(self, other):
+146:           if getattr(self, 'conditional', False) and getattr(other, 'conditional', False):
+147:               return Q(other) | Q(self)
+148:           raise NotImplementedError(
+149:               "Use .bitand() and .bitor() for bitwise logical operations."
+150:           )
+151: 
+152: 
+153: @deconstructible
+154: class BaseExpression:
+155:     """Base class for all query expressions."""
+156: 
+157:     # aggregate specific fields
+158:     is_summary = False
+159:     _output_field_resolved_to_none = False
+160:     # Can the expression be used in a WHERE clause?
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

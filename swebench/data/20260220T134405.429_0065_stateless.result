@@ -1,0 +1,7 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = ProcessResult(
+  exitCode = 0,
+  stdout = "Found tests: ['def test_current_app_no_partial_match(self):']",
+  stderr = ""
+)

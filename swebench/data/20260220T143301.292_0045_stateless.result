@@ -1,0 +1,41 @@
+status: success
+Line 310-345:
+309:                 "Article 1",
+310:             ],
+311:             attrgetter("headline")
+312:         )
+313: 
+314:     def test_order_by_pk(self):
+315:         """
+316:         'pk' works as an ordering option in Meta.
+317:         """
+318:         self.assertQuerysetEqual(
+319:             Author.objects.all(),
+320:             list(reversed(range(1, Author.objects.count() + 1))),
+321:             attrgetter("pk"),
+322:         )
+323: 
+324:     def test_order_by_fk_attname(self):
+325:         """
+326:         ordering by a foreign key by its attribute name prevents the query
+327:         from inheriting its related model ordering option (#19195).
+328:         """
+329:         for i in range(1, 5):
+330:             author = Author.objects.get(pk=i)
+331:             article = getattr(self, "a%d" % (5 - i))
+332:             article.author = author
+333:             article.save(update_fields={'author'})
+334: 
+335:         self.assertQuerysetEqual(
+336:             Article.objects.order_by('author_id'), [
+337:                 "Article 4",
+338:                 "Article 3",
+339:                 "Article 2",
+340:                 "Article 1",
+341:             ],
+342:             attrgetter("headline")
+343:         )
+344: 
+345:     def test_order_by_f_expression(self):
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

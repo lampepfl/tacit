@@ -1,0 +1,14 @@
+status: success
+108:         imports = set()
+109:         strings = []
+110:         for k, v in sorted(self.value.items()):
+111:             k_string, k_imports = serializer_factory(k).serialize()
+112:             v_string, v_imports = serializer_factory(v).serialize()
+113:             imports.update(k_imports)
+114:             imports.update(v_imports)
+115:             strings.append((k_string, v_string))
+116:         return "{%s}" % (", ".join("%s: %s" % (k, v) for k, v in strings)), imports
+117: 
+118: 
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

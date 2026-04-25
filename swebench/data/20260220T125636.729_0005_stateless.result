@@ -1,0 +1,13 @@
+status: success
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13158/repo/django/db/models/query.py:418:         clone = self._chain() if self.query.combinator else self.filter(*args, **kwargs)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13158/repo/django/db/models/query.py:988:     def _combinator_query(self, combinator, *other_qs, all=False):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13158/repo/django/db/models/query.py:995:         clone.query.combinator = combinator
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13158/repo/django/db/models/query.py:996:         clone.query.combinator_all = all
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13158/repo/django/db/models/query.py:1003:             return qs[0]._combinator_query('union', *qs[1:], all=all) if qs else self
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13158/repo/django/db/models/query.py:1004:         return self._combinator_query('union', *other_qs, all=all)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13158/repo/django/db/models/query.py:1013:         return self._combinator_query('intersection', *other_qs)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13158/repo/django/db/models/query.py:1019:         return self._combinator_query('difference', *other_qs)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13158/repo/django/db/models/query.py:1378:         if self.query.combinator:
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13158/repo/django/db/models/query.py:1381:                 % (operation_name, self.query.combinator)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

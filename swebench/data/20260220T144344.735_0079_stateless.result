@@ -1,0 +1,7 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = """def template_changed(sender, file_path, **kwargs):
+    for template_dir in get_template_directories():
+        if template_dir in file_path.parents:
+            reset_loaders()
+            return True"""

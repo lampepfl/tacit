@@ -1,0 +1,8 @@
+status: failure
+-- [E006] Not Found Error: -----------------------------------------------------
+6 |    val new_content = oldContent.replace(
+  |                      ^^^^^^^^^^
+  |                      Not found: oldContent - did you mean old_content?
+  |
+  | longer explanation available when compiling with `-explain`
+1 error found

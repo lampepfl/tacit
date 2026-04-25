@@ -1,0 +1,19 @@
+status: success
+360:             result.append((resolved, (sql, params, is_ref)))
+361:         return result
+362: 
+363:     def get_extra_select(self, order_by, select):
+364:         extra_select = []
+365:         if self.query.distinct and not self.query.distinct_fields:
+366:             select_sql = [t[1] for t in select]
+367:             for expr, (sql, params, is_ref) in order_by:
+368:                 without_ordering = self.ordering_parts.search(sql).group(1)
+369:                 if not is_ref and (without_ordering, params) not in select_sql:
+370:                     extra_select.append((expr, (without_ordering, params), None))
+371:         return extra_select
+372: 
+373:     def quote_name_unless_alias(self, name):
+374:         """
+375:         A wrapper around connection.ops.quote_name that doesn't quote aliases
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

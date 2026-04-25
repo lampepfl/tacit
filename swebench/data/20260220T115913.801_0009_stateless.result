@@ -1,0 +1,5 @@
+status: success
+348:     def resolve(self, path):
+370: class URLResolver:
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

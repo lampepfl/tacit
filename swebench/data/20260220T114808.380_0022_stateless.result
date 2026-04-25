@@ -1,0 +1,14 @@
+status: failure
+-- [E007] Type Mismatch Error: -------------------------------------------------
+4 |      exec("python", List("-c", "import django.db.models.fields; print('Import successful')"), None, None, 10000)
+  |                                                                                                     ^^^^
+  |                                                       Found:    None.type
+  |                                                       Required: Long
+  |
+  | longer explanation available when compiling with `-explain`
+-- Error: ----------------------------------------------------------------------
+4 |      exec("python", List("-c", "import django.db.models.fields; print('Import successful')"), None, None, 10000)
+  |                                                                                                           ^^^^^
+  |too many arguments for method exec in trait Interface: (command: String, args: List[String], workingDir: Option[String], timeoutMs:
+  |  Long)(using pp: library.ProcessPermission): library.ProcessResult
+2 errors found

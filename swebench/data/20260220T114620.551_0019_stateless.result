@@ -1,0 +1,43 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = ProcessResult(
+  exitCode = 4,
+  stdout = "",
+  stderr = """ERROR: while parsing the following warning configuration:
+
+  ignore:ASDF functionality for astropy is being moved.*:astropy.utils.exceptions.AstropyDeprecationWarning:astropy.io.misc.asdf.types
+
+This error occurred:
+
+Traceback (most recent call last):
+  File "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/astropy__astropy-14182/repo/astropy/_dev/scm_version.py", line 6, in <module>
+    from setuptools_scm import get_version
+ModuleNotFoundError: No module named 'setuptools_scm'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/astropy__astropy-14182/repo/astropy/version.py", line 6, in <module>
+    from ._dev.scm_version import version
+  File "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/astropy__astropy-14182/repo/astropy/_dev/scm_version.py", line 10, in <module>
+    raise ImportError("setuptools_scm broken or not installed")
+ImportError: setuptools_scm broken or not installed
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/astropy__astropy-14182/repo/astropy/version.py", line 8, in <module>
+    from ._version import version
+ModuleNotFoundError: No module named 'astropy._version'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/tacit/Work/SafeExecMCP/bench/.venv/lib/python3.14/site-packages/_pytest/config/__init__.py", line 2121, in parse_warning_filter
+    category: type[Warning] = _resolve_warning_category(category_)
+                              ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^
+  File "/Users/tacit/Work/SafeExecMCP/bench/.venv/lib/python3.14/site-packages/_pytest/config/__init__.py", line 2168, in _resolve_warning_category
+    m = __import__(module, None, None, [klass])
+  File "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/astropy__astropy-14182/repo/astropy/__init__.py", line 12, in <module>
+    from .version import version as __version__
+  File "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/astropy__ast...

@@ -1,0 +1,24 @@
+status: success
+341:         except IndexError:
+342:             subcommand = 'help'  # Display help if no arguments were given.
+343: 
+344:         # Preprocess options to extract --settings and --pythonpath.
+345:         # These options could affect the commands that are available, so they
+346:         # must be processed early.
+347:         parser = CommandParser(usage='%(prog)s subcommand [options] [args]', add_help=False, allow_abbrev=False)
+348:         parser.add_argument('--settings')
+349:         parser.add_argument('--pythonpath')
+350:         parser.add_argument('args', nargs='*')  # catch-all
+351:         try:
+352:             options, args = parser.parse_known_args(self.argv[2:])
+353:             handle_default_options(options)
+354:         except CommandError:
+355:             pass  # Ignore any option errors at this point.
+356: 
+357:         try:
+358:             settings.INSTALLED_APPS
+359:         except ImproperlyConfigured as exc:
+360:             self.settings_exception = exc
+361:         except ImportError as exc:
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

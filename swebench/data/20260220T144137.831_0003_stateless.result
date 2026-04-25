@@ -1,0 +1,34 @@
+status: success
+741:             opts = orig_opts
+742:             for name in parts[:-1]:
+743:                 old_model = cur_model
+744:                 if name in self._filtered_relations:
+745:                     name = self._filtered_relations[name].relation_name
+746:                 source = opts.get_field(name)
+747:                 if is_reverse_o2o(source):
+748:                     cur_model = source.related_model
+749:                 else:
+750:                     cur_model = source.remote_field.model
+751:                 opts = cur_model._meta
+752:                 # Even if we're "just passing through" this model, we must add
+753:                 # both the current model's pk and the related reference field
+754:                 # (if it's not a reverse relation) to the things we select.
+755:                 if not is_reverse_o2o(source):
+756:                     must_include[old_model].add(source)
+757:                 add_to_dict(must_include, cur_model, opts.pk)
+758:             field = opts.get_field(parts[-1])
+759:             is_reverse_object = field.auto_created and not field.concrete
+760:             model = field.related_model if is_reverse_object else field.model
+761:             model = model._meta.concrete_model
+762:             if model == opts.model:
+763:                 model = cur_model
+764:             if not is_reverse_o2o(field):
+765:                 add_to_dict(seen, model, field)
+766: 
+767:         if defer:
+768:             # We need to load all fields for each model, except those that
+769:             # appear in "seen" (for all models that appear in "seen"). The only
+770:             # slight complexity here is handling fields that exist on parent
+771:             # models.
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

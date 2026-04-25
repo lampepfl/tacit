@@ -1,0 +1,24 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = List(
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12184/repo/django/urls/resolvers.py",
+    lineNumber = 8,
+    line = "import functools"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12184/repo/django/urls/resolvers.py",
+    lineNumber = 73,
+    line = "@functools.lru_cache(maxsize=None)"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12184/repo/django/urls/resolvers.py",
+    lineNumber = 78,
+    line = "@functools.lru_cache(maxsize=None)"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12184/repo/django/urls/resolvers.py",
+    lineNumber = 366,
+    line = "        if isinstance(callback, functools.partial):"
+  )
+)

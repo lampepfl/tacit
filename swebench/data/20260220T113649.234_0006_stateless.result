@@ -1,0 +1,13 @@
+status: success
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-10914/repo/tests/test_utils/tests.py:1098:         Overriding the FILE_UPLOAD_PERMISSIONS setting should be reflected in
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-10914/repo/tests/test_utils/tests.py:1103:         with self.settings(FILE_UPLOAD_PERMISSIONS=0o777):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-10914/repo/tests/file_storage/tests.py:507:         FILE_UPLOAD_PERMISSIONS=0o777,
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-10914/repo/tests/file_storage/tests.py:525:             'FILE_UPLOAD_PERMISSIONS': 0o333,
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-10914/repo/tests/file_storage/tests.py:537:             self.assertEqual(defaults_storage.file_permissions_mode, settings['FILE_UPLOAD_PERMISSIONS'])
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-10914/repo/tests/file_storage/tests.py:888:     @override_settings(FILE_UPLOAD_PERMISSIONS=0o654)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-10914/repo/tests/file_storage/tests.py:895:     @override_settings(FILE_UPLOAD_PERMISSIONS=None)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-10914/repo/tests/staticfiles_tests/test_storage.py:506:         FILE_UPLOAD_PERMISSIONS=0o655,
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-10914/repo/tests/staticfiles_tests/test_storage.py:519:         FILE_UPLOAD_PERMISSIONS=None,
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-10914/repo/tests/staticfiles_tests/test_storage.py:532:         FILE_UPLOAD_PERMISSIONS=0o655,
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

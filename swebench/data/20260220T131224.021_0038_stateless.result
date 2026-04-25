@@ -1,0 +1,11 @@
+status: success
+java.lang.SecurityException: Access denied: command 'PYTHONPATH=/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12908/repo python' is not in allowed commands Set(python)
+  at library.CommandValidator$.validate(CommandValidator.scala:39)
+  at library.ProcessOps$.exec(ProcessOps.scala:14)
+  at library.InterfaceImpl.exec(InterfaceImpl.scala:13)
+  at rs$line$2$.run$$anonfun$1$$anonfun$1(rs$line$2:4)
+  at library.InterfaceImpl.requestExecPermission(InterfaceImpl.scala:37)
+  at rs$line$2$.run$$anonfun$1(rs$line$2:5)
+  at library.InterfaceImpl.requestFileSystem(InterfaceImpl.scala:33)
+  at rs$line$2$.run(rs$line$2:6)
+  ... 53 elided

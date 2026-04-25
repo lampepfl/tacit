@@ -1,0 +1,85 @@
+status: success
+Found at line: 265
+265:     def alter_field(self, app_label, model_name, name, field, preserve_default):
+266:         if not preserve_default:
+267:             field = field.clone()
+268:             field.default = NOT_PROVIDED
+269:         else:
+270:             field = field
+271:         model_key = app_label, model_name
+272:         fields = self.models[model_key].fields
+273:         if self._relations is not None:
+274:             old_field = fields.pop(name)
+275:             if old_field.is_relation:
+276:                 self.resolve_model_field_relations(model_key, name, old_field)
+277:             fields[name] = field
+278:             if field.is_relation:
+279:                 self.resolve_model_field_relations(model_key, name, field)
+280:         else:
+281:             fields[name] = field
+282:         # TODO: investigate if old relational fields must be reloaded or if
+283:         # it's sufficient if the new field is (#27737).
+284:         # Delay rendering of relationships if it's not a relational field and
+285:         # not referenced by a foreign key.
+286:         delay = not field.is_relation and not field_is_referenced(
+287:             self, model_key, (name, field)
+288:         )
+289:         self.reload_model(*model_key, delay=delay)
+290: 
+291:     def rename_field(self, app_label, model_name, old_name, new_name):
+292:         model_key = app_label, model_name
+293:         model_state = self.models[model_key]
+294:         # Rename the field.
+295:         fields = model_state.fields
+296:         try:
+297:             found = fields.pop(old_name)
+298:         except KeyError:
+299:             raise FieldDoesNotExist(
+300:                 f"{app_label}.{model_name} has no field named '{old_name}'"
+301:             )
+302:         fields[new_name] = found
+303:         for field in fields.values():
+304:             # Fix from_fields to refer to the new field.
+305:             from_fields = getattr(field, "from_fields", None)
+306:             if from_fields:
+307:                 field.from_fields = tuple(
+308:                     [
+309:                         new_name if from_field_name == old_name else from_field_name
+310:                         for from_field_name in from_fields
+311:                     ]
+312:                 )
+313:         # Fix index/unique_together to refer to the new field.
+314:         options = model_state.options
+315:         for option in ("index_together", "unique_together"):
+316:             if option in options:
+317:                 options[option] = [
+318:                     [new_name if n == old_name else n for n in together]
+319:                     for together in options[option]
+320:                 ]
+321:         # Fix to_fields to refer to the new field.
+322:         delay = True
+323:         references = get_references(self, model_key, (old_name, found))
+324:         for *_, field, reference in references:
+325:             delay = False
+326:             if reference.to:
+327:                 remote_field, to_fields = reference.to
+328:                 if getattr(remote_field, "field_name", None) == old_name:
+329:                     remote_field.field_name = new_name
+330:                 if to_fields:
+331:                     field.to_fields = tuple(
+332:                         [
+333:                             new_name if to_field_name == old_name else to_field_name
+334:                             for to_field_name in to_fields
+335:                         ]
+336:                     )
+337:         if self._relations is not None:
+338:             old_name_lower = old_name.lower()
+339:             new_name_lower = new_name.lower()
+340:             for to_model in self._relations.values():
+341:                 if old_name_lower in to_model[model_key]:
+342:                     field = to_model[model_key].pop(old_name_lower)
+343:                     field.name = new_name_lower
+344:                     to_model[model_key][new_name_lower] = field
+345:         self.reload_model(*model_key, delay=delay)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

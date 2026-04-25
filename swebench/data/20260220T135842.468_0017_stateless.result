@@ -1,0 +1,23 @@
+status: success
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15252/repo/tests/migrations/test_loader.py:10: from django.db.migrations.recorder import MigrationRecorder
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15252/repo/tests/migrations/test_loader.py:26:         recorder = MigrationRecorder(connection)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15252/repo/tests/migrations/test_loader.py:37:         recorder_other = MigrationRecorder(connections['other'])
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15252/repo/tests/migrations/test_loader.py:253:         recorder = MigrationRecorder(connection)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15252/repo/tests/migrations/test_loader.py:273:         recorder = MigrationRecorder(connection)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15252/repo/tests/migrations/test_loader.py:346:         recorder = MigrationRecorder(connection)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15252/repo/tests/migrations/test_loader.py:366:         recorder = MigrationRecorder(connection)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15252/repo/tests/migrations/test_loader.py:420:         recorder = MigrationRecorder(connection)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15252/repo/tests/migrations/test_loader.py:439:         recorder = MigrationRecorder(connection)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15252/repo/tests/migrations/test_loader.py:473:         recorder = MigrationRecorder(connection)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15252/repo/tests/migrations/test_commands.py:17: from django.db.migrations.recorder import MigrationRecorder
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15252/repo/tests/migrations/test_commands.py:331:         migration1 = MigrationRecorder(connection).migration_qs.get(app='migrations', name='0001_initial')
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15252/repo/tests/migrations/test_commands.py:909:         recorder = MigrationRecorder(connection)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15252/repo/tests/migrations/test_commands.py:931:         recorder = MigrationRecorder(connection)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15252/repo/tests/migrations/test_commands.py:963:             recorder = MigrationRecorder(connection)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15252/repo/tests/migrations/test_commands.py:1004:         recorder = MigrationRecorder(connection)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15252/repo/tests/migrations/test_commands.py:1131:                 MigrationRecorder, 'has_table',
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15252/repo/tests/migrations/test_commands.py:1850:         recorder = MigrationRecorder(connection)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15252/repo/tests/migrations/test_executor.py:8: from django.db.migrations.recorder import MigrationRecorder
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15252/repo/tests/migrations/test_executor.py:648:         recorder = MigrationRecorder(connection)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

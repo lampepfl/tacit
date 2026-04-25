@@ -1,0 +1,33 @@
+status: success
+429:         else:
+430:             sql, params = node.as_sql(self, self.connection)
+431:         return sql, params
+432: 
+433:     def get_combinator_sql(self, combinator, all):
+434:         features = self.connection.features
+435:         compilers = [
+436:             query.get_compiler(self.using, self.connection)
+437:             for query in self.query.combined_queries if not query.is_empty()
+438:         ]
+439:         if not features.supports_slicing_ordering_in_compound:
+440:             for query, compiler in zip(self.query.combined_queries, compilers):
+441:                 if query.low_mark or query.high_mark:
+442:                     raise DatabaseError('LIMIT/OFFSET not allowed in subqueries of compound statements.')
+443:                 if compiler.get_order_by():
+444:                     raise DatabaseError('ORDER BY not allowed in subqueries of compound statements.')
+445:         parts = ()
+446:         for compiler in compilers:
+447:             try:
+448:                 # If the columns list is limited, then all combined queries
+449:                 # must have the same columns list. Set the selects defined on
+450:                 # the query on all combined queries, if not already set.
+451:                 if not compiler.query.values_select and self.query.values_select:
+452:                     compiler.query = compiler.query.clone()
+453:                     compiler.query.set_values((
+454:                         *self.query.extra_select,
+455:                         *self.query.values_select,
+456:                         *self.query.annotation_select,
+457:                     ))
+458:                 part_sql, part_args = compiler.as_sql()
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

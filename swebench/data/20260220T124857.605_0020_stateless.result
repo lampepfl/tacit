@@ -1,0 +1,36 @@
+status: success
+713:     def delete(self):
+714:         """Delete the records in the current QuerySet."""
+715:         self._not_support_combined_queries('delete')
+716:         assert not self.query.is_sliced, \
+717:             "Cannot use 'limit' or 'offset' with delete."
+718: 
+719:         if self._fields is not None:
+720:             raise TypeError("Cannot call delete() after .values() or .values_list()")
+721: 
+722:         del_query = self._chain()
+723: 
+724:         # The delete is actually 2 queries - one to find related objects,
+725:         # and one to delete. Make sure that the discovery of related
+726:         # objects is performed on the same database as the deletion.
+727:         del_query._for_write = True
+728: 
+729:         # Disable non-supported fields.
+730:         del_query.query.select_for_update = False
+731:         del_query.query.select_related = False
+732:         del_query.query.clear_ordering(force_empty=True)
+733: 
+734:         collector = Collector(using=del_query.db)
+735:         collector.collect(del_query)
+736:         deleted, _rows_count = collector.delete()
+737: 
+738:         # Clear the result cache, in case this QuerySet gets reused.
+739:         self._result_cache = None
+740:         return deleted, _rows_count
+741: 
+742:     delete.alters_data = True
+743:     delete.queryset_only = True
+744: 
+745:     def _raw_delete(self, using):
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,8 @@
+status: failure
+-- [E006] Not Found Error: -----------------------------------------------------
+6 |    exec("ls", List("/"), None, 30000)
+  |    ^^^^
+  |    Expected a type, but found a term: exec
+  |
+  | longer explanation available when compiling with `-explain`
+1 error found

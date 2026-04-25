@@ -1,0 +1,28 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = ProcessResult(
+  exitCode = 0,
+  stdout = """Found: setup.py
+  # This check and everything above must remain compatible with Python 2.7.
+  This will install the latest version of Django which works on your
+Found: pyproject.toml
+Found: tox.ini
+  # Tox (https://tox.readthedocs.io/) is a tool for running tests in multiple
+  # virtualenvs. This configuration file helps to run the test suite on all
+  [testenv:py3]
+  [testenv]
+  # OBJC_DISABLE_INITIALIZE_FORK_SAFETY fixes hung tests for MacOS users. (#30806)
+  py{3,38,39}: -rtests/requirements/py3.txt
+  postgres: -rtests/requirements/postgres.txt
+  mysql: -rtests/requirements/mysql.txt
+  oracle: -rtests/requirements/oracle.txt
+  changedir = tests
+  {envpython} runtests.py {posargs}
+  [testenv:flake8]
+  [testenv:docs]
+  [testenv:isort]
+  commands = isort --check-only --diff django tests scripts
+  [testenv:javascript]
+  npm test""",
+  stderr = ""
+)

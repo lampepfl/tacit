@@ -1,0 +1,28 @@
+status: success
+1641: 
+1642:     def contribute_to_class(self, cls, name, **kwargs):
+1643:         # To support multiple relations to self, it's useful to have a non-None
+1644:         # related name on symmetrical relations for internal reasons. The
+1645:         # concept doesn't make a lot of sense externally ("you want me to
+1646:         # specify *what* on my non-reversible relation?!"), so we set it up
+1647:         # automatically. The funky name reduces the chance of an accidental
+1648:         # clash.
+1649:         if self.remote_field.symmetrical and (
+1650:             self.remote_field.model == RECURSIVE_RELATIONSHIP_CONSTANT or
+1651:             self.remote_field.model == cls._meta.object_name
+1652:         ):
+1653:             self.remote_field.related_name = "%s_rel_+" % name
+1654:         elif self.remote_field.is_hidden():
+1655:             # If the backwards relation is disabled, replace the original
+1656:             # related_name with one generated from the m2m field name. Django
+1657:             # still uses backwards relations internally and we need to avoid
+1658:             # clashes between multiple m2m fields with related_name == '+'.
+1659:             self.remote_field.related_name = '_%s_%s_%s_+' % (
+1660:                 cls._meta.app_label,
+1661:                 cls.__name__.lower(),
+1662:                 name,
+1663:             )
+1664: 
+1665:         super().contribute_to_class(cls, name, **kwargs)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

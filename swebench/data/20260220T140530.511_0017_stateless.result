@@ -1,0 +1,13 @@
+status: success
+261: def _if_modified_since_passes(last_modified, if_modified_since):
+262:     """
+263:     Test the If-Modified-Since comparison as defined in section 3.3 of RFC 7232.
+264:     """
+265:     return not last_modified or last_modified > if_modified_since
+266: 
+267: 
+268: def patch_response_headers(response, cache_timeout=None):
+269:     """
+270:     Add HTTP caching headers to the given HttpResponse: Expires and
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

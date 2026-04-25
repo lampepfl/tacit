@@ -1,0 +1,31 @@
+status: success
+Found 27 matches
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15738/repo/django/db/migrations/autodetector.py:176:         # generate_removed_altered_index/unique_together(), and
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15738/repo/django/db/migrations/autodetector.py:177:         # generate_altered_index/unique_together().
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15738/repo/django/db/migrations/autodetector.py:191:         self.generate_removed_altered_unique_together()
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15738/repo/django/db/migrations/autodetector.py:198:         self.generate_altered_unique_together()
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15738/repo/django/db/migrations/autodetector.py:471:         # Field is removed and part of an index/unique_together
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15738/repo/django/db/migrations/autodetector.py:591:         be deferred (e.g. unique_together, index_together).
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15738/repo/django/db/migrations/autodetector.py:618:             unique_together = model_state.options.pop("unique_together", None)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15738/repo/django/db/migrations/autodetector.py:739:             if unique_together:
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15738/repo/django/db/migrations/autodetector.py:744:                         unique_together=unique_together,
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15738/repo/django/db/migrations/autodetector.py:836:             unique_together = model_state.options.pop("unique_together", None)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15738/repo/django/db/migrations/autodetector.py:838:             if unique_together:
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15738/repo/django/db/migrations/autodetector.py:843:                         unique_together=None,
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15738/repo/django/db/migrations/autodetector.py:1088:             # order_with_respect_to or index/unique_together operation;
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15738/repo/django/db/migrations/autodetector.py:1499:     def generate_removed_altered_unique_together(self):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15738/repo/django/db/migrations/autodetector.py:1521:     def generate_altered_unique_together(self):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15738/repo/django/db/migrations/operations/models.py:247:                 for option_name in ("unique_together", "index_together"):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15738/repo/django/db/migrations/operations/models.py:281:                 for option_name in ("unique_together", "index_together"):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15738/repo/django/db/migrations/operations/models.py:600:     Change the value of unique_together to the target one.
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15738/repo/django/db/migrations/operations/models.py:601:     Input value of unique_together must be a set of tuples.
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15738/repo/django/db/migrations/operations/models.py:604:     option_name = "unique_together"
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15738/repo/django/db/migrations/operations/models.py:606:     def __init__(self, name, unique_together):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15738/repo/django/db/migrations/operations/models.py:607:         super().__init__(name, unique_together)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15738/repo/django/db/migrations/state.py:313:         # Fix index/unique_together to refer to the new field.
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15738/repo/django/db/migrations/state.py:315:         for option in ("index_together", "unique_together"):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15738/repo/django/db/migrations/state.py:807:                 if name == "unique_together":
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15738/repo/django/db/migrations/state.py:808:                     ut = model._meta.original_attrs["unique_together"]
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15738/repo/django/db/migrations/state.py:828:             for key in ["unique_together", "index_together", "order_with_respect_to"]:
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

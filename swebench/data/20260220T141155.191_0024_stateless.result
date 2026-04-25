@@ -1,0 +1,93 @@
+status: success
+1420:                 app_label,
+1421:                 model_name,
+1422:             )
+1423:             dependencies.append((through_app_label, through_object_name, None, True))
+1424:         return dependencies
+1425: 
+1426:     def _get_altered_foo_together_operations(self, option_name):
+1427:         for app_label, model_name in sorted(self.kept_model_keys):
+1428:             old_model_name = self.renamed_models.get(
+1429:                 (app_label, model_name), model_name
+1430:             )
+1431:             old_model_state = self.from_state.models[app_label, old_model_name]
+1432:             new_model_state = self.to_state.models[app_label, model_name]
+1433: 
+1434:             # We run the old version through the field renames to account for those
+1435:             old_value = old_model_state.options.get(option_name)
+1436:             old_value = (
+1437:                 {
+1438:                     tuple(
+1439:                         self.renamed_fields.get((app_label, model_name, n), n)
+1440:                         for n in unique
+1441:                     )
+1442:                     for unique in old_value
+1443:                 }
+1444:                 if old_value
+1445:                 else set()
+1446:             )
+1447: 
+1448:             new_value = new_model_state.options.get(option_name)
+1449:             new_value = set(new_value) if new_value else set()
+1450: 
+1451:             if old_value != new_value:
+1452:                 dependencies = []
+1453:                 for foo_togethers in new_value:
+1454:                     for field_name in foo_togethers:
+1455:                         field = new_model_state.get_field(field_name)
+1456:                         if field.remote_field and field.remote_field.model:
+1457:                             dependencies.extend(
+1458:                                 self._get_dependencies_for_foreign_key(
+1459:                                     app_label,
+1460:                                     model_name,
+1461:                                     field,
+1462:                                     self.to_state,
+1463:                                 )
+1464:                             )
+1465:                 yield (
+1466:                     old_value,
+1467:                     new_value,
+1468:                     app_label,
+1469:                     model_name,
+1470:                     dependencies,
+1471:                 )
+1472: 
+1473:     def _generate_removed_altered_foo_together(self, operation):
+1474:         for (
+1475:             old_value,
+1476:             new_value,
+1477:             app_label,
+1478:             model_name,
+1479:             dependencies,
+1480:         ) in self._get_altered_foo_together_operations(operation.option_name):
+1481:             if operation == operations.AlterIndexTogether:
+1482:                 old_value = {
+1483:                     value
+1484:                     for value in old_value
+1485:                     if value
+1486:                     not in self.renamed_index_together_values[app_label, model_name]
+1487:                 }
+1488:             removal_value = new_value.intersection(old_value)
+1489:             if removal_value or old_value:
+1490:                 self.add_operation(
+1491:                     app_label,
+1492:                     operation(
+1493:                         name=model_name, **{operation.option_name: removal_value}
+1494:                     ),
+1495:                     dependencies=dependencies,
+1496:                 )
+1497: 
+1498:     def generate_removed_altered_unique_together(self):
+1499:         self._generate_removed_altered_foo_together(operations.AlterUniqueTogether)
+1500: 
+1501:     def generate_removed_altered_index_together(self):
+1502:         self._generate_removed_altered_foo_together(operations.AlterIndexTogether)
+1503: 
+1504:     def _generate_altered_foo_together(self, operation):
+1505:         for (
+1506:             old_value,
+1507:             new_value,
+1508:             app_label,
+1509:             model_name,
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

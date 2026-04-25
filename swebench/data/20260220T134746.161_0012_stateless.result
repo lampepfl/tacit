@@ -1,0 +1,24 @@
+status: success
+135:     def __rpow__(self, other):
+136:         return self._combine(other, self.POW, True)
+137: 
+138:     def __rand__(self, other):
+139:         raise NotImplementedError(
+140:             "Use .bitand() and .bitor() for bitwise logical operations."
+141:         )
+142: 
+143:     def __ror__(self, other):
+144:         raise NotImplementedError(
+145:             "Use .bitand() and .bitor() for bitwise logical operations."
+146:         )
+147: 
+148: 
+149: @deconstructible
+150: class BaseExpression:
+151:     """Base class for all query expressions."""
+152: 
+153:     # aggregate specific fields
+154:     is_summary = False
+155:     _output_field_resolved_to_none = False
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

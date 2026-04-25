@@ -1,0 +1,33 @@
+status: success
+985:         else:
+986:             return self._filter_or_exclude(False, **filter_obj)
+987: 
+988:     def _combinator_query(self, combinator, *other_qs, all=False):
+989:         # Clone the query to inherit the select list and everything
+990:         clone = self._chain()
+991:         # Clear limits and ordering so they can be reapplied
+992:         clone.query.clear_ordering(True)
+993:         clone.query.clear_limits()
+994:         clone.query.combined_queries = (self.query,) + tuple(qs.query for qs in other_qs)
+995:         clone.query.combinator = combinator
+996:         clone.query.combinator_all = all
+997:         return clone
+998: 
+999:     def union(self, *other_qs, all=False):
+1000:         # If the query is an EmptyQuerySet, combine all nonempty querysets.
+1001:         if isinstance(self, EmptyQuerySet):
+1002:             qs = [q for q in other_qs if not isinstance(q, EmptyQuerySet)]
+1003:             return qs[0]._combinator_query('union', *qs[1:], all=all) if qs else self
+1004:         return self._combinator_query('union', *other_qs, all=all)
+1005: 
+1006:     def intersection(self, *other_qs):
+1007:         # If any query is an EmptyQuerySet, return it.
+1008:         if isinstance(self, EmptyQuerySet):
+1009:             return self
+1010:         for other in other_qs:
+1011:             if isinstance(other, EmptyQuerySet):
+1012:                 return other
+1013:         return self._combinator_query('intersection', *other_qs)
+1014: 
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

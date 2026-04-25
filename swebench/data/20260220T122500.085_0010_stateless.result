@@ -1,0 +1,18 @@
+status: success
+java.util.regex.PatternSyntaxException: Dangling meta character '?' near index 0
+?
+^
+  at java.util.regex.Pattern.error(Pattern.java:2028)
+  at java.util.regex.Pattern.sequence(Pattern.java:2203)
+  at java.util.regex.Pattern.expr(Pattern.java:2069)
+  at java.util.regex.Pattern.compile(Pattern.java:1783)
+  at java.util.regex.Pattern.<init>(Pattern.java:1430)
+  at java.util.regex.Pattern.compile(Pattern.java:1069)
+  at scala.util.matching.Regex.<init>(Regex.scala:233)
+  at scala.collection.StringOps$.r$extension(StringOps.scala:838)
+  at library.FileOps$.grep(FileOps.scala:9)
+  at library.InterfaceImpl.grep(InterfaceImpl.scala:12)
+  at rs$line$2$.run$$anonfun$1(rs$line$2:3)
+  at library.InterfaceImpl.requestFileSystem(InterfaceImpl.scala:33)
+  at rs$line$2$.run(rs$line$2:4)
+  ... 53 elided

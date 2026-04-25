@@ -1,0 +1,26 @@
+status: success
+10: from django.db.models import AutoField, Manager, OrderWrt, UniqueConstraint
+12: from django.utils.datastructures import ImmutableList, OrderedSet
+27:     'verbose_name', 'verbose_name_plural', 'db_table', 'ordering',
+28:     'unique_together', 'permissions', 'get_latest_by', 'order_with_respect_to',
+85:         self.ordering = []
+86:         self._ordering_clash = False
+97:         self.order_with_respect_to = None
+193:             # order_with_respect_and ordering are mutually exclusive.
+194:             self._ordering_clash = bool(self.ordering and self.order_with_respect_to)
+221:         if self.order_with_respect_to:
+224:             query = self.order_with_respect_to
+226:                 self.order_with_respect_to = next(
+233:             self.ordering = ('_order',)
+234:             if not any(isinstance(field, OrderWrt) for field in model._meta.local_fields):
+235:                 model.add_to_class('_order', OrderWrt())
+237:             self.order_with_respect_to = None
+261:         # Insert the given field in the order in which it was created, using
+559:             # In order to avoid premature loading of the relation tree
+581:         Return a list of parent classes leading to `model` (ordered from
+598:         Return all the ancestors of this model as a list ordered by MRO.
+601:         result = OrderedSet(self.parents)
+776:             # In order to avoid list manipulation. Always return a shallow copy
+822:         # In order to avoid list manipulation. Always
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

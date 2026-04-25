@@ -1,0 +1,35 @@
+status: success
+import sys
+  from io import StringIO
+  from astropy.table import QTable
+  import astropy.units as u
+  
+  # Test 1: Basic RST output (no header_rows)
+  tbl = QTable({'wave': [350,950]*u.nm, 'response': [0.7, 1.2]*u.count})
+  out = StringIO()
+  tbl.write(out, format="ascii.rst")
+  print("Test 1: Basic RST output (no header_rows)")
+  print(out.getvalue())
+  print("---")
+  
+  # Test 2: RST with header_rows=["name", "unit"]
+  out2 = StringIO()
+  tbl.write(out2, format="ascii.rst", header_rows=["name", "unit"])
+  print("Test 2: RST with header_rows=['name', 'unit']")
+  print(out2.getvalue())
+  print("---")
+  
+  # Test 3: Verify error is fixed
+  print("Test 3: Verify no TypeError")
+  try:
+      out3 = StringIO()
+      tbl.write(out3, format="ascii.rst", header_rows=["name", "unit"])
+      print("SUCCESS: No TypeError raised!")
+  except TypeError as e:
+      print(f"FAILURE: {e}")
+  print("---")
+  
+  print("All tests passed!")
+  
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

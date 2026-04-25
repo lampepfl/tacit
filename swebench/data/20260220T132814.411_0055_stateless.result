@@ -1,0 +1,7 @@
+status: success
+46: from django.utils.text import (
+47:     capfirst, format_lazy, get_text_list, smart_split, unescape_string_literal,
+48: )
+49: from django.utils.translation import gettext as _, ngettext
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

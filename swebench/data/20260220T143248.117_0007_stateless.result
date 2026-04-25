@@ -1,0 +1,19 @@
+status: success
+Migrations contents:
+  questioner.py
+  graph.py
+  recorder.py
+  __init__.py
+  autodetector.py
+  operations
+  utils.py
+  loader.py
+  optimizer.py
+  serializer.py
+  exceptions.py
+  writer.py
+  migration.py
+  executor.py
+  state.py
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

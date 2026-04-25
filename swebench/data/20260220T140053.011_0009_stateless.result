@@ -1,0 +1,5 @@
+status: success
+22:             if obj.extra_tags is not None:
+23:                 message.append(obj.extra_tags)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

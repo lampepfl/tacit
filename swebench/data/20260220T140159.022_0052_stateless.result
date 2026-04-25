@@ -1,0 +1,14 @@
+status: success
+Found 39 matches
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14999/repo/tests/migrations/test_optimizer.py:72:         CreateModel should absorb RenameModels.
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14999/repo/tests/migrations/test_optimizer.py:84:                 migrations.RenameModel("Foo", "Bar"),
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14999/repo/tests/migrations/test_optimizer.py:99:         RenameModels should absorb themselves.
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14999/repo/tests/migrations/test_optimizer.py:103:                 migrations.RenameModel("Foo", "Baa"),
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14999/repo/tests/migrations/test_optimizer.py:104:                 migrations.RenameModel("Baa", "Bar"),
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14999/repo/tests/migrations/test_optimizer.py:107:                 migrations.RenameModel("Foo", "Bar"),
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14999/repo/tests/migrations/test_optimizer.py:858:                 migrations.RenameModel("Foo", "Phou"),
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14999/repo/tests/migrations/test_optimizer.py:860:                 migrations.RenameModel("Phou", "Fou"),
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14999/repo/tests/migrations/test_optimizer.py:878:                 migrations.RenameModel("Foo", "Phou"),
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14999/repo/tests/migrations/test_operations.py:602:         Tests the RenameModel operation.
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,8 @@
+val feedPath = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13230/repo/django/utils/feedgenerator.py"
+
+def readLinesAround(using fs: FileSystem): List[String] = {
+  val lines = access(feedPath).readLines()
+  lines.slice(75, 120)
+}
+
+requestFileSystem(feedPath)(readLinesAround)

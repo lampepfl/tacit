@@ -1,0 +1,9 @@
+status: failure
+-- [E007] Type Mismatch Error: -------------------------------------------------
+12 |      if i >= 269 && i <= 284 then
+   |              ^^^
+   |              Found:    (269 : Int)
+   |              Required: String
+   |
+   | longer explanation available when compiling with `-explain`
+1 error found

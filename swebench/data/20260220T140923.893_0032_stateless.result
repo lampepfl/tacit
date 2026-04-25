@@ -1,0 +1,4 @@
+status: success
+testFile exists: rs$line$2$$$Lambda$3653/0x000000f00195b3b8@fe1f6a0
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,13 @@
+status: failure
+-- [E007] Type Mismatch Error: -------------------------------------------------
+3 |    access("/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11019/repo").children.foreach((e: FileEntry^{fs}) => println(e.name))
+  |                                                                                                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |Found:    (e: library.FileEntry^{fs}) ->{x$1, contextual$1} Unit
+  |Required: library.FileEntry^{contextual$1} => Unit
+  |
+  |Note that capability `contextual$1` cannot flow into capture set {fs}.
+  |
+  |where:    => refers to a root capability created in anonymous function of type (fs²: library.FileSystem^): Unit when checking argument to parameter f of method foreach
+  |
+  | longer explanation available when compiling with `-explain`
+1 error found

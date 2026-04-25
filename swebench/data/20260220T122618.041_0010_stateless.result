@@ -1,0 +1,24 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = List(
+  "320: ",
+  "321:     if isinstance(value, models.Field):",
+  "322:         return ModelFieldSerializer(value)",
+  "323:     if isinstance(value, models.manager.BaseManager):",
+  "324:         return ModelManagerSerializer(value)",
+  "325:     if isinstance(value, Operation):",
+  "326:         return OperationSerializer(value)",
+  "327:     if isinstance(value, type):",
+  "328:         return TypeSerializer(value)",
+  "329:     # Anything that knows how to deconstruct itself.",
+  "330:     if hasattr(value, 'deconstruct'):",
+  "331:         return DeconstructableSerializer(value)",
+  "332:     for type_, serializer_cls in Serializer._registry.items():",
+  "333:         if isinstance(value, type_):",
+  "334:             return serializer_cls(value)",
+  "335:     raise ValueError(",
+  "336:         \"Cannot serialize: %r\\nThere are some values Django cannot serialize into \"",
+  "337:         \"migration files.\\nFor more, see https://docs.djangoproject.com/en/%s/\"",
+  "338:         \"topics/migrations/#migration-serializing\" % (value, get_docs_version())",
+  "339:     )"
+)

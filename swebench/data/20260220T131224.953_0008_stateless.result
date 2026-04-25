@@ -1,0 +1,53 @@
+status: success
+1: import functools
+2: import re
+3: from itertools import chain
+4: 
+5: from django.conf import settings
+6: from django.db import models
+7: from django.db.migrations import operations
+8: from django.db.migrations.migration import Migration
+9: from django.db.migrations.operations.models import AlterModelOptions
+10: from django.db.migrations.optimizer import MigrationOptimizer
+11: from django.db.migrations.questioner import MigrationQuestioner
+12: from django.db.migrations.utils import COMPILED_REGEX_TYPE, RegexObject
+13: from django.utils.topological_sort import stable_topological_sort
+14: 
+15: 
+16: class MigrationAutodetector:
+17:     """
+18:     Take a pair of ProjectStates and compare them to see what the first would
+19:     need doing to make it match the second (the second usually being the
+20:     project's current state).
+21: 
+22:     Note that this naturally operates on entire projects at a time,
+23:     as it's likely that changes interact (for example, you can't
+24:     add a ForeignKey without having a migration to add the table it
+25:     depends on first). A user interface may offer single-app usage
+26:     if it wishes, with the caveat that it may not always be possible.
+27:     """
+28: 
+29:     def __init__(self, from_state, to_state, questioner=None):
+30:         self.from_state = from_state
+31:         self.to_state = to_state
+32:         self.questioner = questioner or MigrationQuestioner()
+33:         self.existing_apps = {app for app, model in from_state.models}
+34: 
+35:     def changes(self, graph, trim_to_apps=None, convert_apps=None, migration_name=None):
+36:         """
+37:         Main entry point to produce a list of applicable changes.
+38:         Take a graph to base names on and an optional set of apps
+39:         to try and restrict to (restriction is not guaranteed)
+40:         """
+41:         changes = self._detect_changes(convert_apps, graph)
+42:         changes = self.arrange_for_graph(changes, graph, migration_name)
+43:         if trim_to_apps:
+44:             changes = self._trim_to_apps(changes, trim_to_apps)
+45:         return changes
+46: 
+47:     def deep_deconstruct(self, obj):
+48:         """
+49:         Recursive deconstruction for a field and its arguments.
+50:         Used for full comparison for rename/alter; sometimes a single-level
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

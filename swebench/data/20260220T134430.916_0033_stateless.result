@@ -1,0 +1,9 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = ProcessResult(
+  exitCode = 0,
+  stdout = """2067:    def clear_deferred_loading(self):
+2071:    def add_deferred_loading(self, field_names):
+2091:    def add_immediate_loading(self, field_names):""",
+  stderr = ""
+)

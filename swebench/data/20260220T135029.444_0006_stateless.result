@@ -1,0 +1,6 @@
+status: success
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14915/repo/django/forms/models.py:1161: class ModelChoiceIteratorValue:
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14915/repo/django/forms/models.py:1170:         if isinstance(other, ModelChoiceIteratorValue):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14915/repo/django/forms/models.py:1201:             ModelChoiceIteratorValue(self.field.prepare_value(obj), obj),
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

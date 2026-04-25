@@ -1,0 +1,7 @@
+status: success
+Exit code: 1
+Output: 
+Errors: ERROR: Could not find a version that satisfies the requirement cgi-fix (from versions: none)
+ERROR: No matching distribution found for cgi-fix
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

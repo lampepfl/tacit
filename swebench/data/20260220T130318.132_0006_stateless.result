@@ -1,0 +1,5 @@
+status: failure
+
+Error: Code validation failed (1 violation):
+  [cast-escape] Line 3: .asInstanceOf is forbidden
+    > val fs = fs0.asInstanceOf[FileSystem^{fs0.origin}]

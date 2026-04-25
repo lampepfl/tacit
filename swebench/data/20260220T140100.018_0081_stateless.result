@@ -1,0 +1,5 @@
+status: success
+-- Error: ----------------------------------------------------------------------
+5 |      exec("python", List("-c", "import django; print(django.__version__)")), None, 30000L)
+  |                                                                            ^
+  |                                   end of statement expected but ',' found

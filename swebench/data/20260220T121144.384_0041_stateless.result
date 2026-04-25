@@ -1,0 +1,25 @@
+status: success
+459: 
+460: @Field.register_lookup
+461: class IsNull(BuiltinLookup):
+462:     lookup_name = 'isnull'
+463:     prepare_rhs = False
+464: 
+465:     def __init__(self, lhs, rhs):
+466:         if not isinstance(rhs, bool):
+467:             raise ValueError(
+468:                 'The QuerySet value for an isnull lookup must be a bool value.'
+469:             )
+470:         super().__init__(lhs, rhs)
+471: 
+472:     def as_sql(self, compiler, connection):
+473:         sql, params = compiler.compile(self.lhs)
+474:         if self.rhs:
+475:             return "%s IS NULL" % sql, params
+476:         else:
+477:             return "%s IS NOT NULL" % sql, params
+478: 
+479: 
+480: @Field.register_lookup
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

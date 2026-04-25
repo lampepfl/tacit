@@ -1,0 +1,104 @@
+status: success
+101: 
+102:     def validate(self, value, model_instance):
+103:         super().validate(value, model_instance)
+104:         try:
+105:             json.dumps(value, cls=self.encoder)
+106:         except TypeError:
+107:             raise exceptions.ValidationError(
+108:                 self.error_messages['invalid'],
+109:                 code='invalid',
+110:                 params={'value': value},
+111:             )
+112: 
+113:     def value_to_string(self, obj):
+114:         return self.value_from_object(obj)
+115: 
+116:     def formfield(self, **kwargs):
+117:         return super().formfield(**{
+118:             'form_class': forms.JSONField,
+119:             'encoder': self.encoder,
+120:             'decoder': self.decoder,
+121:             **kwargs,
+122:         })
+123: 
+124: 
+125: def compile_json_path(key_transforms, include_root=True):
+126:     path = ['$'] if include_root else []
+127:     for key_transform in key_transforms:
+128:         try:
+129:             num = int(key_transform)
+130:         except ValueError:  # non-integer
+131:             path.append('.')
+132:             path.append(json.dumps(key_transform))
+133:         else:
+134:             path.append('[%s]' % num)
+135:     return ''.join(path)
+136: 
+137: 
+138: class DataContains(PostgresOperatorLookup):
+139:     lookup_name = 'contains'
+140:     postgres_operator = '@>'
+141: 
+142:     def as_sql(self, compiler, connection):
+143:         lhs, lhs_params = self.process_lhs(compiler, connection)
+144:         rhs, rhs_params = self.process_rhs(compiler, connection)
+145:         params = tuple(lhs_params) + tuple(rhs_params)
+146:         return 'JSON_CONTAINS(%s, %s)' % (lhs, rhs), params
+147: 
+148:     def as_oracle(self, compiler, connection):
+149:         if isinstance(self.rhs, KeyTransform):
+150:             return HasKey(self.lhs, self.rhs).as_oracle(compiler, connection)
+151:         lhs, lhs_params = self.process_lhs(compiler, connection)
+152:         params = tuple(lhs_params)
+153:         sql = (
+154:             "JSON_QUERY(%s, '$%s' WITH WRAPPER) = "
+155:             "JSON_QUERY('%s', '$.value' WITH WRAPPER)"
+156:         )
+157:         rhs = json.loads(self.rhs)
+158:         if isinstance(rhs, dict):
+159:             if not rhs:
+160:                 return "DBMS_LOB.SUBSTR(%s) LIKE '{%%%%}'" % lhs, params
+161:             return ' AND '.join([
+162:                 sql % (
+163:                     lhs, '.%s' % json.dumps(key), json.dumps({'value': value}),
+164:                 ) for key, value in rhs.items()
+165:             ]), params
+166:         return sql % (lhs, '', json.dumps({'value': rhs})), params
+167: 
+168: 
+169: class ContainedBy(PostgresOperatorLookup):
+170:     lookup_name = 'contained_by'
+171:     postgres_operator = '<@'
+172: 
+173:     def as_sql(self, compiler, connection):
+174:         lhs, lhs_params = self.process_lhs(compiler, connection)
+175:         rhs, rhs_params = self.process_rhs(compiler, connection)
+176:         params = tuple(rhs_params) + tuple(lhs_params)
+177:         return 'JSON_CONTAINS(%s, %s)' % (rhs, lhs), params
+178: 
+179:     def as_oracle(self, compiler, connection):
+180:         raise NotSupportedError('contained_by lookup is not supported on Oracle.')
+181: 
+182: 
+183: class HasKeyLookup(PostgresOperatorLookup):
+184:     logical_operator = None
+185: 
+186:     def as_sql(self, compiler, connection, template=None):
+187:         # Process JSON path from the left-hand side.
+188:         if isinstance(self.lhs, KeyTransform):
+189:             lhs, lhs_params, lhs_key_transforms = self.lhs.preprocess_lhs(compiler, connection)
+190:             lhs_json_path = compile_json_path(lhs_key_transforms)
+191:         else:
+192:             lhs, lhs_params = self.process_lhs(compiler, connection)
+193:             lhs_json_path = '$'
+194:         sql = template % lhs
+195:         # Process JSON path from the right-hand side.
+196:         rhs = self.rhs
+197:         rhs_params = []
+198:         if not isinstance(rhs, (list, tuple)):
+199:             rhs = [rhs]
+200:         for key in rhs:
+201:             if isinstance(key, KeyTransform):
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

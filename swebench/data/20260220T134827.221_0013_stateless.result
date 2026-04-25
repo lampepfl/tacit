@@ -1,0 +1,14 @@
+status: success
+137: 
+138:     def __rand__(self, other):
+139:         raise NotImplementedError(
+140:             "Use .bitand() and .bitor() for bitwise logical operations."
+141:         )
+142: 
+143:     def __ror__(self, other):
+144:         raise NotImplementedError(
+145:             "Use .bitand() and .bitor() for bitwise logical operations."
+146:         )
+147: 
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

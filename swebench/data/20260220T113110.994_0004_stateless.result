@@ -1,0 +1,8 @@
+status: success
+ndio.py (dir=false)
+ndslicing.py (dir=false)
+tests (dir=true)
+__init__.py (dir=false)
+ndarithmetic.py (dir=false)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,65 @@
+status: success
+319:     def database_forwards(self, app_label, schema_editor, from_state, to_state):
+320:         new_model = to_state.apps.get_model(app_label, self.new_name)
+321:         if self.allow_migrate_model(schema_editor.connection.alias, new_model):
+322:             old_model = from_state.apps.get_model(app_label, self.old_name)
+323:             # Move the main table
+324:             schema_editor.alter_db_table(
+325:                 new_model,
+326:                 old_model._meta.db_table,
+327:                 new_model._meta.db_table,
+328:             )
+329:             # Alter the fields pointing to us
+330:             for related_object in old_model._meta.related_objects:
+331:                 if related_object.related_model == old_model:
+332:                     model = new_model
+333:                     related_key = (app_label, self.new_name_lower)
+334:                 else:
+335:                     model = related_object.related_model
+336:                     related_key = (
+337:                         related_object.related_model._meta.app_label,
+338:                         related_object.related_model._meta.model_name,
+339:                     )
+340:                 to_field = to_state.apps.get_model(
+341:                     *related_key
+342:                 )._meta.get_field(related_object.field.name)
+343:                 schema_editor.alter_field(
+344:                     model,
+345:                     related_object.field,
+346:                     to_field,
+347:                 )
+348:             # Rename M2M fields whose name is based on this model's name.
+349:             fields = zip(old_model._meta.local_many_to_many, new_model._meta.local_many_to_many)
+350:             for (old_field, new_field) in fields:
+351:                 # Skip self-referential fields as these are renamed above.
+352:                 if new_field.model == new_field.related_model or not new_field.remote_field.through._meta.auto_created:
+353:                     continue
+354:                 # Rename the M2M table that's based on this model's name.
+355:                 old_m2m_model = old_field.remote_field.through
+356:                 new_m2m_model = new_field.remote_field.through
+357:                 schema_editor.alter_db_table(
+358:                     new_m2m_model,
+359:                     old_m2m_model._meta.db_table,
+360:                     new_m2m_model._meta.db_table,
+361:                 )
+362:                 # Rename the column in the M2M table that's based on this
+363:                 # model's name.
+364:                 schema_editor.alter_field(
+365:                     new_m2m_model,
+366:                     old_m2m_model._meta.get_field(old_model._meta.model_name),
+367:                     new_m2m_model._meta.get_field(new_model._meta.model_name),
+368:                 )
+369: 
+370:     def database_backwards(self, app_label, schema_editor, from_state, to_state):
+371:         self.new_name_lower, self.old_name_lower = self.old_name_lower, self.new_name_lower
+372:         self.new_name, self.old_name = self.old_name, self.new_name
+373: 
+374:         self.database_forwards(app_label, schema_editor, from_state, to_state)
+375: 
+376:         self.new_name_lower, self.old_name_lower = self.old_name_lower, self.new_name_lower
+377:         self.new_name, self.old_name = self.old_name, self.new_name
+378: 
+379:     def references_model(self, name, app_label):
+380:         return (
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

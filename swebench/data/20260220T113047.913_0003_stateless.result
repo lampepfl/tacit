@@ -1,0 +1,24 @@
+status: success
+1255:             if trailing_decimal and value[0] == ' ':
+1256:                 # We have some extra space in the field for the trailing
+1257:                 # decimal point
+1258:                 value = value[1:] + '.'
+1259: 
+1260:             output_field[jdx] = value
+1261: 
+1262:         # Replace exponent separator in floating point numbers
+1263:         if 'D' in format:
+1264:             output_field.replace(encode_ascii('E'), encode_ascii('D'))
+1265: 
+1266: 
+1267: def _get_recarray_field(array, key):
+1268:     """
+1269:     Compatibility function for using the recarray base class's field method.
+1270:     This incorporates the legacy functionality of returning string arrays as
+1271:     Numeric-style chararray objects.
+1272:     """
+1273: 
+1274:     # Numpy >= 1.10.dev recarray no longer returns chararrays for strings
+1275:     # This is currently needed for backwards-compatibility and for
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

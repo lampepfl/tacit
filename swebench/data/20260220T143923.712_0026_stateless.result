@@ -1,0 +1,55 @@
+status: success
+Found at line: 181
+181:     def alter_model_options(self, app_label, model_name, options, option_keys=None):
+182:         model_state = self.models[app_label, model_name]
+183:         model_state.options = {**model_state.options, **options}
+184:         if option_keys:
+185:             for key in option_keys:
+186:                 if key not in options:
+187:                     model_state.options.pop(key, False)
+188:         self.reload_model(app_label, model_name, delay=True)
+189: 
+190:     def remove_model_options(self, app_label, model_name, option_name, value_to_remove):
+191:         model_state = self.models[app_label, model_name]
+192:         if objs := model_state.options.get(option_name):
+193:             model_state.options[option_name] = [
+194:                 obj for obj in objs if tuple(obj) != tuple(value_to_remove)
+195:             ]
+196:         self.reload_model(app_label, model_name, delay=True)
+197: 
+198:     def alter_model_managers(self, app_label, model_name, managers):
+199:         model_state = self.models[app_label, model_name]
+200:         model_state.managers = list(managers)
+201:         self.reload_model(app_label, model_name, delay=True)
+202: 
+203:     def _append_option(self, app_label, model_name, option_name, obj):
+204:         model_state = self.models[app_label, model_name]
+205:         model_state.options[option_name] = [*model_state.options[option_name], obj]
+206:         self.reload_model(app_label, model_name, delay=True)
+207: 
+208:     def _remove_option(self, app_label, model_name, option_name, obj_name):
+209:         model_state = self.models[app_label, model_name]
+210:         objs = model_state.options[option_name]
+211:         model_state.options[option_name] = [obj for obj in objs if obj.name != obj_name]
+212:         self.reload_model(app_label, model_name, delay=True)
+213: 
+214:     def add_index(self, app_label, model_name, index):
+215:         self._append_option(app_label, model_name, "indexes", index)
+216: 
+217:     def remove_index(self, app_label, model_name, index_name):
+218:         self._remove_option(app_label, model_name, "indexes", index_name)
+219: 
+220:     def rename_index(self, app_label, model_name, old_index_name, new_index_name):
+221:         model_state = self.models[app_label, model_name]
+222:         objs = model_state.options["indexes"]
+223: 
+224:         new_indexes = []
+225:         for obj in objs:
+226:             if obj.name == old_index_name:
+227:                 obj = obj.clone()
+228:                 obj.name = new_index_name
+229:             new_indexes.append(obj)
+230: 
+231:         model_state.options["indexes"] = new_indexes
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

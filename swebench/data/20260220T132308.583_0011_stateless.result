@@ -1,0 +1,4 @@
+status: success
+211:                   logger.exception('Error calling %s in signal %s', receiver, self)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

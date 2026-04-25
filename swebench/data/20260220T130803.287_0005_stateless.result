@@ -1,0 +1,8 @@
+status: failure
+-- [E086] Syntax Error: --------------------------------------------------------
+15 |    val methodLines = lines.drop(startLine).takeWhile(!_.startsWith("    def ") || lines.indexOf(_) < startLine)
+   |                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |                                 Wrong number of parameters, expected: 1
+   |
+   | longer explanation available when compiling with `-explain`
+1 error found

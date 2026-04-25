@@ -1,0 +1,5 @@
+status: success
+766:             setattr(cls, 'get_%s_display' % self.name,
+767:                     partialmethod(cls._get_FIELD_display, field=self))
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

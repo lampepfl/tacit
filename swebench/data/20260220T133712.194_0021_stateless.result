@@ -1,0 +1,10 @@
+status: success
+stdout: Q() | q1 = (AND: ('x__in', dict_keys([])))
+q1 | Q() = (AND: ('x__in', dict_keys([])))
+Q() & q1 = (AND: ('x__in', dict_keys([])))
+q1 & Q() = (AND: ('x__in', dict_keys([])))
+Original preserved: True
+stderr: 
+exitCode: 0
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

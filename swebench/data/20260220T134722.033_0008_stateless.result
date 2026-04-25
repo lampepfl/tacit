@@ -1,0 +1,8 @@
+status: success
+Exit code: 1
+Stdout: 
+Stderr:   File "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-14787/repo/test_fix.py", line 2
+    import os
+IndentationError: unexpected indent
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,43 @@
+status: success
+36:     if fullpath.is_dir():
+37:         if show_indexes:
+38:             return directory_index(path, fullpath)
+39:         raise Http404(_("Directory indexes are not allowed here."))
+40:     if not fullpath.exists():
+41:         raise Http404(_("“%(path)s” does not exist") % {"path": fullpath})
+42:     # Respect the If-Modified-Since header.
+43:     statobj = fullpath.stat()
+44:     if not was_modified_since(
+45:         request.META.get("HTTP_IF_MODIFIED_SINCE"), statobj.st_mtime, statobj.st_size
+46:     ):
+47:         return HttpResponseNotModified()
+48:     content_type, encoding = mimetypes.guess_type(str(fullpath))
+49:     content_type = content_type or "application/octet-stream"
+50:     response = FileResponse(fullpath.open("rb"), content_type=content_type)
+51:     response.headers["Last-Modified"] = http_date(statobj.st_mtime)
+52:     if encoding:
+53:         response.headers["Content-Encoding"] = encoding
+54:     return response
+55: 
+56: 
+57: DEFAULT_DIRECTORY_INDEX_TEMPLATE = """
+58: {% load i18n %}
+59: <!DOCTYPE html>
+60: <html lang="en">
+61:   <head>
+62:     <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+63:     <meta http-equiv="Content-Language" content="en-us">
+64:     <meta name="robots" content="NONE,NOARCHIVE">
+65:     <title>{% blocktranslate %}Index of {{ directory }}{% endblocktranslate %}</title>
+66:   </head>
+67:   <body>
+68:     <h1>{% blocktranslate %}Index of {{ directory }}{% endblocktranslate %}</h1>
+69:     <ul>
+70:       {% if directory != "/" %}
+71:       <li><a href="../">../</a></li>
+72:       {% endif %}
+73:       {% for f in file_list %}
+74:       <li><a href="{{ f|urlencode }}">{{ f }}</a></li>
+75:       {% endfor %}
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,8 @@
+status: success
+Index: 45310
+Context:         if remote_field_name:
+                    to_field_rename_key = rename_key + (remote_field_name,)
+                        new_field.remote_field.field_name = old_field.remote_field.field_name
+
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

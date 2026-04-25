@@ -1,0 +1,9 @@
+status: failure
+-- [E040] Syntax Error: --------------------------------------------------------
+27 |      val newLines3 = newLines2.patch(1194, List 0) (""), // insert blank line before
+   |                                                 ^
+   |                          ',' or ')' expected, but integer literal found
+-- Error: ----------------------------------------------------------------------
+27 |      val newLines3 = newLines2.patch(1194, List 0) (""), // insert blank line before
+   |                                                        ^
+   |                                 end of statement expected but ',' found

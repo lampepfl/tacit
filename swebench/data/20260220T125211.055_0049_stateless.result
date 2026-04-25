@@ -1,0 +1,6 @@
+status: success
+100:         self._collected_models = set()
+252:                 self._collected_models.add(model)
+460:         for model in self._collected_models:
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

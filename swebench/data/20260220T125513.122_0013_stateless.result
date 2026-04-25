@@ -1,0 +1,23 @@
+status: success
+1650:         errors = []
+1651:         for field_name in fields:
+1652:             try:
+1653:                 field = forward_fields_map[field_name]
+1654:             except KeyError:
+1655:                 errors.append(
+1656:                     checks.Error(
+1657:                         "'%s' refers to the nonexistent field '%s'." % (
+1658:                             option, field_name,
+1659:                         ),
+1660:                         obj=cls,
+1661:                         id='models.E012',
+1662:                     )
+1663:                 )
+1664:             else:
+1665:                 if isinstance(field.remote_field, models.ManyToManyRel):
+1666:                     errors.append(
+1667:                         checks.Error(
+1668:                             "'%s' refers to a ManyToManyField '%s', but "
+1669:                             "ManyToManyFields are not permitted in '%s'." % (
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

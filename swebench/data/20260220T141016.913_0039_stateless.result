@@ -1,0 +1,8 @@
+status: success
+Exit code: 0
+stdout: DjangoHelpFormatter bases: (<class 'argparse.RawDescriptionHelpFormatter'>,)
+Expected: (RawDescriptionHelpFormatter,)
+Is subclass of RawDescriptionHelpFormatter: True
+stderr: 
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

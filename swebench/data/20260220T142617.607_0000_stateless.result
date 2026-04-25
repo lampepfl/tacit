@@ -1,0 +1,7 @@
+status: failure
+-- [E103] Syntax Error: --------------------------------------------------------
+3 |    given fs: FileSystem^{this} = summon[FileSystem]
+  |                          ^^^^
+  |                          Illegal start of declaration
+  |
+  | longer explanation available when compiling with `-explain`

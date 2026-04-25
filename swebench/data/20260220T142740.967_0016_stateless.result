@@ -1,0 +1,28 @@
+status: success
+185: 
+186: def get_child_arguments():
+187:     """
+188:     Return the executable. This contains a workaround for Windows if the
+189:     executable is reported to not have the .exe extension which can cause bugs
+190:     on reloading.
+191:     """
+192:     import django.__main__
+193: 
+194:     args = [sys.executable] + ['-W%s' % o for o in sys.warnoptions]
+195:     if sys.argv[0] == django.__main__.__file__:
+196:         # The server was started with `python -m django runserver`.
+197:         args += ['-m', 'django']
+198:         args += sys.argv[1:]
+199:     else:
+200:         args += sys.argv
+201:     return args
+202: 
+203: 
+204: def trigger_reload(filename):
+205:     logger.info('%s changed, reloading.', filename)
+206:     sys.exit(3)
+207: 
+208: 
+209: def restart_with_reloader():
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

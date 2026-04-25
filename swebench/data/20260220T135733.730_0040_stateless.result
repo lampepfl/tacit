@@ -1,0 +1,9 @@
+status: success
+build_filter handles EmptyResultSet: false
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15213/repo/django/db/models/expressions.py:231:     def resolve_expression(self, query=None, allow_joins=True, reuse=None, summarize=False, for_save=False):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15213/repo/django/db/models/expressions.py:492:     def resolve_expression(self, query=None, allow_joins=True, reuse=None, summarize=False, for_save=False):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15213/repo/django/db/models/expressions.py:595:     def resolve_expression(self, query=None, allow_joins=True, reuse=None,
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15213/repo/django/db/models/expressions.py:627:     def resolve_expression(self, *args, **kwargs):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15213/repo/django/db/models/expressions.py:645:     def resolve_expression(self, *args, **kwargs):
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

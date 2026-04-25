@@ -1,0 +1,83 @@
+status: success
+40: def normalize(pattern):
+41:     r"""
+42:     Given a reg-exp pattern, normalize it to an iterable of forms that
+43:     suffice for reverse matching. This does the following:
+44: 
+45:     (1) For any repeating sections, keeps the minimum number of occurrences
+46:         permitted (this means zero for optional groups).
+47:     (2) If an optional group includes parameters, include one occurrence of
+48:         that group (along with the zero occurrence case from step (1)).
+49:     (3) Select the first (essentially an arbitrary) element from any character
+50:         class. Select an arbitrary character for any unordered class (e.g. '.'
+51:         or '\w') in the pattern.
+52:     (4) Ignore look-ahead and look-behind assertions.
+53:     (5) Raise an error on any disjunctive ('|') constructs.
+54: 
+55:     Django's URLs for forward resolving are either all positional arguments or
+56:     all keyword arguments. That is assumed here, as well. Although reverse
+57:     resolving can be done using positional args when keyword args are
+58:     specified, the two cannot be mixed in the same reverse() call.
+59:     """
+60:     # Do a linear scan to work out the special features of this pattern. The
+61:     # idea is that we scan once here and collect all the information we need to
+62:     # make future decisions.
+63:     result = []
+64:     non_capturing_groups = []
+65:     consume_next = True
+66:     pattern_iter = next_char(iter(pattern))
+67:     num_args = 0
+68: 
+69:     # A "while" loop is used here because later on we need to be able to peek
+70:     # at the next character and possibly go around without consuming another
+71:     # one at the top of the loop.
+72:     try:
+73:         ch, escaped = next(pattern_iter)
+74:     except StopIteration:
+75:         return [('', [])]
+76: 
+77:     try:
+78:         while True:
+79:             if escaped:
+80:                 result.append(ch)
+81:             elif ch == '.':
+82:                 # Replace "any character" with an arbitrary representative.
+83:                 result.append(".")
+84:             elif ch == '|':
+85:                 # FIXME: One day we'll should do this, but not in 1.0.
+86:                 raise NotImplementedError('Awaiting Implementation')
+87:             elif ch == "^":
+88:                 pass
+89:             elif ch == '$':
+90:                 break
+91:             elif ch == ')':
+92:                 # This can only be the end of a non-capturing group, since all
+93:                 # other unescaped parentheses are handled by the grouping
+94:                 # section later (and the full group is handled there).
+95:                 #
+96:                 # We regroup everything inside the capturing group so that it
+97:                 # can be quantified, if necessary.
+98:                 start = non_capturing_groups.pop()
+99:                 inner = NonCapture(result[start:])
+100:                 result = result[:start] + [inner]
+101:             elif ch == '[':
+102:                 # Replace ranges with the first character in the range.
+103:                 ch, escaped = next(pattern_iter)
+104:                 result.append(ch)
+105:                 ch, escaped = next(pattern_iter)
+106:                 while escaped or ch != ']':
+107:                     ch, escaped = next(pattern_iter)
+108:             elif ch == '(':
+109:                 # Some kind of group.
+110:                 ch, escaped = next(pattern_iter)
+111:                 if ch != '?' or escaped:
+112:                     # A positional group
+113:                     name = "_%d" % num_args
+114:                     num_args += 1
+115:                     result.append(Group((("%%(%s)s" % name), name)))
+116:                     walk_to_end(ch, pattern_iter)
+117:                 else:
+118:                     ch, escaped = next(pattern_iter)
+119:                     if ch in '!=<':
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

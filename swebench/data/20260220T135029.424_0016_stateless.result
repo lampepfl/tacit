@@ -1,0 +1,34 @@
+status: success
+191:             # Add the SQL to our big list.
+192:             column_sqls.append('%s %s' % (
+193:                 self.quote_name(field.column),
+194:                 definition,
+195:             ))
+196:             # Autoincrement SQL (for backends with post table definition
+197:             # variant).
+198:             if field.get_internal_type() in ('AutoField', 'BigAutoField', 'SmallAutoField'):
+199:                 autoinc_sql = self.connection.ops.autoinc_sql(model._meta.db_table, field.column)
+200:                 if autoinc_sql:
+201:                     self.deferred_sql.extend(autoinc_sql)
+202:         constraints = [constraint.constraint_sql(model, self) for constraint in model._meta.constraints]
+203:         sql = self.sql_create_table % {
+204:             'table': self.quote_name(model._meta.db_table),
+205:             'definition': ', '.join(constraint for constraint in (*column_sqls, *constraints) if constraint),
+206:         }
+207:         if model._meta.db_tablespace:
+208:             tablespace_sql = self.connection.ops.tablespace_sql(model._meta.db_tablespace)
+209:             if tablespace_sql:
+210:                 sql += ' ' + tablespace_sql
+211:         return sql, params
+212: 
+213:     # Field <-> database mapping functions
+214: 
+215:     def _iter_column_sql(self, column_db_type, params, model, field, include_default):
+216:         yield column_db_type
+217:         collation = getattr(field, 'db_collation', None)
+218:         if collation:
+219:             yield self._collate_sql(collation)
+220:         # Work out nullability.
+221:         null = field.null
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

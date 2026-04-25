@@ -1,0 +1,13 @@
+status: success
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12284/repo/tests/admin_utils/test_logentry.py:264:                 self.assertEqual(log.get_action_flag_display(), display_name)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12284/repo/tests/model_regress/tests.py:54:         self.assertIs(a.get_status_display(), None)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12284/repo/tests/admin_changelist/admin.py:87:     def get_list_display(self, request):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12284/repo/tests/admin_changelist/admin.py:88:         my_list_display = super().get_list_display(request)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12284/repo/tests/admin_changelist/admin.py:99:     def get_list_display_links(self, request, list_display):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12284/repo/tests/admin_changelist/tests.py:627:         list_display = m.get_list_display(request)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12284/repo/tests/admin_changelist/tests.py:628:         list_display_links = m.get_list_display_links(request, list_display)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12284/repo/tests/admin_changelist/tests.py:640:         list_display = m.get_list_display(request)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12284/repo/tests/admin_changelist/tests.py:641:         list_display_links = m.get_list_display_links(request, list_display)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12284/repo/tests/admin_changelist/tests.py:695:         list_display = m.get_list_display(request)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

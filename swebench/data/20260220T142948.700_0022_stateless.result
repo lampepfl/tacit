@@ -1,0 +1,9 @@
+status: success
+Found 5 matches
+666:     def get_attname_column(self):
+667:         attname, column = super().get_attname_column()
+946:     def get_attname(self):
+949:     def get_attname_column(self):
+950:         attname = self.get_attname()
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

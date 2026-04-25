@@ -1,0 +1,14 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = ProcessResult(
+  exitCode = 0,
+  stdout = """Valid URL: http://example.com - OK
+Valid URL: https://example.com/path - OK
+Valid URL: http://localhost:8000/ - OK
+Valid URL: ftp://ftp.example.com - OK
+
+Invalid URL: ////]@N.AN - ValidationError (correct)
+Invalid URL: not a url - ValidationError (correct)
+Invalid URL: http:// - ValidationError (correct)""",
+  stderr = ""
+)

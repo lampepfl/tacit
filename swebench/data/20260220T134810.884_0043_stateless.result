@@ -1,0 +1,53 @@
+status: success
+1: from django.apps import apps
+2: from django.db import models
+3: from django.test import SimpleTestCase, TestCase
+4: from django.test.utils import isolate_apps
+5: 
+6: from .models import ManyToMany
+7: 
+8: 
+9: class ManyToManyFieldTests(SimpleTestCase):
+10: 
+11:     def test_abstract_model_pending_operations(self):
+12:         """
+13:         Many-to-many fields declared on abstract models should not add lazy
+14:         relations to resolve relationship declared as string (#24215).
+15:         """
+16:         pending_ops_before = list(apps._pending_operations.items())
+17: 
+18:         class AbstractManyToManyModel(models.Model):
+19:             fk = models.ForeignKey('missing.FK', models.CASCADE)
+20: 
+21:             class Meta:
+22:                 abstract = True
+23: 
+24:         self.assertIs(AbstractManyToManyModel._meta.apps, apps)
+25:         self.assertEqual(
+26:             pending_ops_before,
+27:             list(apps._pending_operations.items()),
+28:             'Pending lookup added for a many-to-many field on an abstract model'
+29:         )
+30: 
+31:     @isolate_apps('model_fields', 'model_fields.tests')
+32:     def test_abstract_model_app_relative_foreign_key(self):
+33:         class AbstractReferent(models.Model):
+34:             reference = models.ManyToManyField('Referred', through='Through')
+35: 
+36:             class Meta:
+37:                 app_label = 'model_fields'
+38:                 abstract = True
+39: 
+40:         def assert_app_model_resolved(label):
+41:             class Referred(models.Model):
+42:                 class Meta:
+43:                     app_label = label
+44: 
+45:             class Through(models.Model):
+46:                 referred = models.ForeignKey('Referred', on_delete=models.CASCADE)
+47:                 referent = models.ForeignKey('ConcreteReferent', on_delete=models.CASCADE)
+48: 
+49:                 class Meta:
+50:                     app_label = label
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

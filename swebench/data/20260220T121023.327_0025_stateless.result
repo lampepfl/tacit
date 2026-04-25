@@ -1,0 +1,6 @@
+status: success
+stdout: 
+stderr: 
+exit: 0
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

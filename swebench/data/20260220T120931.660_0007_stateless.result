@@ -1,0 +1,12 @@
+status: success
+183:         self.generate_renamed_fields()
+809:     def generate_renamed_fields(self):
+811:         self.renamed_fields = {}
+844:                             self.renamed_fields[app_label, model_name, field_name] = rem_field_name
+912:             old_field_name = self.renamed_fields.get((app_label, model_name, field_name), field_name)
+929:                     if to_field_rename_key in self.renamed_fields:
+936:                         self.renamed_fields.get(from_rename_key + (from_field,), from_field)
+940:                         self.renamed_fields.get(rename_key + (to_field,), to_field)
+1093:                     self.renamed_fields.get((app_label, model_name, n), n)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

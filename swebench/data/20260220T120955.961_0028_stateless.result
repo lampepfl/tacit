@@ -1,0 +1,43 @@
+status: success
+1131:             raise NotSupportedError(
+1132:                 expression.__class__.__name__ + ' is disallowed in the filter '
+1133:                 'clause.'
+1134:             )
+1135:         if hasattr(expression, 'get_source_expressions'):
+1136:             for expr in expression.get_source_expressions():
+1137:                 self.check_filterable(expr)
+1138: 
+1139:     def build_lookup(self, lookups, lhs, rhs):
+1140:         """
+1141:         Try to extract transforms and lookup from given lhs.
+1142: 
+1143:         The lhs value is something that works like SQLExpression.
+1144:         The rhs value is what the lookup is going to compare against.
+1145:         The lookups is a list of names to extract using get_lookup()
+1146:         and get_transform().
+1147:         """
+1148:         # __exact is the default lookup if one isn't given.
+1149:         *transforms, lookup_name = lookups or ['exact']
+1150:         for name in transforms:
+1151:             lhs = self.try_transform(lhs, name)
+1152:         # First try get_lookup() so that the lookup takes precedence if the lhs
+1153:         # supports both transform and lookup for the name.
+1154:         lookup_class = lhs.get_lookup(lookup_name)
+1155:         if not lookup_class:
+1156:             if lhs.field.is_relation:
+1157:                 raise FieldError('Related Field got invalid lookup: {}'.format(lookup_name))
+1158:             # A lookup wasn't found. Try to interpret the name as a transform
+1159:             # and do an Exact lookup against it.
+1160:             lhs = self.try_transform(lhs, lookup_name)
+1161:             lookup_name = 'exact'
+1162:             lookup_class = lhs.get_lookup(lookup_name)
+1163:             if not lookup_class:
+1164:                 return
+1165: 
+1166:         lookup = lookup_class(lhs, rhs)
+1167:         # Interpret '__exact=None' as the sql 'is NULL'; otherwise, reject all
+1168:         # uses of None as a query value unless the lookup supports it.
+1169:         if lookup.rhs is None and not lookup.can_use_none_as_rhs:
+1170:             if lookup_name not in ('exact', 'iexact'):
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

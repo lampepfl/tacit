@@ -1,0 +1,23 @@
+status: success
+Found 19 matches
+62: #   * attname:   The attribute to use on the model object. This is the same as
+67: #                "attname", except if db_column is specified.
+70: # attname. For example, this gets the primary key value of object "obj":
+72: #     getattr(obj, opts.pk.attname)
+750:         self.attname, self.column = self.get_attname_column()
+769:             if not getattr(cls, self.attname, None):
+770:                 setattr(cls, self.attname, self.descriptor_class(self))
+788:         return {self.name: getattr(obj, self.attname)}
+790:     def get_attname(self):
+793:     def get_attname_column(self):
+794:         attname = self.get_attname()
+795:         column = self.db_column or attname
+796:         return attname, column
+803:         return getattr(model_instance, self.attname)
+859:             self.remote_field.get_related_field().attname
+933:         return getattr(obj, self.attname)
+1198:             setattr(model_instance, self.attname, value)
+1348:             setattr(model_instance, self.attname, value)
+2186:             setattr(model_instance, self.attname, value)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

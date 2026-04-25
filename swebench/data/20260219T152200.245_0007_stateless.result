@@ -1,0 +1,103 @@
+status: success
+151:             n_outputs, n_inputs = input.n_outputs, input.n_inputs
+152:         else:
+153:             n_outputs, n_inputs = input.shape
+154:         return n_inputs, n_outputs
+155: 
+156:     left_inputs, left_outputs = _n_inputs_outputs(left)
+157:     right_inputs, right_outputs = _n_inputs_outputs(right)
+158: 
+159:     if left_inputs != right_inputs or left_outputs != right_outputs:
+160:         raise ModelDefinitionError(
+161:             "Unsupported operands for arithmetic operator: left (n_inputs={}, "
+162:             "n_outputs={}) and right (n_inputs={}, n_outputs={}); "
+163:             "models must have the same n_inputs and the same "
+164:             "n_outputs for this operator.".format(
+165:                 left_inputs, left_outputs, right_inputs, right_outputs))
+166: 
+167:     result = np.ones((left_outputs, left_inputs))
+168:     return result
+169: 
+170: 
+171: def _coord_matrix(model, pos, noutp):
+172:     """
+173:     Create an array representing inputs and outputs of a simple model.
+174: 
+175:     The array has a shape (noutp, model.n_inputs).
+176: 
+177:     Parameters
+178:     ----------
+179:     model : `astropy.modeling.Model`
+180:         model
+181:     pos : str
+182:         Position of this model in the expression tree.
+183:         One of ['left', 'right'].
+184:     noutp : int
+185:         Number of outputs of the compound model of which the input model
+186:         is a left or right child.
+187: 
+188:     """
+189:     if isinstance(model, Mapping):
+190:         axes = []
+191:         for i in model.mapping:
+192:             axis = np.zeros((model.n_inputs,))
+193:             axis[i] = 1
+194:             axes.append(axis)
+195:         m = np.vstack(axes)
+196:         mat = np.zeros((noutp, model.n_inputs))
+197:         if pos == 'left':
+198:             mat[: model.n_outputs, :model.n_inputs] = m
+199:         else:
+200:             mat[-model.n_outputs:, -model.n_inputs:] = m
+201:         return mat
+202:     if not model.separable:
+203:         # this does not work for more than 2 coordinates
+204:         mat = np.zeros((noutp, model.n_inputs))
+205:         if pos == 'left':
+206:             mat[:model.n_outputs, : model.n_inputs] = 1
+207:         else:
+208:             mat[-model.n_outputs:, -model.n_inputs:] = 1
+209:     else:
+210:         mat = np.zeros((noutp, model.n_inputs))
+211: 
+212:         for i in range(model.n_inputs):
+213:             mat[i, i] = 1
+214:         if pos == 'right':
+215:             mat = np.roll(mat, (noutp - model.n_outputs))
+216:     return mat
+217: 
+218: 
+219: def _cstack(left, right):
+220:     """
+221:     Function corresponding to '&' operation.
+222: 
+223:     Parameters
+224:     ----------
+225:     left, right : `astropy.modeling.Model` or ndarray
+226:         If input is of an array, it is the output of `coord_matrix`.
+227: 
+228:     Returns
+229:     -------
+230:     result : ndarray
+231:         Result from this operation.
+232: 
+233:     """
+234:     noutp = _compute_n_outputs(left, right)
+235: 
+236:     if isinstance(left, Model):
+237:         cleft = _coord_matrix(left, 'left', noutp)
+238:     else:
+239:         cleft = np.zeros((noutp, left.shape[1]))
+240:         cleft[: left.shape[0], : left.shape[1]] = left
+241:     if isinstance(right, Model):
+242:         cright = _coord_matrix(right, 'right', noutp)
+243:     else:
+244:         cright = np.zeros((noutp, right.shape[1]))
+245:         cright[-right.shape[0]:, -right.shape[1]:] = 1
+246: 
+247:     return np.hstack([cleft, cright])
+248: 
+249: 
+250: def _cdot(left, right):
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

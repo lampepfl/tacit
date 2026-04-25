@@ -1,0 +1,18 @@
+status: success
+compat.py (dir=false)
+mixins (dir=true)
+tests (dir=true)
+__init__.py (dir=false)
+ccddata.py (dir=false)
+nduncertainty.py (dir=false)
+nddata.py (dir=false)
+flag_collection.py (dir=false)
+utils.py (dir=false)
+bitmask.py (dir=false)
+_testing.py (dir=false)
+blocks.py (dir=false)
+nddata_withmixins.py (dir=false)
+nddata_base.py (dir=false)
+decorators.py (dir=false)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

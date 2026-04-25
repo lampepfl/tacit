@@ -1,0 +1,84 @@
+status: success
+0: from django.contrib.contenttypes.fields import (
+1:     GenericForeignKey, GenericRelation,
+2: )
+3: from django.contrib.contenttypes.models import ContentType
+4: from django.core.checks import Error
+5: from django.core.exceptions import FieldDoesNotExist, FieldError
+6: from django.db import models
+7: from django.test import SimpleTestCase
+8: from django.test.utils import isolate_apps
+9: 
+10: 
+11: @isolate_apps('model_inheritance')
+12: class AbstractInheritanceTests(SimpleTestCase):
+13:     def test_single_parent(self):
+14:         class AbstractBase(models.Model):
+15:             name = models.CharField(max_length=30)
+16: 
+17:             class Meta:
+18:                 abstract = True
+19: 
+20:         class AbstractDescendant(AbstractBase):
+21:             name = models.CharField(max_length=50)
+22: 
+23:             class Meta:
+24:                 abstract = True
+25: 
+26:         class DerivedChild(AbstractBase):
+27:             name = models.CharField(max_length=50)
+28: 
+29:         class DerivedGrandChild(AbstractDescendant):
+30:             pass
+31: 
+32:         self.assertEqual(AbstractDescendant._meta.get_field('name').max_length, 50)
+33:         self.assertEqual(DerivedChild._meta.get_field('name').max_length, 50)
+34:         self.assertEqual(DerivedGrandChild._meta.get_field('name').max_length, 50)
+35: 
+36:     def test_multiple_parents_mro(self):
+37:         class AbstractBaseOne(models.Model):
+38:             class Meta:
+39:                 abstract = True
+40: 
+41:         class AbstractBaseTwo(models.Model):
+42:             name = models.CharField(max_length=30)
+43: 
+44:             class Meta:
+45:                 abstract = True
+46: 
+47:         class DescendantOne(AbstractBaseOne, AbstractBaseTwo):
+48:             class Meta:
+49:                 abstract = True
+50: 
+51:         class DescendantTwo(AbstractBaseOne, AbstractBaseTwo):
+52:             name = models.CharField(max_length=50)
+53: 
+54:             class Meta:
+55:                 abstract = True
+56: 
+57:         class Derived(DescendantOne, DescendantTwo):
+58:             pass
+59: 
+60:         self.assertEqual(DescendantOne._meta.get_field('name').max_length, 30)
+61:         self.assertEqual(DescendantTwo._meta.get_field('name').max_length, 50)
+62:         self.assertEqual(Derived._meta.get_field('name').max_length, 50)
+63: 
+64:     def test_multiple_inheritance_cannot_shadow_concrete_inherited_field(self):
+65:         class ConcreteParent(models.Model):
+66:             name = models.CharField(max_length=255)
+67: 
+68:         class AbstractParent(models.Model):
+69:             name = models.IntegerField()
+70: 
+71:             class Meta:
+72:                 abstract = True
+73: 
+74:         class FirstChild(ConcreteParent, AbstractParent):
+75:             pass
+76: 
+77:         class AnotherChild(AbstractParent, ConcreteParent):
+78:             pass
+79: 
+80:         self.assertIsInstance(FirstChild._meta.get_field('name'), models.CharField)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

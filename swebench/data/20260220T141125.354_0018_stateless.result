@@ -1,0 +1,28 @@
+status: success
+735:                     ),
+736:                     dependencies=related_dependencies,
+737:                 )
+738:             if unique_together:
+739:                 self.add_operation(
+740:                     app_label,
+741:                     operations.AlterUniqueTogether(
+742:                         name=model_name,
+743:                         unique_together=unique_together,
+744:                     ),
+745:                     dependencies=related_dependencies,
+746:                 )
+747:             if index_together:
+748:                 self.add_operation(
+749:                     app_label,
+750:                     operations.AlterIndexTogether(
+751:                         name=model_name,
+752:                         index_together=index_together,
+753:                     ),
+754:                     dependencies=related_dependencies,
+755:                 )
+756:             # Fix relationships if the model changed from a proxy model to a
+757:             # concrete model.
+758:             relations = self.to_state.relations
+759:             if (app_label, model_name) in self.old_proxy_keys:
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

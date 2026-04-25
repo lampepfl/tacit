@@ -1,0 +1,49 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = """Looking at the file `/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12125/repo/django/db/migrations/serializer.py`, here's the content of the `serialize` function and the code that handles the `__qualname__` of classes:
+
+## The `serialize` function:
+
+```python
+def serialize(value):
+    """
+    Serialize the given value (which must be a valid JSON value) into a string
+    of Python code that, when evaluated, reconstructs the value.
+    """
+    return serializer_factory(value).serialize()
+```
+
+## Code that handles the `__qualname__` of classes:
+
+The file contains a `ClassSerializer` class that specifically handles serialization of classes using their `__qualname__`:
+
+```python
+class ClassSerializer(BaseSerializer):
+    def serialize(self):
+        if self.value.__module__ is None:
+            raise ValueError("Cannot serialize a class without a module")
+        module = self.value.__module__
+        qualname = self.value.__qualname__
+        return "%s.%s" % (module, qualname)
+```
+
+Additionally, there are other serializers that also use `__qualname__` for functions and methods:
+
+```python
+class FunctionSerializer(BaseSerializer):
+    def serialize(self):
+        if self.value.__module__ is None:
+            raise ValueError("Cannot serialize a function without a module")
+        module = self.value.__module__
+        qualname = self.value.__qualname__
+        return "%s.%s" % (module, qualname)
+
+
+class MethodSerializer(BaseSerializer):
+    def serialize(self):
+        if self.value.__module__ is None:
+            raise ValueError("Cannot serialize a method without a module")
+        module = self.value.__module__
+        qualname = self.value.__qualname__
+        # Convert a method to a function representation
+...

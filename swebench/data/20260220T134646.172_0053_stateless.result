@@ -1,0 +1,7 @@
+status: success
+java.lang.SecurityException: Access denied: command 'sed' is not in allowed commands Set(grep, cat)
+  at library.CommandValidator$.validate(CommandValidator.scala:39)
+  at library.ProcessOps$.exec(ProcessOps.scala:14)
+  at library.InterfaceImpl.exec(InterfaceImpl.scala:13)
+  at rs$line$2$.run(rs$line$2:5)
+  ... 53 elided

@@ -1,0 +1,9 @@
+status: success
+Subquery get_group_by_cols at: 41601
+Content:
+def get_group_by_cols(self, alias=None):
+        cols = []
+        for source in self.get_source_expressions():
+            cols.extend(source.get_gro
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

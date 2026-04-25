@@ -1,0 +1,5 @@
+status: success
+-- Error: ----------------------------------------------------------------------
+20 |      # - path (the current element from list_2)
+   |      ^
+   |      end of statement expected but '#' found

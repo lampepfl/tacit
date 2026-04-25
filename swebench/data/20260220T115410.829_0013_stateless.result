@@ -1,0 +1,4 @@
+status: success
+232:         if isinstance(value, (bytes, memoryview)):
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,9 @@
+status: failure
+-- [E007] Type Mismatch Error: -------------------------------------------------
+8 |      if i >= 259 && i <= 275 then println(s"$i: |$line|")
+  |              ^^^
+  |              Found:    (259 : Int)
+  |              Required: String
+  |
+  | longer explanation available when compiling with `-explain`
+1 error found

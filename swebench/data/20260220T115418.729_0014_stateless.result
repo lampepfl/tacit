@@ -1,0 +1,24 @@
+status: success
+225:         # Per PEP 3333, this response body must be bytes. To avoid returning
+226:         # an instance of a subclass, this function returns `bytes(value)`.
+227:         # This doesn't make a copy when `value` already contains bytes.
+228: 
+229:         # Handle string types -- we can't rely on force_bytes here because:
+230:         # - Python attempts str conversion first
+231:         # - when self._charset != 'utf-8' it re-encodes the content
+232:         if isinstance(value, (bytes, memoryview)):
+233:             return bytes(value)
+234:         if isinstance(value, str):
+235:             return bytes(value.encode(self.charset))
+236:         # Handle non-string types.
+237:         return str(value).encode(self.charset)
+238: 
+239:     # These methods partially implement the file-like object interface.
+240:     # See https://docs.python.org/library/io.html#io.IOBase
+241: 
+242:     # The WSGI server must call this method upon completion of the request.
+243:     # See http://blog.dscpl.com.au/2012/10/obligations-for-calling-close-on.html
+244:     def close(self):
+245:         for closable in self._closable_objects:
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

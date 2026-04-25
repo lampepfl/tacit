@@ -1,0 +1,24 @@
+status: success
+1: import datetime
+2: import decimal
+3: from collections import defaultdict
+4: 
+5: from django.core.exceptions import FieldDoesNotExist
+6: from django.db import models, router
+7: from django.db.models.constants import LOOKUP_SEP
+8: from django.db.models.deletion import Collector
+9: from django.forms.utils import pretty_name
+10: from django.urls import NoReverseMatch, reverse
+11: from django.utils import formats, timezone
+12: from django.utils.html import format_html
+13: from django.utils.regex_helper import _lazy_re_compile
+14: from django.utils.text import capfirst
+15: from django.utils.translation import ngettext, override as translation_override
+16: 
+17: QUOTE_MAP = {i: '_%02X' % i for i in b'":/_#?;@&=+$,"[]<>%\n\\'}
+18: UNQUOTE_MAP = {v: chr(k) for k, v in QUOTE_MAP.items()}
+19: UNQUOTE_RE = _lazy_re_compile('_(?:%s)' % '|'.join([x[1:] for x in UNQUOTE_MAP]))
+20: 
+21: 
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

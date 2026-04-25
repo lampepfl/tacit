@@ -1,0 +1,125 @@
+status: success
+Found at line: 533
+533: class AlterTogetherOptionOperation(ModelOptionOperation):
+534:     option_name = None
+535: 
+536:     def __init__(self, name, option_value):
+537:         if option_value:
+538:             option_value = set(normalize_together(option_value))
+539:         setattr(self, self.option_name, option_value)
+540:         super().__init__(name)
+541: 
+542:     @cached_property
+543:     def option_value(self):
+544:         return getattr(self, self.option_name)
+545: 
+546:     def deconstruct(self):
+547:         kwargs = {
+548:             "name": self.name,
+549:             self.option_name: self.option_value,
+550:         }
+551:         return (self.__class__.__qualname__, [], kwargs)
+552: 
+553:     def state_forwards(self, app_label, state):
+554:         state.alter_model_options(
+555:             app_label,
+556:             self.name_lower,
+557:             {self.option_name: self.option_value},
+558:         )
+559: 
+560:     def database_forwards(self, app_label, schema_editor, from_state, to_state):
+561:         new_model = to_state.apps.get_model(app_label, self.name)
+562:         if self.allow_migrate_model(schema_editor.connection.alias, new_model):
+563:             old_model = from_state.apps.get_model(app_label, self.name)
+564:             alter_together = getattr(schema_editor, "alter_%s" % self.option_name)
+565:             alter_together(
+566:                 new_model,
+567:                 getattr(old_model._meta, self.option_name, set()),
+568:                 getattr(new_model._meta, self.option_name, set()),
+569:             )
+570: 
+571:     def database_backwards(self, app_label, schema_editor, from_state, to_state):
+572:         return self.database_forwards(app_label, schema_editor, from_state, to_state)
+573: 
+574:     def references_field(self, model_name, name, app_label):
+575:         return self.references_model(model_name, app_label) and (
+576:             not self.option_value
+577:             or any((name in fields) for fields in self.option_value)
+578:         )
+579: 
+580:     def describe(self):
+581:         return "Alter %s for %s (%s constraint(s))" % (
+582:             self.option_name,
+583:             self.name,
+584:             len(self.option_value or ""),
+585:         )
+586: 
+587:     @property
+588:     def migration_name_fragment(self):
+589:         return "alter_%s_%s" % (self.name_lower, self.option_name)
+590: 
+591:     def can_reduce_through(self, operation, app_label):
+592:         return super().can_reduce_through(operation, app_label) or (
+593:             isinstance(operation, AlterTogetherOptionOperation)
+594:             and type(operation) is not type(self)
+595:         )
+596: 
+597: 
+598: class AlterUniqueTogether(AlterTogetherOptionOperation):
+599:     """
+600:     Change the value of unique_together to the target one.
+601:     Input value of unique_together must be a set of tuples.
+602:     """
+603: 
+604:     option_name = "unique_together"
+605: 
+606:     def __init__(self, name, unique_together):
+607:         super().__init__(name, unique_together)
+608: 
+609: 
+610: class AlterIndexTogether(AlterTogetherOptionOperation):
+611:     """
+612:     Change the value of index_together to the target one.
+613:     Input value of index_together must be a set of tuples.
+614:     """
+615: 
+616:     option_name = "index_together"
+617: 
+618:     def __init__(self, name, index_together):
+619:         super().__init__(name, index_together)
+620: 
+621: 
+622: class AlterOrderWithRespectTo(ModelOptionOperation):
+623:     """Represent a change with the order_with_respect_to option."""
+624: 
+625:     option_name = "order_with_respect_to"
+626: 
+627:     def __init__(self, name, order_with_respect_to):
+628:         self.order_with_respect_to = order_with_respect_to
+629:         super().__init__(name)
+630: 
+631:     def deconstruct(self):
+632:         kwargs = {
+633:             "name": self.name,
+634:             "order_with_respect_to": self.order_with_respect_to,
+635:         }
+636:         return (self.__class__.__qualname__, [], kwargs)
+637: 
+638:     def state_forwards(self, app_label, state):
+639:         state.alter_model_options(
+640:             app_label,
+641:             self.name_lower,
+642:             {self.option_name: self.order_with_respect_to},
+643:         )
+644: 
+645:     def database_forwards(self, app_label, schema_editor, from_state, to_state):
+646:         to_model = to_state.apps.get_model(app_label, self.name)
+647:         if self.allow_migrate_model(schema_editor.connection.alias, to_model):
+648:             from_model = from_state.apps.get_model(app_label, self.name)
+649:             # Remove a field if we need to
+650:             if (
+651:                 from_model._meta.order_with_respect_to
+652:                 and not to_model._meta.order_with_respect_to
+653:             ):
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

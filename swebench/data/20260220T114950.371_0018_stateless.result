@@ -1,0 +1,27 @@
+status: failure
+-- [E129] Potential Issue Warning: ---------------------------------------------
+3 |    summon[IOCapability]
+  |    ^^^^^^^^^^^^^^^^^^^^
+  |    A pure expression does nothing in statement position
+  |
+  | longer explanation available when compiling with `-explain`
+-- [E007] Type Mismatch Error: -------------------------------------------------
+4 |    requestFileSystem("/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11019/repo") { (fs: FileSystem^) =>
+  |                                                                                                                                   ^
+  |Capability `contextual$1` outlives its scope: it leaks into outer capture set 's1 which is owned by method run.
+  |The leakage occurred when trying to match the following types:
+  |
+  |Found:    (contextual$1: library.FileSystem^) ?->{x$1}
+  |  library.FileSystem^'s2 ->{contextual$1, x$1} Unit
+  |Required: (library.FileSystem^) ?=> library.FileSystem^'s3 ->'s1 Unit
+  |
+  |where:    ?=> refers to a root capability created in method run when checking argument to parameter op of method requestFileSystem
+  |          ^   refers to the root capability caps.any
+  |
+5 |      val files = access("/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-11019/repo").children
+6 |      files.foreach((e: FileEntry^) => println(e.name))
+7 |    }
+  |
+  | longer explanation available when compiling with `-explain`
+1 warning found
+1 error found

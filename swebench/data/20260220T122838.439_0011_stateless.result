@@ -1,0 +1,34 @@
+status: success
+375:         if hasattr(field, 'help_text'):
+376:             help_text = field.help_text
+377:     return help_text
+378: 
+379: 
+380: def display_for_field(value, field, empty_value_display):
+381:     from django.contrib.admin.templatetags.admin_list import _boolean_icon
+382: 
+383:     if getattr(field, 'flatchoices', None):
+384:         return dict(field.flatchoices).get(value, empty_value_display)
+385:     # BooleanField needs special-case null-handling, so it comes before the
+386:     # general null test.
+387:     elif isinstance(field, models.BooleanField):
+388:         return _boolean_icon(value)
+389:     elif value is None:
+390:         return empty_value_display
+391:     elif isinstance(field, models.DateTimeField):
+392:         return formats.localize(timezone.template_localtime(value))
+393:     elif isinstance(field, (models.DateField, models.TimeField)):
+394:         return formats.localize(value)
+395:     elif isinstance(field, models.DecimalField):
+396:         return formats.number_format(value, field.decimal_places)
+397:     elif isinstance(field, (models.IntegerField, models.FloatField)):
+398:         return formats.number_format(value)
+399:     elif isinstance(field, models.FileField) and value:
+400:         return format_html('<a href="{}">{}</a>', value.url, value)
+401:     else:
+402:         return display_for_value(value, empty_value_display)
+403: 
+404: 
+405: def display_for_value(value, empty_value_display, boolean=False):
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

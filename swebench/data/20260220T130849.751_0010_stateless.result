@@ -1,0 +1,81 @@
+status: success
+342:     def get_constraints(self, cursor, table_name):
+343:         """
+344:         Retrieve any constraints or keys (unique, pk, fk, check, index) across
+345:         one or more columns.
+346:         """
+347:         constraints = {}
+348:         # Find inline check constraints.
+349:         try:
+350:             table_schema = cursor.execute(
+351:                 "SELECT sql FROM sqlite_master WHERE type='table' and name=%s" % (
+352:                     self.connection.ops.quote_name(table_name),
+353:                 )
+354:             ).fetchone()[0]
+355:         except TypeError:
+356:             # table_name is a view.
+357:             pass
+358:         else:
+359:             columns = {info.name for info in self.get_table_description(cursor, table_name)}
+360:             constraints.update(self._parse_table_constraints(table_schema, columns))
+361: 
+362:         # Get the index info
+363:         cursor.execute("PRAGMA index_list(%s)" % self.connection.ops.quote_name(table_name))
+364:         for row in cursor.fetchall():
+365:             # SQLite 3.8.9+ has 5 columns, however older versions only give 3
+366:             # columns. Discard last 2 columns if there.
+367:             number, index, unique = row[:3]
+368:             cursor.execute(
+369:                 "SELECT sql FROM sqlite_master "
+370:                 "WHERE type='index' AND name=%s" % self.connection.ops.quote_name(index)
+371:             )
+372:             # There's at most one row.
+373:             sql, = cursor.fetchone() or (None,)
+374:             # Inline constraints are already detected in
+375:             # _parse_table_constraints(). The reasons to avoid fetching inline
+376:             # constraints from `PRAGMA index_list` are:
+377:             # - Inline constraints can have a different name and information
+378:             #   than what `PRAGMA index_list` gives.
+379:             # - Not all inline constraints may appear in `PRAGMA index_list`.
+380:             if not sql:
+381:                 # An inline constraint
+382:                 continue
+383:             # Get the index info for that index
+384:             cursor.execute('PRAGMA index_info(%s)' % self.connection.ops.quote_name(index))
+385:             for index_rank, column_rank, column in cursor.fetchall():
+386:                 if index not in constraints:
+387:                     constraints[index] = {
+388:                         "columns": [],
+389:                         "primary_key": False,
+390:                         "unique": bool(unique),
+391:                         "foreign_key": None,
+392:                         "check": False,
+393:                         "index": True,
+394:                     }
+395:                 constraints[index]['columns'].append(column)
+396:             # Add type and column orders for indexes
+397:             if constraints[index]['index'] and not constraints[index]['unique']:
+398:                 # SQLite doesn't support any index type other than b-tree
+399:                 constraints[index]['type'] = Index.suffix
+400:                 order_info = sql.split('(')[-1].split(')')[0].split(',')
+401:                 orders = ['DESC' if info.endswith('DESC') else 'ASC' for info in order_info]
+402:                 constraints[index]['orders'] = orders
+403:         # Get the PK
+404:         pk_column = self.get_primary_key_column(cursor, table_name)
+405:         if pk_column:
+406:             # SQLite doesn't actually give a name to the PK constraint,
+407:             # so we invent one. This is fine, as the SQLite backend never
+408:             # deletes PK constraints by name, as you can't delete constraints
+409:             # in SQLite; we remake the table with a new PK instead.
+410:             constraints["__primary__"] = {
+411:                 "columns": [pk_column],
+412:                 "primary_key": True,
+413:                 "unique": False,  # It's not actually a unique constraint.
+414:                 "foreign_key": None,
+415:                 "check": False,
+416:                 "index": False,
+417:             }
+418:         constraints.update(self._get_foreign_key_constraints(cursor, table_name))
+419:         return constraints
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

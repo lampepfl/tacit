@@ -1,0 +1,14 @@
+status: success
+Exit code: 0
+Stdout: Collecting setuptools<69
+  Downloading setuptools-68.2.2-py3-none-any.whl.metadata (6.3 kB)
+Downloading setuptools-68.2.2-py3-none-any.whl (807 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 807.9/807.9 kB 11.8 MB/s  0:00:00
+Installing collected packages: setuptools
+  Attempting uninstall: setuptools
+    Found existing installation: setuptools 82.0.0
+    Uninstalling setuptools-82.0.0:
+      Successfully uninstalled setuptools-82.0.0
+Successfully installed setuptools-68.2.2
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

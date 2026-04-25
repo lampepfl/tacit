@@ -1,0 +1,39 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = List(
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12184/repo/django/urls/resolvers.py",
+    lineNumber = 29,
+    line = "from .utils import get_callable"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12184/repo/django/urls/resolvers.py",
+    lineNumber = 389,
+    line = "        self._callback_strs = set()"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12184/repo/django/urls/resolvers.py",
+    lineNumber = 459,
+    line = "                    self._callback_strs.add(url_pattern.lookup_str)"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12184/repo/django/urls/resolvers.py",
+    lineNumber = 494,
+    line = "                    self._callback_strs.update(url_pattern._callback_strs)"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12184/repo/django/urls/resolvers.py",
+    lineNumber = 532,
+    line = "    def _is_callback(self, name):"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12184/repo/django/urls/resolvers.py",
+    lineNumber = 535,
+    line = "        return name in self._callback_strs"
+  ),
+  GrepMatch(
+    file = "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12184/repo/django/urls/resolvers.py",
+    lineNumber = 606,
+    line = "        return get_callable(callback), {}"
+  )
+)

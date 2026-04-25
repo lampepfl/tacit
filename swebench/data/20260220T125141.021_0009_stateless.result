@@ -1,0 +1,33 @@
+status: success
+1275:                 errors.extend(cls._check_column_name_clashes())
+1276:             errors += [
+1277:                 *cls._check_index_together(),
+1278:                 *cls._check_unique_together(),
+1279:                 *cls._check_indexes(databases),
+1280:                 *cls._check_ordering(),
+1281:                 *cls._check_constraints(databases),
+1282:             ]
+1283: 
+1284:         return errors
+1285: 
+1286:     @classmethod
+1287:     def _check_swappable(cls):
+1288:         """Check if the swapped model exists."""
+1289:         errors = []
+1290:         if cls._meta.swapped:
+1291:             try:
+1292:                 apps.get_model(cls._meta.swapped)
+1293:             except ValueError:
+1294:                 errors.append(
+1295:                     checks.Error(
+1296:                         "'%s' is not of the form 'app_label.app_name'." % cls._meta.swappable,
+1297:                         id='models.E001',
+1298:                     )
+1299:                 )
+1300:             except LookupError:
+1301:                 app_label, model_name = cls._meta.swapped.split('.')
+1302:                 errors.append(
+1303:                     checks.Error(
+1304:                         "'%s' references '%s.%s', which has not been "
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

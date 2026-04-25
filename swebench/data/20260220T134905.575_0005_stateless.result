@@ -1,0 +1,54 @@
+status: success
+231: 
+232:         indexes = model._meta.indexes
+233:         if delete_field:
+234:             indexes = [
+235:                 index for index in indexes
+236:                 if delete_field.name not in index.fields
+237:             ]
+238: 
+239:         constraints = list(model._meta.constraints)
+240: 
+241:         # Provide isolated instances of the fields to the new model body so
+242:         # that the existing model's internals aren't interfered with when
+243:         # the dummy model is constructed.
+244:         body_copy = copy.deepcopy(body)
+245: 
+246:         # Construct a new model with the new fields to allow self referential
+247:         # primary key to resolve to. This model won't ever be materialized as a
+248:         # table and solely exists for foreign key reference resolution purposes.
+249:         # This wouldn't be required if the schema editor was operating on model
+250:         # states instead of rendered models.
+251:         meta_contents = {
+252:             'app_label': model._meta.app_label,
+253:             'db_table': model._meta.db_table,
+254:             'unique_together': unique_together,
+255:             'index_together': index_together,
+256:             'indexes': indexes,
+257:             'constraints': constraints,
+258:             'apps': apps,
+259:         }
+260:         meta = type("Meta", (), meta_contents)
+261:         body_copy['Meta'] = meta
+262:         body_copy['__module__'] = model.__module__
+263:         type(model._meta.object_name, model.__bases__, body_copy)
+264: 
+265:         # Construct a model with a renamed table name.
+266:         body_copy = copy.deepcopy(body)
+267:         meta_contents = {
+268:             'app_label': model._meta.app_label,
+269:             'db_table': 'new__%s' % strip_quotes(model._meta.db_table),
+270:             'unique_together': unique_together,
+271:             'index_together': index_together,
+272:             'indexes': indexes,
+273:             'constraints': constraints,
+274:             'apps': apps,
+275:         }
+276:         meta = type("Meta", (), meta_contents)
+277:         body_copy['Meta'] = meta
+278:         body_copy['__module__'] = model.__module__
+279:         new_model = type('New%s' % model._meta.object_name, model.__bases__, body_copy)
+280: 
+281:         # Create a new table with the updated schema.
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

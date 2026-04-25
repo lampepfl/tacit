@@ -1,0 +1,9 @@
+status: success
+Line 118: 'class EnumSerializer(BaseSerializer):'
+Line 119: '      def serialize(self):'
+Line 120: '          enum_class = self.value.__class__'
+Line 121: '          module = enum_class.__module__'
+Line 122: '          return "%s.%s[%r]" % (module, enum_class.__name__, self.value.name), {'import %s' % module}'
+Line 123: ''
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

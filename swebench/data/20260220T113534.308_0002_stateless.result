@@ -1,0 +1,20 @@
+status: success
+# Licensed under a 3-clause BSD style license - see LICENSE.rst
+# This module implements the Arithmetic mixin to the NDData class.
+
+import warnings
+from copy import deepcopy
+
+import numpy as np
+
+from astropy.nddata.nduncertainty import NDUncertainty
+from astropy.units import dimensionless_unscaled
+from astropy.utils import format_doc, sharedmethod
+from astropy.utils.exceptions import AstropyUserWarning
+from astropy.utils.masked import Masked
+
+__all__ = ["NDArithmeticMixin"]
+
+# Global so it doesn
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,7 @@
+status: success
+Context around if: ld_name,)
+                    if to_field_rename_key in self.renamed_fields:
+                        new_field.remote_field.field_name = remote_field_name
+                # Handle 
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

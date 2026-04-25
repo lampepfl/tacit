@@ -1,0 +1,5 @@
+status: success
+Found line: 146 ->                             if elem_index <= last_insert_index:
+Fixed!
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

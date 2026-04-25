@@ -1,0 +1,10 @@
+status: success
+rs$line$2$$$Lambda$2511/0x000000700198b050@5062c277
+1 warning found
+def run()(using x$1: IOCapability): Any
+-- Warning: --------------------------------------------------------------------
+2 |  val x = requestFileSystem("test") _
+  |          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |The trailing ` _` for eta-expansion is unnecessary;
+  |the compiler performs eta-expansion automatically, so you can write the function value directly instead.
+val res0: Any = ()

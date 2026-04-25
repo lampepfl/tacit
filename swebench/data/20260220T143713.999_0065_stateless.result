@@ -1,0 +1,6 @@
+status: success
+Last class definition at line: 371
+Last method definition at line: 583
+Total lines: 595
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

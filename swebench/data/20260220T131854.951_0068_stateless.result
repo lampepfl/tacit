@@ -1,0 +1,7 @@
+status: success
+import re
+  
+  # Read the file
+  with open('django/db/migrations/autodetector.py', 'r') as f:
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,18 @@
+status: success
+126:       This is the size of the item we're talking about.
+127:     """
+128:     try:
+129:         if header is None:
+130:             raise ValueError
+131:         matches = re.match(r"^([^;]+)(; length=([0-9]+))?$", header, re.IGNORECASE)
+132:         header_mtime = parse_http_date(matches[1])
+133:         header_len = matches[3]
+134:         if header_len and int(header_len) != size:
+135:             raise ValueError
+136:         if int(mtime) > header_mtime:
+137:             raise ValueError
+138:     except (AttributeError, ValueError, OverflowError):
+139:         return True
+140:     return False
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

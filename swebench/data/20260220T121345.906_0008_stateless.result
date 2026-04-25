@@ -1,0 +1,29 @@
+status: success
+935:         collector = Collector(using=using)
+936:         collector.collect([self], keep_parents=keep_parents)
+937:         return collector.delete()
+938: 
+939:     delete.alters_data = True
+940: 
+941:     def _get_FIELD_display(self, field):
+942:         value = getattr(self, field.attname)
+943:         # force_str() to coerce lazy strings.
+944:         return force_str(dict(field.flatchoices).get(value, value), strings_only=True)
+945: 
+946:     def _get_next_or_previous_by_FIELD(self, field, is_next, **kwargs):
+947:         if not self.pk:
+948:             raise ValueError("get_next/get_previous cannot be used on unsaved objects.")
+949:         op = 'gt' if is_next else 'lt'
+950:         order = '' if is_next else '-'
+951:         param = getattr(self, field.attname)
+952:         q = Q(**{'%s__%s' % (field.name, op): param})
+953:         q = q | Q(**{field.name: param, 'pk__%s' % op: self.pk})
+954:         qs = self.__class__._default_manager.using(self._state.db).filter(**kwargs).filter(q).order_by(
+955:             '%s%s' % (order, field.name), '%spk' % order
+956:         )
+957:         try:
+958:             return qs[0]
+959:         except IndexError:
+960:             raise self.DoesNotExist("%s matching query does not exist." % self.__class__._meta.object_name)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

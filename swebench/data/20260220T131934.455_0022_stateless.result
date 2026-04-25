@@ -1,0 +1,38 @@
+status: success
+Exit code: 1
+Output: 
+Stderr: Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+    import django; from django.contrib.admin import sites; print('Import OK')
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13447/repo/django/contrib/admin/__init__.py", line 2, in <module>
+    from django.contrib.admin.filters import (
+    ...<3 lines>...
+    )
+  File "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13447/repo/django/contrib/admin/filters.py", line 10, in <module>
+    from django.contrib.admin.options import IncorrectLookupParameters
+  File "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13447/repo/django/contrib/admin/options.py", line 11, in <module>
+    from django.contrib.admin import helpers, widgets
+  File "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13447/repo/django/contrib/admin/helpers.py", line 4, in <module>
+    from django.contrib.admin.utils import (
+    ...<2 lines>...
+    )
+  File "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13447/repo/django/contrib/admin/utils.py", line 11, in <module>
+    from django.urls import NoReverseMatch, reverse
+  File "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13447/repo/django/urls/__init__.py", line 1, in <module>
+    from .base import (
+    ...<3 lines>...
+    )
+  File "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13447/repo/django/urls/base.py", line 8, in <module>
+    from .exceptions import NoReverseMatch, Resolver404
+  File "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13447/repo/django/urls/exceptions.py", line 1, in <module>
+    from django.http import Http404
+  File "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13447/repo/django/http/__init__.py", line 2, in <module>
+    from django.http.request import (
+        HttpRequest, QueryDict, RawPostDataException, UnreadablePostError,
+    )
+  File "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13447/repo/django/http/request.py", line 1, in <module>
+    import cgi
+ModuleNotFoundError: No module named 'cgi'
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

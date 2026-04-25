@@ -1,0 +1,18 @@
+status: success
+847: |        context['widget']['subwidgets'] = subwidgets|
+848: ||
+849: |        return context|
+850: ||
+851: |        return [|
+852: |            widget.value_from_datadict(data, files, name + widget_name)|
+853: |            for widget_name, widget in zip(self.widgets_names, self.widgets)|
+854: |        ]|
+855: ||
+856: |    def value_omitted_from_data(self, data, files, name):|
+857: |        return all(|
+858: |            widget.value_omitted_from_data(data, files, name + widget_name)|
+859: |            for widget_name, widget in zip(self.widgets_names, self.widgets)|
+860: |        )|
+861: ||
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

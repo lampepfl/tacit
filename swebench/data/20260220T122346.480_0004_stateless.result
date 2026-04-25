@@ -1,0 +1,6 @@
+status: failure
+-- [E008] Not Found Error: -----------------------------------------------------
+4 |    content.lines.take(100).mkString("\n")
+  |    ^^^^^^^^^^^^^^^^^^
+  |    value take is not a member of (java.util.stream.Stream[String])?
+1 error found

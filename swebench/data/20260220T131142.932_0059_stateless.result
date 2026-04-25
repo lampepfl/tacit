@@ -1,0 +1,8 @@
+status: success
+0: 'if alias:' at 37585
+   Nearest class before: class Subquery(Expression):
+  
+   Subquery before: class Subquery(Expression):
+  
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

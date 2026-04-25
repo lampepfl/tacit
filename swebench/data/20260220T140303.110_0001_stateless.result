@@ -1,0 +1,20 @@
+status: failure
+-- [E007] Type Mismatch Error: -------------------------------------------------
+2 |  requestFileSystem("/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15400/repo") { (fs: FileSystem) =>
+  |                                                                                                                                 ^
+  |Capability `contextual$1` outlives its scope: it leaks into outer capture set 's1 which is owned by method run.
+  |The leakage occurred when trying to match the following types:
+  |
+  |Found:    (contextual$1: library.FileSystem^) ?->'s2
+  |  library.FileSystem^'s3 ->{contextual$1} List[String]
+  |Required: (library.FileSystem^) ?=> library.FileSystem^'s4 ->'s1 List[String]
+  |
+  |where:    ?=> refers to a root capability created in method run when checking argument to parameter op of method requestFileSystem
+  |          ^   refers to the root capability caps.any
+  |
+3 |    val matches = grepRecursive(".", "SimpleLazyObject", "*.py")
+4 |    matches.map(m => s"${m.file}:${m.lineNumber}: ${m.line}").take(20)
+5 |  }
+  |
+  | longer explanation available when compiling with `-explain`
+1 error found

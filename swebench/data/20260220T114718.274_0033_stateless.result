@@ -1,0 +1,13 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = ProcessResult(
+  exitCode = 0,
+  stdout = """Collecting setuptools-scm
+  Using cached setuptools_scm-9.2.2-py3-none-any.whl.metadata (7.7 kB)
+Requirement already satisfied: packaging>=20 in /Users/tacit/Work/SafeExecMCP/bench/.venv/lib/python3.14/site-packages (from setuptools-scm) (26.0)
+Requirement already satisfied: setuptools in /Users/tacit/Work/SafeExecMCP/bench/.venv/lib/python3.14/site-packages (from setuptools-scm) (82.0.0)
+Using cached setuptools_scm-9.2.2-py3-none-any.whl (62 kB)
+Installing collected packages: setuptools-scm
+Successfully installed setuptools-scm-9.2.2""",
+  stderr = ""
+)

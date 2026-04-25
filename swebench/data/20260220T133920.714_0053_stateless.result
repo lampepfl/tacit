@@ -1,0 +1,18 @@
+status: success
+=== Final verification ===
+ModelChoiceField.default_error_messages:
+    default_error_messages = {
+        'invalid_choice': _('Select a valid choice. %(value)s is not one of the'
+                            ' available choices.'),
+    }
+    def __init__(self, queryset, *, empty_label="---------",
+
+ModelChoiceField.to_python raise:
+            value = self.queryset.get(**{key: value})
+        except (ValueError, TypeError, self.queryset.model.DoesNotExist):
+            raise ValidationError(self.error_messages['invalid_choice'], code='invalid_choice', params={'value': value})
+        return value
+
+    def validate(self, value):
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

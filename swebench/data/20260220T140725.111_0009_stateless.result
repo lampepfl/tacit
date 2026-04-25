@@ -1,0 +1,13 @@
+status: failure
+-- [E009] Syntax Error: --------------------------------------------------------
+3 |  given IO: IOCapability = new {} with IOCapability
+  |                                  ^^^^
+  |         Early definitions are not supported; use trait parameters instead
+  |
+  | longer explanation available when compiling with `-explain`
+-- [E018] Syntax Error: --------------------------------------------------------
+3 |  given IO: IOCapability = new {} with IOCapability
+  |                                                   ^
+  |                            expression expected but [31mend of statement[0m found
+  |
+  | longer explanation available when compiling with `-explain`

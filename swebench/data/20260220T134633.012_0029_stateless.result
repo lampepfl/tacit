@@ -1,0 +1,38 @@
+status: success
+1230:     def _check_ignored_options(self, **kwargs):
+1231:         warnings = []
+1232: 
+1233:         if self.has_null_arg:
+1234:             warnings.append(
+1235:                 checks.Warning(
+1236:                     'null has no effect on ManyToManyField.',
+1237:                     obj=self,
+1238:                     id='fields.W340',
+1239:                 )
+1240:             )
+1241: 
+1242:         if self._validators:
+1243:             warnings.append(
+1244:                 checks.Warning(
+1245:                     'ManyToManyField does not support validators.',
+1246:                     obj=self,
+1247:                     id='fields.W341',
+1248:                 )
+1249:             )
+1250:         if (self.remote_field.limit_choices_to and self.remote_field.through and
+1251:                 not self.remote_field.through._meta.auto_created):
+1252:             warnings.append(
+1253:                 checks.Warning(
+1254:                     'limit_choices_to has no effect on ManyToManyField '
+1255:                     'with a through model.',
+1256:                     obj=self,
+1257:                     id='fields.W343',
+1258:                 )
+1259:             )
+1260: 
+1261:         return warnings
+1262: 
+1263:     def _check_relationship_model(self, from_model=None, **kwargs):
+1264:         if hasattr(self.remote_field.through, '_meta'):
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

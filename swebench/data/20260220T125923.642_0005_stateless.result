@@ -1,0 +1,22 @@
+status: success
+def __eq__(self, other):
+          if not isinstance(other, ValidationError):
+              return NotImplemented
+          if hasattr(self, 'error_dict') or hasattr(other, 'error_dict'):
+              if not hasattr(self, 'error_dict') or not hasattr(other, 'error_dict'):
+                  return False
+              return dict(self) == dict(other)
+          if hasattr(self, 'error_list') or hasattr(other, 'error_list'):
+              if not hasattr(self, 'error_list') or not hasattr(other, 'error_list'):
+                  return False
+              return sorted(self.error_list, key=lambda e: (e.message, e.code, str(e.params))) == \
+                     sorted(other.error_list, key=lambda e: (e.message, e.code, str(e.params)))
+          return (
+              self.message == other.message and
+              self.code == other.code and
+              self.params == other.params
+          )
+  
+  
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

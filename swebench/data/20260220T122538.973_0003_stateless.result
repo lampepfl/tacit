@@ -1,0 +1,6 @@
+status: success
+843:                 blank_defined = any(choice in ('', None) for choice, _ in self.flatchoices)
+868:     def _get_flatchoices(self):
+879:     flatchoices = property(_get_flatchoices)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

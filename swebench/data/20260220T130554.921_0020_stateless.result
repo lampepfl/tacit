@@ -1,0 +1,15 @@
+status: success
+153: 
+154:     def match(self, path):
+155:         match = self.regex.search(path)
+156:         if match:
+157:             # If there are any named groups, use those as kwargs, ignoring
+158:             # non-named groups. Otherwise, pass all non-named arguments as
+159:             # positional arguments.
+160:             kwargs = {k: v for k, v in match.groupdict().items() if v is not None}
+161:             args = () if kwargs else tuple(v for v in match.groups() if v is not None)
+162:             return path[match.end():], args, kwargs
+163:         return None
+164: 
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

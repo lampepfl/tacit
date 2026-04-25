@@ -1,0 +1,13 @@
+status: success
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13158/repo/tests/model_forms/tests.py:12: from django.db.models.query import EmptyQuerySet
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13158/repo/tests/model_forms/tests.py:1757:         self.assertIsInstance(f.clean([]), EmptyQuerySet)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13158/repo/tests/model_forms/tests.py:1758:         self.assertIsInstance(f.clean(()), EmptyQuerySet)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13158/repo/tests/queries/tests.py:720:         # An EmptyQuerySet should not raise exceptions if it is filtered.
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13158/repo/tests/queries/tests.py:2253: class EmptyQuerySetTests(SimpleTestCase):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13158/repo/tests/basic/tests.py:8: from django.db.models.query import MAX_GET_RESULTS, EmptyQuerySet
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13158/repo/tests/basic/tests.py:307:         msg = "EmptyQuerySet can't be instantiated"
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13158/repo/tests/basic/tests.py:309:             EmptyQuerySet()
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13158/repo/tests/basic/tests.py:310:         self.assertIsInstance(Article.objects.none(), EmptyQuerySet)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13158/repo/tests/basic/tests.py:311:         self.assertNotIsInstance('', EmptyQuerySet)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,7 @@
+status: success
+Line 304:         self.through_fields = through_fields
+Line 313:             self.through_fields,
+Line 323:         if self.through_fields:
+Line 324:             field = opts.get_field(self.through_fields[0])
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

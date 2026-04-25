@@ -1,0 +1,25 @@
+status: success
+Root: /Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/astropy__astropy-14995/repo
+Is directory: true
+  CITATION
+  .git-blame-ignore-revs
+  CODE_OF_CONDUCT.md
+  codecov.yml
+  conftest.py
+  licenses
+  .pre-commit-config.yaml
+  GOVERNANCE.md
+  pyproject.toml
+  .pyinstaller
+  MANIFEST.in
+  docs
+  .astropy-root
+  .devcontainer
+  cextern
+  setup.py
+  .gitignore
+  CONTRIBUTING.md
+  examples
+  .github
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

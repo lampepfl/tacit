@@ -1,0 +1,33 @@
+status: success
+191: 
+192:     # Step 3: Test the If-None-Match precondition.
+193:     if if_none_match_etags and not _if_none_match_passes(etag, if_none_match_etags):
+194:         if request.method in ("GET", "HEAD"):
+195:             return _not_modified(request, response)
+196:         else:
+197:             return _precondition_failed(request)
+198: 
+199:     # Step 4: Test the If-Modified-Since precondition.
+200:     if (
+201:         not if_none_match_etags
+202:         and if_modified_since
+203:         and not _if_modified_since_passes(last_modified, if_modified_since)
+204:         and request.method in ("GET", "HEAD")
+205:     ):
+206:         return _not_modified(request, response)
+207: 
+208:     # Step 5: Test the If-Range precondition (not supported).
+209:     # Step 6: Return original response since there isn't a conditional response.
+210:     return response
+211: 
+212: 
+213: def _if_match_passes(target_etag, etags):
+214:     """
+215:     Test the If-Match comparison as defined in section 3.1 of RFC 7232.
+216:     """
+217:     if not target_etag:
+218:         # If there isn't an ETag, then there can't be a match.
+219:         return False
+220:     elif etags == ["*"]:
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

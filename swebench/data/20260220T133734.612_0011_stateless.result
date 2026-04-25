@@ -1,0 +1,22 @@
+status: success
+271: class KeyTransform(Transform):
+326: class KeyTransformTextLookupMixin:
+366: class KeyTransformIsNull(lookups.IsNull):
+379: class KeyTransformIn(lookups.In):
+402: class KeyTransformExact(JSONExact):
+446: class KeyTransformIExact(CaseInsensitiveMixin, KeyTransformTextLookupMixin, lookups.IExact):
+450: class KeyTransformIContains(CaseInsensitiveMixin, KeyTransformTextLookupMixin, lookups.IContains):
+454: class KeyTransformStartsWith(KeyTransformTextLookupMixin, lookups.StartsWith):
+458: class KeyTransformIStartsWith(CaseInsensitiveMixin, KeyTransformTextLookupMixin, lookups.IStartsWith):
+462: class KeyTransformEndsWith(KeyTransformTextLookupMixin, lookups.EndsWith):
+466: class KeyTransformIEndsWith(CaseInsensitiveMixin, KeyTransformTextLookupMixin, lookups.IEndsWith):
+470: class KeyTransformRegex(KeyTransformTextLookupMixin, lookups.Regex):
+474: class KeyTransformIRegex(CaseInsensitiveMixin, KeyTransformTextLookupMixin, lookups.IRegex):
+478: class KeyTransformNumericLookupMixin:
+486: class KeyTransformLt(KeyTransformNumericLookupMixin, lookups.LessThan):
+490: class KeyTransformLte(KeyTransformNumericLookupMixin, lookups.LessThanOrEqual):
+494: class KeyTransformGt(KeyTransformNumericLookupMixin, lookups.GreaterThan):
+498: class KeyTransformGte(KeyTransformNumericLookupMixin, lookups.GreaterThanOrEqual):
+520: class KeyTransformFactory:
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

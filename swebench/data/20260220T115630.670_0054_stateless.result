@@ -1,0 +1,34 @@
+status: success
+First 30 lines of runtests.py:
+0: #!/usr/bin/env python
+1: import argparse
+2: import atexit
+3: import copy
+4: import os
+5: import shutil
+6: import socket
+7: import subprocess
+8: import sys
+9: import tempfile
+10: import warnings
+11: 
+12: import django
+13: from django.apps import apps
+14: from django.conf import settings
+15: from django.db import connection, connections
+16: from django.test import TestCase, TransactionTestCase
+17: from django.test.runner import default_test_processes
+18: from django.test.selenium import SeleniumTestCaseBase
+19: from django.test.utils import get_runner
+20: from django.utils.deprecation import (
+21:     RemovedInDjango31Warning, RemovedInDjango40Warning,
+22: )
+23: from django.utils.log import DEFAULT_LOGGING
+24: 
+25: try:
+26:     import MySQLdb
+27: except ImportError:
+28:     pass
+29: else:
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

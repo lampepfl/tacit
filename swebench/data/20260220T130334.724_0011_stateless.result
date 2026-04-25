@@ -1,0 +1,9 @@
+status: success
+-- Error: ----------------------------------------------------------------------
+5 |  def testFs(): String = summonFrom {
+  |                         ^
+  |                         summonFrom can only be used in an inline method
+  |
+6 |    case fs: FileSystem => find(".", "*").mkString(", ")
+7 |  }
+1 error found

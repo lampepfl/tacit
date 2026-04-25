@@ -1,0 +1,12 @@
+status: success
+Exit code: 1
+Stdout: 
+Stderr (first 500): Traceback (most recent call last):
+  File "/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/astropy__astropy-14995/repo/setup.py", line 69, in <module>
+    setup(ext_modules=get_extensions())
+                      ~~~~~~~~~~~~~~^^
+  File "/Users/tacit/Work/SafeExecMCP/bench/.venv/lib/python3.14/site-packages/extension_helpers/_setup_helpers.py", line 68, in get_extensions
+    for setuppkg in iter_setup_packages(srcdir, packages):
+                    ~~~~~~~~~~~
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

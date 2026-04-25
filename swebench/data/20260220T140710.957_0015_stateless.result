@@ -1,0 +1,6 @@
+status: success
+8: from argparse import ArgumentParser, HelpFormatter
+105: class DjangoHelpFormatter(HelpFormatter):
+292:             formatter_class=DjangoHelpFormatter,
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

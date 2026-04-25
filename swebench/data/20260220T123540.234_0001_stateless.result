@@ -1,0 +1,7 @@
+status: success
+83:     def cleanse_setting(self, key, value):
+92:                 cleansed = {k: self.cleanse_setting(k, v) for k, v in value.items()}
+112:                 settings_dict[k] = self.cleanse_setting(k, getattr(settings, k))
+121:         return {k: self.cleanse_setting(k, v) for k, v in request.META.items()}
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

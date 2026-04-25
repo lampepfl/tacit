@@ -1,0 +1,14 @@
+status: failure
+-- [E006] Not Found Error: -----------------------------------------------------
+4 |    def access2(path: String)(using fs: FileSystem): FileEntry ^ fs = access(path)
+  |                                                               ^
+  |                                                         Not found: type ^
+  |
+  | longer explanation available when compiling with `-explain`
+-- [E006] Not Found Error: -----------------------------------------------------
+4 |    def access2(path: String)(using fs: FileSystem): FileEntry ^ fs = access(path)
+  |                                                                 ^^
+  |                                     Expected a type, but found a term: fs
+  |
+  | longer explanation available when compiling with `-explain`
+2 errors found

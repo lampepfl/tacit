@@ -1,0 +1,10 @@
+status: success
+7: from django.core.exceptions import EmptyResultSet, FieldError
+275:             except EmptyResultSet:
+509:             except EmptyResultSet:
+516:             raise EmptyResultSet
+555:                 except EmptyResultSet:
+1200:                 raise EmptyResultSet
+1201:         except EmptyResultSet:
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

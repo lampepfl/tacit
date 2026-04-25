@@ -1,0 +1,13 @@
+status: success
+Content around optimization:
+# Optimize for the case with a single obj and no dependencies
+        if len(self.data) == 1 and len(instances) == 1:
+            instance = list(instances)[0]
+            if self.can_fast_delete(instance):
+                with transaction.mark_for_rollback_on_error():
+                    count = sql.DeleteQuery(model).delete_batch([instance.pk], self.using)
+                return count, {model._meta.label: count}
+
+        
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

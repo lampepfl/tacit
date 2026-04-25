@@ -1,0 +1,20 @@
+status: success
+1156:                 if unique is not None and infodict['unique'] != unique:
+1157:                     continue
+1158:                 if primary_key is not None and infodict['primary_key'] != primary_key:
+1159:                     continue
+1160:                 if index is not None and infodict['index'] != index:
+1161:                     continue
+1162:                 if check is not None and infodict['check'] != check:
+1163:                     continue
+1164:                 if foreign_key is not None and not infodict['foreign_key']:
+1165:                     continue
+1166:                 if type_ is not None and infodict['type'] != type_:
+1167:                     continue
+1168:                 if not exclude or name not in exclude:
+1169:                     result.append(name)
+1170:         return result
+1171: 
+1172:     def _delete_primary_key(self, model, strict=False):
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

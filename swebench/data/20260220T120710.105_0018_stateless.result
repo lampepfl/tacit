@@ -1,0 +1,5 @@
+status: success
+522:             if q.group_by is True:
+2085:         if self.group_by is True:
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

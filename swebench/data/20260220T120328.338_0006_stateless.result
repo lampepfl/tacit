@@ -1,0 +1,12 @@
+status: success
+201:     def check(self, **kwargs):
+954:     def check(self, **kwargs):
+1028:     def check(self, **kwargs):
+1369:     def check(self, **kwargs):
+1586:     def check(self, **kwargs):
+1687:     def check(self, **kwargs):
+1828:     def check(self, **kwargs):
+2189:     def check(self, **kwargs):
+2302:     def check(self, **kwargs):
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

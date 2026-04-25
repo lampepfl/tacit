@@ -1,0 +1,5 @@
+status: success
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12284/repo/tests/model_inheritance/test_abstract_inheritance.py
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12284/repo/tests/test_runner_apps/tagged/tests_inheritance.py
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

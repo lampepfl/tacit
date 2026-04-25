@@ -1,0 +1,31 @@
+status: success
+217: 
+218: class BaseReloader:
+219:     def __init__(self):
+220:           self.extra_files = set()
+221:           self.directory_globs = defaultdict(set)
+222:           self._stop_condition = threading.Event()
+223:           # Add the main script file (e.g., manage.py) to extra files to watch.
+224:           # This ensures changes to the main script are detected when running
+225:           # with `python manage.py runserver` (as opposed to `python -m django`).
+226:           if sys.argv[0]:
+227:               script_path = pathlib.Path(sys.argv[0])
+228:               if script_path.exists():
+229:                   self.extra_files.add(script_path)
+230:         self.extra_files = set()
+231:         self.directory_globs = defaultdict(set)
+232:         self._stop_condition = threading.Event()
+233: 
+234:     def watch_dir(self, path, glob):
+235:         path = Path(path)
+236:         if not path.is_absolute():
+237:             raise ValueError('%s must be absolute.' % path)
+238:         logger.debug('Watching dir %s with glob %s.', path, glob)
+239:         self.directory_globs[path].add(glob)
+240: 
+241:     def watch_file(self, path):
+242:         path = Path(path)
+243:         if not path.is_absolute():
+244:             raise ValueError('%s must be absolute.' % path)
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

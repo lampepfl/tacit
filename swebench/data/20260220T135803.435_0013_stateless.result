@@ -1,0 +1,11 @@
+status: failure
+-- [E018] Syntax Error: --------------------------------------------------------
+14 |      Deal with storing migration records in the database.
+   |           ^^^^
+   |           expression expected but [31mwith[0m found
+   |
+   | longer explanation available when compiling with `-explain`
+-- [E040] Syntax Error: --------------------------------------------------------
+17 |      creation, it's the one thing we can't do normally via migrations.
+   |                  ^
+   |                  ',' or ')' expected, but quoted identifier found

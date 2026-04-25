@@ -1,0 +1,44 @@
+status: success
+351:         the given `model`.
+352:         """
+353:         sql, params = self.table_sql(model)
+354:         # Prevent using [] as params, in the case a literal '%' is used in the definition
+355:         self.execute(sql, params or None)
+356: 
+357:         # Add any field index and index_together's (deferred as SQLite _remake_table needs it)
+358:         self.deferred_sql.extend(self._model_indexes_sql(model))
+359: 
+360:         # Make M2M tables
+361:         for field in model._meta.local_many_to_many:
+362:             if field.remote_field.through._meta.auto_created:
+363:                 self.create_model(field.remote_field.through)
+364: 
+365:     def delete_model(self, model):
+366:         """Delete a model from the database."""
+367:         # Handle auto-created intermediary models
+368:         for field in model._meta.local_many_to_many:
+369:             if field.remote_field.through._meta.auto_created:
+370:                 self.delete_model(field.remote_field.through)
+371: 
+372:         # Delete the table
+373:         self.execute(self.sql_delete_table % {
+374:             "table": self.quote_name(model._meta.db_table),
+375:         })
+376:         # Remove all deferred statements referencing the deleted table.
+377:         for sql in list(self.deferred_sql):
+378:             if isinstance(sql, Statement) and sql.references_table(model._meta.db_table):
+379:                 self.deferred_sql.remove(sql)
+380: 
+381:     def add_index(self, model, index):
+382:         """Add an index on a model."""
+383:         if (
+384:             index.contains_expressions and
+385:             not self.connection.features.supports_expression_indexes
+386:         ):
+387:             return None
+388:         # Index.create_sql returns interpolated SQL which makes params=None a
+389:         # necessity to avoid escaping attempts on execution.
+390:         self.execute(index.create_sql(model, self), params=None)
+391: 
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

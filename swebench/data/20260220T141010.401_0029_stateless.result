@@ -1,0 +1,5 @@
+status: success
+172:     if_unmodified_since = request.META.get("HTTP_IF_UNMODIFIED_SINCE")
+177:     if_modified_since = request.META.get("HTTP_IF_MODIFIED_SINCE")
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

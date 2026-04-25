@@ -1,0 +1,21 @@
+status: success
+2034:     def __init__(self, parent_model, admin_site):
+2035:         self.admin_site = admin_site
+2036:         self.parent_model = parent_model
+2037:         self.opts = self.model._meta
+2038:         self.has_registered_model = admin_site.is_registered(self.model)
+2039:         super().__init__()
+2040:         if self.verbose_name is None:
+2041:             self.verbose_name = self.model._meta.verbose_name
+2042:         if self.verbose_name_plural is None:
+2043:             self.verbose_name_plural = format_lazy('{}s', self.verbose_name)
+2044: 
+2045:     @property
+2046:     def media(self):
+2047:         extra = '' if settings.DEBUG else '.min'
+2048:         js = ['vendor/jquery/jquery%s.js' % extra, 'jquery.init.js', 'inlines.js']
+2049:         if self.filter_vertical or self.filter_horizontal:
+2050:             js.extend(['SelectBox.js', 'SelectFilter2.js'])
+2051:         if self.classes and 'collapse' in self.classes:
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

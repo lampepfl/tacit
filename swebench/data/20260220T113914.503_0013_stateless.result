@@ -1,0 +1,28 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = List(
+  "1234:             if xy.shape[-1] != self.naxis:",
+  "1235:                 raise ValueError(",
+  "1236:                     \"When providing two arguments, the array must be \"",
+  "1237:                     \"of shape (N, {0})\".format(self.naxis))",
+  "1238:             if ra_dec_order and sky == 'input':",
+  "1239:                 xy = self._denormalize_sky(xy)",
+  "1240:             result = func(xy, origin)",
+  "1241:             if ra_dec_order and sky == 'output':",
+  "1242:                 result = self._normalize_sky(result)",
+  "1243:             return result",
+  "1244: ",
+  "1245:         if len(args) == 2:",
+  "1246:             try:",
+  "1247:                 xy, origin = args",
+  "1248:                 xy = np.asarray(xy)",
+  "1249:                 origin = int(origin)",
+  "1250:             except Exception:",
+  "1251:                 raise TypeError(",
+  "1252:                     \"When providing two arguments, they must be \"",
+  "1253:                     \"(coords[N][{0}], origin)\".format(self.naxis))",
+  "1254:             if self.naxis == 1 and len(xy.shape) == 1:",
+  "1255:                 return _return_list_of_arrays([xy], origin)",
+  "1256:             return _return_single_array(xy, origin)",
+  "1257: "
+)

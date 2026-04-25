@@ -1,0 +1,33 @@
+status: success
+1270:     def check(cls, **kwargs):
+1271:         errors = [*cls._check_swappable(), *cls._check_model(), *cls._check_managers(**kwargs)]
+1272:         if not cls._meta.swapped:
+1273:             databases = kwargs.get('databases') or []
+1274:             errors += [
+1275:                 *cls._check_fields(**kwargs),
+1276:                 *cls._check_m2m_through_same_relationship(),
+1277:                 *cls._check_long_column_names(databases),
+1278:             ]
+1279:             clash_errors = (
+1280:                 *cls._check_id_field(),
+1281:                 *cls._check_field_name_clashes(),
+1282:                 *cls._check_model_name_db_lookup_clashes(),
+1283:                 *cls._check_property_name_related_field_accessor_clashes(),
+1284:                 *cls._check_single_primary_key(),
+1285:             )
+1286:             errors.extend(clash_errors)
+1287:             # If there are field name clashes, hide consequent column name
+1288:             # clashes.
+1289:             if not clash_errors:
+1290:                 errors.extend(cls._check_column_name_clashes())
+1291:             errors += [
+1292:                 *cls._check_index_together(),
+1293:                 *cls._check_unique_together(),
+1294:                 *cls._check_indexes(databases),
+1295:                 *cls._check_ordering(),
+1296:                 *cls._check_constraints(databases),
+1297:                 *cls._check_default_pk(),
+1298:             ]
+1299: 
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

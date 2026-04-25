@@ -1,0 +1,76 @@
+status: success
+168:     logical_operator = None
+169: 
+170:     def as_sql(self, compiler, connection, template=None):
+171:         # Process JSON path from the left-hand side.
+172:         if isinstance(self.lhs, KeyTransform):
+173:             lhs, lhs_params, lhs_key_transforms = self.lhs.preprocess_lhs(compiler, connection)
+174:             lhs_json_path = compile_json_path(lhs_key_transforms)
+175:         else:
+176:             lhs, lhs_params = self.process_lhs(compiler, connection)
+177:             lhs_json_path = '$'
+178:         sql = template % lhs
+179:         # Process JSON path from the right-hand side.
+180:         rhs = self.rhs
+181:         rhs_params = []
+182:         if not isinstance(rhs, (list, tuple)):
+183:             rhs = [rhs]
+184:         for key in rhs:
+185:             if isinstance(key, KeyTransform):
+186:                 *_, rhs_key_transforms = key.preprocess_lhs(compiler, connection)
+187:             else:
+188:                 rhs_key_transforms = [key]
+189:             rhs_params.append('%s%s' % (
+190:                 lhs_json_path,
+191:                 compile_json_path(rhs_key_transforms, include_root=False),
+192:             ))
+193:         # Add condition for each key.
+194:         if self.logical_operator:
+195:             sql = '(%s)' % self.logical_operator.join([sql] * len(rhs_params))
+196:         return sql, tuple(lhs_params) + tuple(rhs_params)
+197: 
+198:     def as_mysql(self, compiler, connection):
+199:         return self.as_sql(compiler, connection, template="JSON_CONTAINS_PATH(%s, 'one', %%s)")
+200: 
+201:     def as_oracle(self, compiler, connection):
+202:         sql, params = self.as_sql(compiler, connection, template="JSON_EXISTS(%s, '%%s')")
+203:         # Add paths directly into SQL because path expressions cannot be passed
+204:         # as bind variables on Oracle.
+205:         return sql % tuple(params), []
+206: 
+207:     def as_postgresql(self, compiler, connection):
+208:         if isinstance(self.rhs, KeyTransform):
+209:             *_, rhs_key_transforms = self.rhs.preprocess_lhs(compiler, connection)
+210:             for key in rhs_key_transforms[:-1]:
+211:                 self.lhs = KeyTransform(key, self.lhs)
+212:             self.rhs = rhs_key_transforms[-1]
+213:         return super().as_postgresql(compiler, connection)
+214: 
+215:     def as_sqlite(self, compiler, connection):
+216:         return self.as_sql(compiler, connection, template='JSON_TYPE(%s, %%s) IS NOT NULL')
+217: 
+218: 
+219: class HasKey(HasKeyLookup):
+220:     lookup_name = 'has_key'
+221:     postgres_operator = '?'
+222:     prepare_rhs = False
+223: 
+224: 
+225: class HasKeys(HasKeyLookup):
+226:     lookup_name = 'has_keys'
+227:     postgres_operator = '?&'
+228:     logical_operator = ' AND '
+229: 
+230:     def get_prep_lookup(self):
+231:         return [str(item) for item in self.rhs]
+232: 
+233: 
+234: class HasAnyKeys(HasKeys):
+235:     lookup_name = 'has_any_keys'
+236:     postgres_operator = '?|'
+237:     logical_operator = ' OR '
+238: 
+239: 
+240: class JSONExact(lookups.Exact):
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

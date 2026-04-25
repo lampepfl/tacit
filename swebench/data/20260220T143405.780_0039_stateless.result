@@ -1,0 +1,14 @@
+status: success
+def run()(using x$1: IOCapability): Any
+val res0: Any = """    # any template_loader that has a 'get_dirs' method.
+    # Collect the directories, filtering out Django templates.
+    cwd = Path.cwd()
+    items = set()
+    for backend in engines.all():
+        if not isinstance(backend, DjangoTemplates):
+            continue
+
+        items.update(cwd / to_path(dir) for dir in backend.engine.dirs)
+
+        for loader in backend.engine.template_loaders:
+            if not hasattr(loader, 'get_dirs'):"""

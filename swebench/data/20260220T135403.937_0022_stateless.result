@@ -1,0 +1,4 @@
+status: success
+1406:     def _add_q(self, q_object, used_aliases, branch_negated=False,
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

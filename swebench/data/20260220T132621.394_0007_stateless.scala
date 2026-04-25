@@ -1,0 +1,7 @@
+requestFileSystem("/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13757/repo") {
+  val file = access("/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-13757/repo/django/db/models/lookups.py")
+  val lines = file.readLines()
+  for (i <- 504 until 530) {
+    println(s"${i + 1}: ${lines(i)}")
+  }
+}

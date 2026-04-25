@@ -1,0 +1,63 @@
+status: success
+71:         if self.prepare_rhs and hasattr(self.lhs.output_field, 'get_prep_value'):
+72:             return self.lhs.output_field.get_prep_value(self.rhs)
+73:         return self.rhs
+74: 
+75:     def get_db_prep_lookup(self, value, connection):
+76:         return ('%s', [value])
+77: 
+78:     def process_lhs(self, compiler, connection, lhs=None):
+79:         lhs = lhs or self.lhs
+80:         if hasattr(lhs, 'resolve_expression'):
+81:             lhs = lhs.resolve_expression(compiler.query)
+82:         return compiler.compile(lhs)
+83: 
+84:     def process_rhs(self, compiler, connection):
+85:         value = self.rhs
+86:         if self.bilateral_transforms:
+87:             if self.rhs_is_direct_value():
+88:                 # Do not call get_db_prep_lookup here as the value will be
+89:                 # transformed before being used for lookup
+90:                 value = Value(value, output_field=self.lhs.output_field)
+91:             value = self.apply_bilateral_transforms(value)
+92:             value = value.resolve_expression(compiler.query)
+93:         if hasattr(value, 'as_sql'):
+94:             return compiler.compile(value)
+95:         else:
+96:             return self.get_db_prep_lookup(value, connection)
+97: 
+98:     def rhs_is_direct_value(self):
+99:         return not hasattr(self.rhs, 'as_sql')
+100: 
+101:     def relabeled_clone(self, relabels):
+102:         new = copy(self)
+103:         new.lhs = new.lhs.relabeled_clone(relabels)
+104:         if hasattr(new.rhs, 'relabeled_clone'):
+105:             new.rhs = new.rhs.relabeled_clone(relabels)
+106:         return new
+107: 
+108:     def get_group_by_cols(self, alias=None):
+109:         cols = self.lhs.get_group_by_cols()
+110:         if hasattr(self.rhs, 'get_group_by_cols'):
+111:             cols.extend(self.rhs.get_group_by_cols())
+112:         return cols
+113: 
+114:     def as_sql(self, compiler, connection):
+115:         raise NotImplementedError
+116: 
+117:     def as_oracle(self, compiler, connection):
+118:         # Oracle doesn't allow EXISTS() to be compared to another expression
+119:         # unless it's wrapped in a CASE WHEN.
+120:         wrapped = False
+121:         exprs = []
+122:         for expr in (self.lhs, self.rhs):
+123:             if isinstance(expr, Exists):
+124:                 expr = Case(When(expr, then=True), default=False, output_field=BooleanField())
+125:                 wrapped = True
+126:             exprs.append(expr)
+127:         lookup = type(self)(*exprs) if wrapped else self
+128:         return lookup.as_sql(compiler, connection)
+129: 
+130:     @cached_property
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

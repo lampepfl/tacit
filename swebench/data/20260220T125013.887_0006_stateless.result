@@ -1,0 +1,19 @@
+status: success
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12856/repo/django/db/backends/sqlite3/schema.py:9: from django.db.models import UniqueConstraint
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12856/repo/django/db/backends/sqlite3/schema.py:420:         if isinstance(constraint, UniqueConstraint) and constraint.condition:
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12856/repo/django/db/backends/sqlite3/schema.py:426:         if isinstance(constraint, UniqueConstraint) and constraint.condition:
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12856/repo/django/db/models/options.py:10: from django.db.models import AutoField, Manager, OrderWrt, UniqueConstraint
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12856/repo/django/db/models/options.py:840:             if isinstance(constraint, UniqueConstraint) and constraint.condition is None
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12856/repo/django/db/models/fields/related.py:550:                         'or a UniqueConstraint (without condition) in the '
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12856/repo/django/db/models/fields/related.py:566:                         'UniqueConstraint (without condition) in the model '
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12856/repo/django/db/models/constraints.py:6: __all__ = ['CheckConstraint', 'Deferrable', 'UniqueConstraint']
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12856/repo/django/db/models/constraints.py:79: class UniqueConstraint(BaseConstraint):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12856/repo/django/db/models/constraints.py:84:             raise ValueError('UniqueConstraint.condition must be a Q instance.')
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12856/repo/django/db/models/constraints.py:87:                 'UniqueConstraint with conditions cannot be deferred.'
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12856/repo/django/db/models/constraints.py:91:                 'UniqueConstraint.deferrable must be a Deferrable instance.'
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12856/repo/django/db/models/constraints.py:137:         if isinstance(other, UniqueConstraint):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12856/repo/django/db/models/base.py:23: from django.db.models.constraints import CheckConstraint, UniqueConstraint
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12856/repo/django/db/models/base.py:1895:                 isinstance(constraint, UniqueConstraint) and constraint.condition is not None
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-12856/repo/django/db/models/base.py:1914:                 isinstance(constraint, UniqueConstraint) and constraint.deferrable is not None
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,24 @@
+status: success
+Line 1562-1580:
+1561:         # treat trailing names as lookups until a field can be resolved.
+1562:         last_field_exception = None
+1563:         for pivot in range(len(names), 0, -1):
+1564:             try:
+1565:                 path, final_field, targets, rest = self.names_to_path(
+1566:                     names[:pivot], opts, allow_many, fail_on_missing=True,
+1567:                 )
+1568:             except FieldError as exc:
+1569:                 if pivot == 1:
+1570:                     # The first item cannot be a lookup, so it's safe
+1571:                     # to raise the field error here.
+1572:                     raise
+1573:                 else:
+1574:                     last_field_exception = exc
+1575:             else:
+1576:                 # The transforms are the remaining items that couldn't be
+1577:                 # resolved into fields.
+1578:                 transforms = names[pivot:]
+1579:                 break
+1580:         for name in transforms:
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

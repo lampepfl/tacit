@@ -1,0 +1,6 @@
+status: success
+Original line 1588:         'invalid': _("'%(value)s' value has an invalid format. It must be in "
+New line 1588:         'invalid': _("'%(value)s' value has an invalid format. It must be in "
+File updated
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -1,0 +1,33 @@
+status: success
+30: 
+31: 
+32: class ReadOnlyPasswordHashWidget(forms.Widget):
+33:     template_name = 'auth/widgets/read_only_password_hash.html'
+34:     read_only = True
+35: 
+36:     def get_context(self, name, value, attrs):
+37:         context = super().get_context(name, value, attrs)
+38:         summary = []
+39:         if not value or value.startswith(UNUSABLE_PASSWORD_PREFIX):
+40:             summary.append({'label': gettext("No password set.")})
+41:         else:
+42:             try:
+43:                 hasher = identify_hasher(value)
+44:             except ValueError:
+45:                 summary.append({'label': gettext("Invalid password format or unknown hashing algorithm.")})
+46:             else:
+47:                 for key, value_ in hasher.safe_summary(value).items():
+48:                     summary.append({'label': gettext(key), 'value': value_})
+49:         context['summary'] = summary
+50:         return context
+51: 
+52:     def id_for_label(self, id_):
+53:         return None
+54: 
+55: 
+56: 
+57: class ReadOnlyPasswordHashField(forms.Field):
+58:     widget = ReadOnlyPasswordHashWidget
+59: 
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

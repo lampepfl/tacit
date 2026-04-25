@@ -1,0 +1,9 @@
+status: failure
+-- [E040] Syntax Error: --------------------------------------------------------
+47 |    println(s"$i: ${lines(i))}")
+   |                            ^
+   |                            '}' expected, but ')' found
+-- Error: ----------------------------------------------------------------------
+47 |    println(s"$i: ${lines(i))}")
+   |                              ^
+   |                      end of statement expected but string literal found

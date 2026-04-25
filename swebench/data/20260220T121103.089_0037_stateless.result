@@ -1,0 +1,23 @@
+status: success
+51: 
+52: def prepare_lookup_value(key, value):
+53:     """
+54:     Return a lookup value prepared to be used in queryset filtering.
+55:     """
+56:     # if key ends with __in, split parameter into separate values
+57:     if key.endswith('__in'):
+58:         value = value.split(',')
+59:     # if key ends with __isnull, special case '' and the string literals 'false' and '0'
+60:     elif key.endswith('__isnull'):
+61:         value = value.lower() not in ('', 'false', '0')
+62:     return value
+63: 
+64: 
+65: def quote(s):
+66:     """
+67:     Ensure that primary key values do not confuse the admin URLs by escaping
+68:     any '/', '_' and ':' and similarly problematic characters.
+69:     Similar to urllib.parse.quote(), except that the quoting is slightly
+70:     different so that it doesn't get automatically unquoted by the Web browser.
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

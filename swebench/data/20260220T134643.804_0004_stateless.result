@@ -1,0 +1,7 @@
+status: success
+35:     def _wrapper(self, *args, **kwargs):
+40:         bound_method = partial(method.__get__(self, type(self)))
+41:         for dec in decorators:
+46:     for dec in decorators:
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

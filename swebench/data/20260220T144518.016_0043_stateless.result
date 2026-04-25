@@ -1,0 +1,33 @@
+status: success
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15738/repo/django/db/models/query.py:167:             fields = [self.queryset.model_fields.get(c) for c in self.queryset.columns]
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15738/repo/django/db/models/query.py:178:                     for column, pos in annotation_fields:
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15738/repo/django/db/models/query.py:179:                         setattr(instance, column, values[pos])
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15738/repo/django/db/models/query.py:386:                  doing some column masking, and returning the rows in chunks.
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15738/repo/django/db/models/query.py:798:                 returned_columns = self._batched_insert(
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15738/repo/django/db/models/query.py:806:                 for obj_with_pk, results in zip(objs_with_pk, returned_columns):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15738/repo/django/db/models/query.py:815:                 returned_columns = self._batched_insert(
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15738/repo/django/db/models/query.py:828:                     assert len(returned_columns) == len(objs_without_pk)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15738/repo/django/db/models/query.py:829:                 for obj_without_pk, results in zip(objs_without_pk, returned_columns):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15738/repo/django/db/models/query.py:1976:             f for f in self.model._meta.fields if converter(f.column) in self.columns
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15738/repo/django/db/models/query.py:1979:             (column, pos)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15738/repo/django/db/models/query.py:1980:             for pos, column in enumerate(self.columns)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15738/repo/django/db/models/query.py:1981:             if column not in self.model_fields
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15738/repo/django/db/models/query.py:1984:             self.columns.index(converter(f.column)) for f in model_init_fields
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15738/repo/django/db/models/query.py:2070:     def columns(self):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15738/repo/django/db/models/query.py:2075:         columns = self.query.get_columns()
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15738/repo/django/db/models/query.py:2076:         # Adjust any column names which don't match field names
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15738/repo/django/db/models/query.py:2078:             # Ignore translations for nonexistent column names
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15738/repo/django/db/models/query.py:2080:                 index = columns.index(query_name)
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15738/repo/django/db/models/query.py:2084:                 columns[index] = model_name
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15738/repo/django/db/models/query.py:2085:         return columns
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15738/repo/django/db/models/query.py:2089:         """A dict mapping column names to model field names."""
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15738/repo/django/db/models/query.py:2093:             name, column = field.get_attname_column()
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15738/repo/django/db/models/query.py:2094:             model_fields[converter(column)] = field
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15738/repo/django/db/models/query.py:2497:     input for initialization. That data is used to compute which columns
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15738/repo/django/db/models/query.py:2511:         #    - cols_start, cols_end: usually the columns in the row are
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15738/repo/django/db/models/expressions.py:249:     def contains_column_references(self):
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15738/repo/django/db/models/expressions.py:251:             expr and expr.contains_column_references
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15738/repo/django/db/models/expressions.py:1071:                     _, column_name = parent_field.get_attname_column()
+/Users/tacit/Work/SafeExecMCP/bench/swebench_runs/20260220_122941/workspace/django__django-15738/repo/django/db/models/expressions.py:1072:                     if column_name.lower() in self.sql.lower():
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

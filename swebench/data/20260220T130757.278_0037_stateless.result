@@ -1,0 +1,17 @@
+status: success
+def get_group_by_cols(self, alias=None):
+        return [self]
+
+
+class ExpressionList(Func):
+    """
+    An expression containing multiple expressions. Can be used to provide a
+    list of expressions as an argument to another expression, like an
+    ordering clause.
+    """
+    template = '%(expressions)s'
+
+    def __init__(self, *expressions, **extra):
+        if not expressions:
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

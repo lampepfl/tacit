@@ -1,0 +1,11 @@
+status: success
+Wrong fix at: 25915
+Context around wrong fix:
+arams
+
+    def get_group_by_cols(self, alias=None):
+        return self.source.get_group_by_cols(alias=self.refs)
+
+    d
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

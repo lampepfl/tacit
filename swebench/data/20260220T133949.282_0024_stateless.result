@@ -1,0 +1,13 @@
+status: success
+Original lines:
+368: [        if not self.rhs:]
+369: [            return HasKey(self.lhs.lhs, self.lhs.key_name).as_oracle(compiler, connection)]
+370: [        return super().as_sql(compiler, connection)]
+371: []
+372: [    def as_sqlite(self, compiler, connection):]
+373: [        if not self.rhs:]
+374: [            return HasKey(self.lhs.lhs, self.lhs.key_name).as_sqlite(compiler, connection)]
+375: [        return super().as_sql(compiler, connection)]
+376: []
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

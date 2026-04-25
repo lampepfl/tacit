@@ -1,0 +1,7 @@
+status: success
+1282:                 *cls._check_constraints(databases),
+1867:     def _check_constraints(cls, databases):
+1874:                 connection.features.supports_table_check_constraints or
+1875:                 'supports_table_check_constraints' in cls._meta.required_db_features
+def run()(using x$1: IOCapability): Any
+val res0: Any = ()

@@ -468,3 +468,82 @@ class LibraryIntegrationSuite extends munit.FunSuite:
     assert(result.success, s"should compile but throw at runtime: ${result.error.getOrElse(result.output)}")
     assert(result.output.contains("timed out") || result.output.contains("RuntimeException"),
       s"expected timeout error, got: ${result.output}")
+
+  // ── Safe mode defense-in-depth tests ──────────────────────────────
+
+  test("safe mode rejects mutating outer var inside Classified.map"):
+    // `Classified.map` requires `T -> B` (a pure function). Mutating a `var`
+    // from the enclosing scope is a side effect that makes the lambda impure.
+    // Only safe mode catches this, because capture tracking treats mutable
+    // variables as capabilities. Without safe mode, this compiles silently.
+    assertCompileError(
+      """var counter = 0
+        |val c = classify("secret")
+        |val result = c.map { s =>
+        |  counter += 1
+        |  s.toUpperCase
+        |}
+        |result""".stripMargin,
+      "capture"
+    )
+
+  test("safe mode allows reading outer val inside Classified.map"):
+    // Reading an immutable `val` does not capture any capability, so it's
+    // a pure operation and safe mode allows it inside Classified.map.
+    val result = ScalaExecutor.execute("""
+      val prefix = "PREFIX:"
+      val c = classify("secret")
+      c.map(s => prefix + s.toUpperCase).toString
+    """)
+    assert(result.success, s"execution failed: ${result.error.getOrElse(result.output)}")
+
+  test("safe mode allows legitimate Classified.map with pure function"):
+    val result = ScalaExecutor.execute("""
+      val c = classify("secret")
+      c.map(_.trim).toString
+    """)
+    assert(result.success, s"execution failed: ${result.error.getOrElse(result.output)}")
+
+  test("safe mode rejects println inside Classified.map (side channel)"):
+    assertCompileError(
+      """val secret = classify("password")
+        |secret.map(x => { println(x); x })""".stripMargin,
+      "capture"
+    )
+
+  test("safe mode allows file system operations with capability"):
+    val result = ScalaExecutor.execute("""
+      requestFileSystem("/tmp") {
+        val f = access("/tmp/safe-mode-test.txt")
+        f.write("safe mode works")
+        val content = f.read()
+        f.delete()
+        content
+      }
+    """)
+    assert(result.success, s"execution failed: ${result.error.getOrElse(result.output)}")
+    assert(result.output.contains("safe mode works"), s"unexpected output: ${result.output}")
+
+  test("safe mode allows exec with permitted command"):
+    val result = ScalaExecutor.execute("""
+      requestExecPermission(Set("echo")) {
+        exec("echo", List("safe-mode-test")).stdout.trim
+      }
+    """)
+    assert(result.success, s"execution failed: ${result.error.getOrElse(result.output)}")
+    assert(result.output.contains("safe-mode-test"), s"unexpected output: ${result.output}")
+
+  test("safe mode allows network with permitted host"):
+    val result = ScalaExecutor.execute("""
+      requestNetwork(Set("localhost")) {
+        // Validates host without making a real connection
+        "network capability available"
+      }
+    """)
+    assert(result.success, s"execution failed: ${result.error.getOrElse(result.output)}")
+
+  test("safe mode rejects exec without ProcessPermission capability"):
+    assertCompileError(
+      """exec("echo", List("hi"))""",
+      "no given instance of type tacit.library.ProcessPermission"
+    )

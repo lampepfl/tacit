@@ -68,9 +68,11 @@ impl/                  # Implementation
 test/                  # Test suites
 ```
 
-## Build
+## Compile and Test
 
 ```bash
 scala compile .
 scala test .
 ```
+
+Note, the library tests does not enable safe mode, because they are mainly testing the behaviours.

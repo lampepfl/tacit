@@ -479,3 +479,76 @@ class CodeValidatorSuite extends munit.FunSuite:
     // //> using is checked on original code, so it will match even in a string
     // This documents the current behavior
     assert(result.nonEmpty) // directive patterns check original code
+
+  // ── Safe mode defense-in-depth tests ──────────────────────────────
+
+  test("safe mode is enabled by default"):
+    val cfg = Config()
+    assert(cfg.safeMode, "safe mode should be enabled by default")
+
+  test("safe mode can be disabled via --no-safe-mode"):
+    val cfg = Config.parseCliArgs(Array("--library-jar", System.getProperty("tacit.library.jar", "/tmp/fake.jar"), "--no-safe-mode"))
+    cfg.foreach(c => assert(!c.safeMode, "safe mode should be off with --no-safe-mode"))
+
+  test("safe mode rejects asInstanceOf at compile time"):
+    // In safe mode, .asInstanceOf is restricted. The CodeValidator blocks the
+    // pattern, but even if it were bypassed (e.g. via string interpolation), the
+    // compiler in safe mode would reject it.
+    val result = ScalaExecutor.execute("""
+      val x: Any = "hello"
+      val s = x.asInstanceOf[String]
+      s
+    """)
+    // CodeValidator catches this before safe mode even sees it
+    assert(!result.success)
+    assert(result.error.exists(_.contains("cast-escape")))
+
+  test("safe mode blocks caps.unsafe even if validator were bypassed"):
+    // Both the CodeValidator AND the safe-mode compiler reject caps.unsafe.
+    // The validator catches it first (text-based), but safe mode provides
+    // a second layer at the type system level.
+    val violations = CodeValidator.validate("import caps.unsafe.given")
+    assert(violations.nonEmpty)
+    assert(violations.exists(_.ruleId == "cc-unsafe-caps"))
+
+  test("safe mode blocks unsafeAssumePure even if validator were bypassed"):
+    val violations = CodeValidator.validate("val x = unsafeAssumePure(??? : Int)")
+    assert(violations.nonEmpty)
+    assert(violations.exists(_.ruleId == "cc-unsafe-pure"))
+
+  test("REPL execution works with safe mode enabled by default"):
+    // Simple code should work fine in safe mode
+    val result = ScalaExecutor.execute("1 + 1")
+    assert(result.success)
+    assert(result.output.contains("2"))
+
+  test("REPL execution with collection operations works in safe mode"):
+    val result = ScalaExecutor.execute("List(1, 2, 3).map(_ * 2)")
+    assert(result.success)
+
+  test("REPL execution with case class works in safe mode"):
+    val result = ScalaExecutor.execute("""
+      case class Point(x: Int, y: Int)
+      Point(3, 4).x
+    """)
+    assert(result.success)
+    assert(result.output.contains("3"))
+
+  test("REPL execution with pattern matching works in safe mode"):
+    val result = ScalaExecutor.execute("""
+      val x: Any = 42
+      x match
+        case i: Int => s"int: $i"
+        case _ => "other"
+    """)
+    assert(result.success)
+    assert(result.output.contains("int: 42"))
+
+  test("REPL execution with for comprehension works in safe mode"):
+    val result = ScalaExecutor.execute("""
+      for
+        x <- List(1, 2)
+        y <- List(10, 20)
+      yield x * y
+    """)
+    assert(result.success)

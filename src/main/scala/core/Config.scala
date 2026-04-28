@@ -10,7 +10,7 @@ case class Config(
   recordPath: Option[String] = None,
   quiet: Boolean = false,
   sessionEnabled: Boolean = true,
-  safeMode: Boolean = false,
+  safeMode: Boolean = true,
   libraryJarPath: String = Option(System.getProperty("tacit.library.jar")).getOrElse(""),
   libraryConfig: Json = Json.obj(),
 ):
@@ -106,7 +106,10 @@ object Config:
         .text("Disable session-related tools (create/execute/delete/list sessions)."),
       opt[Unit]("safe-mode")
         .action((_, c) => c.copy(safeMode = true))
-        .text("Enable Scala `language.experimental.safe` in the REPL for every execution."),
+        .text("Enable Scala `language.experimental.safe` in the REPL for every execution (default: on)."),
+      opt[Unit]("no-safe-mode")
+        .action((_, c) => c.copy(safeMode = false))
+        .text("Disable safe mode in the REPL."),
       opt[String]("library-jar")
         .action((x, c) => c.copy(libraryJarPath = x))
         .text("Path to the library JAR (TACIT-library.jar). Required."),

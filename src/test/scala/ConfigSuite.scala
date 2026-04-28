@@ -40,6 +40,7 @@ class ConfigSuite extends munit.FunSuite:
     assertEquals(cfg.recordPath, None)
     assertEquals(cfg.quiet, false)
     assertEquals(cfg.sessionEnabled, true)
+    assertEquals(cfg.safeMode, true)
     assertEquals(cfg.libraryConfig, Json.obj())
 
   // ── Server CLI flags ────────────────────────────────────────
@@ -255,3 +256,18 @@ class ConfigSuite extends munit.FunSuite:
       val cfg = Config.parseCliArgs(Array("--config", path)).get
       assertEquals(cfg.libraryConfig, Json.obj())
     }
+
+  // ── Safe mode flag ────────────────────────────────────────────
+
+  test("safe mode is enabled by default"):
+    val cfg = parseRaw().get
+    assert(cfg.safeMode)
+
+  test("--no-safe-mode disables safe mode"):
+    val cfg = parse("--no-safe-mode").get
+    assert(!cfg.safeMode)
+
+  test("--safe-mode explicitly enables safe mode"):
+    // safe mode is already on by default; explicit flag should keep it on
+    val cfg = parse("-s").get
+    assert(cfg.safeMode)

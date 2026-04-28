@@ -12,8 +12,8 @@ import caps.*
  */
 @assumeSafe
 trait Classified[+T]:
-  def map[B](op: T -> B): Classified[B]
-  def flatMap[B](op: T -> Classified[B]): Classified[B]
+  def map[B](op: T ->{any.rd} B): Classified[B]
+  def flatMap[B](op: T ->{any.rd} Classified[B]): Classified[B]
 
 // ─── File System ────────────────────────────────────────────────────────────
 

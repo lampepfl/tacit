@@ -1,19 +1,19 @@
-val scala3Version = {
-  val fallback = "3.8.3-RC1"
-  try {
-    val url = "https://repo.scala-lang.org/artifactory/api/storage/local-maven-nightlies/org/scala-lang/scala3-compiler_3/"
-    val content = scala.io.Source.fromURL(url, "UTF-8").mkString
-    val pattern = """"uri"\s*:\s*"/(3\.[^"]*NIGHTLY)"""".r
-    val versions = pattern.findAllMatchIn(content).map(_.group(1)).toList.sorted
-    val latest = versions.last
-    if (latest != fallback) println(s"[info] Use Scala 3 nightly: $latest")
-    latest
-  } catch { case _: Exception =>
-    println(s"[warn] Failed to fetch latest nightly, using fallback: $fallback")
-    fallback
-  }
-}
-// val scala3Version = "3.8.4-RC1-bin-SNAPSHOT"
+// val scala3Version = {
+//   val fallback = "3.8.3-RC1"
+//   try {
+//     val url = "https://repo.scala-lang.org/artifactory/api/storage/local-maven-nightlies/org/scala-lang/scala3-compiler_3/"
+//     val content = scala.io.Source.fromURL(url, "UTF-8").mkString
+//     val pattern = """"uri"\s*:\s*"/(3\.[^"]*NIGHTLY)"""".r
+//     val versions = pattern.findAllMatchIn(content).map(_.group(1)).toList.sorted
+//     val latest = versions.last
+//     if (latest != fallback) println(s"[info] Use Scala 3 nightly: $latest")
+//     latest
+//   } catch { case _: Exception =>
+//     println(s"[warn] Failed to fetch latest nightly, using fallback: $fallback")
+//     fallback
+//   }
+// }
+val scala3Versoin = "3.9.0-RC1-bin-20260424-4a012b1-NIGHTLY"
 ThisBuild / resolvers += Resolver.scalaNightlyRepository
 
 val circeVersion = "0.14.15"

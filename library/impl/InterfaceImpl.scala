@@ -3,12 +3,20 @@ package tacit.library
 import language.experimental.captureChecking
 import caps.*
 
+import dotty.tools.repl.eval.{Eval, evalLike}
+
 import java.io.{File => JFile, PrintStream, FileOutputStream}
 
 @assumeSafe
 abstract class InterfaceImpl(
-  private val config: LibraryConfig = LibraryConfig()
+  configJson: String
 ) extends Interface:
+
+  private val config = LibraryConfig.fromJson(configJson)
+
+  // create real FileSystem by default, but allow tests to override with a virtual one
+  protected def createFS(root: String, filter: String -> Boolean, classifiedPatterns: Set[String]): FileSystem =
+    new RealFileSystem(root, filter, classifiedPatterns)
 
   private val DefaultClassifiedPatterns: Set[String] = Set(
     ".ssh", ".gnupg", ".env", ".env.*", ".netrc", ".npmrc", ".pypirc",
@@ -45,19 +53,13 @@ abstract class InterfaceImpl(
     case _: Classified[?] => "Classified(***)"
     case other            => other
 
-  protected def createFS(root: String, filter: String -> Boolean, classifiedPatterns: Set[String]): FileSystem
-
   export FileOps.*
   export ProcessOps.*
   export WebOps.*
 
-  // IOCapability's private constructor means user code cannot create one.
-  // The null sentinel is safe: IOCapability is only used as a type-level
-  // capability witness, never dereferenced at runtime.
-  val iocap: IOCapability = null.asInstanceOf[IOCapability]
-
   private val llmOps = LlmOps(llmConfig)
-  export llmOps.chat
+
+  export llmOps.*
 
   def println(x: Any)(using IOCapability): Unit =
     // Classified.toString already returns "Classified(***)" so the

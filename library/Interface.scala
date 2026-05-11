@@ -1,5 +1,7 @@
 package tacit.library
 
+import dotty.tools.repl.eval.{Eval, EvalContext, EvalResult, evalLike, evalSafeLike}
+
 import language.experimental.captureChecking
 import caps.*
 
@@ -89,7 +91,7 @@ trait ProcessPermission extends caps.SharedCapability:
 /** Capability gating access to standard output (`println`, `print`, `printf`).
  *  An implicit instance is available at the REPL top level. */
 @assumeSafe
-class IOCapability private extends caps.SharedCapability
+class IOCapability private[library] extends caps.SharedCapability
 
 // ─── Interface ──────────────────────────────────────────────────────────────
 
@@ -128,9 +130,7 @@ class IOCapability private extends caps.SharedCapability
  *  ```
  */
 @assumeSafe
-trait Interface extends SharedCapability:
-
-  val iocap: IOCapability
+trait Interface:
 
   // ── File System ─────────────────────────────────────────────────────
 
@@ -239,8 +239,10 @@ trait Interface extends SharedCapability:
 
   /** Print to the standard output stream visible to the agent.
    *
-   *  If the argument is a `Classified[_]`, only the masked form
-   *  `Classified(***)` is written here — the actual content is never shown
+   *  If you want to show results containing classified data to the end user,
+   *  print the classified value in a separate print call so it can be captured by 
+   *  the secure output sink. When the argument is a `Classified[_]`, only the masked form
+   *  `Classified(***)` is written here, and the actual content is never shown
    *  to the agent. When the host has configured a secure output sink, the
    *  unwrapped content is additionally written to that sink, which only
    *  the end user can read. Non-classified arguments are printed normally
@@ -274,3 +276,24 @@ trait Interface extends SharedCapability:
    *  val summary: Classified[String] = chat(secret.map(q => s"Summarize the following: $q"))
    *  ``` */
   def chat(message: Classified[String]): Classified[String]
+
+  /** Ask the configured trusted LLM to fill the call-site placeholder with a Scala
+   *  expression of type `T`, then compile and run it under the live REPL.
+   *  The synthetic parameters (`bindings`, `expectedType`, `enclosingSource`)
+   *  are populated by the compiler at the call site.
+   *  All functions in `Interface` are in scope at the call site and can be used 
+   *  in the generated code.
+   *
+   *  ```
+   *  val n: Int = agent[Int]("answer to the ultimate question")
+   *  ```
+   */
+  @evalLike def agent[T](
+      prompt: String,
+      bindings: Array[Eval.Binding] = Array.empty[Eval.Binding],
+      expectedType: String = "",
+      enclosingSource: String = "",
+      maxAttempts: Int = 3
+  ): T
+
+end Interface

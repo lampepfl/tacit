@@ -17,7 +17,7 @@ class LibrarySuite extends munit.FunSuite:
 
   private val interface: Interface^{} = new InterfaceImpl() {
     def createFS(root: String, filter: String -> Boolean, classifiedPatterns: Set[String]): FileSystem =
-      new RealFileSystem(Path.of(root), filter, classifiedPatterns)
+      new RealFileSystem(root, filter, classifiedPatterns)
   }.unsafeAssumePure
 
   import interface.*
@@ -174,7 +174,7 @@ class LibrarySuite extends munit.FunSuite:
       LibraryConfig(strictMode = Some(false), classifiedPaths = Some(Set("secret")))
     ) {
       def createFS(root: String, filter: String -> Boolean, classifiedPatterns: Set[String]): FileSystem =
-        new RealFileSystem(Path.of(root), filter, classifiedPatterns)
+        new RealFileSystem(root, filter, classifiedPatterns)
     }
     import classifiedInterface.*
 
@@ -219,7 +219,7 @@ class LibrarySuite extends munit.FunSuite:
       LibraryConfig(secureOutput = Some(secureFile.toString))
     ) {
       def createFS(root: String, filter: String -> Boolean, classifiedPatterns: Set[String]): FileSystem =
-        new RealFileSystem(Path.of(root), filter, classifiedPatterns)
+        new RealFileSystem(root, filter, classifiedPatterns)
     }
     given (IOCapability^{}) = secureInterface.iocap.unsafeAssumePure
 

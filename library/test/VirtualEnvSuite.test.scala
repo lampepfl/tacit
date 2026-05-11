@@ -10,7 +10,7 @@ class VirtualEnvSuite extends munit.FunSuite:
 
   val interface: Interface^{} = new InterfaceImpl() {
     def createFS(root: String, filter: String -> Boolean, classifiedPatterns: Set[String]): FileSystem =
-      new VirtualFileSystem(Path.of(root), filter, classifiedPatterns = classifiedPatterns)
+      new VirtualFileSystem(root, filter, classifiedPatterns = classifiedPatterns)
   }.unsafeAssumePure
 
   import interface.*

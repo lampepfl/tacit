@@ -1,19 +1,20 @@
-val scala3Version = {
-  val fallback = "3.8.3-RC1"
-  try {
-    val url = "https://repo.scala-lang.org/artifactory/api/storage/local-maven-nightlies/org/scala-lang/scala3-compiler_3/"
-    val content = scala.io.Source.fromURL(url, "UTF-8").mkString
-    val pattern = """"uri"\s*:\s*"/(3\.[^"]*NIGHTLY)"""".r
-    val versions = pattern.findAllMatchIn(content).map(_.group(1)).toList.sorted
-    val latest = versions.last
-    if (latest != fallback) println(s"[info] Use Scala 3 nightly: $latest")
-    latest
-  } catch { case _: Exception =>
-    println(s"[warn] Failed to fetch latest nightly, using fallback: $fallback")
-    fallback
-  }
-}
-// val scala3Version = "3.8.4-RC1-bin-SNAPSHOT"
+// val scala3Version = {
+//   val fallback = "3.8.3-RC1"
+//   try {
+//     val url = "https://repo.scala-lang.org/artifactory/api/storage/local-maven-nightlies/org/scala-lang/scala3-compiler_3/"
+//     val content = scala.io.Source.fromURL(url, "UTF-8").mkString
+//     val pattern = """"uri"\s*:\s*"/(3\.[^"]*NIGHTLY)"""".r
+//     val versions = pattern.findAllMatchIn(content).map(_.group(1)).toList.sorted
+//     val latest = versions.last
+//     if (latest != fallback) println(s"[info] Use Scala 3 nightly: $latest")
+//     latest
+//   } catch { case _: Exception =>
+//     println(s"[warn] Failed to fetch latest nightly, using fallback: $fallback")
+//     fallback
+//   }
+// }
+// Need the specific version with dynamic eval published locally 
+val scala3Version = "3.9.0-RC1-bin-SNAPSHOT"
 ThisBuild / resolvers += Resolver.scalaNightlyRepository
 
 val tacitVersion = "0.1.4-SNAPSHOT"
@@ -35,10 +36,22 @@ lazy val lib = project
     Compile / unmanagedSources / excludeFilter :=
       "*.test.scala" || "project.scala" || "README.md",
     libraryDependencies ++= Seq(
-      "com.openai" % "openai-java" % "4.32.0",
+      "com.openai" % "openai-java" % "4.35.0",
       "io.circe" %% "circe-core" % circeVersion,
       "io.circe" %% "circe-parser" % circeVersion,
+      "org.scala-lang" %% "scala3-compiler" % scala3Version,
+      "org.scala-lang" %% "scala3-repl" % scala3Version,
     ),
+    // Bundle Interface.scala source as a classpath resource so the agent
+    // prompt can include the full capability API surface. We place it under
+    // `tacit/` and use a non-`.scala` extension so the incremental compiler
+    // doesn't re-discover it as a duplicate source on the next build.
+    Compile / resourceGenerators += Def.task {
+      val src = baseDirectory.value / "Interface.scala"
+      val dst = (Compile / resourceManaged).value / "tacit" / "Interface.scala.txt"
+      IO.copyFile(src, dst)
+      Seq(dst)
+    }.taskValue,
     scalacOptions ++= Seq(
       "-language:experimental.captureChecking",
       "-language:experimental.modularity",

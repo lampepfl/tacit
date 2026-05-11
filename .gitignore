@@ -1,5 +1,6 @@
 log/
 note/
+bench/
 
 # IDE
 .idea/
@@ -32,6 +33,7 @@ project/plugins/project/
 .history
 .cache
 .lib/
+*.jar
 
 ### SBT Patch ###
 .bsp/
@@ -222,3 +224,5 @@ poetry.toml
 
 # LSP config files
 pyrightconfig.json
+
+tacit_config.json

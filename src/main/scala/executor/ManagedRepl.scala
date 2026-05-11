@@ -36,6 +36,12 @@ object ManagedRepl:
     */
   private def replClasspathArgs(using Context): Array[String] =
     val classpath = JFile(ctx.config.libraryJarPath).getAbsolutePath
+
+    val langaugeFeatures = List(
+      "experimental.captureChecking",
+      "experimental.modularity",
+    ) ++ (if ctx.config.safeMode then List("experimental.safe") else Nil)
+
     Array(
       "-classpath", classpath,
       "-color:never",
@@ -45,8 +51,10 @@ object ManagedRepl:
       "-Yexplicit-nulls",
       "-Ycheck-all-patmat",
       "-Wsafe-init",
-      "-language:experimental.captureChecking",
-      "-language:experimental.modularity"
+      s"-language:${langaugeFeatures.mkString(",")}",
+      s"-Xrepl-eval-log-dir:${ctx.config.recordPath.getOrElse("./log")}/eval",
+      "-release:17",
+      // "-Vprint:cc"
     )
 
   /** Exposes only JDK platform classes and the library JAR, keeping user code
@@ -66,13 +74,15 @@ object ManagedRepl:
       .replace("\\", "\\\\")
       .replace("\"", "\\\"")
     s"""|import tacit.library.*
+        |import dotty.tools.repl.eval.{Eval, EvalContext, EvalResult, evalLike, evalSafeLike}
         |import caps.*
-        |@assumeSafe object api extends InterfaceImpl(LibraryConfig.fromJson("$jsonStr")) {
-        |  def createFS(root: String, filter: String -> Boolean, classifiedPatterns: Set[String]): FileSystem =
-        |    new RealFileSystem(java.nio.file.Path.of(root), filter, classifiedPatterns)
-        |}
+        |object api extends InterfaceImpl("$jsonStr")
         |import api.*
-        |@assumeSafe given IOCapability = iocap
+        |""".stripMargin
+
+  // We need a separate preamble for REPL, so the first repl object will be pure.
+  private[executor] def libraryPreambleTracked(using Context): String =
+    s"""|given IOCapability = GlobalIOCap
         |""".stripMargin
 
   /** We swap `System.out`/`System.err` around each execution to catch output the
@@ -122,9 +132,12 @@ class ManagedRepl(using Context):
     * preamble is a programmer bug that should surface loudly.
     */
   def init(): this.type =
+    // val (output, thrown) = withOutputCapture(outputCapture, printStream):
     state = driver.run(libraryPreamble)(using state)
-    if ctx.config.safeMode then
-      state = driver.run("import language.experimental.safe")(using state)
+    state = driver.run(libraryPreambleTracked)(using state)
+    // For debugging preamble issues
+    // println(output)
+    // thrown.foreach(e => println(s"Preamble error: ${e.getMessage}"))
     this
 
   /** Execute `code` against the current state.

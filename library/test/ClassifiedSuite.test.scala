@@ -67,7 +67,7 @@ class ClassifiedSuite extends munit.FunSuite:
     LibraryConfig(strictMode = Some(false), classifiedPaths = Some(Set("secret")))
   ) {
     def createFS(root: String, filter: String -> Boolean, classifiedPatterns: Set[String]): FileSystem =
-      new VirtualFileSystem(Path.of(root), filter, classifiedPatterns = classifiedPatterns)
+      new VirtualFileSystem(root, filter, classifiedPatterns = classifiedPatterns)
   }.unsafeAssumePure
 
   import interface.*
@@ -239,7 +239,7 @@ class ClassifiedSuite extends munit.FunSuite:
       LibraryConfig(strictMode = Some(false), classifiedPaths = Some(patterns))
     ) {
       def createFS(root: String, filter: String -> Boolean, classifiedPatterns: Set[String]): FileSystem =
-        new VirtualFileSystem(Path.of(root), filter, classifiedPatterns = classifiedPatterns)
+        new VirtualFileSystem(root, filter, classifiedPatterns = classifiedPatterns)
     }.unsafeAssumePure
 
   test("pattern without slash matches any component") {

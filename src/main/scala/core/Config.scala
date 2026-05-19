@@ -89,7 +89,9 @@ object Config:
     val llm = config.libraryConfig.hcursor.downField("llm")
     val fields = Seq("baseUrl", "apiKey", "model")
     val present = fields.filter(f => llm.get[String](f).toOption.exists(_.nonEmpty))
-    if present.size == fields.size then config       // all present
+    val hasProvider = llm.get[String]("provider").toOption.exists(_.nonEmpty)
+    if hasProvider then config                       // workspace facade mode — keep as-is
+    else if present.size == fields.size then config  // all present
     else if present.isEmpty then                     // none present — clean up empty object
       config.copy(libraryConfig = config.libraryConfig.mapObject(_.remove("llm")))
     else
@@ -147,6 +149,9 @@ object Config:
       opt[String]("llm-model")
         .action((x, c) => c.withLlm("model", x))
         .text("LLM model name."),
+      opt[String]("llm-provider-name")
+        .action((x, c) => c.withLlm("provider", x))
+        .text("LLM provider name (e.g. 'openrouter', 'deepseek'). Used by the workspace facade together with --llm-model."),
       opt[Int]("agentdojo-port")
         .action((x, c) => c.copy(agentdojoPort = Some(x)))
         .text("Port for the AgentDojo MCP server."),

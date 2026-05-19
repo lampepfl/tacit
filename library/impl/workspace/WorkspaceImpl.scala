@@ -5,14 +5,19 @@ import caps.*
 
 import dotty.tools.repl.eval.{Eval, evalLike}
 
-import tacit.library.{Classified, ClassifiedImpl, LlmConfig, LlmOps}
+import tacit.library.{Classified, ClassifiedImpl, LlmConfig, LlmOps, LlmProvider}
 import tacit.library.mcp.{JValue, MCPClient, MCPError}
 
 import java.nio.charset.StandardCharsets
 import java.nio.file.{Files, Path, StandardOpenOption}
 
 @assumeSafe
-class WorkspaceImpl(endpoint: String, secureOutputPath: String) extends WorkspaceService, AutoCloseable:
+class WorkspaceImpl(
+    endpoint: String,
+    secureOutputPath: String,
+    llmProviderName: String,
+    llmName: String
+) extends WorkspaceService, AutoCloseable:
   private val client = MCPClient(endpoint)
 
   client.initialize()
@@ -198,10 +203,11 @@ class WorkspaceImpl(endpoint: String, secureOutputPath: String) extends Workspac
     def requireEnv(name: String): String =
       sys.env.getOrElse(name,
         throw RuntimeException(s"$name environment variable is not set"))
+    val provider = LlmProvider.fromId(llmProviderName)
     LlmOps(Some(LlmConfig(
-      baseUrl = "https://openrouter.ai/api/v1",
-      apiKey = requireEnv("OPENROUTER_API_KEY"),
-      model = "anthropic/claude-sonnet-4-6"
+      baseUrl = LlmProvider.baseUrlOf(provider),
+      apiKey = requireEnv(LlmProvider.apiKeyEnvName(provider)),
+      model = llmName
     )))
 
   @evalLike def agent[T](

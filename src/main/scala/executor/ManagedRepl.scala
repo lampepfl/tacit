@@ -92,11 +92,21 @@ object ManagedRepl:
     val secureChannel = ctx.config.agentdojoSecureChannel.getOrElse(
       throw IllegalStateException("--agentdojo-secure-channel is required when --agentdojo-domain=workspace")
     )
-    val escapedChannel = secureChannel.replace("\\", "\\\\").replace("\"", "\\\"")
+    val llm = ctx.config.libraryConfig.hcursor.downField("llm")
+    val providerName = llm.get[String]("provider").toOption.filter(_.nonEmpty).getOrElse(
+      throw IllegalStateException("--llm-provider-name is required when --agentdojo-domain=workspace")
+    )
+    val modelName = llm.get[String]("model").toOption.filter(_.nonEmpty).getOrElse(
+      throw IllegalStateException("--llm-model is required when --agentdojo-domain=workspace")
+    )
+    def escape(s: String): String = s.replace("\\", "\\\\").replace("\"", "\\\"")
+    val escapedChannel = escape(secureChannel)
+    val escapedProvider = escape(providerName)
+    val escapedModel = escape(modelName)
     s"""|import tacit.library.*
         |import tacit.library.workspace.*
         |import caps.*
-        |val workspace: WorkspaceService = new WorkspaceImpl("http://127.0.0.1:$port/mcp", "$escapedChannel")
+        |val workspace: WorkspaceService = new WorkspaceImpl("http://127.0.0.1:$port/mcp", "$escapedChannel", "$escapedProvider", "$escapedModel")
         |import workspace.*
         |""".stripMargin
 

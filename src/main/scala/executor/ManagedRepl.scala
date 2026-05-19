@@ -106,8 +106,8 @@ object ManagedRepl:
     s"""|import tacit.library.*
         |import tacit.library.workspace.*
         |import caps.*
-        |val workspace: WorkspaceService = new WorkspaceImpl("http://127.0.0.1:$port/mcp", "$escapedChannel", "$escapedProvider", "$escapedModel")
-        |import workspace.*
+        |val service: WorkspaceService = new WorkspaceImpl("http://127.0.0.1:$port/mcp", "$escapedChannel", "$escapedProvider", "$escapedModel")
+        |import service.*
         |""".stripMargin
 
   // We need a separate preamble for REPL, so the first repl object will be pure.

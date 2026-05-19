@@ -90,7 +90,7 @@ object Config:
     val fields = Seq("baseUrl", "apiKey", "model")
     val present = fields.filter(f => llm.get[String](f).toOption.exists(_.nonEmpty))
     val hasProvider = llm.get[String]("provider").toOption.exists(_.nonEmpty)
-    if hasProvider then config                       // workspace facade mode — keep as-is
+    if hasProvider then config                       // provider mode — baseUrl/apiKey derived in LlmConfig
     else if present.size == fields.size then config  // all present
     else if present.isEmpty then                     // none present — clean up empty object
       config.copy(libraryConfig = config.libraryConfig.mapObject(_.remove("llm")))

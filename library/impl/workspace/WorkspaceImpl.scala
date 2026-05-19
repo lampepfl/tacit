@@ -200,15 +200,7 @@ class WorkspaceImpl(
   // ── LLM ────────────────────────────────────────────────────────
 
   private lazy val llmOps: LlmOps =
-    def requireEnv(name: String): String =
-      sys.env.getOrElse(name,
-        throw RuntimeException(s"$name environment variable is not set"))
-    val provider = LlmProvider.fromId(llmProviderName)
-    LlmOps(Some(LlmConfig(
-      baseUrl = LlmProvider.baseUrlOf(provider),
-      apiKey = requireEnv(LlmProvider.apiKeyEnvName(provider)),
-      model = llmName
-    )))
+    LlmOps(Some(LlmProvider.resolve(llmProviderName, llmName)))
 
   @evalLike def agent[T](
       prompt: String,

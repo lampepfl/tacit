@@ -9,6 +9,7 @@ import scopt.OParser
 enum AgentdojoDomain:
   case Workspace
   case Slack
+  case Banking
 
 object AgentdojoDomain:
   val choices: String = values.map(_.toString.toLowerCase).mkString(", ")

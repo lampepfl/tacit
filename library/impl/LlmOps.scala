@@ -31,6 +31,13 @@ object AgentInterface:
     examples = """`getChannels()`, `sendChannelMessage(...)`, `agent[T]("...")`"""
   )
 
+  /** The banking (accounts/transactions) capability surface. */
+  val Banking: AgentInterface = AgentInterface(
+    resource = "/tacit/BankingInterface.scala.txt",
+    traitName = "BankingService",
+    examples = """`getBalance()`, `sendMoney(...)`, `agent[T]("...")`"""
+  )
+
 class LlmOps(
     config: Option[LlmConfig],
     interface: AgentInterface = AgentInterface()

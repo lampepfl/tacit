@@ -75,6 +75,7 @@ object ManagedRepl:
       case Some(AgentdojoDomain.Workspace) => workspacePreamble
       case Some(AgentdojoDomain.Slack)     => slackPreamble
       case Some(AgentdojoDomain.Banking)   => bankingPreamble
+      case Some(AgentdojoDomain.Travel)    => travelPreamble
 
   private def defaultPreamble(using Context): String =
     val jsonStr = ctx.config.libraryConfig.noSpaces
@@ -95,6 +96,9 @@ object ManagedRepl:
 
   private def bankingPreamble(using Context): String =
     domainPreamble("tacit.library.banking.*", "BankingService", "BankingImpl")
+
+  private def travelPreamble(using Context): String =
+    domainPreamble("tacit.library.travel.*", "TravelService", "TravelImpl")
 
   /** Shared preamble for AgentDojo domain facades: resolves the MCP port, secure
    *  channel, and LLM provider/model from the config, then binds the domain

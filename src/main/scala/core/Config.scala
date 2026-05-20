@@ -10,6 +10,7 @@ enum AgentdojoDomain:
   case Workspace
   case Slack
   case Banking
+  case Travel
 
 object AgentdojoDomain:
   val choices: String = values.map(_.toString.toLowerCase).mkString(", ")

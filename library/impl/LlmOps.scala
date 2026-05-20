@@ -38,6 +38,13 @@ object AgentInterface:
     examples = """`getBalance()`, `sendMoney(...)`, `agent[T]("...")`"""
   )
 
+  /** The travel (hotels/restaurants/car rentals/flights) capability surface. */
+  val Travel: AgentInterface = AgentInterface(
+    resource = "/tacit/TravelInterface.scala.txt",
+    traitName = "TravelService",
+    examples = """`getAllHotelsInCity(...)`, `reserveHotel(...)`, `agent[T]("...")`"""
+  )
+
 class LlmOps(
     config: Option[LlmConfig],
     interface: AgentInterface = AgentInterface()

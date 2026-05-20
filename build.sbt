@@ -49,7 +49,7 @@ lazy val lib = project
     Compile / resourceGenerators += Def.task {
       val base = baseDirectory.value
       val outDir = (Compile / resourceManaged).value / "tacit"
-      Seq("Interface.scala", "WorkspaceInterface.scala", "SlackInterface.scala", "BankingInterface.scala").map { name =>
+      Seq("Interface.scala", "WorkspaceInterface.scala", "SlackInterface.scala", "BankingInterface.scala", "TravelInterface.scala").map { name =>
         val dst = outDir / s"$name.txt"
         IO.copyFile(base / name, dst)
         dst

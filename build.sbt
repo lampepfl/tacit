@@ -42,15 +42,18 @@ lazy val lib = project
       "org.scala-lang" %% "scala3-compiler" % scala3Version,
       "org.scala-lang" %% "scala3-repl" % scala3Version,
     ),
-    // Bundle Interface.scala source as a classpath resource so the agent
-    // prompt can include the full capability API surface. We place it under
-    // `tacit/` and use a non-`.scala` extension so the incremental compiler
-    // doesn't re-discover it as a duplicate source on the next build.
+    // Bundle the capability API sources as classpath resources so the agent
+    // prompt can include the full API surface. We place them under `tacit/`
+    // and use a non-`.scala` extension so the incremental compiler doesn't
+    // re-discover them as duplicate sources on the next build.
     Compile / resourceGenerators += Def.task {
-      val src = baseDirectory.value / "Interface.scala"
-      val dst = (Compile / resourceManaged).value / "tacit" / "Interface.scala.txt"
-      IO.copyFile(src, dst)
-      Seq(dst)
+      val base = baseDirectory.value
+      val outDir = (Compile / resourceManaged).value / "tacit"
+      Seq("Interface.scala", "WorkspaceInterface.scala").map { name =>
+        val dst = outDir / s"$name.txt"
+        IO.copyFile(base / name, dst)
+        dst
+      }
     }.taskValue,
     scalacOptions ++= Seq(
       "-language:experimental.captureChecking",

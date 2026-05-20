@@ -5,7 +5,7 @@ import caps.*
 
 import dotty.tools.repl.eval.{Eval, evalLike}
 
-import tacit.library.{Classified, ClassifiedImpl, LlmConfig, LlmOps, LlmProvider}
+import tacit.library.{AgentInterface, Classified, ClassifiedImpl, LlmConfig, LlmOps, LlmProvider}
 import tacit.library.mcp.{JValue, MCPClient, MCPError}
 
 import java.nio.charset.StandardCharsets
@@ -200,7 +200,10 @@ class WorkspaceImpl(
   // ── LLM ────────────────────────────────────────────────────────
 
   private lazy val llmOps: LlmOps =
-    LlmOps(Some(LlmProvider.resolve(llmProviderName, llmName)))
+    LlmOps(
+      Some(LlmProvider.resolve(llmProviderName, llmName)),
+      AgentInterface.Workspace
+    )
 
   @evalLike def agent[T](
       prompt: String,

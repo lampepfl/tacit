@@ -6,7 +6,28 @@ import com.openai.client.okhttp.OpenAIOkHttpClient
 import com.openai.models.chat.completions.ChatCompletionCreateParams
 import dotty.tools.repl.eval.{Eval, EvalContext, EvalResult, evalLike}
 
-class LlmOps(config: Option[LlmConfig]):
+/** Describes the capability API surface presented to the inline agent:
+ *  the source bundled as a classpath resource (`resource`), the trait whose
+ *  members are pre-loaded into scope (`traitName`), and a few illustrative
+ *  call examples for the prompt (`examples`). */
+case class AgentInterface(
+    resource: String = "/tacit/Interface.scala.txt",
+    traitName: String = "Interface",
+    examples: String = """`chat("...")`, `requestFileSystem(...)`"""
+)
+
+object AgentInterface:
+  /** The workspace (email/calendar/drive) capability surface. */
+  val Workspace: AgentInterface = AgentInterface(
+    resource = "/tacit/WorkspaceInterface.scala.txt",
+    traitName = "WorkspaceService",
+    examples = """`getUnreadEmails()`, `sendEmail(...)`, `agent[T]("...")`"""
+  )
+
+class LlmOps(
+    config: Option[LlmConfig],
+    interface: AgentInterface = AgentInterface()
+):
 
   private def requireConfig(): LlmConfig =
     config.getOrElse(
@@ -56,13 +77,23 @@ class LlmOps(config: Option[LlmConfig]):
     @annotation.tailrec
     def attempt(n: Int, prevCode: String, prevErrors: List[String]): EvalResult[T] =
       val request = AgentPrompt.build(
-        prompt, bindings, expectedType, enclosingSource, prevCode, prevErrors)
+        interface, interfaceReference, prompt, bindings, expectedType, enclosingSource, prevCode, prevErrors)
       val code = AgentPrompt.stripCodeFences(chat(request)).trim
       val r = Eval.evalSafe[T](code, bindings, expectedType, enclosingSource)
       if r.isSuccess || n >= maxAttempts then r
       else attempt(n + 1, code, r.error.nn.errors.toList)
 
     attempt(1, "", Nil).get
+
+  /** The full interface source, bundled as a classpath resource by the build,
+   *  so the LLM sees the exact capability API surface available at the call
+   *  site. Which interface is served is selected by `interface.resource`. */
+  private lazy val interfaceReference: String =
+    val stream = classOf[LlmOps].getResourceAsStream(interface.resource)
+    if stream != null then
+      try scala.io.Source.fromInputStream(stream)(using scala.io.Codec.UTF8).mkString
+      finally stream.close()
+    else s"(${interface.resource} not found on classpath)"
 
 private object AgentPrompt:
 
@@ -71,31 +102,23 @@ private object AgentPrompt:
       |Output ONLY a Scala expression that fills the placeholder in the user's source.
       |No markdown fences, no commentary.""".stripMargin
 
-  /** The full `Interface.scala` source, bundled as a classpath resource by the
-   *  build, so the LLM sees the exact capability API surface available at the
-   *  REPL call site. */
-  private lazy val InterfaceReference: String =
-    val stream = classOf[LlmOps].getResourceAsStream("/tacit/Interface.scala.txt")
-    if stream != null then
-      try scala.io.Source.fromInputStream(stream)(using scala.io.Codec.UTF8).mkString
-      finally stream.close()
-    else "(Interface.scala source not found on classpath)"
+  private def interfaceIntro(interface: AgentInterface): String =
+    s"""You may only interact with the system through the capability-scoped API
+       |defined below. Do not use Java/Scala standard library APIs (java.io,
+       |java.nio, scala.io, sys.process, java.net, etc.) directly. All members
+       |of the `${interface.traitName}` trait are pre-loaded into scope (via
+       |`import api.*`), so call them unqualified — e.g. ${interface.examples}.
+       |""".stripMargin
 
-  private val InterfaceIntro =
-    """You may only interact with the system through the capability-scoped API
-      |defined below. Do not use Java/Scala standard library APIs (java.io,
-      |java.nio, scala.io, sys.process, java.net, etc.) directly. All members
-      |of the `Interface` trait are pre-loaded into scope (via `import api.*`),
-      |so call them unqualified — e.g. `chat("...")`, `requestFileSystem(...)`.
-      |""".stripMargin
-
-  private def interfaceSection: String =
-    s"""$InterfaceIntro
+  private def interfaceSection(interface: AgentInterface, interfaceReference: String): String =
+    s"""${interfaceIntro(interface)}
        |```scala
-       |$InterfaceReference
+       |$interfaceReference
        |```""".stripMargin
 
   def build(
+      interface: AgentInterface,
+      interfaceReference: String,
       task: String,
       bindings: Array[Eval.Binding],
       expectedType: String,
@@ -105,7 +128,7 @@ private object AgentPrompt:
   ): String =
     List(
       Intro,
-      interfaceSection,
+      interfaceSection(interface, interfaceReference),
       typeSection(expectedType),
       contextSection(enclosingSource),
       bindingsSection(bindings),

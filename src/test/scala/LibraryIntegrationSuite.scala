@@ -342,7 +342,7 @@ class LibraryIntegrationSuite extends munit.FunSuite:
     // overrides that and allows it.
     val cfg = Config(libraryConfig = io.circe.Json.obj(
       "strictMode" -> io.circe.Json.fromBoolean(true),
-      "commandPermissions" -> io.circe.Json.arr(io.circe.Json.fromString("cat"))
+      "commandPermissions" -> io.circe.Json.arr(io.circe.Json.fromString("cat *"))
     ))
     given Context = Context(cfg, None)
     val result = ScalaExecutor.execute("""

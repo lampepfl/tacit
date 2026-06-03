@@ -1,6 +1,7 @@
 package tacit.library
 
 import com.openai.client.OpenAIClient
+import com.openai.models.ReasoningEffort
 import com.openai.client.okhttp.OpenAIOkHttpClient
 import com.openai.models.chat.completions.ChatCompletionCreateParams
 
@@ -24,6 +25,7 @@ class LlmOps(config: Option[LlmConfig]):
     val params = ChatCompletionCreateParams.builder()
       .model(cfg.model)
       .addUserMessage(message)
+      .reasoningEffort(ReasoningEffort.HIGH)
       .build()
     client.chat().completions().create(params)
       .choices().get(0).message().content().orElse("").nn

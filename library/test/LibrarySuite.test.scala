@@ -15,14 +15,14 @@ class LibrarySuite extends munit.FunSuite:
   override def beforeEach(context: BeforeEach): Unit =
     tmpDir = Files.createTempDirectory("sandbox-test")
 
-  private val interface: Interface^{} = new InterfaceImpl() {
-    def createFS(root: String, filter: String -> Boolean, classifiedPatterns: Set[String]): FileSystem =
-      new RealFileSystem(Path.of(root), filter, classifiedPatterns)
+  private val interface: Interface^{} = new InterfaceImpl("{}") {
+    override def createFS(root: String, filter: String -> Boolean, classifiedPatterns: Set[String]): FileSystem =
+      new RealFileSystem(root, filter, classifiedPatterns)
   }.unsafeAssumePure
 
   import interface.*
 
-  given (IOCapability^{}) = iocap.unsafeAssumePure
+  given (IOCapability^{}) = null.asInstanceOf[IOCapability]
 
   override def afterEach(context: AfterEach): Unit =
     if Files.exists(tmpDir) then
@@ -171,10 +171,10 @@ class LibrarySuite extends munit.FunSuite:
     val secretDir = tmpDir.resolve("secret")
     Files.createDirectories(secretDir)
     val classifiedInterface: Interface^ = new InterfaceImpl(
-      LibraryConfig(strictMode = Some(false), classifiedPaths = Some(Set("secret")))
+      """{"strictMode": false, "classifiedPaths": ["secret"]}"""
     ) {
-      def createFS(root: String, filter: String -> Boolean, classifiedPatterns: Set[String]): FileSystem =
-        new RealFileSystem(Path.of(root), filter, classifiedPatterns)
+      override def createFS(root: String, filter: String -> Boolean, classifiedPatterns: Set[String]): FileSystem =
+        new RealFileSystem(root, filter, classifiedPatterns)
     }
     import classifiedInterface.*
 
@@ -216,12 +216,12 @@ class LibrarySuite extends munit.FunSuite:
   test("secureOutput: classified println masks main stream, reveals in secure file") {
     val secureFile = tmpDir.resolve("secure.log")
     val secureInterface: Interface^ = new InterfaceImpl(
-      LibraryConfig(secureOutput = Some(secureFile.toString))
+      io.circe.Json.obj("secureOutput" -> io.circe.Json.fromString(secureFile.toString)).noSpaces
     ) {
-      def createFS(root: String, filter: String -> Boolean, classifiedPatterns: Set[String]): FileSystem =
-        new RealFileSystem(Path.of(root), filter, classifiedPatterns)
+      override def createFS(root: String, filter: String -> Boolean, classifiedPatterns: Set[String]): FileSystem =
+        new RealFileSystem(root, filter, classifiedPatterns)
     }
-    given (IOCapability^{}) = secureInterface.iocap.unsafeAssumePure
+    given (IOCapability^{}) = null.asInstanceOf[IOCapability]
 
     val mainBuf = new java.io.ByteArrayOutputStream()
     scala.Console.withOut(new java.io.PrintStream(mainBuf, true, "UTF-8")) {

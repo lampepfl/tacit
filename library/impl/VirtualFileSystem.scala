@@ -8,12 +8,12 @@ import java.nio.charset.StandardCharsets
 import java.nio.file.{Path, Paths}
 
 class VirtualFileSystem(
-  val root: Path,
+  val root: String,
   check: String -> Boolean = _ => true,
   initialFiles: Map[String, String] = Map.empty,
   protected val classifiedPatterns: Set[String] = Set.empty
 ) extends BaseFileSystem:
-  protected val normalizedRoot: Path = root.toAbsolutePath.normalize
+  protected val normalizedRoot: Path = Paths.get(root).toAbsolutePath.normalize
   protected def pathCheck(relativePath: String): Boolean = check(relativePath)
   private val files: TrieMap[Path, Array[Byte]] = TrieMap.empty
   private val directories: TrieMap[Path, Unit] = TrieMap(normalizedRoot -> ())

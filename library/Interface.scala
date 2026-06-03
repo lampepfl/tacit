@@ -89,7 +89,7 @@ trait ProcessPermission extends caps.SharedCapability:
 /** Capability gating access to standard output (`println`, `print`, `printf`).
  *  An implicit instance is available at the REPL top level. */
 @assumeSafe
-class IOCapability private extends caps.SharedCapability
+class IOCapability private[library] extends caps.SharedCapability
 
 // ─── Interface ──────────────────────────────────────────────────────────────
 
@@ -128,9 +128,7 @@ class IOCapability private extends caps.SharedCapability
  *  ```
  */
 @assumeSafe
-trait Interface extends SharedCapability:
-
-  val iocap: IOCapability
+trait Interface:
 
   // ── File System ─────────────────────────────────────────────────────
 
@@ -239,8 +237,10 @@ trait Interface extends SharedCapability:
 
   /** Print to the standard output stream visible to the agent.
    *
-   *  If the argument is a `Classified[_]`, only the masked form
-   *  `Classified(***)` is written here — the actual content is never shown
+   *  If you want to show results containing classified data to the end user,
+   *  print the classified value in a separate print call so it can be captured by
+   *  the secure output sink. When the argument is a `Classified[_]`, only the masked form
+   *  `Classified(***)` is written here, and the actual content is never shown
    *  to the agent. When the host has configured a secure output sink, the
    *  unwrapped content is additionally written to that sink, which only
    *  the end user can read. Non-classified arguments are printed normally

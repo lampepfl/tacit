@@ -64,15 +64,15 @@ class ClassifiedSuite extends munit.FunSuite:
   // ── File system classified path enforcement (VirtualFileSystem) ───────
 
   val interface: Interface^{} = new InterfaceImpl(
-    LibraryConfig(strictMode = Some(false), classifiedPaths = Some(Set("secret")))
+    """{"strictMode": false, "classifiedPaths": ["secret"]}"""
   ) {
-    def createFS(root: String, filter: String -> Boolean, classifiedPatterns: Set[String]): FileSystem =
-      new VirtualFileSystem(Path.of(root), filter, classifiedPatterns = classifiedPatterns)
+    override def createFS(root: String, filter: String -> Boolean, classifiedPatterns: Set[String]): FileSystem =
+      new VirtualFileSystem(root, filter, classifiedPatterns = classifiedPatterns)
   }.unsafeAssumePure
 
   import interface.*
 
-  given (IOCapability^{}) = iocap.unsafeAssumePure
+  given (IOCapability^{}) = null.asInstanceOf[IOCapability]
 
   test("isClassified returns true for classified file") {
     requestFileSystem("/virtual") {
@@ -236,16 +236,19 @@ class ClassifiedSuite extends munit.FunSuite:
 
   private def mkInterface(patterns: Set[String]): Interface^{} =
     new InterfaceImpl(
-      LibraryConfig(strictMode = Some(false), classifiedPaths = Some(patterns))
+      io.circe.Json.obj(
+        "strictMode" -> io.circe.Json.fromBoolean(false),
+        "classifiedPaths" -> io.circe.Json.fromValues(patterns.map(io.circe.Json.fromString))
+      ).noSpaces
     ) {
-      def createFS(root: String, filter: String -> Boolean, classifiedPatterns: Set[String]): FileSystem =
-        new VirtualFileSystem(Path.of(root), filter, classifiedPatterns = classifiedPatterns)
+      override def createFS(root: String, filter: String -> Boolean, classifiedPatterns: Set[String]): FileSystem =
+        new VirtualFileSystem(root, filter, classifiedPatterns = classifiedPatterns)
     }.unsafeAssumePure
 
   test("pattern without slash matches any component") {
     val api = mkInterface(Set(".ssh"))
     import api.*
-    given (IOCapability^{}) = iocap.unsafeAssumePure
+    given (IOCapability^{}) = null.asInstanceOf[IOCapability]
     requestFileSystem("/virtual") {
       assert(access("/virtual/.ssh").isClassified)
       assert(access("/virtual/home/.ssh/id_rsa").isClassified)
@@ -256,7 +259,7 @@ class ClassifiedSuite extends munit.FunSuite:
   test("glob wildcard in component pattern") {
     val api = mkInterface(Set(".env.*"))
     import api.*
-    given (IOCapability^{}) = iocap.unsafeAssumePure
+    given (IOCapability^{}) = null.asInstanceOf[IOCapability]
     requestFileSystem("/virtual") {
       assert(access("/virtual/.env.local").isClassified)
       assert(access("/virtual/config/.env.production").isClassified)
@@ -267,7 +270,7 @@ class ClassifiedSuite extends munit.FunSuite:
   test("relative pattern with slash is anchored to root") {
     val api = mkInterface(Set("config/secrets"))
     import api.*
-    given (IOCapability^{}) = iocap.unsafeAssumePure
+    given (IOCapability^{}) = null.asInstanceOf[IOCapability]
     requestFileSystem("/virtual") {
       assert(access("/virtual/config/secrets").isClassified)
       assert(access("/virtual/config/secrets/key.pem").isClassified)
@@ -278,7 +281,7 @@ class ClassifiedSuite extends munit.FunSuite:
   test("relative pattern with ** matches at any depth") {
     val api = mkInterface(Set("**/secrets"))
     import api.*
-    given (IOCapability^{}) = iocap.unsafeAssumePure
+    given (IOCapability^{}) = null.asInstanceOf[IOCapability]
     requestFileSystem("/virtual") {
       assert(access("/virtual/secrets").isClassified)
       assert(access("/virtual/a/secrets").isClassified)
@@ -290,7 +293,7 @@ class ClassifiedSuite extends munit.FunSuite:
   test("relative pattern with wildcard in middle") {
     val api = mkInterface(Set("config/*/keys"))
     import api.*
-    given (IOCapability^{}) = iocap.unsafeAssumePure
+    given (IOCapability^{}) = null.asInstanceOf[IOCapability]
     requestFileSystem("/virtual") {
       assert(access("/virtual/config/prod/keys").isClassified)
       assert(access("/virtual/config/dev/keys/secret.pem").isClassified)
@@ -301,7 +304,7 @@ class ClassifiedSuite extends munit.FunSuite:
   test("trailing slash is stripped and still matches") {
     val api = mkInterface(Set("secret/"))
     import api.*
-    given (IOCapability^{}) = iocap.unsafeAssumePure
+    given (IOCapability^{}) = null.asInstanceOf[IOCapability]
     requestFileSystem("/virtual") {
       assert(access("/virtual/secret").isClassified)
       assert(access("/virtual/secret/data.txt").isClassified)
@@ -311,7 +314,7 @@ class ClassifiedSuite extends munit.FunSuite:
   test("empty pattern matches nothing") {
     val api = mkInterface(Set("", "/"))
     import api.*
-    given (IOCapability^{}) = iocap.unsafeAssumePure
+    given (IOCapability^{}) = null.asInstanceOf[IOCapability]
     requestFileSystem("/virtual") {
       assert(!access("/virtual/anything").isClassified)
     }

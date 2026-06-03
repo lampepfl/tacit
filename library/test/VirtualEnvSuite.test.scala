@@ -8,14 +8,14 @@ import java.nio.file.{Files, Path}
 
 class VirtualEnvSuite extends munit.FunSuite:
 
-  val interface: Interface^{} = new InterfaceImpl() {
-    def createFS(root: String, filter: String -> Boolean, classifiedPatterns: Set[String]): FileSystem =
-      new VirtualFileSystem(Path.of(root), filter, classifiedPatterns = classifiedPatterns)
+  val interface: Interface^{} = new InterfaceImpl("{}") {
+    override def createFS(root: String, filter: String -> Boolean, classifiedPatterns: Set[String]): FileSystem =
+      new VirtualFileSystem(root, filter, classifiedPatterns = classifiedPatterns)
   }.unsafeAssumePure
 
   import interface.*
 
-  given (IOCapability^{}) = iocap.unsafeAssumePure
+  given (IOCapability^{}) = null.asInstanceOf[IOCapability]
 
   test("virtual: write and read back") {
     requestFileSystem("/virtual") {

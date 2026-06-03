@@ -10,6 +10,7 @@ import dotty.tools.dotc.reporting.Diagnostic
 import java.io.{ByteArrayOutputStream, File => JFile, PrintStream}
 import java.net.URLClassLoader
 import java.nio.charset.StandardCharsets
+import java.util.jar.JarFile
 
 case class ExecutionResult(
     success: Boolean,
@@ -30,6 +31,22 @@ object ManagedRepl:
   ) extends ReplDriver(settings, out, cl):
     def runParseResult(res: ParseResult)(using State): State =
       runBody(interpret(res))
+
+  /** Reads a UTF-8 text resource bundled inside the library JAR (e.g. the
+    * `Interface.scala` API reference shown by `show_interface`). The reference
+    * lives with the library it documents rather than on the server's own
+    * classpath. Returns `None` if the JAR or entry can't be read.
+    */
+  def readLibraryResource(name: String)(using Context): Option[String] =
+    try
+      val jar = JarFile(ctx.config.libraryJarPath)
+      try
+        Option(jar.getJarEntry(name)).map: entry =>
+          val stream = jar.getInputStream(entry)
+          try scala.io.Source.fromInputStream(stream)(using scala.io.Codec.UTF8).mkString
+          finally stream.close()
+      finally jar.close()
+    catch case _: Exception => None
 
   /** The library fat JAR provides the full classpath (Scala stdlib + library
     * classes + library dependencies), so we don't need `-usejavacp`.
@@ -67,12 +84,9 @@ object ManagedRepl:
       .replace("\"", "\\\"")
     s"""|import tacit.library.*
         |import caps.*
-        |@assumeSafe object api extends InterfaceImpl(LibraryConfig.fromJson("$jsonStr")) {
-        |  def createFS(root: String, filter: String -> Boolean, classifiedPatterns: Set[String]): FileSystem =
-        |    new RealFileSystem(java.nio.file.Path.of(root), filter, classifiedPatterns)
-        |}
+        |@assumeSafe object api extends InterfaceImpl("$jsonStr")
         |import api.*
-        |@assumeSafe given IOCapability = iocap
+        |@assumeSafe given IOCapability = GlobalIOCap
         |""".stripMargin
 
   /** We swap `System.out`/`System.err` around each execution to catch output the

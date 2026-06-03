@@ -119,7 +119,7 @@ class ScalaExecutorSuite extends munit.FunSuite:
   test("code producing large output completes"):
     val result = ScalaExecutor.execute("(1 to 500).toList")
     assert(result.success)
-    assert(result.output.contains("List(1, 2, 3"))
+    assert(result.output.replace(" ", "").replace("\n", "").contains("List(1,2,3"))
 
   test("pattern matching expression"):
     val result = ScalaExecutor.execute("""

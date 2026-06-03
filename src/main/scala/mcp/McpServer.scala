@@ -2,7 +2,7 @@ package tacit.mcp
 
 import tacit.core.*
 import Context.*
-import tacit.executor.{CodeRecorder, ExecutionResult, ScalaExecutor, SessionManager}
+import tacit.executor.{CodeRecorder, ExecutionResult, ManagedRepl, ScalaExecutor, SessionManager}
 
 import io.circe.*
 import io.circe.syntax.*
@@ -18,33 +18,29 @@ private object BuildInfo:
   val version: String = Option(props.getProperty("version")).getOrElse("0.0.0-unknown")
   val name: String = Option(props.getProperty("name")).getOrElse("TACIT")
 
-/** The Interface.scala source bundled as a classpath resource, displayed by show_interface. */
-private val InterfaceReference: String =
-  val preamble =
-    """|IMPORTANT: You must only use the provided interface below to interact with the system.
-       |Do not use Java/Scala standard library APIs (java.io, java.nio, scala.io, sys.process, java.net, etc.) to access files, run processes, or make network requests directly.
-       |All system interactions must go through the capability-scoped API so that access is properly sandboxed and auditable.
-       |
-       |The interface is pre-loaded and available in all code executions.
-       |
-       |""".stripMargin
-  val source =
-    val stream = classOf[McpServer].getResourceAsStream("/Interface.scala")
-    if stream != null then
-      try
-        val content = scala.io.Source.fromInputStream(stream)(using scala.io.Codec.UTF8).mkString
-        "```scala\n" + content + "\n```"
-      finally stream.close()
-    else
-      System.err.println("[TACIT MCP] WARNING: Interface.scala resource not found on classpath")
-      "(Interface.scala source not found on classpath)"
-  preamble + source
-
 /** MCP Server implementation for Scala code execution */
 class McpServer(using Context):
   private val ProtocolVersion = "2025-11-25"
 
   private val sessionManager = SessionManager()
+
+  /** The Interface.scala source, read from the library JAR (where it is bundled),
+   *  displayed by show_interface. */
+  private lazy val interfaceReference: String =
+    val preamble =
+      """|IMPORTANT: You must only use the provided interface below to interact with the system.
+         |Do not use Java/Scala standard library APIs (java.io, java.nio, scala.io, sys.process, java.net, etc.) to access files, run processes, or make network requests directly.
+         |All system interactions must go through the capability-scoped API so that access is properly sandboxed and auditable.
+         |
+         |The interface is pre-loaded and available in all code executions.
+         |
+         |""".stripMargin
+    val source = ManagedRepl.readLibraryResource("Interface.scala.txt") match
+      case Some(content) => "```scala\n" + content + "\n```"
+      case None =>
+        System.err.println("[TACIT MCP] WARNING: Interface.scala resource not found in library JAR")
+        "(Interface.scala source not found in library JAR)"
+    preamble + source
 
   private inline def recorder: Option[CodeRecorder] = ctx.recorder
   private inline def sessionEnabled: Boolean = ctx.config.sessionEnabled
@@ -178,7 +174,7 @@ class McpServer(using Context):
     Right(CallToolResult(content = List(TextContent(text))))
   
   private def showInterface(): Either[String, CallToolResult] =
-    Right(CallToolResult(content = List(TextContent(InterfaceReference))))
+    Right(CallToolResult(content = List(TextContent(interfaceReference))))
 
   private def formatExecutionResult(result: ExecutionResult): CallToolResult =
     val output = result.error match

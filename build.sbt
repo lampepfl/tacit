@@ -1,22 +1,22 @@
-val scala3Version = {
-  val fallback = "3.8.3-RC1"
-  try {
-    val url = "https://repo.scala-lang.org/artifactory/api/storage/local-maven-nightlies/org/scala-lang/scala3-compiler_3/"
-    val content = scala.io.Source.fromURL(url, "UTF-8").mkString
-    val pattern = """"uri"\s*:\s*"/(3\.[^"]*NIGHTLY)"""".r
-    val versions = pattern.findAllMatchIn(content).map(_.group(1)).toList.sorted
-    val latest = versions.last
-    if (latest != fallback) println(s"[info] Use Scala 3 nightly: $latest")
-    latest
-  } catch { case _: Exception =>
-    println(s"[warn] Failed to fetch latest nightly, using fallback: $fallback")
-    fallback
-  }
-}
-// val scala3Version = "3.8.4-RC1-bin-SNAPSHOT"
+// val scala3Version = {
+//   val fallback = "3.8.3-RC1"
+//   try {
+//     val url = "https://repo.scala-lang.org/artifactory/api/storage/local-maven-nightlies/org/scala-lang/scala3-compiler_3/"
+//     val content = scala.io.Source.fromURL(url, "UTF-8").mkString
+//     val pattern = """"uri"\s*:\s*"/(3\.[^"]*NIGHTLY)"""".r
+//     val versions = pattern.findAllMatchIn(content).map(_.group(1)).toList.sorted
+//     val latest = versions.last
+//     if (latest != fallback) println(s"[info] Use Scala 3 nightly: $latest")
+//     latest
+//   } catch { case _: Exception =>
+//     println(s"[warn] Failed to fetch latest nightly, using fallback: $fallback")
+//     fallback
+//   }
+// }
+val scala3Version = "3.10.0-RC1-bin-20260603-466fa59-NIGHTLY"
 ThisBuild / resolvers += Resolver.scalaNightlyRepository
 
-val tacitVersion = "0.1.4-SNAPSHOT"
+val tacitVersion = "0.2.0-SNAPSHOT"
 val tacitLibVersion = tacitVersion
 
 val circeVersion = "0.14.15"
@@ -35,7 +35,7 @@ lazy val lib = project
     Compile / unmanagedSources / excludeFilter :=
       "*.test.scala" || "project.scala" || "README.md",
     libraryDependencies ++= Seq(
-      "com.openai" % "openai-java" % "4.32.0",
+      "com.openai" % "openai-java" % "4.38.0",
       "io.circe" %% "circe-core" % circeVersion,
       "io.circe" %% "circe-parser" % circeVersion,
     ),
@@ -46,6 +46,14 @@ lazy val lib = project
       "-Yexplicit-nulls", "-Wsafe-init",
       "-release:17",
     ),
+    // Bundle Interface.scala source into the library JAR so the MCP server can
+    // serve it via show_interface.
+    Compile / resourceGenerators += Def.task {
+      val src = baseDirectory.value / "Interface.scala"
+      val dst = (Compile / resourceManaged).value / "Interface.scala.txt"
+      IO.copyFile(src, dst)
+      Seq(dst)
+    }.taskValue,
     // Assembly settings for creating a standalone library JAR
     assembly / assemblyJarName := "TACIT-library.jar",
     assembly / assemblyMergeStrategy := {
@@ -94,16 +102,8 @@ lazy val root = project
       "com.github.scopt" %% "scopt" % "4.1.1-M3",
       "org.scala-lang" %% "scala3-compiler" % scala3Version,
       "org.scala-lang" %% "scala3-repl" % scala3Version,
-      "org.scalameta" %% "munit" % "1.3.0" % Test,
+      "org.scalameta" %% "munit" % "1.3.2" % Test,
     ),
-
-    // Bundle Interface.scala source as a classpath resource so show_interface can serve it
-    Compile / resourceGenerators += Def.task {
-      val src = (lib / baseDirectory).value / "Interface.scala"
-      val dst = (Compile / resourceManaged).value / "Interface.scala"
-      IO.copyFile(src, dst)
-      Seq(dst)
-    }.taskValue,
 
     // Generate version.properties so the server can read its own version at runtime
     Compile / resourceGenerators += Def.task {

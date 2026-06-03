@@ -83,7 +83,7 @@ private def readEvalLoop(initial: ManagedRepl, terminal: Terminal)(using Context
 private enum DevCommand:
   case Quit, Reset, Continue
 
-private def handleCommand(cmd: String, out: java.io.PrintWriter): DevCommand = cmd match
+private def handleCommand(cmd: String, out: java.io.PrintWriter)(using Context): DevCommand = cmd match
   case ":quit" | ":exit" | ":q" =>
     DevCommand.Quit
   case ":reset" =>
@@ -120,9 +120,6 @@ private val helpText: String =
      |and browse history; history persists to ~/.tacit_dev_history.
      |""".stripMargin
 
-private def loadInterface(): String =
-  val stream = classOf[ManagedRepl].getResourceAsStream("/Interface.scala")
-  if stream == null then "(Interface.scala resource not found on classpath)"
-  else
-    try scala.io.Source.fromInputStream(stream)(using scala.io.Codec.UTF8).mkString
-    finally stream.close()
+private def loadInterface()(using Context): String =
+  ManagedRepl.readLibraryResource("Interface.scala.txt")
+    .getOrElse("(Interface.scala resource not found in library JAR)")

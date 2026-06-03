@@ -149,3 +149,34 @@ class CodeRecorderSuite extends munit.FunSuite:
       val content = Source.fromFile(resultFiles(dir).head).mkString
       assert(content.contains("status: success"))
     }
+
+  // ── Security: agent-controlled session_id must not escape the recordings dir ──
+
+  test("malicious session_id cannot write outside the recordings directory"):
+    withTempDir("traversal") { parent =>
+      val dir = File(parent, "rec")
+      val recorder = CodeRecorder(dir)
+      // execute_in_session records with the agent's session_id even when no such
+      // session exists, so a traversal payload must be neutralized.
+      recorder.record("payload", "../../../../tmp/tacit-escape", ExecutionResult(true, "x"))
+      recorder.close()
+
+      // The file that was written stays inside `dir`, with a clean name.
+      val written = scalaFiles(dir)
+      assertEquals(written.length, 1)
+      assertEquals(written.head.getParentFile.getCanonicalPath, dir.getCanonicalPath)
+      assert(!written.head.getName.contains("/") && !written.head.getName.contains(".."),
+        s"filename not sanitized: ${written.head.getName}")
+      // Nothing escaped into a sibling of the recordings dir.
+      assert(!File(parent, "tmp").exists(), "recorder escaped its directory")
+    }
+
+  test("empty/blank session_id falls back to a safe name"):
+    withTempDir("blank-id") { dir =>
+      val recorder = CodeRecorder(dir)
+      recorder.record("p", "///", ExecutionResult(true, "x"))
+      recorder.close()
+      val written = scalaFiles(dir)
+      assertEquals(written.length, 1)
+      assert(written.head.getName.contains("unknown"), s"got ${written.head.getName}")
+    }

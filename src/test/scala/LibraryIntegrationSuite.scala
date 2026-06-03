@@ -85,28 +85,54 @@ class LibraryIntegrationSuite extends munit.FunSuite:
 
     manager.deleteSession(sessionId)
 
-  test("calling foreach(println) on the result of grepRecursive"):
-    val result = ScalaExecutor.execute("""
-      requestFileSystem(".") {
-        val allEntries = access("./projects/webapp").walk()
-
+  test("calling foreach(println) on the result of walk"):
+    // Regression: map walk() entries to strings, then foreach(println) — must
+    // type-check under capture checking. Use a temp tree, not a hardcoded path.
+    val tmpDir = Files.createTempDirectory("walk-foreach-test")
+    Files.createDirectories(tmpDir.resolve("sub"))
+    Files.writeString(tmpDir.resolve("a.txt"), "x")
+    Files.writeString(tmpDir.resolve("sub/b.txt"), "y")
+    // Plain (non-interpolated) string so the inner `${...}` stays literal Scala;
+    // the root path is injected via replace.
+    val code = """
+      requestFileSystem("ROOT") {
+        val allEntries = access("ROOT").walk()
         // Collect info as plain strings first, then print outside the lambda
         val lines = allEntries.map(e => s"${if e.isDirectory then "[DIR] " else "[FILE]"} ${e.path}")
-
         lines.foreach(println)
       }
-    """)
+    """.replace("ROOT", tmpDir.toString)
+    val result = ScalaExecutor.execute(code)
+    Files.deleteIfExists(tmpDir.resolve("sub/b.txt"))
+    Files.deleteIfExists(tmpDir.resolve("a.txt"))
+    Files.deleteIfExists(tmpDir.resolve("sub"))
+    Files.deleteIfExists(tmpDir)
     assert(result.success, s"execution failed: ${result.error.getOrElse(result.output)}")
     assert(!result.output.contains("Type Mismatch Error"), s"unexpected output: ${result.output}")
+    assert(result.output.contains("a.txt") && result.output.contains("[FILE]"),
+      s"expected walked entries in output: ${result.output}")
 
-  test("filter out all non-file with walk on root"):
-    val result = ScalaExecutor.execute("""
-      requestFileSystem("/") {
-        access("/").walk().filterNot(_.isDirectory).map(_.path)
+  test("filter out all non-file with walk (no capture-checking type mismatch)"):
+    // Regression: walk().filterNot(_.isDirectory).map(_.path) must type-check
+    // under capture checking. Use a small temp tree — walking "/" here traversed
+    // the whole filesystem and timed CI out.
+    val tmpDir = Files.createTempDirectory("walk-filter-test")
+    Files.createDirectories(tmpDir.resolve("sub"))
+    Files.writeString(tmpDir.resolve("a.txt"), "a")
+    Files.writeString(tmpDir.resolve("sub/b.txt"), "b")
+    val result = ScalaExecutor.execute(s"""
+      requestFileSystem("${tmpDir}") {
+        access("${tmpDir}").walk().filterNot(_.isDirectory).map(_.path)
       }
     """)
+    Files.deleteIfExists(tmpDir.resolve("sub/b.txt"))
+    Files.deleteIfExists(tmpDir.resolve("a.txt"))
+    Files.deleteIfExists(tmpDir.resolve("sub"))
+    Files.deleteIfExists(tmpDir)
     assert(result.success, s"execution failed: ${result.error.getOrElse(result.output)}")
     assert(!result.output.contains("Type Mismatch Error"), s"unexpected output: ${result.output}")
+    assert(result.output.contains("a.txt") && result.output.contains("b.txt"),
+      s"expected walked file paths in output: ${result.output}")
 
   // ── Negative tests: capture checking prevents capability leaks ──
 
@@ -172,6 +198,29 @@ class LibraryIntegrationSuite extends munit.FunSuite:
       }
       """,
       "capture"
+    )
+
+  test("Classified.map cannot exfiltrate via a captured mutable Array cell"):
+    // The secret must not escape the pure map closure by being written into a
+    // mutable structure captured from the enclosing scope. Capture checking
+    // rejects the captured `cell`.
+    assertCompileError(
+      """val cell = Array("")
+        |val secret = classify("password")
+        |secret.map(s => { cell(0) = s; s })
+        |cell(0)""".stripMargin,
+      "capture"
+    )
+
+  test("Classified.map cannot exfiltrate via a captured ArrayBuffer"):
+    // scala.collection.mutable.ArrayBuffer is not usable from safe code, so even
+    // constructing the side-channel buffer is rejected.
+    assertCompileError(
+      """val buf = scala.collection.mutable.ArrayBuffer[String]()
+        |val secret = classify("password")
+        |secret.map(s => { buf += s; s })
+        |buf.mkString""".stripMargin,
+      "safe"
     )
 
   test("session preserves state across library calls"):
@@ -283,6 +332,37 @@ class LibraryIntegrationSuite extends munit.FunSuite:
 
     assert(!result.output.contains("SSH PRIVATE KEY"),
       s"classified data leaked! output: ${result.output}")
+
+  test("classified file content stays protected even when reached via walk()"):
+    // walk()/children() hand out handles to classified files under a
+    // non-classified root (a known metadata-exposure), but the content boundary
+    // must still hold: reading any such handle throws.
+    val tmpDir = Files.createTempDirectory("classified-walk-test")
+    val sshDir = tmpDir.resolve(".ssh")
+    Files.createDirectories(sshDir)
+    Files.writeString(sshDir.resolve("id_rsa"), "SSH PRIVATE KEY MATERIAL")
+
+    val cfg = Config(libraryConfig = io.circe.Json.obj(
+      "classifiedPaths" -> io.circe.Json.arr(io.circe.Json.fromString(".ssh"))))
+    given Context = Context(cfg, None)
+
+    val result = ScalaExecutor.execute(s"""
+      requestFileSystem("${tmpDir}") {
+        access("${tmpDir}").walk()
+          .filter(_.name == "id_rsa")
+          .map(e => e.read())   // attempt to read content of a walked classified file
+      }
+    """)
+
+    Files.deleteIfExists(sshDir.resolve("id_rsa"))
+    Files.deleteIfExists(sshDir)
+    Files.deleteIfExists(tmpDir)
+
+    assert(!result.output.contains("SSH PRIVATE KEY MATERIAL"),
+      s"classified content leaked via walk()->read(): ${result.output}")
+    assert(result.output.toLowerCase.contains("classified") ||
+           result.output.toLowerCase.contains("access denied"),
+      s"expected a classified-path security error, got: ${result.output}")
 
   // ── Runtime security: capability enforcement via REPL ────────────
 

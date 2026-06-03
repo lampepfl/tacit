@@ -268,6 +268,14 @@ class ConfigSuite extends munit.FunSuite:
     assert(!cfg.safeMode)
 
   test("--safe-mode explicitly enables safe mode"):
-    // safe mode is already on by default; explicit flag should keep it on
-    val cfg = parse("-s").get
+    val cfg = parse("--safe-mode").get
     assert(cfg.safeMode)
+
+  test("--safe-mode after --no-safe-mode re-enables safe mode"):
+    // Order matters: a later --safe-mode must win over an earlier --no-safe-mode.
+    val cfg = parse("--no-safe-mode", "--safe-mode").get
+    assert(cfg.safeMode)
+
+  test("--no-safe-mode after --safe-mode disables safe mode"):
+    val cfg = parse("--safe-mode", "--no-safe-mode").get
+    assert(!cfg.safeMode)

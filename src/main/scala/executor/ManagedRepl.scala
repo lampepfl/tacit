@@ -101,7 +101,7 @@ object ManagedRepl:
   private def withOutputCapture(
     outputCapture: ByteArrayOutputStream,
     printStream: PrintStream
-  )(run: => Unit): (String, Option[Exception]) =
+  )(run: => Unit): (String, Option[Throwable]) =
     outputCaptureLock.synchronized:
       outputCapture.reset()
       val oldOut = System.out
@@ -112,7 +112,11 @@ object ManagedRepl:
         try
           run
           None
-        catch case e: Exception => Option(e)
+        // NonFatal (not just Exception) so a non-fatal interpreter *Error* — e.g.
+        // dotty's `AssertionError: denotation ... invalid in run N` on certain
+        // symbols is reported as a failed execution instead of escaping to the
+        // JSON-RPC loop, where it would leave the client without any response.
+        catch case scala.util.control.NonFatal(e) => Option(e)
         finally
           System.setOut(oldOut)
           System.setErr(oldErr)

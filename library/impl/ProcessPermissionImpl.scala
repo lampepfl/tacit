@@ -25,7 +25,12 @@ final class ProcessPermissionImpl(
             s"Access denied: invocation '$invocation' does not match any permitted pattern in $patterns"
           )
       case None =>
-        if strictMode && ProcessPermissionImpl.unsafeCommands.contains(command) then
+        // Match on the command's basename: strict mode must block `/bin/cat`,
+        // `./cat`, and `cat` alike, otherwise an absolute/relative path trivially
+        // evades the unsafe-command denylist.
+        val slash = math.max(command.lastIndexOf('/'), command.lastIndexOf('\\'))
+        val basename = if slash >= 0 then command.substring(slash + 1).nn else command
+        if strictMode && ProcessPermissionImpl.unsafeCommands.contains(basename) then
           throw SecurityException(
             s"Strict mode: command '$command' is an unsafe operation. Use requestFileSystem instead."
           )

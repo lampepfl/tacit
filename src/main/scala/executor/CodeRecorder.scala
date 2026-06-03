@@ -23,8 +23,17 @@ class CodeRecorder(dir: File):
   private val tsFormat = DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmmss.SSS").withZone(ZoneOffset.UTC)
   private val counter = AtomicLong(0)
 
+  /** Sanitize a session id before it becomes part of a filename. The id is
+    * agent-controlled (`execute_in_session`'s `session_id`, recorded even when no
+    * such session exists), so an unsanitized value like `../../etc/cron.d/x`
+    * would let the recorder write `.scala`/`.result` files outside `dir`. Keep
+    * only filename-safe characters and bound the length. */
+  private def safeId(sessionId: String): String =
+    val cleaned = sessionId.filter(ch => ch.isLetterOrDigit || ch == '-' || ch == '_').take(64)
+    if cleaned.isEmpty then "unknown" else cleaned
+
   def record(code: String, sessionId: String, result: ExecutionResult): Unit =
-    val base = s"${tsFormat.format(Instant.now())}_%04d_$sessionId".format(counter.getAndIncrement())
+    val base = s"${tsFormat.format(Instant.now())}_%04d_${safeId(sessionId)}".format(counter.getAndIncrement())
     Files.writeString(dirPath.resolve(s"$base.scala"), code)
     val status = if result.success then "success" else "failure"
     val body = StringBuilder(s"status: $status\n${result.output}")

@@ -27,10 +27,7 @@ abstract class InterfaceImpl(
    *  (`Classified(***)`) to the normal output, but also append the fully
    *  unwrapped content to this file — only the end user reading that file
    *  can see classified data. */
-  private val secureWriter: Option[PrintStream] = config.secureOutput.map: path =>
-    val file = JFile(path)
-    Option(file.getAbsoluteFile.nn.getParentFile).foreach(_.mkdirs())
-    PrintStream(FileOutputStream(file, true), true, "UTF-8")
+  private val secureWriter: Option[PrintStream] = config.secureOutput.map(InterfaceImpl.secureWriterFor)
 
   private def withSecureOut(op: => Unit): Unit =
     secureWriter.foreach(w => scala.Console.withOut(w)(op))
@@ -127,3 +124,19 @@ abstract class InterfaceImpl(
 
   def writeClassified(path: String, content: Classified[String])(using fs: FileSystem): Unit =
     fs.access(path).writeClassified(content)
+
+object InterfaceImpl:
+  /** One append-mode `PrintStream` per secureOutput path, shared process-wide.
+    * A fresh `InterfaceImpl` is built on every REPL init (and stateless
+    * `execute` builds a REPL per call), so opening a new `FileOutputStream` in
+    * each instance would leak a file descriptor per execution until the process
+    * runs out. Cache and reuse keyed by path. */
+  private val secureWriters = scala.collection.mutable.HashMap[String, PrintStream]()
+
+  private[library] def secureWriterFor(path: String): PrintStream =
+    secureWriters.synchronized:
+      secureWriters.getOrElseUpdate(path, {
+        val file = JFile(path)
+        Option(file.getAbsoluteFile.nn.getParentFile).foreach(_.mkdirs())
+        PrintStream(FileOutputStream(file, true), true, "UTF-8")
+      })

@@ -84,6 +84,25 @@ class LibrarySuite extends munit.FunSuite:
     }
   }
 
+  test("reject access through a symlink that escapes the root") {
+    // A symlink inside the root that points outside it must not be a way out:
+    // RealFileSystem resolves symlinks (toRealPath) before the startsWith check.
+    // This exercises the real-disk path that VirtualFileSystem cannot model.
+    val outside = Files.createTempDirectory("sandbox-outside")
+    try
+      Files.writeString(outside.resolve("secret.txt"), "OUTSIDE SECRET")
+      Files.createSymbolicLink(tmpDir.resolve("escape"), outside)
+      requestFileSystem(tmpDir.toString) {
+        val ex = intercept[SecurityException] {
+          access(tmpDir.resolve("escape/secret.txt").toString).read()
+        }
+        assert(ex.getMessage.nn.startsWith("Access denied"))
+      }
+    finally
+      Files.deleteIfExists(outside.resolve("secret.txt"))
+      Files.deleteIfExists(outside)
+  }
+
   test("readLines returns file as list of lines") {
     val filePath = tmpDir.resolve("lines.txt").toString
     requestFileSystem(tmpDir.toString) {
@@ -250,6 +269,18 @@ class LibrarySuite extends munit.FunSuite:
     assert(secureOut.contains("score=42 name=alice"))
   }
 
+  test("secureOutput: the writer for a path is cached, not reopened per instance") {
+    // A fresh InterfaceImpl is built on every REPL init; opening a new
+    // FileOutputStream each time would leak a file descriptor per execution.
+    // The writer must be shared across instances for the same path.
+    val p = tmpDir.resolve("shared-secure.log").toString
+    val w1 = InterfaceImpl.secureWriterFor(p)
+    val w2 = InterfaceImpl.secureWriterFor(p)
+    assert(w1 eq w2, "secureOutput PrintStream should be reused for the same path")
+    val w3 = InterfaceImpl.secureWriterFor(tmpDir.resolve("other-secure.log").toString)
+    assert(w1 ne w3, "different paths should get different writers")
+  }
+
   test("secureOutput: when unset, println behaves like Predef and only writes to main") {
     val mainBuf = new java.io.ByteArrayOutputStream()
     scala.Console.withOut(new java.io.PrintStream(mainBuf, true, "UTF-8")) {
@@ -274,22 +305,27 @@ class LibrarySuite extends munit.FunSuite:
 
   test("calling foreach(println) on the result of grepRecursive") {
     val dirPath = tmpDir.toString
-    val matches = requestFileSystem(dirPath) {
-      grepRecursive(dirPath, "line", "*.txt").map(m => s"Match in ${m.file}: ${m.line}")
-    }
-    // matches.foreach(println)
+    requestFileSystem(dirPath) {
+      access(tmpDir.resolve("a.txt").toString).write("line one\nother\nline three")
+      access(tmpDir.resolve("sub/b.txt").toString).write("line two")
+      access(tmpDir.resolve("c.md").toString).write("line ignored by glob")
 
-    val (projects, webappContents) = requestFileSystem(dirPath) {
-      val projectsList = find(dirPath, "*")
-      val webappList = find(dirPath, "*")
-      (projectsList, webappList)
-    }
+      val matches = grepRecursive(dirPath, "line", "*.txt")
+        .map(m => s"${m.file}:${m.lineNumber}: ${m.line}")
+      assertEquals(matches.length, 3)
+      assert(matches.forall(_.contains("line")))
 
-    // println("Projects directory contents:")
-    // projects.foreach(p => println(p))
-    // println("\n---\n")
-    // println("Webapp directory contents:")
-    // webappContents.foreach(p => println(p))
+      // Exercise foreach(println) on the result: println requires IOCapability and
+      // must type-check under capture checking. Capture stdout to verify it ran.
+      val buf = new java.io.ByteArrayOutputStream()
+      scala.Console.withOut(new java.io.PrintStream(buf, true, "UTF-8")) {
+        matches.foreach(println)
+      }
+      val out = buf.toString("UTF-8")
+      assert(out.contains("a.txt"), s"expected a.txt in output: $out")
+      assert(out.contains("b.txt"), s"expected b.txt in output: $out")
+      assert(!out.contains("c.md"), s"c.md should be excluded by the *.txt glob: $out")
+    }
   }
 
   // --- Compile-time capability leak examples ---

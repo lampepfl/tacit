@@ -44,6 +44,27 @@ class ProcessPermissionSuite extends munit.FunSuite:
   test("validate allows non-file command in strict mode"):
     validate("echo", ProcessPermissionImpl(Set("echo"), strictMode = true))
 
+  // ── strict mode must match on the command basename, not the full path ──
+  // Otherwise `/bin/cat`, `./rm`, `/bin/bash` trivially evade the denylist.
+
+  test("strict mode blocks an absolute-path unsafe command"):
+    val ex = intercept[SecurityException]:
+      validate("/bin/cat", ProcessPermissionImpl(Set("/bin/cat"), strictMode = true))
+    assert(ex.getMessage.nn.contains("Strict mode"))
+
+  test("strict mode blocks a relative-path unsafe command"):
+    val ex = intercept[SecurityException]:
+      validate("./rm", ProcessPermissionImpl(Set("./rm"), strictMode = true))
+    assert(ex.getMessage.nn.contains("Strict mode"))
+
+  test("strict mode blocks an absolute-path shell"):
+    val ex = intercept[SecurityException]:
+      validate("/bin/bash", ProcessPermissionImpl(Set("/bin/bash"), strictMode = true))
+    assert(ex.getMessage.nn.contains("Strict mode"))
+
+  test("strict mode allows an absolute-path safe command"):
+    validate("/usr/bin/echo", ProcessPermissionImpl(Set("/usr/bin/echo"), strictMode = true))
+
   test("validate blocks tar in strict mode"):
     val ex = intercept[SecurityException]:
       validate("tar", ProcessPermissionImpl(Set("tar"), strictMode = true))

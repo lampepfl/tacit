@@ -346,13 +346,14 @@ class CodeValidatorSuite extends munit.FunSuite:
 
   // ---- Security bypass edge cases ----
 
-  test("string interpolation expressions are not analyzed (known limitation)"):
-    // s"${java.io.File(...)}" — the forbidden pattern is inside ${} which is code,
-    // but the current stripper blanks the entire string including interpolation.
-    // This documents the limitation: forbidden code inside interpolation is NOT caught.
+  test("forbidden code inside string interpolation IS analyzed"):
+    // s"${java.io.File(...)}" — the expression inside ${} is real code that the
+    // REPL compiles and executes, so the validator must see it. The interpolation-
+    // aware stripper preserves ${...} as code while blanking the literal text.
     val code = """val s = s"${java.io.File("/tmp")}""""
     val result = CodeValidator.validate(code)
-    assert(result.isEmpty, "interpolation expressions are currently not analyzed — known limitation")
+    assert(result.exists(_.ruleId == "file-io-java"),
+      s"forbidden token inside interpolation must be caught, got: $result")
 
   test("reject pattern at very start of code"):
     val result = CodeValidator.validate("java.io.File")

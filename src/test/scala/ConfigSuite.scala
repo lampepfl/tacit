@@ -12,11 +12,17 @@ class ConfigSuite extends munit.FunSuite:
 
   override def afterAll(): Unit = Files.deleteIfExists(fakeJar)
 
-  /** Run a block with stderr suppressed (for tests that intentionally trigger error output). */
+  /** Run a block with error output suppressed, for tests that intentionally
+   *  trigger it. Covers both `System.err` (used by Config's own warnings) and
+   *  `scala.Console.out`/`Console.err` (used by scopt to print its `Error:` and
+   *  `Usage:` text on a parse failure); the latter is unaffected by
+   *  `System.setErr`, so both must be redirected. */
   private def quietly[T](f: => T): T =
+    val nullStream = new java.io.PrintStream(java.io.OutputStream.nullOutputStream())
     val origErr = System.err
-    System.setErr(new java.io.PrintStream(java.io.OutputStream.nullOutputStream()))
-    try f finally System.setErr(origErr)
+    System.setErr(nullStream)
+    try Console.withOut(nullStream)(Console.withErr(nullStream)(f))
+    finally System.setErr(origErr)
 
   /** Parse CLI args with the fake JAR path prepended. */
   private def parse(args: String*): Option[Config] =

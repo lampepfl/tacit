@@ -106,7 +106,7 @@ class CodeValidatorEvasionSuite extends munit.FunSuite:
     val r = rejected("""val x = s"${System.getProperty("user.home")}"; x""")
     assert(!r.success)
     assert(r.error.exists(_.contains("sys-getprop")), s"got: ${r.error}")
-    assert(!r.output.contains(System.getProperty("user.home").nn))
+    assert(!r.output.contains(System.getProperty("user.home")))
 
   test("e2e (no-safe-mode): sys.props is rejected, not executed"):
     val r = rejected("""sys.props("user.home")""")

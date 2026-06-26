@@ -40,7 +40,7 @@ jobs:
     - name: Set up Scala CLI
       uses: VirtusLab/scala-cli-setup@v1
     - name: Run library tests
-      run: cd library && scala-cli test .
+      run: cd library && scala-cli test . --server=false
 
   publish-release:
     if: github.event_name == 'release'

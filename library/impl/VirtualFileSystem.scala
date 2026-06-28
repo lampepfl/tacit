@@ -91,6 +91,7 @@ class VirtualFileSystem(
     def isDirectory: Boolean = directories.contains(resolved)
 
     def size: Long =
+      requireNotClassified(resolved, "size")
       files.get(resolved).map(_.length.toLong).getOrElse(0L)
 
     def children: List[FileEntry^{origin}] =

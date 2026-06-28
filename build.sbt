@@ -13,7 +13,7 @@
 //     fallback
 //   }
 // }
-val scala3Version = "3.10.0-RC1-bin-20260609-b34a019-NIGHTLY"
+val scala3Version = "3.10.0-RC1-bin-20260616-4733954-NIGHTLY"
 ThisBuild / resolvers += Resolver.scalaNightlyRepository
 
 val tacitVersion = "0.2.0-SNAPSHOT"

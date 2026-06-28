@@ -1,4 +1,4 @@
-//> using scala 3.nightly
+//> using scala 3.10.0-RC1-bin-20260616-4733954-NIGHTLY
 //> using option -deprecation -feature -unchecked -experimental
 //> using option -Wunused:all -Yexplicit-nulls -Wsafe-init
 //> using option -language:experimental.captureChecking

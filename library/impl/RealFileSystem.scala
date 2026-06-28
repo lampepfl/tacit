@@ -95,7 +95,9 @@ class RealFileSystem(
 
     def exists: Boolean = Files.exists(jpath)
     def isDirectory: Boolean = Files.isDirectory(jpath)
-    def size: Long = Files.size(jpath)
+    def size: Long =
+      requireNotClassified(jpath, "size")
+      Files.size(jpath)
 
     def children: List[FileEntry^{origin}] =
       requireNotClassified(jpath, "children")

@@ -217,18 +217,25 @@ class ClassifiedSuite extends munit.FunSuite:
     }
   }
 
+  test("size() on classified file throws SecurityException") {
+    requestFileSystem("/virtual") {
+      val file = access("/virtual/secret/data.txt")
+      file.writeClassified(classify("hello"))
+      val ex = intercept[SecurityException] { file.size }
+      assert(ex.getMessage.nn.contains("classified"))
+    }
+  }
+
   test("metadata operations work on classified files") {
     requestFileSystem("/virtual") {
       val file = access("/virtual/secret/meta.txt")
-      // exists, isDirectory, size, path, name should all work
+      // exists, isDirectory, path, name should all work; size is blocked
       assertEquals(file.exists, false)
       assertEquals(file.isDirectory, false)
       assertEquals(file.name, "meta.txt")
       assert(file.path.endsWith("meta.txt"))
-      // Write and check size
       file.writeClassified(classify("hello"))
       assertEquals(file.exists, true)
-      assertEquals(file.size, 5L)
     }
   }
 

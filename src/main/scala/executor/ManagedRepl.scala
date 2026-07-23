@@ -157,7 +157,7 @@ class ManagedRepl(using Context):
     if violations.nonEmpty then
       ExecutionResult(false, "", Some(CodeValidator.formatErrors(violations)))
     else
-      ParseResult.complete(code)(using state) match
+      ParseResult(code)(using state) match
         case p: Parsed =>
           dispatch(p)
         case cmd @ (_: TypeOf | _: DocOf | Imports) =>

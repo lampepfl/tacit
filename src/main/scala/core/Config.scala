@@ -24,6 +24,17 @@ case class Config(
     val existing = libraryConfig.hcursor.downField("llm").focus.getOrElse(Json.obj())
     withLibrary("llm", existing.deepMerge(Json.obj(key -> value.asJson)))
 
+  /** `libraryConfig` with secrets (the LLM API key) replaced by `***`, for
+    * safe use in logs and startup banners. The config itself is untouched. */
+  def redactedLibraryConfig: Json =
+    libraryConfig.mapObject: root =>
+      root("llm") match
+        case Some(llmJson) =>
+          root.add("llm", llmJson.mapObject: llm =>
+            if llm.contains("apiKey") then llm.add("apiKey", Json.fromString("***"))
+            else llm)
+        case None => root
+
 /** Shape of the JSON config file. All fields optional so missing keys decode as None. */
 private case class FileConfig(
   recordPath: Option[String] = None,
@@ -83,6 +94,16 @@ object Config:
       System.err.println(s"Error: Library JAR not found: '${config.libraryJarPath}'"); None
     else Some(config)
 
+  /** A non-positive timeout is never sane: 0 disables the watchdog silently
+   *  (`Thread.join(0)` waits forever) and a negative value makes every
+   *  execution instantly "time out". Reject both CLI and file values. */
+  private def validateExecutionTimeout(config: Config): Option[Config] =
+    config.executionTimeoutMs match
+      case Some(ms) if ms <= 0 =>
+        System.err.println(s"Error: executionTimeoutMs must be a positive number of milliseconds, got $ms")
+        None
+      case _ => Some(config)
+
   val optParser =
     val builder = OParser.builder[Config]
     import builder.*
@@ -141,4 +162,5 @@ object Config:
   def parseCliArgs(args: Array[String]): Option[Config] =
     OParser.parse(optParser, args, Config())
       .map(validateLlmConfig)
+      .flatMap(validateExecutionTimeout)
       .flatMap(validateLibraryJar)

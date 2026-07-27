@@ -17,7 +17,10 @@ import java.util.concurrent.atomic.AtomicLong
   * multiple executions share the same millisecond timestamp.
   */
 class CodeRecorder(dir: File):
-  dir.mkdirs()
+  if !dir.exists() && !dir.mkdirs() then
+    throw java.io.IOException(s"Could not create recording directory: ${dir.getAbsolutePath}")
+  if !dir.isDirectory || !dir.canWrite then
+    throw java.io.IOException(s"Recording path is not a writable directory: ${dir.getAbsolutePath}")
 
   private val dirPath = dir.toPath
   private val tsFormat = DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmmss.SSS").withZone(ZoneOffset.UTC)
@@ -32,12 +35,19 @@ class CodeRecorder(dir: File):
     val cleaned = sessionId.filter(ch => ch.isLetterOrDigit || ch == '-' || ch == '_').take(64)
     if cleaned.isEmpty then "unknown" else cleaned
 
+  /** Record one execution. Recording is best-effort: a failure (disk full,
+    * permissions lost mid-run, ...) is logged and swallowed so the request
+    * path still returns its execution result to the client. */
   def record(code: String, sessionId: String, result: ExecutionResult): Unit =
-    val base = s"${tsFormat.format(Instant.now())}_%04d_${safeId(sessionId)}".format(counter.getAndIncrement())
-    Files.writeString(dirPath.resolve(s"$base.scala"), code)
-    val status = if result.success then "success" else "failure"
-    val body = StringBuilder(s"status: $status\n${result.output}")
-    result.error.foreach(e => body.append(s"\nError: $e"))
-    Files.writeString(dirPath.resolve(s"$base.result"), body.toString)
+    try
+      val base = s"${tsFormat.format(Instant.now())}_%04d_${safeId(sessionId)}".format(counter.getAndIncrement())
+      Files.writeString(dirPath.resolve(s"$base.scala"), code)
+      val status = if result.success then "success" else "failure"
+      val body = StringBuilder(s"status: $status\n${result.output}")
+      result.error.foreach(e => body.append(s"\nError: $e"))
+      Files.writeString(dirPath.resolve(s"$base.result"), body.toString)
+    catch
+      case scala.util.control.NonFatal(e) =>
+        tacit.core.Log.warn(s"Failed to record execution: ${e.getMessage}")
 
   def close(): Unit = ()

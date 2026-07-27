@@ -29,6 +29,11 @@ abstract class InterfaceImpl(
   private val commandPermissions: Option[Set[String]] = config.commandPermissions
   private val networkPermissions: Option[Set[String]] = config.networkPermissions
   private val llmConfig: Option[LlmConfig] = config.llm
+  /** Whether `writeClassified` is permitted. Defaults to true (current
+   *  behavior); set to false to protect the *integrity* of classified files
+   *  (e.g. `.ssh/authorized_keys`) against agent writes — confidentiality is
+   *  already enforced by the classified-read path. */
+  private val classifiedWriteEnabled: Boolean = config.classifiedWrite.getOrElse(true)
 
   /** Optional secondary sink that receives the *unmasked* form of printed values.
    *  When configured, `println`/`print`/`printf` still write a masked view
@@ -54,7 +59,7 @@ abstract class InterfaceImpl(
 
   // create real FileSystem by default, but allow tests to override with a virtual one
   protected def createFS(root: String, filter: String -> Boolean, classifiedPatterns: Set[String]): FileSystem =
-    new RealFileSystem(root, filter, classifiedPatterns)
+    new RealFileSystem(root, filter, classifiedPatterns, classifiedWriteEnabled)
 
   export FileOps.*
   export ProcessOps.*
@@ -151,6 +156,10 @@ abstract class InterfaceImpl(
     fs.access(path).readClassified()
 
   def writeClassified(path: String, content: Classified[String])(using fs: FileSystem): Unit =
+    if !classifiedWriteEnabled then
+      throw SecurityException(
+        s"Access denied: writeClassified is disabled by the server configuration (classifiedWrite = false)"
+      )
     fs.access(path).writeClassified(content)
 
 object InterfaceImpl:
@@ -164,13 +173,28 @@ object InterfaceImpl:
     * A fresh `InterfaceImpl` is built on every REPL init (and stateless
     * `execute` builds a REPL per call), so opening a new `FileOutputStream` in
     * each instance would leak a file descriptor per execution until the process
-    * runs out. Cache and reuse keyed by path. */
+    * runs out. Cache and reuse keyed by canonical path, so different spellings
+    * of the same file (`a/./log`, `a/sub/../log`) share one stream. */
   private val secureWriters = scala.collection.mutable.HashMap[String, PrintStream]()
 
   private[library] def secureWriterFor(path: String): PrintStream =
     secureWriters.synchronized:
-      secureWriters.getOrElseUpdate(path, {
-        val file = JFile(path)
-        Option(file.getAbsoluteFile.nn.getParentFile).foreach(_.mkdirs())
-        PrintStream(FileOutputStream(file, true), true, "UTF-8")
+      val file = JFile(path).getAbsoluteFile.nn
+      val key =
+        try file.getCanonicalPath.nn
+        catch case _: java.io.IOException => file.getAbsolutePath.nn
+      secureWriters.getOrElseUpdate(key, {
+        Option(file.getParentFile).foreach(_.mkdirs())
+        val isNew = !file.exists()
+        val stream = PrintStream(FileOutputStream(file, true), true, "UTF-8")
+        // The sink receives unmasked classified content, so restrict a newly
+        // created file to the owner (rw-------). Best-effort: POSIX-only.
+        if isNew then
+          try
+            Files.setPosixFilePermissions(
+              file.toPath,
+              java.nio.file.attribute.PosixFilePermissions.fromString("rw-------")
+            )
+          catch case _: UnsupportedOperationException | _: java.io.IOException => ()
+        stream
       })

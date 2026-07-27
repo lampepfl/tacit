@@ -27,7 +27,7 @@ class ExecutionTimeoutSuite extends munit.FunSuite:
   test("a timed-out statement does not corrupt session state"):
     given Context = ctx(800)
     val sm = new SessionManager
-    val sid = sm.createSession()
+    val sid = sm.createSession().fold(err => fail(s"session creation failed: $err"), identity)
     try
       assert(sm.executeInSession(sid, "val x = 41").success)
       val timedOut = sm.executeInSession(sid, "Thread.sleep(20000); x")

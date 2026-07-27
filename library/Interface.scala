@@ -11,7 +11,7 @@ import caps.*
  *  - `map`/`flatMap` only accept **pure** functions, preventing side-channel leaks
  */
 @assumeSafe
-trait Classified[+T]:
+abstract class Classified[+T] private[library] ():
   def map[B](op: T ->{any.rd} B): Classified[B]
   def flatMap[B](op: T ->{any.rd} Classified[B]): Classified[B]
 
@@ -20,7 +20,7 @@ trait Classified[+T]:
 /** Handle to a file or directory, obtained via `access(path)` inside a
  *  `requestFileSystem` block. Cannot escape the block scope. */
 @assumeSafe
-abstract class FileEntry(tracked val origin: FileSystem):
+abstract class FileEntry private[library] (tracked val origin: FileSystem):
   def path: String
   def name: String
   def exists: Boolean
@@ -47,13 +47,14 @@ abstract class FileEntry(tracked val origin: FileSystem):
    *  Throws `SecurityException` if the file is not under a classified path. */
   def readClassified(): Classified[String]
   /** Write classified content to a classified file.
-   *  Throws `SecurityException` if the file is not under a classified path. */
+   *  Throws `SecurityException` if the file is not under a classified path,
+   *  or if the server configuration has disabled classified writes. */
   def writeClassified(content: Classified[String]): Unit
 
 /** Capability granting access to a file-system subtree.
  *  Obtained via `requestFileSystem(root)`. */
 @assumeSafe
-abstract class FileSystem extends caps.SharedCapability:
+abstract class FileSystem private[library] () extends caps.SharedCapability:
   def access(path: String): FileEntry^{this}
 
 // ─── Data Types ─────────────────────────────────────────────────────────────
@@ -78,7 +79,7 @@ case class HttpResponse(status: Int, body: String)
  *  `validateHost` throws `SecurityException` if a host is not permitted by the
  *  scope or by the host-level policy configured on the server. */
 @assumeSafe
-trait Network extends caps.SharedCapability:
+abstract class Network private[library] () extends caps.SharedCapability:
   def validateHost(host: String): Unit
 
 /** Capability granting permission to run a set of commands.
@@ -87,7 +88,7 @@ trait Network extends caps.SharedCapability:
  *  `validateCommand` throws `SecurityException` if a command is not permitted
  *  by the scope or by the host-level policy configured on the server. */
 @assumeSafe
-trait ProcessPermission extends caps.SharedCapability:
+abstract class ProcessPermission private[library] () extends caps.SharedCapability:
   def validateCommand(command: String, args: List[String] = List.empty): Unit
 
 /** Capability gating access to standard output (`println`, `print`, `printf`).
@@ -161,6 +162,8 @@ trait Interface:
   def grep(path: String, pattern: String)(using FileSystem): List[GrepMatch]
 
   /** Recursively search files under `dir` matching `glob` for `pattern` (regex).
+   *  Files under classified paths are silently skipped (their content is never
+   *  read); single-file `grep` on a classified path throws instead.
    *
    *  ```
    *  val hits = grepRecursive("/project/src", "deprecated", "*.scala")
@@ -185,6 +188,8 @@ trait Interface:
   def readClassified(path: String)(using FileSystem): Classified[String]
 
   /** Write classified content to a classified file.
+   *  Throws `SecurityException` if the path is not classified, or if the
+   *  server configuration has disabled classified writes.
    *
    *  ```
    *  writeClassified("/data/secrets/upper.txt", processed)

@@ -202,3 +202,61 @@ class ProcessPermissionSuite extends munit.FunSuite:
     // `.` in the pattern should match only a literal dot
     assert(GlobMatcher.matches("a.b", "a.b"))
     assert(!GlobMatcher.matches("axb", "a.b"))
+
+  // ── strict mode is case-insensitive (macOS has a case-insensitive FS) ──
+
+  test("strict mode blocks an uppercase unsafe command"):
+    val ex = intercept[SecurityException]:
+      validate("CAT", ProcessPermissionImpl(Set("CAT"), strictMode = true))
+    assert(ex.getMessage.nn.contains("Strict mode"))
+
+  test("strict mode blocks a mixed-case unsafe command"):
+    val ex = intercept[SecurityException]:
+      validate("Rm", ProcessPermissionImpl(Set("Rm"), strictMode = true))
+    assert(ex.getMessage.nn.contains("Strict mode"))
+
+  test("strict mode blocks an uppercase absolute-path unsafe command"):
+    val ex = intercept[SecurityException]:
+      validate("/BIN/CAT", ProcessPermissionImpl(Set("/BIN/CAT"), strictMode = true))
+    assert(ex.getMessage.nn.contains("Strict mode"))
+
+  // ── strict mode expanded denylist ─────────────────────────────
+
+  test("strict mode blocks environment-inspection commands"):
+    for cmd <- List("env", "printenv") do
+      val ex = intercept[SecurityException]:
+        validate(cmd, ProcessPermissionImpl(Set(cmd), strictMode = true))
+      assert(ex.getMessage.nn.contains("Strict mode"), cmd)
+
+  test("strict mode blocks network tools"):
+    for cmd <- List("curl", "wget", "ssh", "nc", "telnet", "ftp", "socat") do
+      val ex = intercept[SecurityException]:
+        validate(cmd, ProcessPermissionImpl(Set(cmd), strictMode = true))
+      assert(ex.getMessage.nn.contains("Strict mode"), cmd)
+
+  test("strict mode blocks git"):
+    val ex = intercept[SecurityException]:
+      validate("git", ProcessPermissionImpl(Set("git"), strictMode = true))
+    assert(ex.getMessage.nn.contains("Strict mode"))
+
+  test("strict mode blocks interpreters"):
+    for cmd <- List("python", "python3", "perl", "ruby", "node", "php", "lua") do
+      val ex = intercept[SecurityException]:
+        validate(cmd, ProcessPermissionImpl(Set(cmd), strictMode = true))
+      assert(ex.getMessage.nn.contains("Strict mode"), cmd)
+
+  test("strict mode blocks command runners and text processors"):
+    for cmd <- List("xargs", "nohup", "nice", "timeout", "watch", "parallel", "busybox", "awk", "gawk", "sed") do
+      val ex = intercept[SecurityException]:
+        validate(cmd, ProcessPermissionImpl(Set(cmd), strictMode = true))
+      assert(ex.getMessage.nn.contains("Strict mode"), cmd)
+
+  test("strict mode blocks hex dumpers, process control, and scheduling tools"):
+    for cmd <- List("xxd", "od", "hexdump", "base64", "openssl", "osascript", "open", "kill", "pkill", "killall", "crontab", "at") do
+      val ex = intercept[SecurityException]:
+        validate(cmd, ProcessPermissionImpl(Set(cmd), strictMode = true))
+      assert(ex.getMessage.nn.contains("Strict mode"), cmd)
+
+  test("strict mode still allows build tools (java, sbt, scala)"):
+    for cmd <- List("java", "sbt", "scala", "scala-cli") do
+      validate(cmd, ProcessPermissionImpl(Set(cmd), strictMode = true))

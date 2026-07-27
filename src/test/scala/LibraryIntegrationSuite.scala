@@ -79,7 +79,7 @@ class LibraryIntegrationSuite extends munit.FunSuite:
 
   test("library available in session"):
     val manager = new SessionManager
-    val sessionId = manager.createSession()
+    val sessionId = manager.createSession().fold(err => fail(s"session creation failed: $err"), identity)
 
     val r1 = manager.executeInSession(sessionId, """
       requestFileSystem("/tmp") { access("/tmp").exists }
@@ -170,6 +170,39 @@ class LibraryIntegrationSuite extends munit.FunSuite:
       "no given instance of type tacit.library.Network"
     )
 
+  // ── Negative tests: capability types and impls are sealed ──
+  // The capability classes and their implementations carry `private[library]`
+  // constructors, so agent code can neither instantiate nor extend them —
+  // capabilities can only come from the `request*` scopes. (Regression tests
+  // for the audit finding where `new RealFileSystem("/", ..., Set.empty)`
+  // read arbitrary files and a hand-written `given Network` bypassed the
+  // host allowlist.)
+
+  test("cannot construct RealFileSystem directly"):
+    assertCompileError(
+      """new tacit.library.RealFileSystem("/", (s: String) => true, Set.empty[String])""",
+      "cannot be accessed"
+    )
+
+  test("cannot construct ProcessPermissionImpl directly"):
+    assertCompileError(
+      """new tacit.library.ProcessPermissionImpl(Set("id"), false, None)""",
+      "cannot be accessed"
+    )
+
+  test("cannot construct NetworkImpl directly"):
+    assertCompileError(
+      """new tacit.library.NetworkImpl(Set("*"))""",
+      "cannot be accessed"
+    )
+
+  test("cannot implement the Network capability anonymously"):
+    assertCompileError(
+      """given tacit.library.Network with
+          def validateHost(h: String) = ()""",
+      "cannot be accessed"
+    )
+
   test("println inside Classified.map is rejected by capture checker"):
     assertCompileError(
       """
@@ -229,7 +262,7 @@ class LibraryIntegrationSuite extends munit.FunSuite:
 
   test("session preserves state across library calls"):
     val manager = new SessionManager
-    val sessionId = manager.createSession()
+    val sessionId = manager.createSession().fold(err => fail(s"session creation failed: $err"), identity)
 
     manager.executeInSession(sessionId, """
       val testResult = requestFileSystem("/tmp") { access("/tmp").isDirectory }

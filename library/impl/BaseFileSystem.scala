@@ -31,44 +31,66 @@ abstract class BaseFileSystem extends FileSystem:
     * - Trailing `/` is stripped (no directory-only distinction).
     */
   protected final def isClassifiedPath(p: Path): Boolean =
-    classifiedPatterns.exists(pattern => matchesClassifiedPattern(p, pattern))
+    compiledPatterns.exists(matchesCompiled(_, p))
 
-  private def matchesClassifiedPattern(p: Path, pattern: String): Boolean =
+  /** A classified pattern with its `PathMatcher`s precompiled. Kept as plain
+    * data (not `Path => Boolean` closures) so the cached value carries no
+    * captured capabilities. */
+  private enum CompiledPattern:
+    /** No-slash pattern: matches if any single path component matches. */
+    case Component(matcher: java.nio.file.PathMatcher)
+    /** Absolute pattern: matched against the full absolute path. */
+    case Absolute(matchers: List[java.nio.file.PathMatcher])
+    /** Relative pattern: matched against the path relative to the root. */
+    case Relative(matchers: List[java.nio.file.PathMatcher])
+
+  /** Matchers compiled once from `classifiedPatterns` (constructor-provided
+    * and immutable) and reused for every check, instead of recompiling a
+    * `PathMatcher` per pattern per file operation. `lazy` so subclass state
+    * (`normalizedRoot`) is initialized before first use; thread-safe. */
+  private lazy val compiledPatterns: List[CompiledPattern] =
+    classifiedPatterns.toList.map(compilePattern)
+
+  private def compilePattern(pattern: String): CompiledPattern =
     val stripped = pattern.stripSuffix("/")
-    if stripped.isEmpty then return false
-
-    if !stripped.contains("/") then
+    if stripped.isEmpty then CompiledPattern.Relative(Nil)
+    else if !stripped.contains("/") then
       // No slash: match against each path component individually
-      val matcher = FileSystems.getDefault.nn.getPathMatcher(s"glob:$stripped")
-      val count = p.getNameCount
-      var i = 0
-      while i < count do
-        if matcher.matches(p.getName(i)) then return true
-        i += 1
-      false
+      CompiledPattern.Component(FileSystems.getDefault.nn.getPathMatcher(s"glob:$stripped"))
     else if Path.of(stripped).isAbsolute then
       // Absolute pattern: resolve non-glob prefix through symlinks, then glob-match
-      val resolved = resolveGlobPrefix(stripped)
-      matchesGlobOrDescendant(p, resolved)
+      CompiledPattern.Absolute(globOrDescendantMatchers(resolveGlobPrefix(stripped)))
     else
       // Relative pattern: match against path relative to root
-      val rel = normalizedRoot.relativize(p)
-      matchesGlobOrDescendant(rel, stripped)
+      CompiledPattern.Relative(globOrDescendantMatchers(stripped))
 
-  /** Returns true if `target` matches `glob` exactly or is a descendant of a match.
-    * For patterns starting with `**​/`, also tries matching without the prefix
-    * so that e.g. `**​/secrets` matches a bare `secrets` at the root level.
-    */
-  private def matchesGlobOrDescendant(target: Path, glob: String): Boolean =
+  private def matchesCompiled(compiled: CompiledPattern, p: Path): Boolean =
+    compiled match
+      case CompiledPattern.Component(matcher) =>
+        val count = p.getNameCount
+        var i = 0
+        var found = false
+        while i < count && !found do
+          if matcher.matches(p.getName(i)) then found = true
+          i += 1
+        found
+      case CompiledPattern.Absolute(matchers) =>
+        matchers.exists(_.matches(p))
+      case CompiledPattern.Relative(matchers) =>
+        matchers.exists(_.matches(normalizedRoot.relativize(p)))
+
+  /** Precompiled matchers accepting a `glob` exactly or any descendant of a
+    * match. For globs starting with `**​/`, leading-`**​/` stripped variants are
+    * precompiled too (Java's `**` does not match zero leading directories, so
+    * `**​/secrets` must also be tried as `secrets`); expanding them here avoids
+    * the per-check retry recursion. */
+  private def globOrDescendantMatchers(glob: String): List[java.nio.file.PathMatcher] =
     val fs = FileSystems.getDefault.nn
-    if fs.getPathMatcher(s"glob:$glob").matches(target) then return true
-    if fs.getPathMatcher(s"glob:$glob/**").matches(target) then return true
-    // Java's ** doesn't match zero directories at the start, so strip leading **/
-    // and retry: **/secrets should match bare "secrets"
-    if glob.startsWith("**/") then
-      val rest = glob.stripPrefix("**/")
-      matchesGlobOrDescendant(target, rest)
-    else false
+    def variants(g: String): List[String] =
+      if g.startsWith("**/") then g :: variants(g.stripPrefix("**/"))
+      else List(g)
+    variants(glob).flatMap: g =>
+      List(fs.getPathMatcher(s"glob:$g"), fs.getPathMatcher(s"glob:$g/**"))
 
   // For absolute glob patterns, resolve the longest non-glob prefix through symlinks.
   // E.g., /tmp/secrets/*/keys → /private/tmp/secrets/*/keys on macOS.
@@ -111,4 +133,17 @@ abstract class BaseFileSystem extends FileSystem:
     if !isClassifiedPath(p) then
       throw SecurityException(
         s"Access denied: '$op' is only allowed on classified paths, but $p is not classified."
+      )
+
+  /** Whether classified writes are permitted through this file system. Set
+    * from the server config (`classifiedWrite`, default true) by
+    * [[InterfaceImpl]]. Enforced on `FileEntry.writeClassified` so the
+    * entry-level path cannot bypass the interface-level gate. */
+  protected def classifiedWriteEnabled: Boolean = true
+
+  protected final def requireClassifiedWritable(p: Path, op: String): Unit =
+    requireClassified(p, op)
+    if !classifiedWriteEnabled then
+      throw SecurityException(
+        s"Access denied: '$op' is disabled by the server configuration (classifiedWrite = false)"
       )

@@ -100,6 +100,14 @@ class LibraryConfigSuite extends munit.FunSuite:
     val cfg = LibraryConfig.fromJson("""{"strictMode": true}""")
     assertEquals(cfg.networkPermissions, None)
 
+  test("parses classifiedWrite"):
+    assertEquals(LibraryConfig.fromJson("""{"classifiedWrite": false}""").classifiedWrite, Some(false))
+    assertEquals(LibraryConfig.fromJson("""{"classifiedWrite": true}""").classifiedWrite, Some(true))
+
+  test("classifiedWrite defaults to None"):
+    val cfg = LibraryConfig.fromJson("""{"strictMode": true}""")
+    assertEquals(cfg.classifiedWrite, None)
+
   // ── LlmConfig toString hides API key ────────────────────────
 
   test("LlmConfig toString hides apiKey"):

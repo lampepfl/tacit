@@ -7,12 +7,14 @@ import scala.util.{Success, Failure}
 import java.nio.charset.StandardCharsets
 import java.nio.file.{Path, Paths}
 
-class VirtualFileSystem(
+class VirtualFileSystem private[library] (
   val root: String,
   check: String -> Boolean = _ => true,
   initialFiles: Map[String, String] = Map.empty,
-  protected val classifiedPatterns: Set[String] = Set.empty
+  protected val classifiedPatterns: Set[String] = Set.empty,
+  classifiedWrite: Boolean = true
 ) extends BaseFileSystem:
+  protected override val classifiedWriteEnabled: Boolean = classifiedWrite
   protected val normalizedRoot: Path = Paths.get(root).toAbsolutePath.normalize
   protected def pathCheck(relativePath: String): Boolean = check(relativePath)
   private val files: TrieMap[Path, Array[Byte]] = TrieMap.empty
@@ -120,7 +122,7 @@ class VirtualFileSystem(
       ClassifiedImpl.wrap(String(bytes, StandardCharsets.UTF_8))
 
     def writeClassified(content: Classified[String]): Unit =
-      requireClassified(resolved, "writeClassified")
+      requireClassifiedWritable(resolved, "writeClassified")
       ClassifiedImpl.unwrap(content) match
         case Success(value) =>
           ensureParentDirs(resolved)

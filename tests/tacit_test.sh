@@ -294,6 +294,46 @@ echo "--- cached_release_matches ---"
 )
 
 # ---------------------------------------------------------------------------
+# cached_jars_match_digests
+# ---------------------------------------------------------------------------
+
+echo "--- cached_jars_match_digests ---"
+
+cached_jars_block() {
+  TEST_TMP="$(mktemp -d)"
+  trap 'rm -rf "$TEST_TMP"' EXIT
+
+  CACHE_DIR="$TEST_TMP/cache"
+  mkdir -p "$CACHE_DIR"
+  echo "server content" > "$CACHE_DIR/TACIT.jar"
+  echo "library content" > "$CACHE_DIR/TACIT-library.jar"
+  jar_hash="$(sha256_of "$CACHE_DIR/TACIT.jar")"
+  lib_hash="$(sha256_of "$CACHE_DIR/TACIT-library.jar")"
+
+  info="$(printf 'TACIT.jar\thttps://x/TACIT.jar\tsha256:%s\nTACIT-library.jar\thttps://x/TACIT-library.jar\tsha256:%s\n' \
+    "$jar_hash" "$lib_hash")"
+
+  assert_succeeds "trusts cache when jars match digests" \
+    cached_jars_match_digests "$info"
+
+  # Tampered cached jar must be rejected (so the caller re-downloads)
+  echo "tampered" > "$CACHE_DIR/TACIT.jar"
+  assert_fails "rejects cache when a jar is tampered" \
+    cached_jars_match_digests "$info"
+
+  # No digests in metadata: keep old behavior and trust the cache
+  info_nodigest="$(printf 'TACIT.jar\thttps://x/TACIT.jar\t\nTACIT-library.jar\thttps://x/TACIT-library.jar\t\n')"
+  assert_succeeds "trusts cache when digests are missing" \
+    cached_jars_match_digests "$info_nodigest"
+
+  [[ "$fail_count" -eq 0 ]]
+}
+
+# run_block is defined below (next to the remove_profile_path tests); call it
+# lazily through a wrapper so definition order does not matter.
+run_cached_jars_block() { run_block "cached_jars_match_digests block" cached_jars_block; }
+
+# ---------------------------------------------------------------------------
 # remove_profile_path
 # ---------------------------------------------------------------------------
 
@@ -347,13 +387,64 @@ PROF
   assert_eq "profile without markers unchanged" "$before" "$after"
 )
 
+# A subshell assertion block that must be able to fail the suite:
+# assert_* counters do not propagate out of a subshell, so each block ends
+# with a fail_count check and the parent counts a failed block once.
+run_block() {
+  local label="$1" rc=0
+  shift
+  ( "$@" ) || rc=$?
+  if [[ "$rc" -ne 0 ]]; then
+    echo "  FAIL: ${label} (subshell block had failures)"
+    ((fail_count++)) || true
+  fi
+}
+
+remove_profile_missing_end_marker_block() {
+  TEST_HOME="$(mktemp -d)"
+  trap 'rm -rf "$TEST_HOME"' EXIT
+  HOME="$TEST_HOME"
+  SHELL=/bin/bash
+
+  # Profile with the begin marker but NO end marker
+  profile="$TEST_HOME/.bashrc"
+  cat > "$profile" <<PROF
+# existing config
+alias ll='ls -la'
+
+# >>> tacit path >>>
+case ":\$PATH:" in
+  *) export PATH="\$HOME/.local/bin:\$PATH" ;;
+esac
+
+# trailing config must survive
+export EDITOR=vim
+PROF
+
+  before="$(cat "$profile")"
+  warn_output="$(remove_profile_path 2>&1)"
+  after="$(cat "$profile")"
+
+  assert_eq "profile with missing end marker left intact" "$before" "$after"
+  assert_contains "trailing config after begin marker preserved" "EDITOR=vim" "$after"
+  assert_contains "warns about missing end marker" "no end marker" "$warn_output"
+
+  [[ "$fail_count" -eq 0 ]]
+}
+
+run_block "remove_profile_path missing-end-marker block" \
+  remove_profile_missing_end_marker_block
+
+# Defined earlier, next to the cached_release_matches tests.
+run_cached_jars_block
+
 # ---------------------------------------------------------------------------
 # verify_jar
 # ---------------------------------------------------------------------------
 
 echo "--- verify_jar ---"
 
-(
+verify_jar_block() {
   TEST_TMP="$(mktemp -d)"
   trap 'rm -rf "$TEST_TMP"' EXIT
 
@@ -365,18 +456,50 @@ echo "--- verify_jar ---"
   assert_succeeds "passes with correct digest" \
     verify_jar "$TEST_TMP/test.jar" "sha256:${real_hash}"
 
-  # Wrong digest
+  ok_output="$(verify_jar "$TEST_TMP/test.jar" "sha256:${real_hash}" 2>&1)"
+  assert_contains "success message says verified" "verified" "$ok_output"
+
+  # Wrong digest (tampered jar)
   assert_fails "fails with wrong digest" \
     verify_jar "$TEST_TMP/test.jar" "sha256:0000000000000000000000000000000000000000000000000000000000000000"
 
-  # Empty digest (older releases without digest)
-  assert_succeeds "passes with empty digest" \
+  # Empty digest: fail closed, never install an unverified jar
+  assert_fails "fails with empty digest" \
     verify_jar "$TEST_TMP/test.jar" ""
 
-  # Unknown digest format
-  output="$(verify_jar "$TEST_TMP/test.jar" "md5:abc123" 2>&1)"
-  assert_contains "skips unrecognised digest format" "unrecognised" "$output"
-)
+  missing_output="$(verify_jar "$TEST_TMP/test.jar" "" 2>&1)" || true
+  assert_contains "missing digest error is clear" "no digest in release metadata" "$missing_output"
+
+  # Unknown digest format: fail closed
+  assert_fails "fails on unrecognised digest format" \
+    verify_jar "$TEST_TMP/test.jar" "md5:abc123"
+
+  badfmt_output="$(verify_jar "$TEST_TMP/test.jar" "md5:abc123" 2>&1)" || true
+  assert_contains "unrecognised digest error is clear" "unrecognised digest format" "$badfmt_output"
+
+  # Truncated/short hex digest: fail closed
+  assert_fails "fails on short hex digest" \
+    verify_jar "$TEST_TMP/test.jar" "sha256:abc123"
+
+  # No sha256 tool available (simulate via a PATH without sha256sum/shasum)
+  NOSHA_BIN="$TEST_TMP/nosha-bin"
+  mkdir -p "$NOSHA_BIN"
+  ln -s "$(command -v basename)" "$NOSHA_BIN/basename"
+  nosha_rc=0
+  nosha_output="$(PATH="$NOSHA_BIN" verify_jar "$TEST_TMP/test.jar" "sha256:${real_hash}" 2>&1)" || nosha_rc=$?
+  if [[ "$nosha_rc" -ne 0 ]]; then
+    echo "  PASS: fails when no sha256 tool available (exit $nosha_rc)"
+    ((pass_count++)) || true
+  else
+    echo "  FAIL: fails when no sha256 tool available (expected non-zero exit, got 0)"
+    ((fail_count++)) || true
+  fi
+  assert_contains "no-sha256-tool error is actionable" "coreutils" "$nosha_output"
+
+  [[ "$fail_count" -eq 0 ]]
+}
+
+run_block "verify_jar block" verify_jar_block
 
 # ---------------------------------------------------------------------------
 # main dispatch
@@ -401,6 +524,42 @@ assert_fails "bare uninstall gives migration message" main uninstall
 
 self_help="$(main self help 2>&1)"
 assert_contains "self help shows usage" "Usage:" "$self_help"
+
+# ---------------------------------------------------------------------------
+# download_release.sh extract_assets (jq path, reordered JSON fields)
+# ---------------------------------------------------------------------------
+
+echo "--- download_release.sh extract_assets (jq) ---"
+
+dlr_jq_block() {
+  source "$REPO_ROOT/download_release.sh"
+
+  # browser_download_url before digest/name: the jq parser must still pair
+  # each asset's name, url and digest correctly.
+  reordered_json='{
+    "assets": [
+      {"browser_download_url": "https://example.com/TACIT.jar", "digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "name": "TACIT.jar"},
+      {"digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "name": "TACIT-library.jar", "browser_download_url": "https://example.com/TACIT-library.jar"}
+    ]
+  }'
+
+  parsed="$(extract_assets "$reordered_json")"
+
+  assert_contains "reordered: TACIT.jar row intact" \
+    "$(printf 'TACIT.jar\thttps://example.com/TACIT.jar\tsha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')" \
+    "$parsed"
+  assert_contains "reordered: TACIT-library.jar row intact" \
+    "$(printf 'TACIT-library.jar\thttps://example.com/TACIT-library.jar\tsha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb')" \
+    "$parsed"
+
+  [[ "$fail_count" -eq 0 ]]
+}
+
+if command -v jq >/dev/null 2>&1; then
+  run_block "download_release.sh jq reordered-fields block" dlr_jq_block
+else
+  echo "  SKIP: jq not available, skipping jq parser test"
+fi
 
 # ---------------------------------------------------------------------------
 # Results

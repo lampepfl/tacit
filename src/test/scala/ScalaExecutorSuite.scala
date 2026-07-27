@@ -89,16 +89,21 @@ class ScalaExecutorSuite extends munit.FunSuite:
 
   test("runtime exception is caught and reported"):
     val result = ScalaExecutor.execute("""throw new RuntimeException("boom")""")
-    assert(!result.success || result.output.contains("RuntimeException") || result.error.isDefined)
+    // A runtime throw is not a compile error: the REPL catches it, prints the
+    // stack trace to the captured output, and the execution itself completes.
+    assert(result.success, s"expected successful execution, got error: ${result.error}")
+    assert(result.output.contains("RuntimeException") && result.output.contains("boom"),
+      s"expected stack trace in output, got: ${result.output}")
 
   test("empty code does not crash"):
     val result = ScalaExecutor.execute("")
-    // Should not throw; success with empty or minimal output
-    assert(result != null)
+    assert(result.success, s"got error: ${result.error}")
+    assert(result.error.isEmpty)
 
   test("whitespace-only code does not crash"):
     val result = ScalaExecutor.execute("   \n\n  ")
-    assert(result != null)
+    assert(result.success, s"got error: ${result.error}")
+    assert(result.error.isEmpty)
 
   // ── Language features ───────────────────────────────────────────
 
@@ -186,7 +191,7 @@ class ScalaExecutorSuite extends munit.FunSuite:
   // TODO: try to enable this test after https://github.com/scala/scala3/pull/25789
   // test(":type returns type information"):
   //   val manager = new SessionManager
-  //   val sid = manager.createSession()
+  //   val sid = manager.createSession().getOrElse(err => fail(err))
   //   manager.executeInSession(sid, "val x = 42")
   //   val result = manager.executeInSession(sid, ":type x")
   //   assert(result.success, s"':type x' should succeed, got error: ${result.error}")

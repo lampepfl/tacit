@@ -9,8 +9,14 @@ import io.circe.*
 import io.circe.parser.*
 import io.circe.syntax.*
 
-import java.io.PrintWriter
+import java.io.{BufferedReader, InputStreamReader, PrintWriter}
+import java.nio.charset.StandardCharsets
 import scala.util.control.NonFatal
+
+/** Maximum accepted stdin line length, in characters (~16 MiB). JSON-RPC
+  * messages arrive one per line; an unbounded read would let a single
+  * multi-GB line exhaust server memory before parsing even starts. */
+private val MaxLineChars = 16 * 1024 * 1024
 
 /** TACIT — a Model Context Protocol server for safe Scala code execution. */
 @main def StartMCP(args: String*): Unit =
@@ -25,19 +31,62 @@ import scala.util.control.NonFatal
     case None => ()  // errors already displayed by the parser
     case Some(config) => usingContext(config):
       val server = McpServer()
-      val stdinLines = scala.io.Source.fromInputStream(System.in).getLines()
+      val reader = new BufferedReader(new InputStreamReader(System.in, StandardCharsets.UTF_8))
       val writer = PrintWriter(jsonRpcOut, true)
 
       if !config.quiet then printStartupBanner(config)
 
       try
-        for line <- stdinLines if line.trim.nonEmpty do
-          try handleLine(line, writer, server)
-          catch
-            case NonFatal(e) =>
-              error(s"Request failed: ${e.getMessage}")
-              e.printStackTrace(System.err)
+        var running = true
+        while running do
+          readBoundedLine(reader, MaxLineChars) match
+            case None =>
+              running = false
+            case Some(Left(())) =>
+              // Over-long line: the prefix was discarded up to the newline, so
+              // the stream is positioned at the next request. The id is
+              // unknowable here — respond with `id: null` and keep serving.
+              sendResponse(writer, JsonRpcResponse.error(None, JsonRpcError.ParseError,
+                s"Parse error: request exceeds the $MaxLineChars-character line limit"))
+            case Some(Right(line)) =>
+              if line.trim.nonEmpty then
+                try handleLine(line, writer, server)
+                catch
+                  case NonFatal(e) =>
+                    // The response path itself failed (e.g. broken pipe); no
+                    // response can be sent, so just log and keep the loop alive.
+                    error(s"Failed to handle request: ${e.getMessage}")
+                    e.printStackTrace(System.err)
       finally log("Server shutting down...")
+
+/** Read one line from `reader`, retaining at most `limit` characters.
+  *
+  * Returns `None` on EOF (no characters seen), `Some(Right(line))` for a
+  * normal line, and `Some(Left(()))` when the line exceeded the limit — in
+  * that case the over-long prefix is discarded and reading resumes after the
+  * terminating newline, so the stream stays in sync. A trailing `\r` (CRLF)
+  * is not included in the returned line.
+  */
+private def readBoundedLine(reader: BufferedReader, limit: Int): Option[Either[Unit, String]] =
+  val sb = StringBuilder()
+  var overflow = false
+  var sawAny = false
+  var done = false
+  while !done do
+    reader.read() match
+      case -1 =>
+        done = true
+      case '\n' =>
+        sawAny = true
+        done = true
+      case c =>
+        sawAny = true
+        if c != '\r' then
+          if !overflow && sb.length >= limit then overflow = true
+          if !overflow then sb.append(c.toChar)
+  if !sawAny then None
+  else if overflow then Some(Left(()))
+  else Some(Right(sb.toString))
 
 private def handleLine(line: String, writer: PrintWriter, server: McpServer)(using Context): Unit =
   log(s"Received: ${line.take(200)}...")
@@ -47,10 +96,21 @@ private def handleLine(line: String, writer: PrintWriter, server: McpServer)(usi
         s"Parse error: ${err.message}"))
     case Right(json) => json.as[JsonRpcRequest] match
       case Left(err) =>
-        sendResponse(writer, JsonRpcResponse.error(None, JsonRpcError.InvalidRequest,
+        // Best-effort id recovery so the client can correlate the error;
+        // absent or explicit-null ids serialize as `"id": null` per spec.
+        val id = json.hcursor.downField("id").focus.filterNot(_.isNull)
+        sendResponse(writer, JsonRpcResponse.error(id, JsonRpcError.InvalidRequest,
           s"Invalid request: ${err.message}"))
       case Right(request) =>
-        server.handleRequest(request).foreach(sendResponse(writer, _))
+        try server.handleRequest(request).foreach(sendResponse(writer, _))
+        catch
+          case NonFatal(e) =>
+            // Never leave the client hanging: report the failure as a JSON-RPC
+            // internal error tied to the request id.
+            error(s"Request failed: ${e.getMessage}")
+            e.printStackTrace(System.err)
+            sendResponse(writer, JsonRpcResponse.error(request.id, JsonRpcError.InternalError,
+              s"Internal error: ${e.getMessage}"))
 
 private def printStartupBanner(config: Config): Unit =
   val jarPath = scala.util.Try(
@@ -61,7 +121,7 @@ private def printStartupBanner(config: Config): Unit =
     case Some(dir) => s"Recording: ON -> $dir"
     case None      => "Recording: OFF"
   val sessionStatus = if config.sessionEnabled then "Sessions:  ON" else "Sessions:  OFF"
-  val libConfigStr = config.libraryConfig.spaces2
+  val libConfigStr = config.redactedLibraryConfig.spaces2
     .linesIterator.map(l => s"             $l").mkString("\n")
   System.err.println(
     s"""
@@ -82,4 +142,3 @@ private def sendResponse(writer: PrintWriter, response: JsonRpcResponse)(using C
   log(s"Sending: ${json.take(200)}...")
   writer.println(json)
   writer.flush()
-

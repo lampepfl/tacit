@@ -45,9 +45,23 @@ class McpServer(using Context):
   private inline def recorder: Option[CodeRecorder] = ctx.recorder
   private inline def sessionEnabled: Boolean = ctx.config.sessionEnabled
 
-  /** Handle a JSON-RPC request and return a response */
+  /** Handle a JSON-RPC request and return a response.
+    *
+    * Notifications (requests without an `id`) never produce a response, per
+    * JSON-RPC 2.0. Requests whose `jsonrpc` field is not `"2.0"` are rejected
+    * with an Invalid Request error.
+    */
   def handleRequest(request: JsonRpcRequest): Option[JsonRpcResponse] =
-    request.method match
+    if request.jsonrpc != "2.0" then
+      Some(JsonRpcResponse.error(
+        request.id,
+        JsonRpcError.InvalidRequest,
+        s"Invalid JSON-RPC version: expected \"2.0\", got \"${request.jsonrpc}\""
+      ))
+    else if request.id.isEmpty then
+      // Notification — a response is never sent, whatever the method.
+      None
+    else request.method match
       case "initialize" =>
         handleInitialize(request)
       case "notifications/initialized" | "initialized" =>
@@ -76,7 +90,9 @@ class McpServer(using Context):
     val result = InitializeResult(
       protocolVersion = ProtocolVersion,
       capabilities = ServerCapabilities(
-        tools = Some(ToolsCapability(listChanged = Some(true)))
+        // listChanged is false: the tool set is static and no
+        // notifications/tools/list_changed is ever sent.
+        tools = Some(ToolsCapability(listChanged = Some(false)))
       ),
       serverInfo = ServerInfo(
         name = s"${BuildInfo.name} MCP",
@@ -137,10 +153,10 @@ class McpServer(using Context):
       formatExecutionResult(result)
   
   private def createReplSession(): Either[String, CallToolResult] =
-    val sessionId = sessionManager.createSession()
-    Right(CallToolResult(
-      content = List(TextContent(s"Created REPL session: $sessionId"))
-    ))
+    sessionManager.createSession().map: sessionId =>
+      CallToolResult(
+        content = List(TextContent(s"Created REPL session: $sessionId"))
+      )
   
   private def deleteReplSession(arguments: Option[Json]): Either[String, CallToolResult] =
     for

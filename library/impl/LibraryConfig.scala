@@ -10,7 +10,8 @@ case class LibraryConfig(
   commandPermissions: Option[Set[String]] = None,
   networkPermissions: Option[Set[String]] = None,
   llm: Option[LlmConfig] = None,
-  secureOutput: Option[String] = None
+  secureOutput: Option[String] = None,
+  classifiedWrite: Option[Boolean] = None
 ) derives Decoder
 
 object LibraryConfig:

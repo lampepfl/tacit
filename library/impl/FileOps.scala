@@ -23,7 +23,9 @@ object FileOps:
     val matcher = FileSystems.getDefault.nn.getPathMatcher(s"glob:$glob")
     val regex = pattern.r
     dirEntry.walk().flatMap: entry =>
-      if entry.isDirectory then Nil
+      // Classified files are silently skipped (their content is never read);
+      // single-file `grep` stays fail-closed instead.
+      if entry.isDirectory || entry.isClassified then Nil
       else
         val p = Paths.get(entry.path)
         if matcher.matches(p.getFileName) then grepEntry(entry, regex)

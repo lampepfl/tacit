@@ -63,7 +63,7 @@ lazy val lib = project
         || x.endsWith(".DSA") || x.endsWith(".RSA") => MergeStrategy.discard
       case PathList("META-INF", _*)              => MergeStrategy.first
       case "module-info.class"                   => MergeStrategy.discard
-      case x if x.endsWith(".tasty") => MergeStrategy.first
+      case x if x.endsWith(".tasty") => MergeStrategy.deduplicate
       case x =>
         val oldStrategy = (assembly / assemblyMergeStrategy).value
         oldStrategy(x)
@@ -145,7 +145,7 @@ lazy val root = project
         || x.endsWith(".DSA") || x.endsWith(".RSA") => MergeStrategy.discard
       case PathList("META-INF", _*)              => MergeStrategy.first
       case "module-info.class"                   => MergeStrategy.discard
-      case x if x.endsWith(".tasty") => MergeStrategy.first
+      case x if x.endsWith(".tasty") => MergeStrategy.deduplicate
       case x =>
         val oldStrategy = (assembly / assemblyMergeStrategy).value
         oldStrategy(x)

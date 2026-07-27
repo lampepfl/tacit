@@ -4,17 +4,20 @@ import tacit.core.{Context, Config}
 class SessionManagerSuite extends munit.FunSuite:
   given Context = Context(Config(), None)
 
+  private def newSession(manager: SessionManager): String =
+    manager.createSession().fold(err => fail(s"session creation failed: $err"), identity)
+
   // ── CRUD ───────────────────────────────────────────────────────────
 
   test("create and list sessions"):
     val manager = new SessionManager
-    val sessionId = manager.createSession()
+    val sessionId = newSession(manager)
     assert(sessionId.nonEmpty)
     assert(manager.listSessions().contains(sessionId))
 
   test("delete session"):
     val manager = new SessionManager
-    val sessionId = manager.createSession()
+    val sessionId = newSession(manager)
     assert(manager.deleteSession(sessionId))
     assert(!manager.listSessions().contains(sessionId))
 
@@ -24,7 +27,7 @@ class SessionManagerSuite extends munit.FunSuite:
 
   test("execute in session maintains state"):
     val manager = new SessionManager
-    val sessionId = manager.createSession()
+    val sessionId = newSession(manager)
 
     // Define a variable
     val result1 = manager.executeInSession(sessionId, "val x = 42")
@@ -44,8 +47,8 @@ class SessionManagerSuite extends munit.FunSuite:
 
   test("sessions are isolated from each other"):
     val manager = new SessionManager
-    val s1 = manager.createSession()
-    val s2 = manager.createSession()
+    val s1 = newSession(manager)
+    val s2 = newSession(manager)
     manager.executeInSession(s1, "val x = 1")
     manager.executeInSession(s2, "val x = 2")
     val r1 = manager.executeInSession(s1, "x")
@@ -55,7 +58,7 @@ class SessionManagerSuite extends munit.FunSuite:
 
   test("execute in deleted session returns error"):
     val manager = new SessionManager
-    val sessionId = manager.createSession()
+    val sessionId = newSession(manager)
     manager.deleteSession(sessionId)
     val result = manager.executeInSession(sessionId, "1 + 1")
     assert(!result.success)
@@ -63,20 +66,20 @@ class SessionManagerSuite extends munit.FunSuite:
 
   test("re-delete already deleted session returns false"):
     val manager = new SessionManager
-    val sessionId = manager.createSession()
+    val sessionId = newSession(manager)
     assert(manager.deleteSession(sessionId))
     assert(!manager.deleteSession(sessionId))
 
   test("multiple sessions listed correctly"):
     val manager = new SessionManager
-    val ids = (1 to 3).map(_ => manager.createSession()).toSet
+    val ids = (1 to 3).map(_ => newSession(manager)).toSet
     val listed = manager.listSessions().toSet
     assertEquals(listed, ids)
 
   test("delete one session does not affect others"):
     val manager = new SessionManager
-    val s1 = manager.createSession()
-    val s2 = manager.createSession()
+    val s1 = newSession(manager)
+    val s2 = newSession(manager)
     manager.executeInSession(s1, "val a = 10")
     manager.executeInSession(s2, "val b = 20")
     manager.deleteSession(s1)
@@ -90,7 +93,7 @@ class SessionManagerSuite extends munit.FunSuite:
 
   test("session preserves imports across calls"):
     val manager = new SessionManager
-    val sid = manager.createSession()
+    val sid = newSession(manager)
     manager.executeInSession(sid, "import java.time.LocalDate")
     val result = manager.executeInSession(sid, "LocalDate.of(2025, 1, 1).getYear")
     assert(result.success)
@@ -98,7 +101,7 @@ class SessionManagerSuite extends munit.FunSuite:
 
   test("session preserves function definitions"):
     val manager = new SessionManager
-    val sid = manager.createSession()
+    val sid = newSession(manager)
     manager.executeInSession(sid, "def double(n: Int): Int = n * 2")
     val result = manager.executeInSession(sid, "double(21)")
     assert(result.success)
@@ -106,7 +109,7 @@ class SessionManagerSuite extends munit.FunSuite:
 
   test("session handles compile error without corrupting state"):
     val manager = new SessionManager
-    val sid = manager.createSession()
+    val sid = newSession(manager)
     val r1 = manager.executeInSession(sid, "val good = 42")
     assert(r1.success)
     val r2 = manager.executeInSession(sid, "val bad: Int = \"not an int\"")
@@ -114,3 +117,17 @@ class SessionManagerSuite extends munit.FunSuite:
     val r3 = manager.executeInSession(sid, "good")
     assert(r3.success)
     assert(r3.output.contains("42"))
+
+  // ── Session cap ─────────────────────────────────────────────────
+
+  test("session cap rejects creation beyond the limit"):
+    val manager = new SessionManager(maxSessions = 2)
+    val s1 = newSession(manager)
+    newSession(manager)
+    val third = manager.createSession()
+    assert(third.isLeft, s"expected cap rejection but got: $third")
+    assert(third.left.toOption.exists(_.contains("Session limit reached")),
+      s"expected a clear cap error but got: $third")
+    // Deleting a session frees a slot again.
+    assert(manager.deleteSession(s1))
+    assert(manager.createSession().isRight)

@@ -177,7 +177,22 @@ class LibrarySuite extends munit.FunSuite:
     requestExecPermission(Set("echo")) {
       val result = exec("echo", List("hello", "world"))
       assertEquals(result.exitCode, 0)
-      assertEquals(result.stdout, "hello world")
+      // Output capture is byte-exact: the trailing newline is preserved.
+      assertEquals(result.stdout, "hello world\n")
+    }
+  }
+
+  test("exec caps captured output at 8 MiB per stream") {
+    // `seq 1 2000000` emits ~15 MB; beyond 8 MiB the output is drained (so the
+    // process never blocks) but discarded, with a truncation marker appended.
+    requestExecPermission(Set("seq")) {
+      val result = exec("seq", List("1", "2000000"), timeoutMs = 60000)
+      assertEquals(result.exitCode, 0)
+      assert(
+        result.stdout.endsWith("...[truncated: output exceeded 8 MiB cap]..."),
+        s"expected truncation marker, got tail: ${result.stdout.takeRight(80)}"
+      )
+      assert(result.stdout.length <= 8 * 1024 * 1024 + 100)
     }
   }
 
@@ -419,6 +434,105 @@ class LibrarySuite extends munit.FunSuite:
       api.requestFileSystem(parent.toString) { api.access(parent.resolve("x").toString).read() }
     }
     assert(ex.getMessage.nn.contains("not within any allowed root"))
+  }
+
+  // ── grepRecursive: classified files are skipped, not fatal ──
+
+  test("grepRecursive silently skips classified files and still returns other matches") {
+    val secretDir = tmpDir.resolve("secret")
+    Files.createDirectories(secretDir)
+    val classifiedInterface: Interface^ = new InterfaceImpl(
+      """{"strictMode": false, "classifiedPaths": ["secret"], "allowedRoots": ["/"]}"""
+    ) {
+      override def createFS(root: String, filter: String -> Boolean, classifiedPatterns: Set[String]): FileSystem =
+        new RealFileSystem(root, filter, classifiedPatterns)
+    }
+    classifiedInterface.requestFileSystem(tmpDir.toString) {
+      classifiedInterface.access(tmpDir.resolve("public.txt").toString).write("needle visible")
+      classifiedInterface.access(secretDir.resolve("hidden.txt").toString)
+        .writeClassified(classifiedInterface.classify("needle hidden"))
+      // Must not throw, and must not read the classified file's content.
+      val matches = classifiedInterface.grepRecursive(tmpDir.toString, "needle")
+      assertEquals(matches.length, 1)
+      assert(matches.head.file.endsWith("public.txt"), s"unexpected matches: $matches")
+    }
+  }
+
+  test("grep still fails closed on a classified file") {
+    val secretDir = tmpDir.resolve("secret")
+    Files.createDirectories(secretDir)
+    val classifiedInterface: Interface^ = new InterfaceImpl(
+      """{"strictMode": false, "classifiedPaths": ["secret"], "allowedRoots": ["/"]}"""
+    ) {
+      override def createFS(root: String, filter: String -> Boolean, classifiedPatterns: Set[String]): FileSystem =
+        new RealFileSystem(root, filter, classifiedPatterns)
+    }
+    classifiedInterface.requestFileSystem(tmpDir.toString) {
+      classifiedInterface.access(secretDir.resolve("hidden.txt").toString)
+        .writeClassified(classifiedInterface.classify("needle hidden"))
+      intercept[SecurityException] {
+        classifiedInterface.grep(secretDir.resolve("hidden.txt").toString, "needle")
+      }
+    }
+  }
+
+  // ── classifiedWrite gate ──────────────────────────────────────
+
+  test("classifiedWrite = false blocks writeClassified at both interface and entry level") {
+    val secretDir = tmpDir.resolve("secret")
+    Files.createDirectories(secretDir)
+    val gated: Interface^ = new InterfaceImpl(
+      """{"strictMode": false, "classifiedPaths": ["secret"], "allowedRoots": ["/"], "classifiedWrite": false}"""
+    ) {
+      override def createFS(root: String, filter: String -> Boolean, classifiedPatterns: Set[String]): FileSystem =
+        new RealFileSystem(root, filter, classifiedPatterns, classifiedWrite = false)
+    }
+    gated.requestFileSystem(tmpDir.toString) {
+      val ex1 = intercept[SecurityException] {
+        gated.writeClassified(secretDir.resolve("a.txt").toString, gated.classify("x"))
+      }
+      assert(ex1.getMessage.nn.contains("classifiedWrite"), ex1.getMessage)
+      // The entry-level path must be gated too, not just the interface-level one.
+      val ex2 = intercept[SecurityException] {
+        gated.access(secretDir.resolve("b.txt").toString).writeClassified(gated.classify("x"))
+      }
+      assert(ex2.getMessage.nn.contains("classifiedWrite"), ex2.getMessage)
+    }
+  }
+
+  test("classifiedWrite defaults to true when unset") {
+    val secretDir = tmpDir.resolve("secret")
+    Files.createDirectories(secretDir)
+    val open: Interface^ = new InterfaceImpl(
+      """{"strictMode": false, "classifiedPaths": ["secret"], "allowedRoots": ["/"]}"""
+    ) {
+      override def createFS(root: String, filter: String -> Boolean, classifiedPatterns: Set[String]): FileSystem =
+        new RealFileSystem(root, filter, classifiedPatterns)
+    }
+    open.requestFileSystem(tmpDir.toString) {
+      open.writeClassified(secretDir.resolve("ok.txt").toString, open.classify("data"))
+      assertEquals(Files.readString(secretDir.resolve("ok.txt")).nn, "data")
+    }
+  }
+
+  // ── secureOutput hardening ────────────────────────────────────
+
+  test("secureOutput: different spellings of the same file share one writer") {
+    val w1 = InterfaceImpl.secureWriterFor(tmpDir.resolve("spell-secure.log").toString)
+    val w2 = InterfaceImpl.secureWriterFor(tmpDir.resolve("sub/../spell-secure.log").toString)
+    assert(w1 eq w2, "canonical paths should share a single PrintStream")
+  }
+
+  test("secureOutput: newly created file is owner-only on POSIX filesystems") {
+    val secureFile = tmpDir.resolve("posix-secure.log")
+    InterfaceImpl.secureWriterFor(secureFile.toString)
+    try
+      val perms = Files.getPosixFilePermissions(secureFile)
+      assertEquals(
+        perms,
+        java.nio.file.attribute.PosixFilePermissions.fromString("rw-------")
+      )
+    catch case _: UnsupportedOperationException => () // non-POSIX filesystem: nothing to check
   }
 
   // --- Compile-time capability leak examples ---

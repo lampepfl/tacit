@@ -124,7 +124,18 @@ object CodeValidator:
     * Newlines are preserved and every input char maps to exactly one output char,
     * so reported line numbers stay correct.
     */
-  def stripLiteralsAndComments(code: String): String =
+  def stripLiteralsAndComments(code: String): String = strip(code, blankComments = true)
+
+  /** Strip string literals (and char literals) but KEEP comment text.
+    *
+    * Used for the `//> using` / `import $` directive patterns: directives
+    * live *inside* comments, so a comment-blanking strip would erase the very
+    * text they look for — yet the same directive appearing inside a string
+    * literal is inert data and must not be flagged.
+    */
+  def stripStringLiteralsOnly(code: String): String = strip(code, blankComments = false)
+
+  private def strip(code: String, blankComments: Boolean): String =
     val sb = StringBuilder(code.length)
     val len = code.length
     // A frame is either code (`isString=false`; `fromInterp` ⇒ a balanced `}`
@@ -169,14 +180,20 @@ object CodeValidator:
           if triple then { blank('"'); blank('"'); blank('"'); i += 3 } else { blank('"'); i += 1 }
           stack.push(Frame(true, triple, interp, false))
         else if c == '/' && i + 1 < len && code.charAt(i + 1) == '/' then
-          while i < len && code.charAt(i) != '\n' do { blank(code.charAt(i)); i += 1 }
+          while i < len && code.charAt(i) != '\n' do
+            if blankComments then blank(code.charAt(i)) else emit(code.charAt(i))
+            i += 1
         else if c == '/' && i + 1 < len && code.charAt(i + 1) == '*' then
-          blank('/'); blank('*'); i += 2
+          if blankComments then { blank('/'); blank('*') } else { emit('/'); emit('*') }
+          i += 2
           var closed = false
           while i < len && !closed do
             if i + 1 < len && code.charAt(i) == '*' && code.charAt(i + 1) == '/' then
-              blank('*'); blank('/'); i += 2; closed = true
-            else { blank(code.charAt(i)); i += 1 }
+              if blankComments then { blank('*'); blank('/') } else { emit('*'); emit('/') }
+              i += 2; closed = true
+            else
+              if blankComments then blank(code.charAt(i)) else emit(code.charAt(i))
+              i += 1
         else if c == '{' then
           emit('{'); f.brace += 1; i += 1
         else if c == '}' then
@@ -187,8 +204,10 @@ object CodeValidator:
 
     sb.toString
 
-  /** Patterns that must be checked against the original (unstripped) code. */
-  private val originalCodePatterns: Set[String] = Set("directive-using", "directive-import")
+  /** Patterns that must see comment text (directives live in comments) but
+    * still ignore string-literal contents, so a directive quoted in a string
+    * is not flagged. Matched against [[stripStringLiteralsOnly]] output. */
+  private val stringStrippedPatterns: Set[String] = Set("directive-using", "directive-import")
 
   /** Squeeze whitespace around dots so `caps . unsafe` collapses to `caps.unsafe`.
    *  Scala allows spaces around member-access dots, but the forbidden patterns
@@ -231,14 +250,15 @@ object CodeValidator:
     val stripped = stripLiteralsAndComments(code)
     val originalLines = code.linesIterator.toArray
     val strippedLines = stripped.linesIterator.toArray
+    val stringStrippedLines = stripStringLiteralsOnly(code).linesIterator.toArray
     // Logical (dot-joined, squeezed) lines defeat whitespace/newline evasion;
-    // physical original lines back the directive patterns and the reported snippet.
+    // physical original lines back the reported snippet.
     val logical = logicalLines(strippedLines)
 
     for
       pattern <- forbiddenPatterns
-      lines = if originalCodePatterns.contains(pattern.id)
-              then originalLines.zipWithIndex.toList
+      lines = if stringStrippedPatterns.contains(pattern.id)
+              then stringStrippedLines.zipWithIndex.toList
               else logical
       (line, idx) <- lines
       if pattern.regex.findFirstIn(line).isDefined

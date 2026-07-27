@@ -119,7 +119,8 @@ ensure_cache_dir() {
 
 release_json() {
   local api_url="https://api.github.com/repos/${OWNER_REPO}/releases/latest"
-  local curl_args=(-fsSL -H "Accept: application/vnd.github+json")
+  local curl_args=(-sSL -H "Accept: application/vnd.github+json")
+  local response http_code body
 
   require_command curl
 
@@ -127,7 +128,22 @@ release_json() {
     curl_args+=(-H "Authorization: Bearer ${GITHUB_TOKEN}")
   fi
 
-  curl "${curl_args[@]}" "$api_url"
+  response="$(curl "${curl_args[@]}" -w $'\n%{http_code}' "$api_url")" \
+    || fail "failed to query the GitHub API at ${api_url}."
+  http_code="${response##*$'\n'}"
+  body="${response%$'\n'*}"
+
+  case "$http_code" in
+    2*) ;;
+    403)
+      fail "GitHub API returned 403 Forbidden for ${api_url}. You may be rate limited; set GITHUB_TOKEN to raise the rate limit."
+      ;;
+    *)
+      fail "GitHub API returned HTTP ${http_code} for ${api_url}."
+      ;;
+  esac
+
+  printf '%s\n' "$body"
 }
 
 extract_release_field() {
@@ -144,6 +160,39 @@ extract_release_id() {
 }
 
 extract_assets() {
+  local json="$1"
+
+  # Prefer jq when available: it parses JSON structurally and does not depend
+  # on field order within asset objects. Fall back to the grep state machine.
+  if command -v jq >/dev/null 2>&1; then
+    extract_assets_jq "$json"
+  else
+    extract_assets_grep "$json"
+  fi
+}
+
+extract_assets_jq() {
+  local json="$1"
+  local parsed
+
+  if ! parsed="$(printf '%s' "$json" | jq -r '
+    [ .assets[]?
+      | select(.name == "TACIT.jar" or .name == "TACIT-library.jar")
+      | "\(.name)\t\(.browser_download_url)\t\(.digest // "")"
+    ] | unique | .[]
+  ' 2>/dev/null)"; then
+    fail "failed to parse the latest release metadata with jq."
+  fi
+
+  printf '%s\n' "$parsed" | grep -qF $'TACIT.jar\t' \
+    || fail "required asset TACIT.jar not found in the latest release."
+  printf '%s\n' "$parsed" | grep -qF $'TACIT-library.jar\t' \
+    || fail "required asset TACIT-library.jar not found in the latest release."
+
+  printf '%s\n' "$parsed"
+}
+
+extract_assets_grep() {
   local json="$1"
   local library_url="" library_digest=""
   local assembly_url="" assembly_digest=""
@@ -203,7 +252,6 @@ sha256_of() {
   elif command -v shasum >/dev/null 2>&1; then
     shasum -a 256 "$1" | awk '{print $1}'
   else
-    echo "Warning: no sha256sum or shasum found, skipping checksum verification." >&2
     return 1
   fi
 }
@@ -214,25 +262,27 @@ verify_jar() {
 
   name="$(basename "$file")"
 
+  # Fail closed: a matched TACIT asset without a digest is exactly the
+  # tamper/corruption case we must not install.
   if [[ -z "$digest" ]]; then
-    echo "  ${name}: no digest in release metadata, skipping"
-    return 0
+    fail "no digest in release metadata for ${name}; refusing to install an unverified jar."
   fi
 
-  # digest format is "sha256:<hex>"
-  if [[ "$digest" =~ ^sha256:(.+)$ ]]; then
+  # digest format is "sha256:<64 hex chars>"
+  if [[ "$digest" =~ ^sha256:([0-9a-fA-F]{64})$ ]]; then
     expected="${BASH_REMATCH[1]}"
   else
-    echo "  ${name}: unrecognised digest format '${digest}', skipping"
-    return 0
+    fail "unrecognised digest format '${digest}' for ${name}; expected 'sha256:' followed by 64 hex characters."
   fi
 
-  actual="$(sha256_of "$file")" || return 0
+  if ! actual="$(sha256_of "$file")"; then
+    fail "cannot verify ${name}: no sha256 tool found. Install coreutils (sha256sum) or use macOS shasum."
+  fi
 
   if [[ "$actual" != "$expected" ]]; then
     fail "Checksum mismatch for ${name}: expected ${expected}, got ${actual}"
   fi
-  echo "  ${name}: OK"
+  echo "  ${name}: verified (sha256)"
 }
 
 cached_release_matches() {
@@ -240,6 +290,32 @@ cached_release_matches() {
 
   [[ -f "$SERVER_JAR" && -f "$LIBRARY_JAR" && -f "$RELEASE_MARKER" ]] || return 1
   [[ "$(cat "$RELEASE_MARKER")" == "$release_key" ]]
+}
+
+# Re-verify cached jars against the release digests before trusting them.
+# Returns 0 when the cache is trustworthy, 1 when it must be re-downloaded.
+# When digests are unavailable (or no sha256 tool exists), keep the old
+# behavior and trust the cache: this check must not add new failure modes.
+cached_jars_match_digests() {
+  local assets_info="$1"
+  local name _url digest expected actual
+
+  while IFS=$'\t' read -r name _url digest; do
+    [[ -n "$name" ]] || continue
+    # No digest in metadata: cannot do better than the old behavior.
+    [[ -n "$digest" ]] || return 0
+    if [[ "$digest" =~ ^sha256:([0-9a-fA-F]{64})$ ]]; then
+      expected="${BASH_REMATCH[1]}"
+    else
+      # Unusable digest format: treat the cache as stale and re-download.
+      return 1
+    fi
+    # No sha256 tool available: keep the old behavior and trust the cache.
+    actual="$(sha256_of "${CACHE_DIR}/${name}")" || return 0
+    [[ "$actual" == "$expected" ]] || return 1
+  done <<< "$assets_info"
+
+  return 0
 }
 
 download_latest_release() {
@@ -251,8 +327,13 @@ download_latest_release() {
   release_key="$(release_key_from_json "$json")"
 
   if cached_release_matches "$release_key"; then
-    echo "TACIT is already up to date in ${CACHE_DIR}."
-    return 0
+    local cached_assets_info
+    cached_assets_info="$(extract_assets "$json")"
+    if cached_jars_match_digests "$cached_assets_info"; then
+      echo "TACIT is already up to date in ${CACHE_DIR}."
+      return 0
+    fi
+    echo "Cached TACIT jars failed checksum verification; downloading again."
   fi
 
   tmp_dir="$(mktemp -d "${CACHE_DIR}/download.XXXXXX")"
@@ -430,6 +511,11 @@ remove_profile_path() {
     [[ -n "$file" && -f "$file" ]] || continue
     content="$(cat "$file")"
     [[ "$content" == *"$PATH_MARKER_BEGIN"* ]] || continue
+
+    if [[ "$content" != *"$PATH_MARKER_END"* ]]; then
+      echo "Warning: ${file} contains the tacit begin marker but no end marker; leaving it untouched." >&2
+      continue
+    fi
 
     cleaned="$(awk -v begin="$PATH_MARKER_BEGIN" -v end="$PATH_MARKER_END" '
       index($0, begin) { skip=1; next }

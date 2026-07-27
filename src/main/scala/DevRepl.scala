@@ -33,7 +33,7 @@ private def printBanner(config: Config): Unit =
     s"""
        | TACIT Library Dev REPL
        | Library:   ${config.libraryJarPath}
-       | LibConfig: ${config.libraryConfig.noSpaces}
+       | LibConfig: ${config.redactedLibraryConfig.noSpaces}
        |
        | Enter Scala code; submit with a blank line.
        | Commands: :help  :interface  :reset  :quit

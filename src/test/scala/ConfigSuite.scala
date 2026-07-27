@@ -304,3 +304,41 @@ class ConfigSuite extends munit.FunSuite:
   test("--no-safe-mode after --safe-mode disables safe mode"):
     val cfg = parse("--safe-mode", "--no-safe-mode").get
     assert(!cfg.safeMode)
+
+  // ── executionTimeoutMs validation ─────────────────────────────
+
+  test("--exec-timeout-ms 0 is rejected"):
+    val cfg = quietly { parse("--exec-timeout-ms", "0") }
+    assertEquals(cfg, None)
+
+  test("--exec-timeout-ms negative is rejected"):
+    val cfg = quietly { parse("--exec-timeout-ms=-100") }
+    assertEquals(cfg, None)
+
+  test("config file with non-positive executionTimeoutMs is rejected"):
+    withConfigFile(s"""{ "executionTimeoutMs": 0, "libraryJarPath": "$jarPath" }""") { path =>
+      val cfg = quietly { Config.parseCliArgs(Array("--config", path)) }
+      assertEquals(cfg, None)
+    }
+
+  // ── Secret redaction ────────────────────────────────────────────
+
+  test("redactedLibraryConfig masks llm.apiKey"):
+    val cfg = parse(
+      "--llm-base-url", "https://api.example.com",
+      "--llm-api-key", "sk-secret",
+      "--llm-model", "gpt-4"
+    ).get
+    val redacted = cfg.redactedLibraryConfig
+    val llm = redacted.hcursor.downField("llm")
+    assertEquals(llm.get[String]("apiKey").toOption, Some("***"))
+    assertEquals(llm.get[String]("baseUrl").toOption, Some("https://api.example.com"))
+    assert(!redacted.noSpaces.contains("sk-secret"))
+    // The original config is untouched.
+    assertEquals(
+      cfg.libraryConfig.hcursor.downField("llm").get[String]("apiKey").toOption,
+      Some("sk-secret"))
+
+  test("redactedLibraryConfig without an llm section is unchanged"):
+    val cfg = parse("--strict").get
+    assertEquals(cfg.redactedLibraryConfig, cfg.libraryConfig)

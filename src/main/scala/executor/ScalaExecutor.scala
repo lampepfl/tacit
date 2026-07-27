@@ -23,15 +23,23 @@ class ReplSession(val id: String)(using Context):
 object ReplSession:
   def create(using Context): ReplSession = ReplSession(UUID.randomUUID().toString)
 
-/** Manages multiple REPL sessions. Thread-safe via TrieMap. */
-class SessionManager(using Context):
+/** Manages multiple REPL sessions. Thread-safe via TrieMap.
+  *
+  * The number of live sessions is capped: each session carries a full
+  * compiler instance, so unbounded creation is a memory/DoS vector.
+  */
+class SessionManager(maxSessions: Int = SessionManager.MaxSessions)(using Context):
   private val sessions = TrieMap[String, ReplSession]()
 
-  /** Create a new session and return its ID */
-  def createSession(): String =
-    val session = ReplSession.create
-    sessions(session.id) = session
-    session.id
+  /** Create a new session and return its ID, or a human-readable error when
+    * the session cap is reached. */
+  def createSession(): Either[String, String] =
+    if sessions.size >= maxSessions then
+      Left(s"Session limit reached ($maxSessions active sessions); delete a session before creating a new one.")
+    else
+      val session = ReplSession.create
+      sessions(session.id) = session
+      Right(session.id)
 
   /** Delete a session by ID */
   def deleteSession(sessionId: String): Boolean =
@@ -50,3 +58,8 @@ class SessionManager(using Context):
   /** List all active session IDs */
   def listSessions(): List[String] =
     sessions.keys.toList
+
+object SessionManager:
+  /** Upper bound on simultaneously live sessions (each one is a full
+    * compiler warmup; unbounded creation is a DoS vector). */
+  val MaxSessions = 100

@@ -180,3 +180,36 @@ class CodeRecorderSuite extends munit.FunSuite:
       assertEquals(written.length, 1)
       assert(written.head.getName.contains("unknown"), s"got ${written.head.getName}")
     }
+
+  // ── Failure handling ──────────────────────────────────────────
+
+  test("constructor throws a clear error when the directory cannot be created"):
+    withTempDir("uncreatable") { parent =>
+      val blocker = File(parent, "blocker")
+      Files.writeString(blocker.toPath, "not a directory")
+      val e = intercept[java.io.IOException] {
+        CodeRecorder(File(blocker, "child"))
+      }
+      assert(e.getMessage.contains("child"),
+        s"error should name the offending path, got: ${e.getMessage}")
+    }
+
+  test("constructor throws when the path exists but is not writable"):
+    withTempDir("nowrite") { dir =>
+      assert(dir.setWritable(false, false), "could not make temp dir read-only")
+      try
+        intercept[java.io.IOException] { CodeRecorder(dir) }
+      finally dir.setWritable(true, false)
+    }
+
+  test("record failure is logged, not propagated"):
+    withTempDir("readonly") { dir =>
+      val recorder = CodeRecorder(dir)
+      assert(dir.setWritable(false, false), "could not make temp dir read-only")
+      try
+        // Must not throw — the request path keeps working even when
+        // recording fails (disk full, permissions lost, ...).
+        recorder.record("1 + 1", "s1", ExecutionResult(true, "2"))
+        assertEquals(scalaFiles(dir).length, 0)
+      finally dir.setWritable(true, false)
+    }

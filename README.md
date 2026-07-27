@@ -337,7 +337,7 @@ Configuration is split into **server config** (transport, recording, sessions) a
 
 | Flag | Description |
 |------|-------------|
-| `-s`/`--strict` | Block a built-in list of file-op commands (cat, ls, rm, ...) through exec. Convenient for quick experiments; for real deployments prefer `--command-permissions`. |
+| `-s`/`--strict` | Block a built-in denylist of unsafe commands (file ops, shells, interpreters, network tools, command runners, ...) through exec; matching is case-insensitive. Convenient for quick experiments; for real deployments prefer `--command-permissions`. |
 | `--command-permissions <patterns>` | Comma-separated glob patterns of exec-able commands (e.g. `echo,py*,ls`). Only `*` is interpreted as a wildcard. When set, `--strict` is ignored. |
 | `--network-permissions <patterns>` | Comma-separated glob patterns of reachable hosts (e.g. `*.example.com,api.github.com`). Only `*` is interpreted as a wildcard. |
 | `--allowed-roots <paths>` | Comma-separated outer bound on `requestFileSystem` roots (e.g. `/home/me/project,/tmp`). A requested root must resolve to a path within one of these. Defaults to the server's working directory when unset. |
@@ -362,6 +362,7 @@ Configuration is split into **server config** (transport, recording, sessions) a
     "allowedRoots": ["/home/user/project", "/tmp"],
     "classifiedPaths": [".ssh", ".env", ".env.*", "secrets"],
     "secureOutput": "/tmp/secure.log",
+    "classifiedWrite": false,
     "llm": {
       "baseUrl": "https://api.example.com",
       "apiKey": "sk-...",
@@ -379,9 +380,12 @@ set, `strictMode` is ignored. In real deployments you should always configure
 this list explicitly.
 
 **`strictMode`** (optional, default `true`). A quick-experiment default that
-blocks a built-in list of file-op commands (`cat`, `ls`, `rm`, `tar`, `chmod`,
-shells, ...) through `exec`. Convenient when you just want to try things out,
-but too coarse for real use; prefer `commandPermissions`.
+blocks a built-in denylist of unsafe commands through `exec`: file-op commands
+(`cat`, `ls`, `rm`, `tar`, `chmod`, ...), shells, interpreters (`python`,
+`node`, `perl`, ...), network tools (`curl`, `wget`, `ssh`, ...), command
+runners (`xargs`, `nohup`, `env`, ...), and similar. Matching is
+case-insensitive on the command's basename. Convenient when you just want to
+try things out, but too coarse for real use; prefer `commandPermissions`.
 
 **`networkPermissions`** (optional). The network allowlist: a
 list of glob patterns (only `*` is a wildcard) that every host reached via
@@ -402,8 +406,18 @@ within whatever root is granted.
 `println`/`print`/`printf` call from the isolation, but with `Classified[_]`
 values *unwrapped*. The agent's main output still shows the masked form
 (`Classified(***)`), so only whoever can read this file sees the real content.
-Parent directories are created automatically. When unset, printing behaves
-normally and nothing is written to disk.
+Parent directories are created automatically, and newly created sink files get
+owner-only permissions (`rw-------`) on POSIX systems. When unset, printing
+behaves normally and nothing is written to disk.
+
+**`classifiedWrite`** (optional, default `true`; JSON config only). When set to
+`false`, all writes to classified files are denied — both
+`writeClassified(path, content)` and `access(path).writeClassified(content)`.
+Note that because `classify` can wrap any value, leaving this enabled means an
+agent can *overwrite* classified files (e.g. `.ssh/authorized_keys`) with
+arbitrary content: the `Classified` mechanism protects confidentiality, not
+integrity. Set this to `false` in deployments where classified files must be
+read-only for the agent.
 
 ### Classified Path Patterns
 
@@ -435,6 +449,11 @@ Default classified patterns (when `classifiedPaths` is not configured): `.ssh`, 
 | `list_sessions` | - | List active session IDs |
 | `delete_repl_session` | `session_id` | Delete a session |
 | `show_interface` | - | Show the full capability API reference |
+
+Sessions are capped at 100 active sessions; `create_repl_session` returns an
+error at the cap. Execution output is capped at 10 MiB (truncation is marked
+in the result), and `exec` captures at most 8 MiB of stdout and 8 MiB of
+stderr per invocation.
 
 ### Example: Stateful Session
 
@@ -577,7 +596,8 @@ Safe mode is an experimental feature still under active development. By default,
 ### Execution Timeout
 
 `--exec-timeout-ms <ms>` (or `"executionTimeoutMs"` in the JSON config) bounds the
-wall-clock time of a single REPL evaluation. On timeout the client receives a
+wall-clock time of a single REPL evaluation. The value must be positive;
+zero or negative values are rejected at startup. On timeout the client receives a
 prompt error instead of hanging, and for stateful sessions the session keeps
 its prior state, so the abandoned statement has no observable effect.
 
@@ -652,8 +672,9 @@ Here is an example of adding a hypothetical `requestDatabase` capability.
 // Add a result type
 case class QueryResult(columns: List[String], rows: List[List[String]])
 
-// Add a capability class
-class DatabasePermission(val connectionString: String) extends caps.SharedCapability
+// Add a capability class. Note the `private[library]` constructor: capability
+// classes must not be constructible or extendable by agent code.
+class DatabasePermission private[library] (val connectionString: String) extends caps.SharedCapability
 
 // Add methods to the Interface trait
 trait Interface:
@@ -754,6 +775,8 @@ sbt "devRepl --strict --config my.json"      # with flags
 ### Things to Keep in Mind
 
 - **Capabilities must extend `caps.SharedCapability`.** This is what makes capture checking work. Without it, the compiler cannot track the capability's scope and users could leak it out of the `request*` block.
+
+- **Capability classes and their implementations are sealed.** All capability types (`FileSystem`, `Network`, `ProcessPermission`, `IOCapability`, `Classified`, `FileEntry`) and every impl class (`RealFileSystem`, `NetworkImpl`, ...) have `private[library]` constructors, so agent code can neither instantiate nor extend them — capabilities can only come from the `request*` scopes. Keep this invariant for any capability you add: give the class a `private[library]` constructor and make concrete impls `private[library]` as well.
 
 - **Capture checking is experimental.** The project uses `-language:experimental.captureChecking`. Compiler behavior may change across Scala 3 nightly versions. If you hit unexpected errors, check if the issue is with capture checking by temporarily removing the flag.
 

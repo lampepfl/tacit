@@ -313,3 +313,58 @@ class McpServerSuite extends munit.FunSuite:
     assert(response.get.error.isDefined)
     assert(response.get.error.get.message.toLowerCase.contains("disabled") || response.get.error.get.message.toLowerCase.contains("session"),
       s"Expected error about sessions being disabled but got: ${response.get.error.get.message}")
+
+  // ── JSON-RPC protocol conformance ─────────────────────────────
+
+  test("request with wrong jsonrpc version returns InvalidRequest"):
+    val server = new McpServer()
+    val request = JsonRpcRequest("1.0", "ping", None, Some(Json.fromInt(1)))
+    val response = server.handleRequest(request)
+    assert(response.isDefined)
+    assert(response.get.error.isDefined)
+    assertEquals(response.get.error.get.code, JsonRpcError.InvalidRequest)
+    // The error is correlated with the request id.
+    assertEquals(response.get.id, Some(Json.fromInt(1)))
+
+  test("notification without id gets no response, whatever the method"):
+    val server = new McpServer()
+    assert(server.handleRequest(makeRequest("ping", id = None)).isEmpty)
+    assert(server.handleRequest(makeRequest("tools/list", id = None)).isEmpty)
+    assert(server.handleRequest(makeRequest("no/such/method", id = None)).isEmpty)
+
+  test("initialize does not advertise tools.listChanged"):
+    val server = new McpServer()
+    val response = server.handleRequest(makeRequest("initialize"))
+    assert(response.isDefined)
+    val listChanged = response.get.result
+      .flatMap(_.hcursor.downField("capabilities").downField("tools").get[Boolean]("listChanged").toOption)
+    assertEquals(listChanged, Some(false))
+
+  test("response without id serializes as explicit id:null"):
+    val json = JsonRpcResponse.error(None, JsonRpcError.ParseError, "boom").asJson.noSpaces
+    assert(json.contains("\"id\":null"), s"expected explicit null id, got: $json")
+    assert(!json.contains("\"result\""), s"error response must not carry result, got: $json")
+
+  test("success response omits the error field"):
+    val json = JsonRpcResponse.success(Some(Json.fromInt(3)), Json.obj()).asJson.noSpaces
+    assert(!json.contains("\"error\""), s"success response must not carry error, got: $json")
+    assert(json.contains("\"id\":3"), s"expected request id, got: $json")
+
+  // ── Recorder failure resilience ───────────────────────────────
+
+  test("recorder failure does not break execute_scala"):
+    val dir = java.nio.file.Files.createTempDirectory("recorder-fail").toFile
+    val recorder = tacit.executor.CodeRecorder(dir)
+    assert(dir.setWritable(false, false), "could not make temp dir read-only")
+    try
+      given Context = Context(Config(), Some(recorder))
+      val server = new McpServer()
+      val response = server.handleRequest(toolCallRequest("execute_scala", Json.obj("code" -> "1 + 1".asJson)))
+      assert(response.isDefined)
+      assert(response.get.error.isEmpty, s"protocol error: ${response.get.error}")
+      assert(!hasIsError(response), s"expected successful execution, got: ${extractContent(response)}")
+      assert(extractContent(response).exists(_.contains("2")),
+        s"expected execution output, got: ${extractContent(response)}")
+    finally
+      dir.setWritable(true, false)
+      dir.delete()

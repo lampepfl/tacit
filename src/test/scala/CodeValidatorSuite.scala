@@ -338,7 +338,7 @@ class CodeValidatorSuite extends munit.FunSuite:
 
   test("SessionManager rejects forbidden code"):
     val sm = new SessionManager
-    val sid = sm.createSession()
+    val sid = sm.createSession().fold(err => fail(s"session creation failed: $err"), identity)
     val result = sm.executeInSession(sid, "import java.io.File")
     assert(!result.success)
     assert(result.error.exists(_.contains("file-io-java")))
@@ -467,19 +467,25 @@ class CodeValidatorSuite extends munit.FunSuite:
     val violations = result
     assert(violations.head.snippet == "import java.io.File")
 
-  test("directive //> using is checked on original code, not stripped"):
-    // Even though comments are stripped, directive detection uses original code
+  test("directive //> using in a comment is rejected"):
+    // Directives live in comments, so they are matched against code with only
+    // string literals stripped (comments preserved).
     val code = "//> using dep \"com.lihaoyi::os-lib:0.9.1\""
     val result = CodeValidator.validate(code)
     assert(result.nonEmpty)
     assert(result.exists(_.ruleId =="directive-using"))
 
   test("directive inside a string is allowed"):
+    // A directive quoted inside a string literal is inert data, not a
+    // directive; string contents are stripped before matching.
     val code = """val s = "//> using dep foo""""
     val result = CodeValidator.validate(code)
-    // //> using is checked on original code, so it will match even in a string
-    // This documents the current behavior
-    assert(result.nonEmpty) // directive patterns check original code
+    assertEquals(result, Nil)
+
+  test("import $ directive inside a string is allowed"):
+    val code = """val s = "import $dep.foo""""
+    val result = CodeValidator.validate(code)
+    assertEquals(result, Nil)
 
   // ── Safe mode defense-in-depth tests ──────────────────────────────
 

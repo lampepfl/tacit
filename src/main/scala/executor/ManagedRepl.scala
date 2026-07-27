@@ -7,7 +7,7 @@ import Context.*
 import dotty.tools.repl.*
 import dotty.tools.dotc.reporting.Diagnostic
 
-import java.io.{ByteArrayOutputStream, File => JFile, PrintStream}
+import java.io.{File => JFile, PrintStream}
 import java.net.URLClassLoader
 import java.nio.charset.StandardCharsets
 import java.util.jar.JarFile
@@ -19,6 +19,41 @@ case class ExecutionResult(
 )
 
 object ManagedRepl:
+
+  /** Hard cap on captured execution output (bytes of UTF-8). Without it,
+    * `while(true) println("x")` grows the capture buffer until the server
+    * runs out of memory. Output beyond the cap is discarded. */
+  val MaxOutputBytes: Int = 10 * 1024 * 1024
+
+  /** Appended to captured output that hit [[MaxOutputBytes]], so the client
+    * can tell the output was cut rather than complete. */
+  val TruncationMarker: String = "\n... [output truncated: exceeded 10 MiB capture limit]"
+
+  /** An [[java.io.OutputStream]] that retains at most `limit` bytes and
+    * silently discards the rest, setting [[truncated]] once anything is
+    * dropped. Writes never throw, so the cap logic can never break the
+    * evaluation path (PrintStream also swallows I/O errors on its own). */
+  private[executor] final class BoundedOutputStream(private val limit: Int) extends java.io.OutputStream:
+    private val buf = new java.io.ByteArrayOutputStream(math.min(limit, 8192))
+    @volatile var truncated: Boolean = false
+
+    override def write(b: Int): Unit =
+      if buf.size() < limit then buf.write(b)
+      else truncated = true
+
+    override def write(b: Array[Byte], off: Int, len: Int): Unit =
+      val room = limit - buf.size()
+      if room <= 0 then truncated = true
+      else
+        if len > room then truncated = true
+        buf.write(b, off, math.min(len, room))
+
+    def resetCapture(): Unit =
+      buf.reset()
+      truncated = false
+
+    def capturedString: String = buf.toString(java.nio.charset.StandardCharsets.UTF_8)
+  end BoundedOutputStream
 
   /** Subclass of [[ReplDriver]] that exposes the protected `runBody`/`interpret`
     * pair, so we can feed a pre-parsed [[ParseResult]] to the driver instead of
@@ -99,11 +134,11 @@ object ManagedRepl:
   private val outputCaptureLock = Object()
 
   private def withOutputCapture(
-    outputCapture: ByteArrayOutputStream,
+    outputCapture: BoundedOutputStream,
     printStream: PrintStream
   )(run: => Unit): (String, Option[Throwable]) =
     outputCaptureLock.synchronized:
-      outputCapture.reset()
+      outputCapture.resetCapture()
       val oldOut = System.out
       val oldErr = System.err
       System.setOut(printStream)
@@ -121,7 +156,9 @@ object ManagedRepl:
           System.setOut(oldOut)
           System.setErr(oldErr)
           printStream.flush()
-      (outputCapture.toString(StandardCharsets.UTF_8).trim, thrown)
+      val captured = outputCapture.capturedString.trim
+      val output = if outputCapture.truncated then captured + TruncationMarker else captured
+      (output, thrown)
 end ManagedRepl
 
 /** Wraps a [[ReplDriver]] together with its output-capture streams and
@@ -131,7 +168,7 @@ end ManagedRepl
 class ManagedRepl(using Context):
   import ManagedRepl.*
 
-  private val outputCapture = new ByteArrayOutputStream()
+  private val outputCapture = new BoundedOutputStream(MaxOutputBytes)
   private val printStream = new PrintStream(outputCapture, true, StandardCharsets.UTF_8)
   private val driver = new OpenReplDriver(replClasspathArgs, printStream, Some(sandboxedClassLoader))
   private var state: State = driver.initialState

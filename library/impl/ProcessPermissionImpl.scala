@@ -6,7 +6,7 @@ package tacit.library
  *
  *  These fields live here — not on [[ProcessPermission]] — so the public
  *  capability surface the agent sees stays abstract. */
-final class ProcessPermissionImpl(
+final class ProcessPermissionImpl private[library] (
   val allowedCommands: Set[String],
   val strictMode: Boolean = false,
   val commandPermissions: Option[Set[String]] = None
@@ -27,9 +27,12 @@ final class ProcessPermissionImpl(
       case None =>
         // Match on the command's basename: strict mode must block `/bin/cat`,
         // `./cat`, and `cat` alike, otherwise an absolute/relative path trivially
-        // evades the unsafe-command denylist.
+        // evades the unsafe-command denylist. The comparison is case-insensitive
+        // (Locale.ROOT): on case-insensitive filesystems (e.g. macOS) `CAT`
+        // resolves to `cat` and must not bypass the denylist.
         val slash = math.max(command.lastIndexOf('/'), command.lastIndexOf('\\'))
-        val basename = if slash >= 0 then command.substring(slash + 1).nn else command
+        val basename = (if slash >= 0 then command.substring(slash + 1).nn else command)
+          .toLowerCase(java.util.Locale.ROOT).nn
         if strictMode && ProcessPermissionImpl.unsafeCommands.contains(basename) then
           throw SecurityException(
             s"Strict mode: command '$command' is an unsafe operation. Use requestFileSystem instead."
@@ -58,6 +61,28 @@ object ProcessPermissionImpl:
     "ln", "readlink",
     // Disk operations
     "dd", "df", "du",
-    // Bash
-    "bash", "sh", "zsh", "fish", "dash"
+    // Shells
+    "bash", "sh", "zsh", "fish", "dash",
+    // Environment inspection (leaks secrets via process env)
+    "env", "printenv",
+    // Network tools (exfiltration / unrestricted network access)
+    "curl", "wget", "ssh", "sftp", "nc", "netcat", "telnet", "ftp", "socat",
+    // Version control (network access + arbitrary file reads via subcommands)
+    "git",
+    // Crypto/encoding tools (file reads + obfuscation)
+    "openssl", "base64",
+    // Interpreters (arbitrary code execution escapes the sandbox policy)
+    "python", "python3", "perl", "ruby", "node", "php", "lua",
+    // Command runners (wrap and re-invoke arbitrary commands)
+    "xargs", "nohup", "nice", "timeout", "watch", "parallel", "busybox",
+    // Text processors with command-execution features
+    "awk", "gawk", "sed",
+    // Binary/hex dumpers (read arbitrary files)
+    "xxd", "od", "hexdump",
+    // Platform escape hatches
+    "osascript", "open",
+    // Process control
+    "kill", "pkill", "killall",
+    // Scheduled execution
+    "crontab", "at"
   )

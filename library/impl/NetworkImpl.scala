@@ -7,7 +7,7 @@ package tacit.library
  *  The allowlist is constructed by [[InterfaceImpl.requestNetwork]] from the
  *  scope's declared `hosts`, after validating those hosts against the
  *  server-configured `networkPermissions` policy. */
-final class NetworkImpl(val permittedHosts: Set[String]) extends Network:
+final class NetworkImpl private[library] (val permittedHosts: Set[String]) extends Network:
   def validateHost(host: String): Unit =
     if !permittedHosts.exists(p => GlobMatcher.matches(host, p)) then
       throw SecurityException(

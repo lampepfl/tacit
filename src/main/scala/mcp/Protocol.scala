@@ -24,7 +24,17 @@ case class JsonRpcResponse(
 )
 
 object JsonRpcResponse:
-  given Encoder[JsonRpcResponse] = deriveEncoder[JsonRpcResponse].mapJson(_.dropNullValues)
+  // Hand-rolled encoder: `id` must always be present in the wire format —
+  // `None` serializes as explicit `"id": null` (required by JSON-RPC 2.0 for
+  // parse/invalid-request errors), never omitted. `result`/`error` are only
+  // emitted when present (exactly one of them, per spec).
+  given Encoder[JsonRpcResponse] = Encoder.instance: r =>
+    val fields = List.newBuilder[(String, Json)]
+    fields += "jsonrpc" -> Json.fromString(r.jsonrpc)
+    r.result.foreach(res => fields += "result" -> res)
+    r.error.foreach(err => fields += "error" -> Encoder[JsonRpcError].apply(err))
+    fields += "id" -> r.id.getOrElse(Json.Null)
+    Json.obj(fields.result()*)
   
   def success(id: Option[Json], result: Json): JsonRpcResponse =
     JsonRpcResponse(result = Some(result), id = id)
@@ -40,7 +50,7 @@ case class JsonRpcError(
 )
 
 object JsonRpcError:
-  given Encoder[JsonRpcError] = deriveEncoder
+  given Encoder[JsonRpcError] = deriveEncoder[JsonRpcError].mapJson(_.dropNullValues)
   
   // Standard JSON-RPC error codes
   val ParseError = -32700

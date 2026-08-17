@@ -18,6 +18,11 @@ private object BuildInfo:
   val version: String = Option(props.getProperty("version")).getOrElse("0.0.0-unknown")
   val name: String = Option(props.getProperty("name")).getOrElse("TACIT")
 
+/** Matches JSON-RPC method names in the `notifications/` namespace. */
+private object Notification:
+  def unapply(method: String): Option[String] =
+    Option.when(method.startsWith("notifications/"))(method)
+
 /** MCP Server implementation for Scala code execution */
 class McpServer(using Context):
   private val ProtocolVersion = "2025-11-25"
@@ -47,9 +52,11 @@ class McpServer(using Context):
 
   /** Handle a JSON-RPC request and return a response.
     *
-    * Notifications (requests without an `id`) never produce a response, per
-    * JSON-RPC 2.0. Requests whose `jsonrpc` field is not `"2.0"` are rejected
-    * with an Invalid Request error.
+    * Notifications (requests without an `id`, see [[JsonRpcRequest]]) never
+    * produce a response, whatever their method. Every request that carries
+    * an `id` gets exactly one response, including requests whose method is a
+    * notification name. Requests whose `jsonrpc` field is not `"2.0"` are
+    * rejected with an Invalid Request error.
     */
   def handleRequest(request: JsonRpcRequest): Option[JsonRpcResponse] =
     if request.jsonrpc != "2.0" then
@@ -59,26 +66,22 @@ class McpServer(using Context):
         s"Invalid JSON-RPC version: expected \"2.0\", got \"${request.jsonrpc}\""
       ))
     else if request.id.isEmpty then
-      // Notification — a response is never sent, whatever the method.
       None
     else request.method match
       case "initialize" =>
         handleInitialize(request)
-      case "notifications/initialized" | "initialized" =>
-        // Notification, no response needed (accept both for backward compat)
-        None
       case "tools/list" =>
         handleToolsList(request)
       case "tools/call" =>
         handleToolsCall(request)
       case "ping" =>
         Some(JsonRpcResponse.success(request.id, Json.obj()))
-      case "notifications/cancelled" =>
-        // Notification, no response needed
-        None
-      case other if other.startsWith("notifications/") =>
-        // All notifications - no response needed
-        None
+      case "initialized" | Notification(_) =>
+        // A notification method sent *with* an id (a client quirk; the bare
+        // `initialized` spelling is kept for backward compatibility). There is
+        // nothing to do, but the id must still be answered so the client is
+        // not left waiting.
+        Some(JsonRpcResponse.success(request.id, Json.obj()))
       case other =>
         Some(JsonRpcResponse.error(
           request.id,

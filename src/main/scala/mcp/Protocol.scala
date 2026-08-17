@@ -3,7 +3,15 @@ package tacit.mcp
 import io.circe.*
 import io.circe.generic.semiauto.*
 
-/** JSON-RPC 2.0 Request */
+/** JSON-RPC 2.0 Request.
+  *
+  * `id` is `None` for an absent `id` member *and* for an explicit
+  * `"id": null`; both are treated as notifications. JSON-RPC 2.0 defines a
+  * notification as a request without an `id` member and discourages null
+  * ids precisely because JSON-RPC 1.0 clients used `null` to mean
+  * "notification"; MCP clients in the wild still do, and answering them
+  * would inject an unexpected response into their stream.
+  */
 case class JsonRpcRequest(
     jsonrpc: String,
     method: String,

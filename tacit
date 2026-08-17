@@ -292,26 +292,35 @@ cached_release_matches() {
   [[ "$(cat "$RELEASE_MARKER")" == "$release_key" ]]
 }
 
+# Whether a sha256 tool is available at all (as opposed to a hashing failure
+# on a particular file, which must not be mistaken for "no tool").
+have_sha256_tool() {
+  command -v sha256sum >/dev/null 2>&1 || command -v shasum >/dev/null 2>&1
+}
+
 # Re-verify cached jars against the release digests before trusting them.
 # Returns 0 when the cache is trustworthy, 1 when it must be re-downloaded.
-# When digests are unavailable (or no sha256 tool exists), keep the old
-# behavior and trust the cache: this check must not add new failure modes.
+# When no sha256 tool exists, keep the old behavior and trust the cache: this
+# check must not add new failure modes. An asset without a digest in the
+# metadata cannot be checked and is skipped; the other asset is still checked.
 cached_jars_match_digests() {
   local assets_info="$1"
   local name _url digest expected actual
 
+  have_sha256_tool || return 0
+
   while IFS=$'\t' read -r name _url digest; do
     [[ -n "$name" ]] || continue
-    # No digest in metadata: cannot do better than the old behavior.
-    [[ -n "$digest" ]] || return 0
+    # No digest in metadata for this asset: cannot do better than the old behavior.
+    [[ -n "$digest" ]] || continue
     if [[ "$digest" =~ ^sha256:([0-9a-fA-F]{64})$ ]]; then
       expected="${BASH_REMATCH[1]}"
     else
       # Unusable digest format: treat the cache as stale and re-download.
       return 1
     fi
-    # No sha256 tool available: keep the old behavior and trust the cache.
-    actual="$(sha256_of "${CACHE_DIR}/${name}")" || return 0
+    # A cached jar that cannot be hashed (missing, unreadable) is not trustworthy.
+    actual="$(sha256_of "${CACHE_DIR}/${name}" 2>/dev/null)" || return 1
     [[ "$actual" == "$expected" ]] || return 1
   done <<< "$assets_info"
 
@@ -334,10 +343,13 @@ download_latest_release() {
       return 0
     fi
     echo "Cached TACIT jars failed checksum verification; downloading again."
+    # Invalidate the cache first: if the re-download fails, `tacit serve` must
+    # not keep running jars that just failed verification.
+    rm -f "$RELEASE_MARKER" "$SERVER_JAR" "$LIBRARY_JAR"
   fi
 
   tmp_dir="$(mktemp -d "${CACHE_DIR}/download.XXXXXX")"
-  trap 'rm -rf "$tmp_dir"' EXIT
+  trap "rm -rf '$tmp_dir'" EXIT
 
   local assets_info
   assets_info="$(extract_assets "$json")"
@@ -346,12 +358,14 @@ download_latest_release() {
   while IFS=$'\t' read -r name url _digest; do
     [[ -n "$name" && -n "$url" ]] || continue
     echo "- ${name}"
-    curl -fL "$url" -o "${tmp_dir}/${name}"
+    curl -fL "$url" -o "${tmp_dir}/${name}" \
+      || fail "failed to download ${name} from ${url}."
   done <<< "$assets_info"
 
   echo "Verifying checksums..."
   while IFS=$'\t' read -r name _url digest; do
-    [[ -n "$name" && -f "${tmp_dir}/${name}" ]] || continue
+    [[ -n "$name" ]] || continue
+    [[ -f "${tmp_dir}/${name}" ]] || fail "${name} was not downloaded."
     verify_jar "${tmp_dir}/${name}" "$digest"
   done <<< "$assets_info"
 

@@ -62,7 +62,7 @@ private val MaxLineChars = 16 * 1024 * 1024
 /** Read one line from `reader`, retaining at most `limit` characters.
   *
   * Returns `None` on EOF (no characters seen), `Some(Right(line))` for a
-  * normal line, and `Some(Left(()))` when the line exceeded the limit — in
+  * normal line, and `Some(Left(()))` when the line exceeded the limit; in
   * that case the over-long prefix is discarded and reading resumes after the
   * terminating newline, so the stream stays in sync. A trailing `\r` (CRLF)
   * is not included in the returned line.
@@ -81,9 +81,9 @@ private def readBoundedLine(reader: BufferedReader, limit: Int): Option[Either[U
         done = true
       case c =>
         sawAny = true
-        if c != '\r' then
-          if !overflow && sb.length >= limit then overflow = true
-          if !overflow then sb.append(c.toChar)
+        if !overflow && sb.length >= limit then overflow = true
+        if !overflow then sb.append(c.toChar)
+  if sb.nonEmpty && sb.last == '\r' then sb.setLength(sb.length - 1)
   if !sawAny then None
   else if overflow then Some(Left(()))
   else Some(Right(sb.toString))
@@ -96,8 +96,8 @@ private def handleLine(line: String, writer: PrintWriter, server: McpServer)(usi
         s"Parse error: ${err.message}"))
     case Right(json) => json.as[JsonRpcRequest] match
       case Left(err) =>
-        // Best-effort id recovery so the client can correlate the error;
-        // absent or explicit-null ids serialize as `"id": null` per spec.
+        // Best-effort id recovery so the client can correlate the error; an
+        // absent or null id serializes as `"id": null` per spec.
         val id = json.hcursor.downField("id").focus.filterNot(_.isNull)
         sendResponse(writer, JsonRpcResponse.error(id, JsonRpcError.InvalidRequest,
           s"Invalid request: ${err.message}"))

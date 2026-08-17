@@ -33,23 +33,34 @@ abstract class BaseFileSystem extends FileSystem:
   protected final def isClassifiedPath(p: Path): Boolean =
     compiledPatterns.exists(matchesCompiled(_, p))
 
-  /** A classified pattern with its `PathMatcher`s precompiled. Kept as plain
-    * data (not `Path => Boolean` closures) so the cached value carries no
-    * captured capabilities. */
+  /** A classified pattern in matchable form. Kept as plain data (not
+    * `Path => Boolean` closures) so the cached value carries no captured
+    * capabilities. */
   private enum CompiledPattern:
     /** No-slash pattern: matches if any single path component matches. */
     case Component(matcher: java.nio.file.PathMatcher)
-    /** Absolute pattern: matched against the full absolute path. */
-    case Absolute(matchers: List[java.nio.file.PathMatcher])
+    /** Absolute pattern, kept as the raw glob: its non-glob prefix is resolved
+      * through symlinks at check time (see [[absoluteMatchers]]). */
+    case Absolute(glob: String)
     /** Relative pattern: matched against the path relative to the root. */
     case Relative(matchers: List[java.nio.file.PathMatcher])
 
-  /** Matchers compiled once from `classifiedPatterns` (constructor-provided
+  /** Patterns prepared once from `classifiedPatterns` (constructor-provided
     * and immutable) and reused for every check, instead of recompiling a
     * `PathMatcher` per pattern per file operation. `lazy` so subclass state
     * (`normalizedRoot`) is initialized before first use; thread-safe. */
   private lazy val compiledPatterns: List[CompiledPattern] =
     classifiedPatterns.toList.map(compilePattern)
+
+  /** Matchers for absolute patterns, keyed by the symlink-resolved glob. The
+    * resolution itself is redone on every check (the file's own path is
+    * resolved at check time too, and a directory named by the pattern may be
+    * created or re-pointed during the file system's lifetime); only the
+    * `PathMatcher` compilation is memoized, one entry per distinct resolution
+    * of each configured absolute pattern. */
+  private val absoluteMatchers =
+    java.util.concurrent.ConcurrentHashMap[String, List[java.nio.file.PathMatcher]]()
+  private val MaxAbsoluteMatchers = 64
 
   private def compilePattern(pattern: String): CompiledPattern =
     val stripped = pattern.stripSuffix("/")
@@ -58,8 +69,7 @@ abstract class BaseFileSystem extends FileSystem:
       // No slash: match against each path component individually
       CompiledPattern.Component(FileSystems.getDefault.nn.getPathMatcher(s"glob:$stripped"))
     else if Path.of(stripped).isAbsolute then
-      // Absolute pattern: resolve non-glob prefix through symlinks, then glob-match
-      CompiledPattern.Absolute(globOrDescendantMatchers(resolveGlobPrefix(stripped)))
+      CompiledPattern.Absolute(stripped)
     else
       // Relative pattern: match against path relative to root
       CompiledPattern.Relative(globOrDescendantMatchers(stripped))
@@ -74,7 +84,13 @@ abstract class BaseFileSystem extends FileSystem:
           if matcher.matches(p.getName(i)) then found = true
           i += 1
         found
-      case CompiledPattern.Absolute(matchers) =>
+      case CompiledPattern.Absolute(glob) =>
+        // Absolute pattern: resolve non-glob prefix through symlinks, then glob-match
+        val resolved = resolveGlobPrefix(glob)
+        // Bounded: a prefix that keeps being re-pointed would otherwise
+        // accumulate one entry per resolution.
+        if absoluteMatchers.size > MaxAbsoluteMatchers then absoluteMatchers.clear()
+        val matchers = absoluteMatchers.computeIfAbsent(resolved, g => globOrDescendantMatchers(g)).nn
         matchers.exists(_.matches(p))
       case CompiledPattern.Relative(matchers) =>
         matchers.exists(_.matches(normalizedRoot.relativize(p)))
@@ -92,8 +108,13 @@ abstract class BaseFileSystem extends FileSystem:
     variants(glob).flatMap: g =>
       List(fs.getPathMatcher(s"glob:$g"), fs.getPathMatcher(s"glob:$g/**"))
 
-  // For absolute glob patterns, resolve the longest non-glob prefix through symlinks.
-  // E.g., /tmp/secrets/*/keys → /private/tmp/secrets/*/keys on macOS.
+  /** For absolute glob patterns, resolve the longest non-glob prefix through
+    * symlinks, e.g. `/tmp/secrets/key*` becomes `/private/tmp/secrets/key*`
+    * on macOS. Files are compared by their real path, so the pattern must be
+    * resolved the same way. A prefix that does not exist yet is resolved via
+    * its nearest existing ancestor (`/tmp/secrets` with no such directory
+    * still becomes `/private/tmp/secrets`); otherwise files created under it
+    * later would never match. */
   private def resolveGlobPrefix(pattern: String): String =
     val path = Path.of(pattern)
     val root = path.getRoot
@@ -118,10 +139,19 @@ abstract class BaseFileSystem extends FileSystem:
       val prefix =
         if firstGlob == count then path  // no glob chars at all
         else root.resolve(path.subpath(0, firstGlob))
-      val abs = prefix.toAbsolutePath.normalize
-      val resolved = if java.nio.file.Files.exists(abs) then abs.toRealPath() else abs
+      val resolved = realPathOfNearestAncestor(prefix.toAbsolutePath.normalize)
       if firstGlob == count then resolved.toString
       else resolved.resolve(path.subpath(firstGlob, count)).toString
+
+  /** `toRealPath` of `abs` if it exists, otherwise the real path of its
+    * nearest existing ancestor with the remaining components appended. */
+  private def realPathOfNearestAncestor(abs: Path): Path =
+    if java.nio.file.Files.exists(abs) then abs.toRealPath()
+    else
+      val parent = abs.getParent
+      val name = abs.getFileName
+      if parent != null && name != null then realPathOfNearestAncestor(parent).resolve(name)
+      else abs
 
   protected final def requireNotClassified(p: Path, op: String): Unit =
     if isClassifiedPath(p) then
@@ -146,4 +176,14 @@ abstract class BaseFileSystem extends FileSystem:
     if !classifiedWriteEnabled then
       throw SecurityException(
         s"Access denied: '$op' is disabled by the server configuration (classifiedWrite = false)"
+      )
+
+  /** Gate for operations that create a path without reading or writing file
+    * content (`mkdir`). Unclassified paths are always allowed; a classified
+    * path counts as a classified write and is allowed only while
+    * `classifiedWrite` is enabled. */
+  protected final def requireCreatable(p: Path, op: String): Unit =
+    if !classifiedWriteEnabled && isClassifiedPath(p) then
+      throw SecurityException(
+        s"Access denied: '$op' on classified path $p is disabled by the server configuration (classifiedWrite = false)"
       )

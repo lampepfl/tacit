@@ -5,7 +5,8 @@ import com.openai.models.ReasoningEffort
 import com.openai.client.okhttp.OpenAIOkHttpClient
 import com.openai.models.chat.completions.ChatCompletionCreateParams
 
-class LlmOps(config: Option[LlmConfig]):
+/** LLM chat operations, exported through [[InterfaceImpl]]. */
+class LlmOps private[library] (config: Option[LlmConfig]):
 
   private def requireConfig(): LlmConfig =
     config.getOrElse(

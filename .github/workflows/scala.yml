@@ -42,7 +42,12 @@ jobs:
     - name: Set up Scala CLI
       uses: VirtusLab/scala-cli-setup@v1
     - name: Run library tests
-      run: cd library && scala-cli test .
+      # --server=false: Scala 3 nightlies from 2026-08-12 on depend on upstream
+      # ASM 9.10.1 (org.ow2.asm) instead of the scala-asm fork, which the
+      # Bloop server bundled with scala-cli (Bloop 2.0.19, ASM 9.9.1) shadows;
+      # compiling through Bloop then fails with a NoClassDefFoundError in the
+      # backend. Plain scalac has no such conflict.
+      run: cd library && scala-cli test . --server=false
 
   publish-release:
     if: github.event_name == 'release'

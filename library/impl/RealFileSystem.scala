@@ -10,6 +10,11 @@ import java.nio.charset.StandardCharsets
 import java.nio.file.{Files, FileVisitResult, Path, Paths, SimpleFileVisitor}
 import java.nio.file.attribute.BasicFileAttributes
 
+object RealFileSystem:
+  /** Maximum symlink hops followed when resolving a dangling link chain
+    * (the kernel's own ELOOP limit is 40). */
+  private val MaxSymlinkDepth = 40
+
 class RealFileSystem private[library] (
   val root: String,
   check: String -> Boolean = _ => true,
@@ -22,18 +27,32 @@ class RealFileSystem private[library] (
     if Files.exists(abs) then abs.toRealPath() else abs
   protected def pathCheck(relativePath: String): Boolean = check(relativePath)
 
-  /** Resolves symlinks in a path. For existing paths, uses toRealPath().
+  /** Resolves symlinks in a path. For existing paths, uses `toRealPath()`.
     * For non-existing paths, resolves the nearest existing ancestor and
     * appends the remaining segments, so that symlinks in parent directories
-    * are still resolved (e.g. /tmp -> /private/tmp on macOS).
+    * are still resolved (e.g. `/tmp` -> `/private/tmp` on macOS).
+    *
+    * A dangling symlink is resolved to where it points: `Files.exists`
+    * follows links and reports it as absent, but a `write` through it would
+    * make the kernel create the *target*, so containment must be checked on
+    * the target, not on the link. Link chains are followed up to
+    * [[RealFileSystem.MaxSymlinkDepth]] hops; longer (or cyclic) chains are
+    * rejected.
     */
-  private def resolveReal(absPath: Path): Path =
+  private def resolveReal(absPath: Path, depth: Int = 0): Path =
     if Files.exists(absPath) then absPath.toRealPath()
+    else if Files.isSymbolicLink(absPath) then
+      if depth >= RealFileSystem.MaxSymlinkDepth then
+        throw SecurityException(s"Access denied: too many levels of symbolic links at $absPath")
+      val target = Files.readSymbolicLink(absPath).nn
+      val parent = absPath.getParent
+      val absTarget = (if target.isAbsolute || parent == null then target else parent.resolve(target)).normalize
+      resolveReal(absTarget, depth + 1)
     else
       val parent = absPath.getParent
       val fileName = absPath.getFileName
       if parent != null && fileName != null && parent != absPath then
-        resolveReal(parent).resolve(fileName)
+        resolveReal(parent, depth).resolve(fileName)
       else absPath
 
   /** Resolves symlinks in an absolute, normalized path and validates that the
@@ -51,6 +70,17 @@ class RealFileSystem private[library] (
   /** Resolves and validates that a path is within the allowed root. */
   private def resolvePath(target: String): Path =
     resolveAndCheck(Paths.get(target).toAbsolutePath.normalize)
+
+  /** Whether `absPath` (an entry found while listing or walking a directory)
+    * resolves to a location inside the root. Entries that do not, e.g. a
+    * symlink pointing outside the root, are omitted from `children`/`walk`
+    * rather than surfaced as entries whose every operation would throw:
+    * `find`/`grepRecursive` over a project with a `.venv/bin/python` or
+    * `node_modules/.bin` link must keep working. Unresolvable entries
+    * (permission errors, symlink loops) are omitted as well. */
+  private def isContained(absPath: Path): Boolean =
+    try resolveReal(absPath).startsWith(normalizedRoot)
+    catch case _: SecurityException | _: java.io.IOException => false
 
   private class FileEntryImpl(jpath: Path) extends FileEntry(this):
     /** Re-resolves and re-validates the path immediately before use.
@@ -115,7 +145,9 @@ class RealFileSystem private[library] (
       Files.delete(p)
 
     def mkdir(): Unit =
-      Files.createDirectories(revalidate())
+      val p = revalidate()
+      requireCreatable(p, "mkdir")
+      Files.createDirectories(p)
       ()
 
     def exists: Boolean = Files.exists(revalidate())
@@ -130,7 +162,7 @@ class RealFileSystem private[library] (
       requireNotClassified(p, "children")
       // Files.list holds an open DirectoryStream; must close it explicitly.
       val stream = Files.list(p).nn
-      try stream.iterator.nn.asScala.map(FileEntryImpl(_)).toList
+      try stream.iterator.nn.asScala.filter(isContained).map(FileEntryImpl(_)).toList
       finally stream.close()
 
     def walk(): List[FileEntry^{origin}] =
@@ -146,7 +178,7 @@ class RealFileSystem private[library] (
           if d != p then paths += d
           FileVisitResult.CONTINUE
       )
-      paths.toList.map(FileEntryImpl(_))
+      paths.toList.filter(isContained).map(FileEntryImpl(_))
 
     def isClassified: Boolean = isClassifiedPath(revalidate())
 

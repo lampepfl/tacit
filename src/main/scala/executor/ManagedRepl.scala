@@ -98,7 +98,14 @@ object ManagedRepl:
       "-Ycheck-all-patmat",
       "-Wsafe-init",
       "-language:experimental.captureChecking",
-      "-language:experimental.modularity"
+      "-language:experimental.modularity",
+      // Only REPL-defined classes get the interrupt instrumentation. With the
+      // default (`true`) the REPL loader re-defines every non-JDK class it
+      // touches, including the library's, so the library would exist twice
+      // (once in `sandboxedClassLoader`, once instrumented in the REPL loader)
+      // with separate static state, and the config registered by
+      // `configureLibrary` would not be the one agent code sees.
+      "-Xrepl-interrupt-instrumentation:local"
     )
 
   /** Exposes only JDK platform classes and the library JAR, keeping user code
@@ -112,17 +119,32 @@ object ManagedRepl:
       ClassLoader.getPlatformClassLoader
     )
 
-  /** Preamble injected before any user code so the capability API is in scope. */
-  private[executor] def libraryPreamble(using Context): String =
-    val jsonStr = ctx.config.libraryConfig.noSpaces
-      .replace("\\", "\\\\")
-      .replace("\"", "\\\"")
-    s"""|import tacit.library.*
-        |import caps.*
-        |@assumeSafe object api extends InterfaceImpl("$jsonStr")
-        |import api.*
-        |@assumeSafe given IOCapability = GlobalIOCap
-        |""".stripMargin
+  /** Preamble injected before any user code so the capability API is in
+    * scope. `SandboxInterface` has no constructor parameters: its policy is
+    * the config the server registered in [[ManagedRepl.configureLibrary]].
+    */
+  private[executor] val libraryPreamble: String =
+    """|import tacit.library.*
+       |import caps.*
+       |@assumeSafe object api extends SandboxInterface
+       |import api.*
+       |@assumeSafe given IOCapability = GlobalIOCap
+       |""".stripMargin
+
+  /** Register the sandbox's library config *before* any REPL code runs, by
+    * calling `InterfaceImpl.configure` on the library classes loaded through
+    * the REPL's own sandboxed class loader (static state is per loader). The
+    * method is not accessible from REPL code, hence reflection. Doing this
+    * from the server rather than from the preamble also sidesteps REPL
+    * evaluation order: REPL objects initialize lazily, so nothing that
+    * depends on `api` having been touched first would be safe.
+    */
+  private def configureLibrary(loader: ClassLoader, libraryConfigJson: String): Unit =
+    val module = Class.forName("tacit.library.InterfaceImpl$", true, loader)
+    val instance = module.getField("MODULE$").get(null)
+    try module.getMethod("configure", classOf[String]).invoke(instance, libraryConfigJson)
+    catch case e: java.lang.reflect.InvocationTargetException =>
+      throw Option(e.getCause).getOrElse(e)
 
   /** We swap `System.out`/`System.err` around each execution to catch output the
    *  REPL driver doesn't route through `printStream` (notably compiler
@@ -170,13 +192,15 @@ class ManagedRepl(using Context):
 
   private val outputCapture = new BoundedOutputStream(MaxOutputBytes)
   private val printStream = new PrintStream(outputCapture, true, StandardCharsets.UTF_8)
-  private val driver = new OpenReplDriver(replClasspathArgs, printStream, Some(sandboxedClassLoader))
+  private val sandboxLoader = sandboxedClassLoader
+  private val driver = new OpenReplDriver(replClasspathArgs, printStream, Some(sandboxLoader))
   private var state: State = driver.initialState
 
-  /** Preamble compile errors are intentionally *not* captured — a broken
+  /** Preamble compile errors are intentionally *not* captured: a broken
     * preamble is a programmer bug that should surface loudly.
     */
   def init(): this.type =
+    configureLibrary(sandboxLoader, ctx.config.libraryConfig.noSpaces)
     state = driver.run(libraryPreamble)(using state)
     if ctx.config.safeMode then
       state = driver.run("import language.experimental.safe")(using state)
@@ -194,7 +218,7 @@ class ManagedRepl(using Context):
     if violations.nonEmpty then
       ExecutionResult(false, "", Some(CodeValidator.formatErrors(violations)))
     else
-      ParseResult(code)(using state) match
+      ParseResult(terminated(code))(using state) match
         case p: Parsed =>
           dispatch(p)
         case cmd @ (_: TypeOf | _: DocOf | Imports) =>
@@ -209,6 +233,17 @@ class ManagedRepl(using Context):
             Some("Syntax error:\n" + formatDiagnostics(errors)))
         case other =>
           ExecutionResult(false, "", Some(s"Unexpected parse result: $other"))
+
+  /** `code` with trailing whitespace replaced by a single newline. The REPL
+    * parser treats input that ends inside an indentation region without a
+    * newline (`x match` followed by `case` lines, `def f =` with an indented
+    * body, ...) as *incomplete* and reports "unindent expected, but eof
+    * found"; that is how the interactive REPL knows to keep reading. Our
+    * clients send complete snippets, so we close them ourselves. Only the
+    * tail is touched, so line numbers in diagnostics are unaffected.
+    */
+  private def terminated(code: String): String =
+    code.stripTrailing() + "\n"
 
   /** Dispatch a parse result, honoring the optional execution timeout. */
   private def dispatch(res: ParseResult): ExecutionResult =
@@ -253,11 +288,13 @@ class ManagedRepl(using Context):
     *
     * On timeout the client gets a prompt error instead of hanging, and the
     * session keeps its prior state (the abandoned statement has no observable
-    * effect). The interrupt is best-effort: a CPU-bound loop that never checks
-    * interruption keeps running in the background and continues to hold the
-    * process-global output lock, so this is *not* a hard sandbox; true
-    * preemption requires process isolation. It does reliably bound
-    * interrupt-responsive work (blocking I/O, sleeps, most library calls).
+    * effect). The interrupt is best-effort: the REPL instruments loops in
+    * REPL-defined classes with interruption checks
+    * (`-Xrepl-interrupt-instrumentation:local`), and blocking I/O and sleeps
+    * respond to it, but a CPU-bound loop inside library or JDK code keeps
+    * running in the background and continues to hold the process-global
+    * output lock. This is *not* a hard sandbox; true preemption requires
+    * process isolation.
     */
   private def dispatchWithTimeout(res: ParseResult, limitMs: Long): ExecutionResult =
     val resultRef = java.util.concurrent.atomic.AtomicReference[(State, String, Option[Throwable])]()

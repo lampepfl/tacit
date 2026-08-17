@@ -93,6 +93,12 @@ By default, this downloads:
 | MCP Server | `./TACIT.jar` |
 | Library | `./TACIT-library.jar` |
 
+Both the wrapper and the script verify the downloaded JARs against the SHA-256
+digests published in the release metadata and refuse to install a JAR whose
+digest is missing or does not match. Downloads land in a temporary directory
+and are moved into place only after verification, so a failed download never
+replaces a previously installed JAR.
+
 To build from the current source tree, see Option 3 below.
 
 #### Option 3: Build from Source
@@ -402,17 +408,27 @@ directory**, so the sandbox is confined to that subtree (fail closed). Set it
 explicitly to widen or relocate the bound. Classified-path masking still applies
 within whatever root is granted.
 
+Symlinks are always resolved before the containment check, including dangling
+ones (a write through a dangling link creates its *target*, so the target is
+what gets checked). Entries found by `children`/`walk` (and therefore by
+`find`/`grepRecursive`) that resolve outside the granted root, such as a
+`.venv/bin/python` or `node_modules/.bin` link, are omitted rather than
+followed or reported as errors.
+
 **`secureOutput`** (optional). Path to an append-only file that mirrors every
 `println`/`print`/`printf` call from the isolation, but with `Classified[_]`
 values *unwrapped*. The agent's main output still shows the masked form
 (`Classified(***)`), so only whoever can read this file sees the real content.
-Parent directories are created automatically, and newly created sink files get
-owner-only permissions (`rw-------`) on POSIX systems. When unset, printing
-behaves normally and nothing is written to disk.
+Parent directories are created automatically, and a sink file that does not
+exist yet is created with owner-only permissions (`rw-------`) on POSIX systems
+(atomically, so it never exists with wider permissions). An existing file is
+appended to with its permissions unchanged. When unset, printing behaves
+normally and nothing is written to disk.
 
 **`classifiedWrite`** (optional, default `true`; JSON config only). When set to
-`false`, all writes to classified files are denied — both
-`writeClassified(path, content)` and `access(path).writeClassified(content)`.
+`false`, all writes to classified paths are denied: `writeClassified(path,
+content)`, `access(path).writeClassified(content)`, and `mkdir()` on a
+classified path.
 Note that because `classify` can wrap any value, leaving this enabled means an
 agent can *overwrite* classified files (e.g. `.ssh/authorized_keys`) with
 arbitrary content: the `Classified` mechanism protects confidentiality, not
@@ -711,7 +727,7 @@ object DatabaseOps:
 In `library/impl/InterfaceImpl.scala`, export your new operations and implement the `request*` method:
 
 ```scala
-abstract class InterfaceImpl(...) extends Interface:
+abstract class InterfaceImpl private[library] (...) extends Interface:
   export FileOps.*
   export ProcessOps.*
   export WebOps.*
@@ -776,7 +792,9 @@ sbt "devRepl --strict --config my.json"      # with flags
 
 - **Capabilities must extend `caps.SharedCapability`.** This is what makes capture checking work. Without it, the compiler cannot track the capability's scope and users could leak it out of the `request*` block.
 
-- **Capability classes and their implementations are sealed.** All capability types (`FileSystem`, `Network`, `ProcessPermission`, `IOCapability`, `Classified`, `FileEntry`) and every impl class (`RealFileSystem`, `NetworkImpl`, ...) have `private[library]` constructors, so agent code can neither instantiate nor extend them — capabilities can only come from the `request*` scopes. Keep this invariant for any capability you add: give the class a `private[library]` constructor and make concrete impls `private[library]` as well.
+- **Capability classes and their implementations are sealed.** All capability types (`FileSystem`, `Network`, `ProcessPermission`, `IOCapability`, `Classified`, `FileEntry`) and every impl class (`RealFileSystem`, `NetworkImpl`, `LlmOps`, ...) have `private[library]` constructors, so agent code can neither instantiate nor extend them: capabilities can only come from the `request*` scopes. Keep this invariant for any capability you add: give the class a `private[library]` constructor and make concrete impls `private[library]` as well.
+
+- **The interface itself is sealed too.** `InterfaceImpl`'s constructor is `private[library]`, so nothing outside the library can choose the policy JSON. The server registers the library config once per sandbox (`InterfaceImpl.configure`, called through the REPL's class loader before any code runs), and the preamble instantiates the parameterless `SandboxInterface`, whose policy is that registered config. Agent code that extends `SandboxInterface` itself only obtains an identical, policy-bound interface, never a wider one.
 
 - **Capture checking is experimental.** The project uses `-language:experimental.captureChecking`. Compiler behavior may change across Scala 3 nightly versions. If you hit unexpected errors, check if the issue is with capture checking by temporarily removing the flag.
 
@@ -790,7 +808,7 @@ sbt "devRepl --strict --config my.json"      # with flags
 
 - **Server depends on library types at compile time.** The server depends on the interface type to run the REPL. Make sure your change is compatible with the server's expected interface.
 
-- **Test your API at the library level first.** The `library/test/` directory contains library-level tests using MUnit, run with `scala-cli test library` (they are **not** part of `sbt test`). Test your new operations there before doing integration tests through the MCP server. See `LibrarySuite.test.scala` for examples.
+- **Test your API at the library level first.** The `library/test/` directory contains library-level tests using MUnit, run with `scala-cli test library --server=false` (they are **not** part of `sbt test`; `--server=false` sidesteps an ASM clash between the current Scala 3 nightlies and the Bloop server bundled with scala-cli). Test your new operations there before doing integration tests through the MCP server. See `LibrarySuite.test.scala` for examples.
 
 ## Development
 
@@ -803,14 +821,14 @@ sbt clean                      # Clean build artifacts
 sbt compile                    # Compile
 sbt test                       # Run the server test suites (src/test/scala)
 sbt "testOnly *McpServerSuite" # Run a single server suite
-scala-cli test library         # Run the library test suites (library/test)
+scala-cli test library --server=false   # Run the library test suites (library/test)
 sbt assembly                   # Build both JARs (server + library)
 sbt "lib/assembly"             # Build library JAR only
 sbt devRepl                    # Interactive REPL for testing the library
 ```
 
 > `sbt test` runs only the server suites. The `library/test/` suites are run
-> separately with `scala-cli test library`.
+> separately with `scala-cli test library --server=false`.
 
 <details>
 <summary>Running the server directly (without an agent)</summary>

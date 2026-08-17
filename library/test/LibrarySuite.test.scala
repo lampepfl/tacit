@@ -4,7 +4,7 @@ import language.experimental.captureChecking
 
 import caps.unsafe.unsafeAssumePure
 
-import java.nio.file.{Files, Path}
+import java.nio.file.{Files, Path, Paths}
 import scala.compiletime.uninitialized
 import scala.jdk.CollectionConverters.*
 
@@ -19,8 +19,8 @@ class LibrarySuite extends munit.FunSuite:
   // tests operate on per-test temp dirs, not on the bound itself (which has its
   // own dedicated tests below).
   private val interface: Interface^{} = new InterfaceImpl("""{"allowedRoots": ["/"]}""") {
-    override def createFS(root: String, filter: String -> Boolean, classifiedPatterns: Set[String]): FileSystem =
-      new RealFileSystem(root, filter, classifiedPatterns)
+    override def createFS(root: String, filter: String -> Boolean, classifiedPatterns: Set[String], classifiedWrite: Boolean): FileSystem =
+      new RealFileSystem(root, filter, classifiedPatterns, classifiedWrite)
   }.unsafeAssumePure
 
   import interface.*
@@ -210,8 +210,8 @@ class LibrarySuite extends munit.FunSuite:
     val classifiedInterface: Interface^ = new InterfaceImpl(
       """{"strictMode": false, "classifiedPaths": ["secret"], "allowedRoots": ["/"]}"""
     ) {
-      override def createFS(root: String, filter: String -> Boolean, classifiedPatterns: Set[String]): FileSystem =
-        new RealFileSystem(root, filter, classifiedPatterns)
+      override def createFS(root: String, filter: String -> Boolean, classifiedPatterns: Set[String], classifiedWrite: Boolean): FileSystem =
+        new RealFileSystem(root, filter, classifiedPatterns, classifiedWrite)
     }
     import classifiedInterface.*
 
@@ -255,8 +255,8 @@ class LibrarySuite extends munit.FunSuite:
     val secureInterface: Interface^ = new InterfaceImpl(
       io.circe.Json.obj("secureOutput" -> io.circe.Json.fromString(secureFile.toString)).noSpaces
     ) {
-      override def createFS(root: String, filter: String -> Boolean, classifiedPatterns: Set[String]): FileSystem =
-        new RealFileSystem(root, filter, classifiedPatterns)
+      override def createFS(root: String, filter: String -> Boolean, classifiedPatterns: Set[String], classifiedWrite: Boolean): FileSystem =
+        new RealFileSystem(root, filter, classifiedPatterns, classifiedWrite)
     }
     given (IOCapability^{}) = null.asInstanceOf[IOCapability]
 
@@ -355,8 +355,8 @@ class LibrarySuite extends munit.FunSuite:
         "allowedRoots" -> io.circe.Json.fromValues(roots.map(io.circe.Json.fromString))
       ).noSpaces
     ) {
-      override def createFS(root: String, filter: String -> Boolean, classifiedPatterns: Set[String]): FileSystem =
-        new RealFileSystem(root, filter, classifiedPatterns)
+      override def createFS(root: String, filter: String -> Boolean, classifiedPatterns: Set[String], classifiedWrite: Boolean): FileSystem =
+        new RealFileSystem(root, filter, classifiedPatterns, classifiedWrite)
     }
 
   test("allowedRoots permits a root nested within the bound") {
@@ -422,8 +422,8 @@ class LibrarySuite extends munit.FunSuite:
     // closed). A fresh interface with no allowedRoots must allow the CWD but
     // deny a temp dir that lives outside it.
     val api: Interface^ = new InterfaceImpl("{}") {
-      override def createFS(root: String, filter: String -> Boolean, classifiedPatterns: Set[String]): FileSystem =
-        new RealFileSystem(root, filter, classifiedPatterns)
+      override def createFS(root: String, filter: String -> Boolean, classifiedPatterns: Set[String], classifiedWrite: Boolean): FileSystem =
+        new RealFileSystem(root, filter, classifiedPatterns, classifiedWrite)
     }
     val cwd = java.nio.file.Paths.get(System.getProperty("user.dir").nn)
     assertEquals(api.requestFileSystem(cwd.toString) { 1 }, 1)   // CWD is permitted
@@ -444,8 +444,8 @@ class LibrarySuite extends munit.FunSuite:
     val classifiedInterface: Interface^ = new InterfaceImpl(
       """{"strictMode": false, "classifiedPaths": ["secret"], "allowedRoots": ["/"]}"""
     ) {
-      override def createFS(root: String, filter: String -> Boolean, classifiedPatterns: Set[String]): FileSystem =
-        new RealFileSystem(root, filter, classifiedPatterns)
+      override def createFS(root: String, filter: String -> Boolean, classifiedPatterns: Set[String], classifiedWrite: Boolean): FileSystem =
+        new RealFileSystem(root, filter, classifiedPatterns, classifiedWrite)
     }
     classifiedInterface.requestFileSystem(tmpDir.toString) {
       classifiedInterface.access(tmpDir.resolve("public.txt").toString).write("needle visible")
@@ -464,8 +464,8 @@ class LibrarySuite extends munit.FunSuite:
     val classifiedInterface: Interface^ = new InterfaceImpl(
       """{"strictMode": false, "classifiedPaths": ["secret"], "allowedRoots": ["/"]}"""
     ) {
-      override def createFS(root: String, filter: String -> Boolean, classifiedPatterns: Set[String]): FileSystem =
-        new RealFileSystem(root, filter, classifiedPatterns)
+      override def createFS(root: String, filter: String -> Boolean, classifiedPatterns: Set[String], classifiedWrite: Boolean): FileSystem =
+        new RealFileSystem(root, filter, classifiedPatterns, classifiedWrite)
     }
     classifiedInterface.requestFileSystem(tmpDir.toString) {
       classifiedInterface.access(secretDir.resolve("hidden.txt").toString)
@@ -484,8 +484,8 @@ class LibrarySuite extends munit.FunSuite:
     val gated: Interface^ = new InterfaceImpl(
       """{"strictMode": false, "classifiedPaths": ["secret"], "allowedRoots": ["/"], "classifiedWrite": false}"""
     ) {
-      override def createFS(root: String, filter: String -> Boolean, classifiedPatterns: Set[String]): FileSystem =
-        new RealFileSystem(root, filter, classifiedPatterns, classifiedWrite = false)
+      override def createFS(root: String, filter: String -> Boolean, classifiedPatterns: Set[String], classifiedWrite: Boolean): FileSystem =
+        new RealFileSystem(root, filter, classifiedPatterns, classifiedWrite)
     }
     gated.requestFileSystem(tmpDir.toString) {
       val ex1 = intercept[SecurityException] {
@@ -506,8 +506,8 @@ class LibrarySuite extends munit.FunSuite:
     val open: Interface^ = new InterfaceImpl(
       """{"strictMode": false, "classifiedPaths": ["secret"], "allowedRoots": ["/"]}"""
     ) {
-      override def createFS(root: String, filter: String -> Boolean, classifiedPatterns: Set[String]): FileSystem =
-        new RealFileSystem(root, filter, classifiedPatterns)
+      override def createFS(root: String, filter: String -> Boolean, classifiedPatterns: Set[String], classifiedWrite: Boolean): FileSystem =
+        new RealFileSystem(root, filter, classifiedPatterns, classifiedWrite)
     }
     open.requestFileSystem(tmpDir.toString) {
       open.writeClassified(secretDir.resolve("ok.txt").toString, open.classify("data"))
@@ -533,6 +533,146 @@ class LibrarySuite extends munit.FunSuite:
         java.nio.file.attribute.PosixFilePermissions.fromString("rw-------")
       )
     catch case _: UnsupportedOperationException => () // non-POSIX filesystem: nothing to check
+  }
+
+  // ── Sealing: the API can only be bootstrapped once per sandbox ──
+
+  test("InterfaceImpl.configure is one-shot and SandboxInterface uses only the configured policy") {
+    // The configured JSON is static; no other test in this JVM configures it.
+    intercept[IllegalStateException] { new SandboxInterface {} }
+    InterfaceImpl.configure("""{"allowedRoots": ["/"], "classifiedPaths": ["secret"]}""")
+    val ex = intercept[SecurityException] {
+      InterfaceImpl.configure("""{"allowedRoots": ["/"], "classifiedPaths": []}""")
+    }
+    assert(ex.getMessage.nn.contains("already configured"), ex.getMessage)
+    // Any number of SandboxInterface instances may exist; all carry the configured policy.
+    val a: Interface^ = new SandboxInterface {}
+    val b: Interface^ = new SandboxInterface {}
+    a.requestFileSystem(tmpDir.toString) {
+      assert(a.access(tmpDir.resolve("secret/k").toString).isClassified)
+    }
+    b.requestFileSystem(tmpDir.toString) {
+      assert(b.access(tmpDir.resolve("secret/k").toString).isClassified)
+    }
+  }
+
+  // ── Symlinks: escapes are neither followed nor fatal ──────────
+
+  test("children/walk omit symlinks that resolve outside the root, and recursive ops keep working") {
+    val outside = Files.createTempDirectory("sandbox-outside")
+    try
+      Files.writeString(outside.resolve("o.txt"), "needle outside")
+      Files.writeString(tmpDir.resolve("in.txt"), "needle inside")
+      Files.createSymbolicLink(tmpDir.resolve("linkdir"), outside)
+      Files.createSymbolicLink(tmpDir.resolve("linkfile"), outside.resolve("o.txt"))
+      Files.createSymbolicLink(tmpDir.resolve("inner"), tmpDir.resolve("in.txt"))
+      requestFileSystem(tmpDir.toString) {
+        val names = access(tmpDir.toString).children.map(_.name).toSet
+        assertEquals(names, Set("in.txt", "inner"), s"escaping links must be omitted, got $names")
+        val walked = access(tmpDir.toString).walk().map(_.name).toSet
+        assertEquals(walked, Set("in.txt", "inner"))
+        // Escaping content is never read; in-root links still work.
+        val hits = grepRecursive(tmpDir.toString, "needle")
+        assertEquals(hits.map(m => Paths.get(m.file).getFileName.toString).toSet, Set("in.txt", "inner"))
+        assertEquals(find(tmpDir.toString, "*.txt").map(Paths.get(_).getFileName.toString), List("in.txt"))
+        // Direct access through the escaping link is still denied.
+        intercept[SecurityException] { access(tmpDir.resolve("linkfile").toString).read() }
+      }
+    finally
+      Files.deleteIfExists(outside.resolve("o.txt"))
+      Files.deleteIfExists(outside)
+  }
+
+  test("writing through a dangling symlink that points outside the root is denied") {
+    val outside = Files.createTempDirectory("sandbox-outside")
+    val target = outside.resolve("created-by-write.txt")
+    try
+      Files.createSymbolicLink(tmpDir.resolve("dangling.txt"), target)
+      requestFileSystem(tmpDir.toString) {
+        val ex = intercept[SecurityException] {
+          access(tmpDir.resolve("dangling.txt").toString).write("escaped")
+        }
+        assert(ex.getMessage.nn.contains("outside root"), ex.getMessage)
+        intercept[SecurityException] {
+          access(tmpDir.resolve("dangling.txt").toString).append("escaped")
+        }
+      }
+      assert(!Files.exists(target), "the write must not create the out-of-root target")
+      // A dangling link that stays inside the root is fine, and creates its target.
+      Files.createSymbolicLink(tmpDir.resolve("local.txt"), tmpDir.resolve("local-target.txt"))
+      requestFileSystem(tmpDir.toString) {
+        access(tmpDir.resolve("local.txt").toString).write("ok")
+      }
+      assertEquals(Files.readString(tmpDir.resolve("local-target.txt")).nn, "ok")
+    finally
+      Files.deleteIfExists(target)
+      Files.deleteIfExists(outside)
+  }
+
+  test("a symlink loop is rejected instead of recursing forever") {
+    Files.createSymbolicLink(tmpDir.resolve("a"), tmpDir.resolve("b"))
+    Files.createSymbolicLink(tmpDir.resolve("b"), tmpDir.resolve("a"))
+    requestFileSystem(tmpDir.toString) {
+      val ex = intercept[SecurityException] { access(tmpDir.resolve("a").toString).write("x") }
+      assert(ex.getMessage.nn.contains("symbolic links"), ex.getMessage)
+      // Listing the directory skips the unresolvable entries rather than failing.
+      assertEquals(access(tmpDir.toString).children, Nil)
+    }
+  }
+
+  // ── classifiedWrite gates mkdir too ───────────────────────────
+
+  test("classifiedWrite = false also blocks mkdir on classified paths") {
+    val gated: Interface^ = new InterfaceImpl(
+      """{"strictMode": false, "classifiedPaths": ["secret"], "allowedRoots": ["/"], "classifiedWrite": false}"""
+    ) {
+      override def createFS(root: String, filter: String -> Boolean, classifiedPatterns: Set[String], classifiedWrite: Boolean): FileSystem =
+        new RealFileSystem(root, filter, classifiedPatterns, classifiedWrite)
+    }
+    gated.requestFileSystem(tmpDir.toString) {
+      val ex = intercept[SecurityException] { gated.access(tmpDir.resolve("secret").toString).mkdir() }
+      assert(ex.getMessage.nn.contains("classifiedWrite"), ex.getMessage)
+      intercept[SecurityException] { gated.access(tmpDir.resolve("secret/sub").toString).mkdir() }
+      // Unclassified directories are unaffected.
+      gated.access(tmpDir.resolve("public/sub").toString).mkdir()
+      assert(Files.isDirectory(tmpDir.resolve("public/sub")))
+    }
+    assert(!Files.exists(tmpDir.resolve("secret")))
+  }
+
+  // ── Absolute classified patterns are resolved at check time ───
+
+  test("absolute classified pattern applies to a directory created after the first check") {
+    // tmpDir on macOS lives under /var -> /private/var, so the pattern's
+    // prefix must be resolved through the symlink even while it is absent.
+    val secretDir = tmpDir.resolve("secrets")
+    val patternApi: Interface^ = new InterfaceImpl(
+      s"""{"strictMode": false, "classifiedPaths": ["${secretDir.toString}"], "allowedRoots": ["/"]}"""
+    ) {
+      override def createFS(root: String, filter: String -> Boolean, classifiedPatterns: Set[String], classifiedWrite: Boolean): FileSystem =
+        new RealFileSystem(root, filter, classifiedPatterns, classifiedWrite)
+    }
+    patternApi.requestFileSystem(tmpDir.toString) {
+      // First check while the directory does not exist: patterns get prepared here.
+      patternApi.access(tmpDir.resolve("plain.txt").toString).write("plain")
+      assert(!patternApi.access(tmpDir.resolve("plain.txt").toString).isClassified)
+      patternApi.access(secretDir.toString).mkdir()
+      assert(patternApi.access(secretDir.resolve("key").toString).isClassified)
+      intercept[SecurityException] {
+        patternApi.access(secretDir.resolve("key").toString).write("leak")
+      }
+    }
+  }
+
+  // ── GlobMatcher: agent-declared host patterns do not grow the shared cache ──
+
+  test("requestNetwork with ever-new host patterns does not grow the GlobMatcher cache") {
+    val before = GlobMatcher.cachedPatternCount
+    for i <- 1 to 300 do
+      requestNetwork(Set(s"host-$i.example.com")) {
+        summon[Network].validateHost(s"host-$i.example.com")
+      }
+    assertEquals(GlobMatcher.cachedPatternCount, before)
   }
 
   // --- Compile-time capability leak examples ---

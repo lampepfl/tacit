@@ -6,8 +6,12 @@ import caps.*
 import java.io.{File => JFile, PrintStream, FileOutputStream}
 import java.nio.file.{Files, Path, Paths}
 
+/** The concrete capability API handed to agent code. The REPL preamble
+ *  instantiates [[SandboxInterface]], whose config is the one registered via
+ *  [[InterfaceImpl.configure]]; tests in this package construct
+ *  `InterfaceImpl` directly. */
 @assumeSafe
-abstract class InterfaceImpl(
+abstract class InterfaceImpl private[library] (
   configJson: String
 ) extends Interface:
 
@@ -57,9 +61,18 @@ abstract class InterfaceImpl(
     case _: Classified[?] => "Classified(***)"
     case other            => other
 
-  // create real FileSystem by default, but allow tests to override with a virtual one
-  protected def createFS(root: String, filter: String -> Boolean, classifiedPatterns: Set[String]): FileSystem =
-    new RealFileSystem(root, filter, classifiedPatterns, classifiedWriteEnabled)
+  /** Builds the `FileSystem` for one `requestFileSystem` scope. Real disk by
+   *  default; tests override it with a [[VirtualFileSystem]]. The
+   *  `classifiedWrite` gate is passed explicitly so an override cannot
+   *  silently drop it (the entry-level `writeClassified`/`mkdir` checks live
+   *  in the file system, not here). */
+  protected def createFS(
+    root: String,
+    filter: String -> Boolean,
+    classifiedPatterns: Set[String],
+    classifiedWrite: Boolean
+  ): FileSystem =
+    new RealFileSystem(root, filter, classifiedPatterns, classifiedWrite)
 
   export FileOps.*
   export ProcessOps.*
@@ -110,7 +123,7 @@ abstract class InterfaceImpl(
 
   def requestFileSystem[T](root: String)(op: FileSystem^ ?=> T)(using IOCapability): T =
     requireRootAllowed(root)
-    val fs = createFS(root, _ => true, classifiedPatterns)
+    val fs = createFS(root, _ => true, classifiedPatterns, classifiedWriteEnabled)
     op(using fs)
 
   /** Entry-time subset check shared by [[requestExecPermission]] and
@@ -163,6 +176,26 @@ abstract class InterfaceImpl(
     fs.access(path).writeClassified(content)
 
 object InterfaceImpl:
+  /** The library config JSON of this sandbox, registered once by the server
+    * via [[configure]]. Static state is scoped to the class loader, and the
+    * server gives every REPL its own sandboxed loader with the library JAR,
+    * so "once" means once per REPL / stateless execution. */
+  private val configured = java.util.concurrent.atomic.AtomicReference[String | Null](null)
+
+  /** Register the sandbox's library config. The server calls this (through
+    * the sandbox class loader, before any REPL code runs) exactly once; a
+    * second call throws. */
+  private[library] def configure(configJson: String): Unit =
+    if !configured.compareAndSet(null, configJson) then
+      throw SecurityException("The TACIT sandbox is already configured.")
+
+  /** The config registered by [[configure]]; throws if the sandbox has not
+    * been configured. */
+  private[library] def configuredJson: String =
+    configured.get() match
+      case null => throw IllegalStateException("The TACIT sandbox has not been configured.")
+      case json => json
+
   /** The server process's current working directory, used as the default
     * `allowedRoots` bound. Falls back to "." if the `user.dir` property is
     * absent (it normally is not). */
@@ -185,16 +218,31 @@ object InterfaceImpl:
         catch case _: java.io.IOException => file.getAbsolutePath.nn
       secureWriters.getOrElseUpdate(key, {
         Option(file.getParentFile).foreach(_.mkdirs())
-        val isNew = !file.exists()
-        val stream = PrintStream(FileOutputStream(file, true), true, "UTF-8")
-        // The sink receives unmasked classified content, so restrict a newly
-        // created file to the owner (rw-------). Best-effort: POSIX-only.
-        if isNew then
-          try
-            Files.setPosixFilePermissions(
-              file.toPath,
-              java.nio.file.attribute.PosixFilePermissions.fromString("rw-------")
-            )
-          catch case _: UnsupportedOperationException | _: java.io.IOException => ()
-        stream
+        createOwnerOnly(file.toPath)
+        PrintStream(FileOutputStream(file, true), true, "UTF-8")
       })
+
+  /** Create the sink file with owner-only permissions (`rw-------`) if it does
+    * not exist yet. Creation and permissions are one atomic step (`O_CREAT`
+    * with the mode), so there is no window in which the file exists with
+    * umask-default permissions. An existing file is left as it is; on
+    * non-POSIX file systems the file is created with default permissions. */
+  private def createOwnerOnly(path: Path): Unit =
+    val perms = java.nio.file.attribute.PosixFilePermissions.fromString("rw-------")
+    try Files.createFile(path, java.nio.file.attribute.PosixFilePermissions.asFileAttribute(perms))
+    catch
+      case _: java.nio.file.FileAlreadyExistsException => ()
+      case _: UnsupportedOperationException =>
+        try Files.createFile(path)
+        catch case _: java.nio.file.FileAlreadyExistsException => ()
+      case _: java.io.IOException => () // FileOutputStream below reports the real problem
+
+/** The class the server preamble instantiates (`object api extends
+  * SandboxInterface`). It has no constructor parameters: its policy is the
+  * config registered via [[InterfaceImpl.configure]]. Kept abstract because a
+  * concrete subclass of [[InterfaceImpl]] cannot be defined inside the
+  * library itself (the compiler rejects the `printf(fmt, args: Any*)`
+  * override check in this compilation unit); the REPL supplies the concrete
+  * `object`. */
+@assumeSafe
+abstract class SandboxInterface extends InterfaceImpl(InterfaceImpl.configuredJson)

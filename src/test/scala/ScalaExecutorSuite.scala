@@ -126,6 +126,19 @@ class ScalaExecutorSuite extends munit.FunSuite:
     assert(result.success)
     assert(result.output.replace(" ", "").replace("\n", "").contains("List(1,2,3"))
 
+  test("code ending inside an indentation region without a trailing newline"):
+    // The REPL parser reads an unterminated indentation region at EOF as
+    // incomplete input ("unindent expected, but eof found"); the executor
+    // must close it since clients send complete snippets.
+    for code <- List(
+      "def f(x: Int): Int =\n  x + 1",
+      "if true then\n  1\nelse\n  2",
+      "val x: Any = 42\nx match\n  case i: Int => s\"int: $i\"\n  case _ => \"other\"",
+      "val x: Any = 42\nx match\n  case i: Int => s\"int: $i\"\n  case _ => \"other\"\n  "
+    ) do
+      val result = ScalaExecutor.execute(code)
+      assert(result.success, s"failed for ${code.replace("\n", "\\n")}: ${result.error}")
+
   test("pattern matching expression"):
     val result = ScalaExecutor.execute("""
       val x: Any = 42

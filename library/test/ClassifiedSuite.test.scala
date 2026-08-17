@@ -66,8 +66,8 @@ class ClassifiedSuite extends munit.FunSuite:
   val interface: Interface^{} = new InterfaceImpl(
     """{"strictMode": false, "classifiedPaths": ["secret"], "allowedRoots": ["/"]}"""
   ) {
-    override def createFS(root: String, filter: String -> Boolean, classifiedPatterns: Set[String]): FileSystem =
-      new VirtualFileSystem(root, filter, classifiedPatterns = classifiedPatterns)
+    override def createFS(root: String, filter: String -> Boolean, classifiedPatterns: Set[String], classifiedWrite: Boolean): FileSystem =
+      new VirtualFileSystem(root, filter, classifiedPatterns = classifiedPatterns, classifiedWrite = classifiedWrite)
   }.unsafeAssumePure
 
   import interface.*
@@ -249,8 +249,8 @@ class ClassifiedSuite extends munit.FunSuite:
         "allowedRoots" -> io.circe.Json.arr(io.circe.Json.fromString("/"))
       ).noSpaces
     ) {
-      override def createFS(root: String, filter: String -> Boolean, classifiedPatterns: Set[String]): FileSystem =
-        new VirtualFileSystem(root, filter, classifiedPatterns = classifiedPatterns)
+      override def createFS(root: String, filter: String -> Boolean, classifiedPatterns: Set[String], classifiedWrite: Boolean): FileSystem =
+        new VirtualFileSystem(root, filter, classifiedPatterns = classifiedPatterns, classifiedWrite = classifiedWrite)
     }.unsafeAssumePure
 
   test("pattern without slash matches any component") {

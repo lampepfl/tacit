@@ -326,6 +326,74 @@ cached_jars_block() {
   assert_succeeds "trusts cache when digests are missing" \
     cached_jars_match_digests "$info_nodigest"
 
+  # A missing digest for one asset must not skip the check of the other
+  # (rows are sorted by jq's `unique`, so the library row comes first).
+  echo "server content" > "$CACHE_DIR/TACIT.jar"
+  info_partial="$(printf 'TACIT-library.jar\thttps://x/TACIT-library.jar\t\nTACIT.jar\thttps://x/TACIT.jar\tsha256:%s\n' "$jar_hash")"
+  assert_succeeds "checks the digested asset when the other has none" \
+    cached_jars_match_digests "$info_partial"
+  echo "tampered" > "$CACHE_DIR/TACIT.jar"
+  assert_fails "rejects a tampered asset even when the other has no digest" \
+    cached_jars_match_digests "$info_partial"
+
+  # A cached jar that cannot be hashed (missing) is not trustworthy.
+  rm -f "$CACHE_DIR/TACIT.jar"
+  assert_fails "rejects cache when a jar cannot be hashed" \
+    cached_jars_match_digests "$info"
+
+  # Without any sha256 tool the check is skipped (old behavior).
+  NOSHA_BIN="$TEST_TMP/nosha-bin"
+  mkdir -p "$NOSHA_BIN"
+  if PATH="$NOSHA_BIN" cached_jars_match_digests "$info"; then
+    echo "  PASS: trusts cache when no sha256 tool exists"
+    ((pass_count++)) || true
+  else
+    echo "  FAIL: trusts cache when no sha256 tool exists"
+    ((fail_count++)) || true
+  fi
+
+  [[ "$fail_count" -eq 0 ]]
+}
+
+# download_latest_release invalidates a cache that failed verification before
+# re-downloading, so a failed re-download cannot leave the bad jars in service.
+cache_invalidation_block() {
+  TEST_TMP="$(mktemp -d)"
+  trap 'rm -rf "$TEST_TMP"' EXIT
+
+  CACHE_DIR="$TEST_TMP/cache"
+  SERVER_JAR="$CACHE_DIR/TACIT.jar"
+  LIBRARY_JAR="$CACHE_DIR/TACIT-library.jar"
+  RELEASE_MARKER="$CACHE_DIR/release.txt"
+  mkdir -p "$CACHE_DIR"
+  echo "TAMPERED" > "$SERVER_JAR"
+  echo "library" > "$LIBRARY_JAR"
+
+  # Fake network: the API returns the fixture; the jar download fails.
+  MOCK_BIN="$TEST_TMP/bin"
+  mkdir -p "$MOCK_BIN"
+  cat > "$MOCK_BIN/curl" <<CURL
+#!/usr/bin/env bash
+for a in "\$@"; do
+  case "\$a" in
+    https://api.github.com/*) cat "$SCRIPT_DIR/fixtures/release.json"; printf '\n200'; exit 0 ;;
+  esac
+done
+exit 22
+CURL
+  chmod +x "$MOCK_BIN/curl"
+  printf '%s\n' "$(release_key_from_json "$FIXTURE_JSON")" > "$RELEASE_MARKER"
+
+  # Marker matches, jars fail digest check, re-download fails.
+  ( PATH="$MOCK_BIN:$PATH" download_latest_release >/dev/null 2>&1 ) && true
+  if [[ -e "$SERVER_JAR" || -e "$RELEASE_MARKER" ]]; then
+    echo "  FAIL: cache invalidated before re-download (jar or marker still present)"
+    ((fail_count++)) || true
+  else
+    echo "  PASS: cache invalidated before re-download"
+    ((pass_count++)) || true
+  fi
+
   [[ "$fail_count" -eq 0 ]]
 }
 
@@ -393,7 +461,9 @@ PROF
 run_block() {
   local label="$1" rc=0
   shift
-  ( "$@" ) || rc=$?
+  # fail_count is reset inside the subshell so that failures from earlier
+  # top-level sections are not re-counted against this block.
+  ( fail_count=0; "$@" ) || rc=$?
   if [[ "$rc" -ne 0 ]]; then
     echo "  FAIL: ${label} (subshell block had failures)"
     ((fail_count++)) || true
@@ -437,6 +507,7 @@ run_block "remove_profile_path missing-end-marker block" \
 
 # Defined earlier, next to the cached_release_matches tests.
 run_cached_jars_block
+run_block "cache invalidation block" cache_invalidation_block
 
 # ---------------------------------------------------------------------------
 # verify_jar
@@ -560,6 +631,54 @@ if command -v jq >/dev/null 2>&1; then
 else
   echo "  SKIP: jq not available, skipping jq parser test"
 fi
+
+# ---------------------------------------------------------------------------
+# download_release.sh extract_assets_grep (pre-release array: same release)
+# ---------------------------------------------------------------------------
+
+echo "--- download_release.sh extract_assets_grep (releases array) ---"
+
+dlr_grep_block() {
+  source "$REPO_ROOT/download_release.sh"
+
+  # Newest release lacks the library jar; the older one has both. Assets must
+  # never be paired across releases, so this must fail rather than mix them.
+  releases_json='[
+    {"tag_name": "v2", "name": "v2", "assets": [
+      {"name": "TACIT.jar", "digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "browser_download_url": "https://x/v2/TACIT.jar"}
+    ], "body": "notes"},
+    {"tag_name": "v1", "name": "v1", "assets": [
+      {"name": "TACIT.jar", "digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "browser_download_url": "https://x/v1/TACIT.jar"},
+      {"name": "TACIT-library.jar", "digest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc", "browser_download_url": "https://x/v1/TACIT-library.jar"}
+    ], "body": "notes"}
+  ]'
+  assert_fails "grep fallback does not pair assets across releases" \
+    extract_assets_grep "$releases_json"
+
+  # Both jars in the newest release: pairs them, ignores the older release.
+  releases_ok='[
+    {"tag_name": "v2", "name": "v2", "assets": [
+      {"name": "TACIT.jar", "digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "browser_download_url": "https://x/v2/TACIT.jar"},
+      {"name": "TACIT-library.jar", "digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd", "browser_download_url": "https://x/v2/TACIT-library.jar"}
+    ]},
+    {"tag_name": "v1", "name": "v1", "assets": [
+      {"name": "TACIT-library.jar", "digest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc", "browser_download_url": "https://x/v1/TACIT-library.jar"}
+    ]}
+  ]'
+  parsed="$(extract_assets_grep "$releases_ok")"
+  assert_contains "grep fallback takes the newest release's jars" "https://x/v2/TACIT-library.jar" "$parsed"
+  assert_not_contains "grep fallback ignores older releases" "https://x/v1/" "$parsed"
+
+  # Argument parsing: options anywhere, unknown options rejected, --help works.
+  help_output="$(main --help 2>&1)"
+  assert_contains "download_release.sh --help prints usage" "Usage:" "$help_output"
+  assert_fails "download_release.sh rejects unknown options" main --bogus
+  assert_fails "download_release.sh rejects extra positional arguments" main dist1 dist2
+
+  [[ "$fail_count" -eq 0 ]]
+}
+
+run_block "download_release.sh grep releases-array block" dlr_grep_block
 
 # ---------------------------------------------------------------------------
 # Results

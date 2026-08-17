@@ -84,6 +84,7 @@ class VirtualFileSystem private[library] (
       ()
 
     def mkdir(): Unit =
+      requireCreatable(resolved, "mkdir")
       ensureParentDirs(resolved)
       directories(resolved) = ()
 

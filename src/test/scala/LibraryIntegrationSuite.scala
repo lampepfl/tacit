@@ -196,6 +196,39 @@ class LibraryIntegrationSuite extends munit.FunSuite:
       "cannot be accessed"
     )
 
+  test("cannot construct InterfaceImpl directly"):
+    assertCompileError(
+      """new tacit.library.InterfaceImpl("{}") {}""",
+      "cannot be accessed"
+    )
+
+  test("cannot construct LlmOps directly"):
+    assertCompileError(
+      """new tacit.library.LlmOps(None)""",
+      "cannot be accessed"
+    )
+
+  test("agent code cannot name InterfaceImpl.configure"):
+    assertCompileError(
+      """tacit.library.InterfaceImpl.configure("{\"allowedRoots\":[\"/\"]}")""",
+      "cannot be accessed"
+    )
+
+  test("a SandboxInterface built by agent code carries the server policy, not a wider one (no safe mode)"):
+    // Extending SandboxInterface is the only way left to build an interface,
+    // and it takes no policy argument: whatever agent code builds is bound to
+    // the config the server registered before the REPL started. Safe mode is
+    // off here so the check is on the library, not on the safe-mode gate.
+    given Context = Context(Config(safeMode = false), None)
+    val result = ScalaExecutor.execute("""
+      object evil extends tacit.library.SandboxInterface
+      evil.requestFileSystem("/etc") { evil.access("/etc/hosts").read() }
+    """)
+    assert(!result.output.contains("localhost"),
+      s"an agent-built interface must not grant wider access, got: ${result.output}")
+    assert(result.output.contains("SecurityException") && result.output.contains("not within any allowed root"),
+      s"expected the server's allowedRoots bound to apply, got: ${result.output}")
+
   test("cannot implement the Network capability anonymously"):
     assertCompileError(
       """given tacit.library.Network with

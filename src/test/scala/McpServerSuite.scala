@@ -331,6 +331,25 @@ class McpServerSuite extends munit.FunSuite:
     assert(server.handleRequest(makeRequest("ping", id = None)).isEmpty)
     assert(server.handleRequest(makeRequest("tools/list", id = None)).isEmpty)
     assert(server.handleRequest(makeRequest("no/such/method", id = None)).isEmpty)
+    assert(server.handleRequest(makeRequest("notifications/initialized", id = None)).isEmpty)
+
+  test("an explicit null id is treated as a notification, like an absent id"):
+    // JSON-RPC 1.0-style clients send notifications as `"id": null`;
+    // answering them would inject an unexpected response into their stream.
+    val absent = io.circe.parser.decode[JsonRpcRequest]("""{"jsonrpc":"2.0","method":"ping"}""")
+    assertEquals(absent.map(_.id), Right(None))
+    val explicitNull = io.circe.parser.decode[JsonRpcRequest]("""{"jsonrpc":"2.0","method":"ping","id":null}""")
+    assertEquals(explicitNull.map(_.id), Right(None))
+    val server = new McpServer()
+    assert(server.handleRequest(explicitNull.toOption.get).isEmpty)
+
+  test("notification method sent with an id is still answered"):
+    val server = new McpServer()
+    for method <- List("notifications/initialized", "initialized", "notifications/cancelled") do
+      val response = server.handleRequest(makeRequest(method, id = Some(Json.fromInt(7))))
+      assert(response.isDefined, s"$method with an id must get a response")
+      assertEquals(response.get.id, Some(Json.fromInt(7)))
+      assert(response.get.error.isEmpty, s"$method: ${response.get.error}")
 
   test("initialize does not advertise tools.listChanged"):
     val server = new McpServer()

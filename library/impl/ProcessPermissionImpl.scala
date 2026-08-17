@@ -39,7 +39,18 @@ final class ProcessPermissionImpl private[library] (
           )
 
 object ProcessPermissionImpl:
-  /** Commands that perform unsafe operations - blocked in strict mode */
+  /** Commands blocked in strict mode, matched case-insensitively on the
+   *  command's basename.
+   *
+   *  This is a convenience denylist for quick experiments, not a security
+   *  boundary: it catches the common ways of reading, writing, or shipping
+   *  files around the capability API (file utilities, shells, scripting
+   *  interpreters, network tools, command runners), but a denylist can never
+   *  be complete. Build tools such as `java`, `scala`, `scala-cli`, and
+   *  `sbt` are deliberately left available and can run arbitrary code, as
+   *  can `find -exec`, `make`, editors with shell escapes, and so on.
+   *  Deployments that need a real bound must use `commandPermissions`, which
+   *  replaces this list with an explicit allowlist. */
   private val unsafeCommands: Set[String] = Set(
     // Read operations
     "cat", "head", "tail", "less", "more", "tac", "nl",
@@ -71,7 +82,7 @@ object ProcessPermissionImpl:
     "git",
     // Crypto/encoding tools (file reads + obfuscation)
     "openssl", "base64",
-    // Interpreters (arbitrary code execution escapes the sandbox policy)
+    // Scripting interpreters (arbitrary code outside the capability API)
     "python", "python3", "perl", "ruby", "node", "php", "lua",
     // Command runners (wrap and re-invoke arbitrary commands)
     "xargs", "nohup", "nice", "timeout", "watch", "parallel", "busybox",

@@ -18,27 +18,36 @@ object ProcessOps:
    *  child exits; without a bound the joins below would hang `exec` forever. */
   private val DrainJoinTimeoutMs = 5000L
 
-  /** Drains an input stream into a string on the current thread, byte-exact
-   *  (trailing newlines preserved), capped at [[MaxStreamBytes]]. */
-  private def drainStream(stream: java.io.InputStream): String =
-    val out = java.io.ByteArrayOutputStream()
-    val buf = new Array[Byte](8192)
-    var captured = 0
-    var truncated = false
-    try
-      var n = stream.read(buf)
-      while n >= 0 do
-        val room = MaxStreamBytes - captured
-        if room > 0 then
-          val keep = math.min(room, n)
-          out.write(buf, 0, keep)
-          captured += keep
-          if keep < n then truncated = true
-        else truncated = true
-        n = stream.read(buf)
-    finally stream.close()
-    val text = out.toString("UTF-8")
-    if truncated then text + TruncationMarker else text
+  /** Incrementally captures one process stream, byte-exact (trailing
+   *  newlines preserved) and capped at [[MaxStreamBytes]]. The bytes live in
+   *  a shared, synchronized buffer so the caller can read whatever arrived so
+   *  far even if the drainer thread never finishes (a grandchild holding the
+   *  pipe open). */
+  private final class StreamCapture:
+    private val out = java.io.ByteArrayOutputStream()
+    @volatile private var truncated = false
+
+    /** Drains `stream` to EOF on the current thread. Output beyond the cap is
+     *  still read (so the process never blocks on a full pipe) but discarded. */
+    def drain(stream: java.io.InputStream): Unit =
+      val buf = new Array[Byte](8192)
+      try
+        var n = stream.read(buf)
+        while n >= 0 do
+          val room = MaxStreamBytes - out.size()
+          if room > 0 then
+            val keep = math.min(room, n)
+            out.write(buf, 0, keep)
+            if keep < n then truncated = true
+          else truncated = true
+          n = stream.read(buf)
+      finally stream.close()
+
+    /** Snapshot of the captured text (`ByteArrayOutputStream` is synchronized,
+     *  so this is safe while a drain is still running). */
+    def text: String =
+      val captured = out.toString("UTF-8")
+      if truncated then captured + TruncationMarker else captured
 
   def exec(
     command: String,
@@ -53,10 +62,10 @@ object ProcessOps:
     try
       // Drain stdout and stderr on separate threads to avoid deadlock
       // when the process output fills the OS pipe buffer.
-      @volatile var stdout = ""
-      @volatile var stderr = ""
-      val t1 = Thread(() => stdout = drainStream(process.getInputStream.nn))
-      val t2 = Thread(() => stderr = drainStream(process.getErrorStream.nn))
+      val stdout = StreamCapture()
+      val stderr = StreamCapture()
+      val t1 = Thread(() => stdout.drain(process.getInputStream.nn))
+      val t2 = Thread(() => stderr.drain(process.getErrorStream.nn))
       t1.setDaemon(true)
       t2.setDaemon(true)
       t1.start()
@@ -67,18 +76,15 @@ object ProcessOps:
         t1.join(1000)
         t2.join(1000)
         throw RuntimeException(s"Process '$command' timed out after ${timeoutMs}ms")
-      // The child exited, but a grandchild that inherited the pipes can keep
-      // them open, which would block the drainers on read forever. Join with a
-      // bounded timeout; if the drainers stall, kill the process (best-effort —
-      // a surviving grandchild's pipe is out of our reach, but the drainers
-      // are daemon threads and we return whatever was captured).
+      // The child has exited, but a grandchild that inherited the pipes can
+      // keep them open, which would block the drainers on read forever. Join
+      // with a bounded timeout and then return whatever was captured so far;
+      // the stalled drainers are daemon threads and finish (or die with the
+      // server) on their own. The surviving grandchild is not ours to kill:
+      // the JVM only knows the direct child, which is already gone.
       t1.join(DrainJoinTimeoutMs)
       t2.join(DrainJoinTimeoutMs)
-      if t1.isAlive || t2.isAlive then
-        process.destroyForcibly()
-        t1.join(1000)
-        t2.join(1000)
-      ProcessResult(process.exitValue(), stdout, stderr)
+      ProcessResult(process.exitValue(), stdout.text, stderr.text)
     catch
       case e: Exception =>
         process.destroyForcibly()

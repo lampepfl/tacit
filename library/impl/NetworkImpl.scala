@@ -8,8 +8,14 @@ package tacit.library
  *  scope's declared `hosts`, after validating those hosts against the
  *  server-configured `networkPermissions` policy. */
 final class NetworkImpl private[library] (val permittedHosts: Set[String]) extends Network:
+  /** The patterns are agent-declared, so they are compiled once per scope and
+   *  kept here rather than in the shared [[GlobMatcher]] cache; otherwise agent
+   *  code could grow that process-wide cache without bound by declaring
+   *  ever-new hosts. */
+  private val matchers = permittedHosts.toList.map(GlobMatcher.compile)
+
   def validateHost(host: String): Unit =
-    if !permittedHosts.exists(p => GlobMatcher.matches(host, p)) then
+    if !matchers.exists(_.matcher(host).matches()) then
       throw SecurityException(
         s"Access denied: host '$host' does not match any permitted pattern in $permittedHosts"
       )

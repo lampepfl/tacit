@@ -16,7 +16,7 @@
 val scala3Version = "3.10.0-RC1-bin-20260816-3adfcbd-NIGHTLY"
 ThisBuild / resolvers += Resolver.scalaNightlyRepository
 
-val tacitVersion = "0.2.1-SNAPSHOT"
+val tacitVersion = "0.2.2-SNAPSHOT"
 val tacitLibVersion = tacitVersion
 
 val circeVersion = "0.14.16"

@@ -2,6 +2,8 @@
 
 **Paper:** [Securing Agents With Tracked Capabilities](https://dl.acm.org/doi/10.1145/3786335.3813127) (ACM) · [arXiv:2603.00991](https://arxiv.org/abs/2603.00991) · 🏆 **Best Paper Award at CAIS 26**
 
+> **Want to use TACIT out of the box?** [ATC (Agent with Tracked Capabilities)](https://github.com/lampepfl/atc) is a ready-to-use terminal coding agent built on TACIT, with no separate agent or MCP setup needed. It also offers finer-grained permission control (deny by default, with temporary and per-session grants) and richer user interaction.
+
 TACIT (Tracked Agent Capabilities In Types) is a **safety harness** for AI agents.
 Instead of calling tools directly, agents write code in Scala 3 with [capture checking](https://nightly.scala-lang.org/docs/reference/experimental/capture-checking/index.html): a type system that statically tracks capabilities and enforces that agent code cannot forge access rights, cannot perform effects beyond its budget, and cannot leak information from pure sub-computations.
 It provides an [MCP](https://modelcontextprotocol.io/) interface, so that it can be easily used by all MCP-compatible agents.

@@ -13,13 +13,13 @@
 //     fallback
 //   }
 // }
-val scala3Version = "3.10.0-RC1-bin-20260816-3adfcbd-NIGHTLY"
+val scala3Version = "3.10.2-RC1-bin-20261015-88be2f5-NIGHTLY"
 ThisBuild / resolvers += Resolver.scalaNightlyRepository
 
-val tacitVersion = "0.2.2-SNAPSHOT"
+val tacitVersion = "0.2.3-SNAPSHOT"
 val tacitLibVersion = tacitVersion
 
-val circeVersion = "0.14.16"
+val circeVersion = "0.14.17"
 
 lazy val lib = project
   .in(file("library"))
@@ -35,7 +35,7 @@ lazy val lib = project
     Compile / unmanagedSources / excludeFilter :=
       "*.test.scala" || "project.scala" || "README.md",
     libraryDependencies ++= Seq(
-      "com.openai" % "openai-java" % "4.51.0",
+      "com.openai" % "openai-java" % "4.81.0",
       "io.circe" %% "circe-core" % circeVersion,
       "io.circe" %% "circe-parser" % circeVersion,
     ),
@@ -99,10 +99,10 @@ lazy val root = project
       "io.circe" %% "circe-core" % circeVersion,
       "io.circe" %% "circe-generic" % circeVersion,
       "io.circe" %% "circe-parser" % circeVersion,
-      "com.github.scopt" %% "scopt" % "4.1.1-M3",
+      "com.github.scopt" %% "scopt" % "4.2.0",
       "org.scala-lang" %% "scala3-compiler" % scala3Version,
       "org.scala-lang" %% "scala3-repl" % scala3Version,
-      "org.scalameta" %% "munit" % "1.3.5" % Test,
+      "org.scalameta" %% "munit" % "1.3.6" % Test,
     ),
 
     // Generate version.properties so the server can read its own version at runtime

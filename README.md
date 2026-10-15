@@ -763,7 +763,7 @@ lazy val lib = project
   .settings(
     // ... existing settings ...
     libraryDependencies ++= Seq(
-      "com.openai" % "openai-java" % "4.38.0",
+      "com.openai" % "openai-java" % "4.81.0",
       "org.postgresql" % "postgresql" % "42.7.3",  // ← add your dep
     ),
   )
